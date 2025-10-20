@@ -16,7 +16,7 @@ PASSENGERS_ROLE_ID = 1404100554807971971 # passengers role
 WILLIAM_ROLE_ID = 1413545658006110401    # William role for test
 GENERAL_CHANNEL_ID = 1404103684069265519 # general channel
 UK_TZ = pytz.timezone("Europe/London")
-ALLOWED_ROLE_NAMES = ["Admin", "Server Sorter Outerer"]  # roles allowed to run commands
+ALLOWED_ROLE_NAMES = ["William", "KD", "Greg", "server sorter outerer"]  # roles allowed to run commands
 # ==================
 
 intents = discord.Intents.default()
