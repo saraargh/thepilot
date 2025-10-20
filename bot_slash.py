@@ -11,7 +11,7 @@ from threading import Thread
 
 # ===== CONFIG =====
 TOKEN = os.getenv("TOKEN")  # use Render environment variable
-POO_ROLE_ID = 1428350046323347589        # poo role
+POO_ROLE_ID = 1429934009550373059    # poo role
 PASSENGERS_ROLE_ID = 1404100554807971971 # passengers role
 WILLIAM_ROLE_ID = 1413545658006110401    # William role for test
 GENERAL_CHANNEL_ID = 1404103684069265519 # general channel
