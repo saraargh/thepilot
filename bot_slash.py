@@ -16,7 +16,14 @@ PASSENGERS_ROLE_ID = 1404100554807971971 # passengers role
 WILLIAM_ROLE_ID = 1413545658006110401    # William role for test
 GENERAL_CHANNEL_ID = 1404103684069265519 # general channel
 UK_TZ = pytz.timezone("Europe/London")
-ALLOWED_ROLE_NAMES = ["William", "KD", "Greg", "server sorter outerer"]  # roles allowed to run commands
+
+# Roles allowed to run commands (by ID)
+ALLOWED_ROLE_IDS = [
+    1413545658006110401,  # William/Admin
+    1404098545006546954,
+    1404105470204969000,
+    1420817462290681936
+]
 # ==================
 
 intents = discord.Intents.default()
@@ -35,11 +42,8 @@ client = PooBot()
 
 # ===== Helper Functions =====
 def user_allowed(member: discord.Member):
-    """Check if user has one of the allowed roles."""
-    for role in member.roles:
-        if role.name in ALLOWED_ROLE_NAMES:
-            return True
-    return False
+    """Check if user has one of the allowed roles by ID."""
+    return any(role.id in ALLOWED_ROLE_IDS for role in member.roles)
 
 async def clear_poo_role(guild):
     poo_role = guild.get_role(POO_ROLE_ID)
