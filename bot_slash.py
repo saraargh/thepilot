@@ -332,118 +332,90 @@ async def wingmates(interaction: discord.Interaction, user1: discord.Member, use
 
     await interaction.response.send_message(embed=embed, file=file)
 
-# ===== Pilot Advice Command (GitHub JSON, bold & italic quote, no plane) =====
+# ===== Pilot Advice Command (Safe, Purple Embed, No "Keep calm" fallback) =====
 @client.tree.command(name="pilotadvice", description="Receive the captain's inspirational advice ✈️")
 async def pilotadvice(interaction: discord.Interaction):
     """Fetch a random inspirational quote from GitHub for PA-style embed."""
     import requests, random
 
-    await interaction.response.defer()  # acknowledge interaction immediately
+    await interaction.response.defer()  # acknowledge immediately
 
     URL = "https://raw.githubusercontent.com/JamesFT/Database-Quotes-JSON/master/quotes.json"
+
+    # Local backup quotes in case API fails
+    backup_quotes = [
+        {"quote": "The sky is not the limit; it’s only the beginning.", "author": "The Captain"},
+        {"quote": "Even in turbulence, stay steady on your course.", "author": "Captain Reynolds"},
+        {"quote": "A smooth sea never made a skilled pilot.", "author": "Unknown"},
+        {"quote": "Every landing is a lesson in disguise.", "author": "The Captain"},
+        {"quote": "Keep your wings level and your heart brave.", "author": "The Captain"}
+    ]
 
     try:
         response = requests.get(URL, timeout=5)
         response.raise_for_status()
-        data = response.json()  # JSON is a list of objects with 'quote' and 'author'
+        data = response.json()
 
-        # Pick a random quote
-        quote = random.choice(data)
-        text = quote.get("quote", "Keep calm and fly on!")
-        author = quote.get("author", "The Captain")
+        # Validate data
+        if isinstance(data, list) and len(data) > 0:
+            quote = random.choice(data)
+            text = quote.get("quote") or random.choice(backup_quotes)["quote"]
+            author = quote.get("author") or random.choice(backup_quotes)["author"]
+        else:
+            raise ValueError("No valid quotes returned")
 
-        # Create embed
-        embed = discord.Embed(
-            title="✈️ Captain's Advice",
-            description=f'📢 Ladies and gentlemen, here’s today’s captain’s advice:\n\n***{text}***',
-            color=discord.Color.teal()
-        )
-        embed.set_footer(text=f"- {author}")  # no plane emoji
+    except Exception:
+        # Use local backup if fetching fails
+        quote = random.choice(backup_quotes)
+        text = quote["quote"]
+        author = quote["author"]
 
-        await interaction.followup.send(embed=embed)
-
-    except Exception as e:
-        await interaction.followup.send(f"❌ Captain can't give advice right now.\nError: {e}")
-    
-# ===== /boardingpass Command (Styled Flight Boarding Pass) =====
-from PIL import Image, ImageDraw, ImageFont
-import io, random, datetime
-import discord
-
-@client.tree.command(name="boardingpass", description="Get your pilot-style boarding pass ✈️")
-async def boardingpass(interaction: discord.Interaction, member: discord.Member = None):
-    member = member or interaction.user  # default to command user
-    await interaction.response.defer()
-
-    # ==== Profile Info ====
-    nickname = member.display_name
-    join_date = member.joined_at.strftime("%d/%m/%y")
-    days_in_server = (datetime.datetime.utcnow() - member.joined_at.replace(tzinfo=None)).days
-
-    # Roles / Class (exclude @everyone)
-    roles = [role.name for role in member.roles if role.name != "@everyone"]
-    role_text = ", ".join(roles) if roles else "No special roles"
-
-    # Seat assignment
-    rows = range(1, 31)
-    seats = ["A","B","C","D","E","F"]
-    seat = f"Seat {random.choice(rows)}{random.choice(seats)}"
-
-    # ==== Create Image ====
-    width, height = 512, 256
-    img = Image.new("RGBA", (width, height), (245, 245, 245, 255))
-    draw = ImageDraw.Draw(img)
-
-    # Draw avatar
-    avatar_bytes = await member.display_avatar.read()
-    avatar = Image.open(io.BytesIO(avatar_bytes)).convert("RGBA").resize((256, 256))
-    img.paste(avatar, (0,0))
-
-    # Draw right-hand side box background
-    draw.rectangle([256, 0, width, height], fill=(230, 230, 250, 255))  # lavender light purple
-
-    # Draw text
-    font = ImageFont.load_default()
-    text_x = 270
-    text_y = 20
-    line_height = 28
-
-    # Boxes / separators
-    draw.line([text_x, text_y-5, width-10, text_y-5], fill="purple", width=2)
-    draw.text((text_x, text_y), f"Call Sign: {nickname}", fill="black", font=font)
-    text_y += line_height
-
-    draw.line([text_x, text_y-5, width-10, text_y-5], fill="purple", width=2)
-    draw.text((text_x, text_y), f"Joined Server: {join_date}", fill="black", font=font)
-    text_y += line_height
-
-    draw.line([text_x, text_y-5, width-10, text_y-5], fill="purple", width=2)
-    draw.text((text_x, text_y), f"Days in Server: {days_in_server}", fill="black", font=font)
-    text_y += line_height
-
-    draw.line([text_x, text_y-5, width-10, text_y-5], fill="purple", width=2)
-    draw.text((text_x, text_y), f"Roles: {role_text}", fill="black", font=font)
-    text_y += line_height
-
-    draw.line([text_x, text_y-5, width-10, text_y-5], fill="purple", width=2)
-    draw.text((text_x, text_y), f"{seat}", fill="black", font=font)
-
-    # ==== Save image to buffer ====
-    buffer = io.BytesIO()
-    img.save(buffer, format="PNG")
-    buffer.seek(0)
-    file = discord.File(fp=buffer, filename="boardingpass.png")
-
-    # ==== Create Embed ====
+    # Create embed
     embed = discord.Embed(
-        title=f"🛫 Boarding Pass: {nickname}",
-        description="Here’s your personal boarding pass!",
+        title="✈️ Captain's Advice",
+        description=f'📢 Ladies and gentlemen, here’s today’s captain’s advice:\n\n***{text}***',
         color=discord.Color.purple()
     )
-    embed.set_image(url="attachment://boardingpass.png")
-    embed.set_footer(text="Generated by The Pilot 🚀")
+    embed.set_footer(text=f"- {author}")
 
-    await interaction.followup.send(embed=embed, file=file)
+    await interaction.followup.send(embed=embed)
+    
+# ===== Boarding Pass Command =====
+@client.tree.command(name="boardingpass", description="View a passenger's flight details 🛫")
+@app_commands.describe(member="The passenger to check in (optional)")
+async def boardingpass(interaction: discord.Interaction, member: discord.Member = None):
+    """Shows a boarding pass-style profile for the user."""
+    await interaction.response.defer()
+
+    member = member or interaction.user  # default to the user running the command
+
+    # Calculate join date & days in server
+    join_date = member.joined_at.strftime("%d/%m/%y")
+    days_in_server = (discord.utils.utcnow() - member.joined_at).days
+
+    # Roles (excluding @everyone)
+    roles = [r.mention for r in member.roles if r.name != "@everyone"]
+    role_list = ", ".join(roles) if roles else "No roles assigned"
+
+    # Random flight number for fun
+    import random
+    flight_number = f"PA{random.randint(1000, 9999)}"
+
+    # Create embed
+    embed = discord.Embed(
+        title=f"🎫 Boarding Pass for {member.display_name}",
+        color=discord.Color.purple()
+    )
+    embed.set_thumbnail(url=member.display_avatar.url)
+    embed.add_field(name="🪪 Passenger", value=f"{member}", inline=False)
+    embed.add_field(name="📅 Joined Flight Crew", value=join_date, inline=True)
+    embed.add_field(name="🧭 Days on Board", value=f"{days_in_server} days", inline=True)
+    embed.add_field(name="🎟️ Roles", value=role_list, inline=False)
+    embed.add_field(name="✈️ Flight Number", value=flight_number, inline=True)
+    embed.add_field(name="🛫 Server", value=interaction.guild.name, inline=True)
+    embed.set_footer(text="Issued by The Pilot 🛩️")
+
+    await interaction.followup.send(embed=embed)
 
 # ===== Keep-alive web server for Uptime Robot =====
 app = Flask("")
