@@ -332,20 +332,29 @@ async def wingmates(interaction: discord.Interaction, user1: discord.Member, use
 
     await interaction.response.send_message(embed=embed, file=file)
 
-# ===== Pilot Advice Command with PA-style flavor =====
+# ===== Pilot Advice Command (ZenQuotes, simple embed) =====
 @client.tree.command(name="pilotadvice", description="Receive the captain's inspirational advice ✈️")
 async def pilotadvice(interaction: discord.Interaction):
-    """Fetches a random inspirational quote in cockpit/airline style with PA announcement."""
+    """Fetches a random inspirational quote from ZenQuotes with PA-style embed."""
+    import requests
+
+    API_URL = "https://zenquotes.io/api/quotes/random"
+
     try:
-        response = requests.get("https://api.quotable.io/random?tags=inspirational")
+        response = requests.get(API_URL, timeout=5)
+        response.raise_for_status()
         data = response.json()
+
+        # ZenQuotes returns a list with one dict
+        quote = data[0].get("q", "Keep calm and fly on!")
+        author = data[0].get("a", "The Captain")
 
         embed = discord.Embed(
             title="✈️ Captain's Advice",
-            description=f'📢 Ladies and gentlemen, here’s today’s captain’s advice:\n\n"{data["content"]}"',
+            description=f'📢 Ladies and gentlemen, here’s today’s captain’s advice:\n\n"{quote}"',
             color=discord.Color.teal()
         )
-        embed.set_footer(text=f"- {data['author']} | Brought to you by The Pilot 🚀")
+        embed.set_footer(text=f"─ ✈️ ─\n- {author} | Brought to you by The Pilot 🚀")
 
         await interaction.response.send_message(embed=embed)
 
