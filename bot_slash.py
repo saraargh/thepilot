@@ -332,7 +332,7 @@ async def wingmates(interaction: discord.Interaction, user1: discord.Member, use
 
     await interaction.response.send_message(embed=embed, file=file)
 
-# ===== Pilot Advice Command (Safe, Purple Embed, No "Keep calm" fallback) =====
+# ===== Pilot Advice Command (GitHub Only, Purple Embed) =====
 @client.tree.command(name="pilotadvice", description="Receive the captain's inspirational advice ✈️")
 async def pilotadvice(interaction: discord.Interaction):
     """Fetch a random inspirational quote from GitHub for PA-style embed."""
@@ -342,15 +342,6 @@ async def pilotadvice(interaction: discord.Interaction):
 
     URL = "https://raw.githubusercontent.com/JamesFT/Database-Quotes-JSON/master/quotes.json"
 
-    # Local backup quotes in case API fails
-    backup_quotes = [
-        {"quote": "The sky is not the limit; it’s only the beginning.", "author": "The Captain"},
-        {"quote": "Even in turbulence, stay steady on your course.", "author": "Captain Reynolds"},
-        {"quote": "A smooth sea never made a skilled pilot.", "author": "Unknown"},
-        {"quote": "Every landing is a lesson in disguise.", "author": "The Captain"},
-        {"quote": "Keep your wings level and your heart brave.", "author": "The Captain"}
-    ]
-
     try:
         response = requests.get(URL, timeout=5)
         response.raise_for_status()
@@ -359,26 +350,26 @@ async def pilotadvice(interaction: discord.Interaction):
         # Validate data
         if isinstance(data, list) and len(data) > 0:
             quote = random.choice(data)
-            text = quote.get("quote") or random.choice(backup_quotes)["quote"]
-            author = quote.get("author") or random.choice(backup_quotes)["author"]
+            text = quote.get("quote")
+            author = quote.get("author") or "The Captain"
+
+            if not text:
+                raise ValueError("Quote missing in JSON entry")
+
+            # Create embed
+            embed = discord.Embed(
+                title="✈️ Captain's Advice",
+                description=f'📢 Ladies and gentlemen, here’s today’s captain’s advice:\n\n***{text}***',
+                color=discord.Color.purple()
+            )
+            embed.set_footer(text=f"- {author}")
+
+            await interaction.followup.send(embed=embed)
         else:
-            raise ValueError("No valid quotes returned")
+            raise ValueError("No valid quotes returned from GitHub")
 
-    except Exception:
-        # Use local backup if fetching fails
-        quote = random.choice(backup_quotes)
-        text = quote["quote"]
-        author = quote["author"]
-
-    # Create embed
-    embed = discord.Embed(
-        title="✈️ Captain's Advice",
-        description=f'📢 Ladies and gentlemen, here’s today’s captain’s advice:\n\n***{text}***',
-        color=discord.Color.purple()
-    )
-    embed.set_footer(text=f"- {author}")
-
-    await interaction.followup.send(embed=embed)
+    except Exception as e:
+        await interaction.followup.send(f"❌ Captain can't give advice right now.\nError: {e}")
     
 # ===== Boarding Pass Command =====
 @client.tree.command(name="boardingpass", description="View a passenger's flight details 🛫")
