@@ -332,6 +332,26 @@ async def wingmates(interaction: discord.Interaction, user1: discord.Member, use
 
     await interaction.response.send_message(embed=embed, file=file)
 
+# ===== Pilot Advice Command with PA-style flavor =====
+@client.tree.command(name="pilotadvice", description="Receive the captain's inspirational advice ✈️")
+async def pilotadvice(interaction: discord.Interaction):
+    """Fetches a random inspirational quote in cockpit/airline style with PA announcement."""
+    try:
+        response = requests.get("https://api.quotable.io/random?tags=inspirational")
+        data = response.json()
+
+        embed = discord.Embed(
+            title="✈️ Captain's Advice",
+            description=f'📢 Ladies and gentlemen, here’s today’s captain’s advice:\n\n"{data["content"]}"',
+            color=discord.Color.teal()
+        )
+        embed.set_footer(text=f"- {data['author']} | Brought to you by The Pilot 🚀")
+
+        await interaction.response.send_message(embed=embed)
+
+    except Exception:
+        await interaction.response.send_message("❌ Sorry, the captain can't give advice right now.")
+
 
 # ===== Keep-alive web server for Uptime Robot =====
 app = Flask("")
