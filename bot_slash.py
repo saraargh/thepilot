@@ -332,67 +332,37 @@ async def wingmates(interaction: discord.Interaction, user1: discord.Member, use
 
     await interaction.response.send_message(embed=embed, file=file)
 
-# ===== Pilot Advice Command (Safe GitHub JSON, PA flavor, purple embed) =====
+# ===== Pilot Advice Command (GitHub JSON, bold & italic quote, no plane) =====
 @client.tree.command(name="pilotadvice", description="Receive the captain's inspirational advice ✈️")
 async def pilotadvice(interaction: discord.Interaction):
-    """Fetch a random inspirational quote from GitHub for PA-style embed with proper defer."""
+    """Fetch a random inspirational quote from GitHub for PA-style embed."""
     import requests
     import random
 
-    # Immediately defer the interaction to avoid 3-second timeout
-    await interaction.response.defer()
-
     URL = "https://raw.githubusercontent.com/JamesFT/Database-Quotes-JSON/master/quotes.json"
-
-    # PA flavor lines
-    pa_lines = [
-        "Ladies and gentlemen, this is your captain speaking…",
-        "Attention passengers, a word of wisdom from your friendly pilot:",
-        "The captain has a little advice for you today:",
-        "Fasten your seatbelts and open your mind to this:",
-        "From the flight deck to your hearts, here’s some inspiration:",
-        "Your captain recommends you take note of the following:",
-        "Cabin crew, prepare for an important life announcement:",
-        "This just in from the cockpit:",
-        "Direct from the captain’s office:",
-        "Your captain’s wisdom of the day, arriving now:"
-    ]
 
     try:
         response = requests.get(URL, timeout=5)
         response.raise_for_status()
-        data = response.json()  # Could be a list or dict
+        data = response.json()  # JSON is a list of objects with 'quote' and 'author'
 
-        # Safe handling: if it's a dict with 'quotes' key
-        if isinstance(data, dict) and "quotes" in data:
-            data = data["quotes"]
-
-        # Ensure we have a list of quotes
-        if not isinstance(data, list) or len(data) == 0:
-            text = "Keep calm and fly on!"
-            author = "The Captain"
-        else:
-            quote = random.choice(data)
-            text = quote.get("quote", "Keep calm and fly on!")
-            author = quote.get("author", "The Captain")
-
-        # Random PA line
-        pa_line = random.choice(pa_lines)
+        # Pick a random quote
+        quote = random.choice(data)
+        text = quote.get("quote", "Keep calm and fly on!")
+        author = quote.get("author", "The Captain")
 
         # Create embed
         embed = discord.Embed(
             title="✈️ Captain's Advice",
-            description=f"{pa_line}\n\n***{text}***",
-            color=discord.Color.purple()
+            description=f'📢 Ladies and gentlemen, here’s today’s captain’s advice:\n\n***{text}***',
+            color=discord.Color.teal()
         )
-        embed.set_footer(text=f"- {author}")
+        embed.set_footer(text=f"- {author}")  # Removed plane emoji
 
-        # Send the embed
-        await interaction.followup.send(embed=embed)
+        await interaction.response.send_message(embed=embed)
 
     except Exception as e:
-        await interaction.followup.send(f"❌ Captain can't give advice right now.\nError: {e}")
-
+        await interaction.response.send_message(f"❌ Captain can't give advice right now.\nError: {e}")
     
 
 # ===== Keep-alive web server for Uptime Robot =====
