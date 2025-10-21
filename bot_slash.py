@@ -354,7 +354,7 @@ async def pilotadvice(interaction: discord.Interaction):
         # Create embed
         embed = discord.Embed(
             title="✈️ Captain's Advice",
-            description=f'📢 Ladies and gentlemen, here’s today’s captain’s advice:\n\n"{text}"',
+            description=f'📢 Ladies and gentlemen, here’s today’s captain’s advice:\n\n"***{text}***"',
             color=discord.Color.teal()
         )
         embed.set_footer(text=f"- {author} | Brought to you by The Pilot 🚀")
