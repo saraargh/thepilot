@@ -332,7 +332,7 @@ async def wingmates(interaction: discord.Interaction, user1: discord.Member, use
 
     await interaction.response.send_message(embed=embed, file=file)
 
-# ===== Pilot Advice Command (GitHub JSON) =====
+# ===== Pilot Advice Command (GitHub JSON, PA flavor, purple embed) =====
 @client.tree.command(name="pilotadvice", description="Receive the captain's inspirational advice ✈️")
 async def pilotadvice(interaction: discord.Interaction):
     """Fetch a random inspirational quote from GitHub for PA-style embed."""
@@ -340,6 +340,20 @@ async def pilotadvice(interaction: discord.Interaction):
     import random
 
     URL = "https://raw.githubusercontent.com/JamesFT/Database-Quotes-JSON/master/quotes.json"
+
+    # PA flavor lines
+    pa_lines = [
+        "Ladies and gentlemen, this is your captain speaking…",
+        "Attention passengers, a word of wisdom from your friendly pilot:",
+        "The captain has a little advice for you today:",
+        "Fasten your seatbelts and open your mind to this:",
+        "From the flight deck to your hearts, here’s some inspiration:",
+        "Your captain recommends you take note of the following:",
+        "Cabin crew, prepare for an important life announcement:",
+        "This just in from the cockpit:",
+        "Direct from the captain’s office:",
+        "Your captain’s wisdom of the day, arriving now:"
+    ]
 
     try:
         response = requests.get(URL, timeout=5)
@@ -351,19 +365,21 @@ async def pilotadvice(interaction: discord.Interaction):
         text = quote.get("quote", "Keep calm and fly on!")
         author = quote.get("author", "The Captain")
 
+        # Pick a random PA flavor line
+        pa_line = random.choice(pa_lines)
+
         # Create embed
         embed = discord.Embed(
             title="✈️ Captain's Advice",
-            description=f'📢 Ladies and gentlemen, here’s today’s captain’s advice:\n\n"{text}"',
-            color=discord.Color.teal()
+            description=f"{pa_line}\n\n***{text}***",
+            color=discord.Color.purple()
         )
-        embed.set_footer(text=f"- {author} | Brought to you by The Pilot 🚀")
+        embed.set_footer(text=f"- {author}")
 
         await interaction.response.send_message(embed=embed)
 
     except Exception as e:
         await interaction.response.send_message(f"❌ Captain can't give advice right now.\nError: {e}")
-
 
 # ===== Keep-alive web server for Uptime Robot =====
 app = Flask("")
