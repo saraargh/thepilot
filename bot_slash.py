@@ -13,8 +13,8 @@ from threading import Thread
 TOKEN = os.getenv("TOKEN")  # use Render environment variable
 POO_ROLE_ID = 1429934009550373059    # poo role
 PASSENGERS_ROLE_ID = 1404100554807971971 # passengers role
-WILLIAM_ROLE_ID = 1413545658006110401    # William role for test
-GENERAL_CHANNEL_ID = 1404103684069265519 # general channel
+WILLIAM_ROLE_ID = 1404098545006546954  # William role for test
+GENERAL_CHANNEL_ID = 1398508734506078240 # general channel
 UK_TZ = pytz.timezone("Europe/London")
 
 # Roles allowed to run commands (by ID)
@@ -73,7 +73,7 @@ async def test_poo(guild):
         await selected.add_roles(poo_role)
         await general_channel.send(f"🧪 Test poo assigned to {selected.mention}!")
     else:
-        await general_channel.send("No members in William role for test.")
+        await general_channel.send("No members in allocated role for test."
 
 # ===== Automation Task =====
 @tasks.loop(seconds=60)
@@ -111,7 +111,7 @@ async def assignpoo(interaction: discord.Interaction, member: discord.Member):
     await member.add_roles(poo_role)
     await interaction.response.send_message(f"🎉 {member.mention} has been manually assigned the poo role.")
 
-@client.tree.command(name="testpoo", description="Test the poo automation using William role")
+@client.tree.command(name="testpoo", description="Test the poo automation using server sorter outer role")
 async def testpoo(interaction: discord.Interaction):
     if not user_allowed(interaction.user):
         await interaction.response.send_message("❌ You do not have permission to use this command.", ephemeral=True)
