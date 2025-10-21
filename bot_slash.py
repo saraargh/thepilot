@@ -332,14 +332,14 @@ async def wingmates(interaction: discord.Interaction, user1: discord.Member, use
 
     await interaction.response.send_message(embed=embed, file=file)
 
-# ===== Pilot Advice Command (GitHub JSON, PA flavor, purple embed, defer) =====
+# ===== Pilot Advice Command (Safe GitHub JSON, PA flavor, purple embed) =====
 @client.tree.command(name="pilotadvice", description="Receive the captain's inspirational advice ✈️")
 async def pilotadvice(interaction: discord.Interaction):
     """Fetch a random inspirational quote from GitHub for PA-style embed with proper defer."""
     import requests
     import random
 
-    # Immediately defer the interaction so Discord knows we're working
+    # Immediately defer the interaction to avoid 3-second timeout
     await interaction.response.defer()
 
     URL = "https://raw.githubusercontent.com/JamesFT/Database-Quotes-JSON/master/quotes.json"
@@ -359,28 +359,35 @@ async def pilotadvice(interaction: discord.Interaction):
     ]
 
     try:
-        # Fetch the quotes JSON from GitHub
         response = requests.get(URL, timeout=5)
         response.raise_for_status()
-        data = response.json()  # List of quote objects
+        data = response.json()  # Could be a list or dict
 
-        # Pick a random quote
-        quote = random.choice(data)
-        text = quote.get("quote", "Keep calm and fly on!")
-        author = quote.get("author", "The Captain")
+        # Safe handling: if it's a dict with 'quotes' key
+        if isinstance(data, dict) and "quotes" in data:
+            data = data["quotes"]
 
-        # Pick a random PA flavor line
+        # Ensure we have a list of quotes
+        if not isinstance(data, list) or len(data) == 0:
+            text = "Keep calm and fly on!"
+            author = "The Captain"
+        else:
+            quote = random.choice(data)
+            text = quote.get("quote", "Keep calm and fly on!")
+            author = quote.get("author", "The Captain")
+
+        # Random PA line
         pa_line = random.choice(pa_lines)
 
-        # Build embed
+        # Create embed
         embed = discord.Embed(
             title="✈️ Captain's Advice",
             description=f"{pa_line}\n\n***{text}***",
             color=discord.Color.purple()
         )
-        embed.set_footer(text=f"- {author}")  # Only author, no plane emoji
+        embed.set_footer(text=f"- {author}")
 
-        # Send the embed as a followup after defer
+        # Send the embed
         await interaction.followup.send(embed=embed)
 
     except Exception as e:
