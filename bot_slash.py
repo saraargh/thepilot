@@ -332,34 +332,37 @@ async def wingmates(interaction: discord.Interaction, user1: discord.Member, use
 
     await interaction.response.send_message(embed=embed, file=file)
 
-# ===== Pilot Advice Command (ZenQuotes, simple embed) =====
+# ===== Pilot Advice Command (GitHub JSON) =====
 @client.tree.command(name="pilotadvice", description="Receive the captain's inspirational advice ✈️")
 async def pilotadvice(interaction: discord.Interaction):
-    """Fetches a random inspirational quote from ZenQuotes with PA-style embed."""
+    """Fetch a random inspirational quote from GitHub for PA-style embed."""
     import requests
+    import random
 
-    API_URL = "https://zenquotes.io/api/quotes/random"
+    URL = "https://raw.githubusercontent.com/JamesFT/Database-Quotes-JSON/master/quotes.json"
 
     try:
-        response = requests.get(API_URL, timeout=5)
+        response = requests.get(URL, timeout=5)
         response.raise_for_status()
-        data = response.json()
+        data = response.json()  # JSON is a list of objects with 'quote' and 'author'
 
-        # ZenQuotes returns a list with one dict
-        quote = data[0].get("q", "Keep calm and fly on!")
-        author = data[0].get("a", "The Captain")
+        # Pick a random quote
+        quote = random.choice(data)
+        text = quote.get("quote", "Keep calm and fly on!")
+        author = quote.get("author", "The Captain")
 
+        # Create embed
         embed = discord.Embed(
             title="✈️ Captain's Advice",
-            description=f'📢 Ladies and gentlemen, here’s today’s captain’s advice:\n\n"{quote}"',
+            description=f'📢 Ladies and gentlemen, here’s today’s captain’s advice:\n\n"{text}"',
             color=discord.Color.teal()
         )
-        embed.set_footer(text=f"─ ✈️ ─\n- {author} | Brought to you by The Pilot 🚀")
+        embed.set_footer(text=f"- {author} | Brought to you by The Pilot 🚀")
 
         await interaction.response.send_message(embed=embed)
 
-    except Exception:
-        await interaction.response.send_message("❌ Sorry, the captain can't give advice right now.")
+    except Exception as e:
+        await interaction.response.send_message(f"❌ Captain can't give advice right now.\nError: {e}")
 
 
 # ===== Keep-alive web server for Uptime Robot =====
