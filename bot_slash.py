@@ -332,10 +332,9 @@ async def wingmates(interaction: discord.Interaction, user1: discord.Member, use
 
     await interaction.response.send_message(embed=embed, file=file)
 
-# ===== Pilot Advice Command (GitHub JSON + Random PA Announcements) =====
+# ===== Pilot Advice Command (Fixed: Skip Empty Quotes + PA Announcements) =====
 @client.tree.command(name="pilotadvice", description="Receive the captain's inspirational advice ✈️")
 async def pilotadvice(interaction: discord.Interaction):
-    """Fetch a random inspirational quote or PA-style announcement for embed."""
     import requests, random
 
     await interaction.response.defer()  # acknowledge immediately
@@ -360,8 +359,8 @@ async def pilotadvice(interaction: discord.Interaction):
         response.raise_for_status()
         data = response.json()
 
-        # Filter out valid GitHub quotes
-        valid_quotes = [q for q in data if q.get("quoteText")]
+        # Filter out entries without a non-empty 'quoteText'
+        valid_quotes = [q for q in data if q.get("quoteText") and q.get("quoteText").strip() != ""]
 
         # Decide whether to use a quote or a PA announcement
         if valid_quotes and random.random() < 0.7:  # 70% chance to use a quote
