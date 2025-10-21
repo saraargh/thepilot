@@ -332,12 +332,13 @@ async def wingmates(interaction: discord.Interaction, user1: discord.Member, use
 
     await interaction.response.send_message(embed=embed, file=file)
 
-# ===== Pilot Advice Command (GitHub JSON) =====
+# ===== Pilot Advice Command (GitHub JSON, bold & italic quote, no plane) =====
 @client.tree.command(name="pilotadvice", description="Receive the captain's inspirational advice ✈️")
 async def pilotadvice(interaction: discord.Interaction):
     """Fetch a random inspirational quote from GitHub for PA-style embed."""
-    import requests
-    import random
+    import requests, random
+
+    await interaction.response.defer()  # acknowledge interaction immediately
 
     URL = "https://raw.githubusercontent.com/JamesFT/Database-Quotes-JSON/master/quotes.json"
 
@@ -354,15 +355,15 @@ async def pilotadvice(interaction: discord.Interaction):
         # Create embed
         embed = discord.Embed(
             title="✈️ Captain's Advice",
-            description=f'📢 Ladies and gentlemen, here’s today’s captain’s advice:\n\n"***{text}***"',
+            description=f'📢 Ladies and gentlemen, here’s today’s captain’s advice:\n\n***{text}***',
             color=discord.Color.teal()
         )
-        embed.set_footer(text=f"- {author} | Brought to you by The Pilot 🚀")
+        embed.set_footer(text=f"- {author}")  # no plane emoji
 
-        await interaction.response.send_message(embed=embed)
+        await interaction.followup.send(embed=embed)
 
     except Exception as e:
-        await interaction.response.send_message(f"❌ Captain can't give advice right now.\nError: {e}")
+        await interaction.followup.send(f"❌ Captain can't give advice right now.\nError: {e}")
     
 # ===== /boardingpass Command (Styled Flight Boarding Pass) =====
 from PIL import Image, ImageDraw, ImageFont
