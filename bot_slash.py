@@ -332,12 +332,15 @@ async def wingmates(interaction: discord.Interaction, user1: discord.Member, use
 
     await interaction.response.send_message(embed=embed, file=file)
 
-# ===== Pilot Advice Command (GitHub JSON, PA flavor, purple embed) =====
+# ===== Pilot Advice Command (GitHub JSON, PA flavor, purple embed, defer) =====
 @client.tree.command(name="pilotadvice", description="Receive the captain's inspirational advice ✈️")
 async def pilotadvice(interaction: discord.Interaction):
-    """Fetch a random inspirational quote from GitHub for PA-style embed."""
+    """Fetch a random inspirational quote from GitHub for PA-style embed with proper defer."""
     import requests
     import random
+
+    # Immediately defer the interaction so Discord knows we're working
+    await interaction.response.defer()
 
     URL = "https://raw.githubusercontent.com/JamesFT/Database-Quotes-JSON/master/quotes.json"
 
@@ -356,9 +359,10 @@ async def pilotadvice(interaction: discord.Interaction):
     ]
 
     try:
+        # Fetch the quotes JSON from GitHub
         response = requests.get(URL, timeout=5)
         response.raise_for_status()
-        data = response.json()  # JSON is a list of objects with 'quote' and 'author'
+        data = response.json()  # List of quote objects
 
         # Pick a random quote
         quote = random.choice(data)
@@ -368,18 +372,21 @@ async def pilotadvice(interaction: discord.Interaction):
         # Pick a random PA flavor line
         pa_line = random.choice(pa_lines)
 
-        # Create embed
+        # Build embed
         embed = discord.Embed(
             title="✈️ Captain's Advice",
             description=f"{pa_line}\n\n***{text}***",
             color=discord.Color.purple()
         )
-        embed.set_footer(text=f"- {author}")
+        embed.set_footer(text=f"- {author}")  # Only author, no plane emoji
 
-        await interaction.response.send_message(embed=embed)
+        # Send the embed as a followup after defer
+        await interaction.followup.send(embed=embed)
 
     except Exception as e:
-        await interaction.response.send_message(f"❌ Captain can't give advice right now.\nError: {e}")
+        await interaction.followup.send(f"❌ Captain can't give advice right now.\nError: {e}")
+
+    
 
 # ===== Keep-alive web server for Uptime Robot =====
 app = Flask("")
