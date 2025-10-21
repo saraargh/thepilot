@@ -249,6 +249,118 @@ async def securitycheck(interaction: discord.Interaction, member: discord.Member
     msg = random.choice(securitycheck_messages).format(user=member.mention)
     await interaction.response.send_message(msg)
 
+# ===== /wingmates command (meme-style poster) =====
+from PIL import Image, ImageDraw, ImageFont
+import io
+import random
+
+@client.tree.command(name="wingmates", description="Pair two members together (meme-style poster)")
+@app_commands.describe(user1="First member", user2="Second member")
+async def wingmates(interaction: discord.Interaction, user1: discord.Member, user2: discord.Member):
+    if not user1 or not user2:
+        await interaction.response.send_message("❌ You must tag exactly two users!", ephemeral=True)
+        return
+
+    # ===== Ship Lists =====
+    good_ships = ["Power Couple of Turbulence","Snack Cart Soulmates","Window Seat Sweethearts",
+                  "In-Flight Romance Legends","Legroom Lovers","Frequent Flyer Lovebirds",
+                  "Emergency Exit Enthusiasts","Baggage Claim Bliss","Seatbelt Sweethearts",
+                  "Jet Lag Lovers","Sky High Smoochers","First Class Flirts",
+                  "Turbulence Tied Hearts","Cloud Nine Companions","Aisle Side Admirers",
+                  "Oxygen Mask Romance","Runway Romance Rebels","Snack Tray Sweeties",
+                  "Tray Table Twosome","Window View Wooers"]
+    bad_ships = ["Middle Seat Misery","Elbow Battle Partners","Screaming Baby Survivors",
+                 "Lost Luggage Lovers","Coffee Spill Conspirators","Legroom Losers",
+                 "Aisle Aggression Alliance","In-Flight Argument Duo","Tray Table Tyrants",
+                 "Overhead Bin Bandits","Turbulent Teammates","Cancelled Flight Couple",
+                 "Bumpy Ride Buddies","Seat Recline Saboteurs","Terminal Troublesome Twosome",
+                 "Delayed Flight Disaster","Lost Boarding Pass Pair","Back Row Brats",
+                 "Luggage Lockdown Lovers","Crying Infant Companions"]
+    chaos_ships = ["Flight Attendant's Worst Nightmare","Oxygen Mask Enthusiasts","Black Hole of Drama",
+                   "Emergency Exit Elopers","Snack Cart Sabotage Squad","Cockpit Chaos Crew",
+                   "Runway Riot Rebels","Turbulence Tragedy Team","Soda Spill Syndicate",
+                   "Tray Table Tornadoes","Aisle Panic Pair","Snack Cart Smugglers",
+                   "Legroom Looters","Overhead Bin Bandits","Cabin Crew Chaos",
+                   "Jet Engine Jokers","In-Flight Frenemies","Seatbelt Sabotage Squad",
+                   "Airline Anarchy Alliance","Cloud Chaos Couple"]
+    savage_comments = ["Pilot says: don't talk to each other ever.",
+                       "Flight attendants are filing a restraining order.",
+                       "Brace for turbulence, the cabin fears you.",
+                       "Your compatibility is low… but your chaos is high.",
+                       "Cabin crew recommends therapy before boarding again.",
+                       "Seatbelt locked. Embarrassment mandatory.",
+                       "Your in-flight snack privileges have been revoked.",
+                       "Caution: may cause emotional turbulence to others.",
+                       "Flight recorder activated. This is going on record.",
+                       "You are the reason the black box exists."]
+
+    # ===== Random Ship Type & Result =====
+    ship_type = random.choice(["good", "bad", "chaos"])
+    if ship_type == "good":
+        result = random.choice(good_ships)
+        percent = random.randint(70, 100)
+        emoji = "❤️"
+        border_color = (255, 182, 193)
+    elif ship_type == "bad":
+        result = random.choice(bad_ships)
+        percent = random.randint(0, 40)
+        emoji = "💔"
+        border_color = (255, 0, 0)
+    else:
+        result = random.choice(chaos_ships)
+        percent = random.randint(30, 80)
+        emoji = "⚡"
+        border_color = (255, 255, 0)
+
+    comment = random.choice(savage_comments)
+
+    # ===== Load Avatars =====
+    avatar1_bytes = await user1.display_avatar.read()
+    avatar2_bytes = await user2.display_avatar.read()
+    avatar1 = Image.open(io.BytesIO(avatar1_bytes)).convert("RGBA").resize((256, 256))
+    avatar2 = Image.open(io.BytesIO(avatar2_bytes)).convert("RGBA").resize((256, 256))
+
+    # ===== Create Base Image =====
+    width, height = 512, 320
+    combined = Image.new("RGBA", (width, height), (255, 255, 255, 255))
+    combined.paste(avatar1, (0, 0))
+    combined.paste(avatar2, (256, 0))
+
+    # ===== Draw Border =====
+    draw = ImageDraw.Draw(combined)
+    for i in range(8):
+        draw.rectangle([i, i, width-i-1, height-i-1], outline=border_color)
+
+    # ===== Overlay Emoji in Middle =====
+    font_large = ImageFont.load_default()
+    draw.text((width//2 - 10, height//2 - 20), emoji, font=font_large, fill=(255, 0, 0, 255))
+
+    # ===== Overlay Ship Name & Percentage =====
+    font_small = ImageFont.load_default()
+    draw.text((10, 270), f"{result}", font=font_small, fill=(0, 0, 0, 255))
+    draw.text((width - 150, 270), f"{percent}% compatible", font=font_small, fill=(0, 0, 0, 255))
+
+    # ===== Overlay Savage Comment =====
+    draw.text((10, 250), f"{comment}", font=font_small, fill=(0, 0, 0, 255))
+
+    # ===== Save to Buffer =====
+    buffer = io.BytesIO()
+    combined.save(buffer, format="PNG")
+    buffer.seek(0)
+    file = discord.File(fp=buffer, filename="wingmates.png")
+
+    # ===== Send Embed =====
+    embed = discord.Embed(
+        title=f"{emoji} Wingmate Result",
+        description=f"{user1.mention} + {user2.mention}",
+        color=random.randint(0, 0xFFFFFF)
+    )
+    embed.set_image(url="attachment://wingmates.png")
+    embed.set_footer(text="Generated by The Pilot 🚀")
+
+    await interaction.response.send_message(embed=embed, file=file)
+
+
 # ===== Keep-alive web server for Uptime Robot =====
 app = Flask("")
 
