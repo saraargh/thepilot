@@ -332,7 +332,7 @@ async def wingmates(interaction: discord.Interaction, user1: discord.Member, use
 
     await interaction.response.send_message(embed=embed, file=file)
 
-# ===== Pilot Advice Command (GitHub JSON, bold & italic quote, no plane) =====
+# ===== Pilot Advice Command (GitHub JSON) =====
 @client.tree.command(name="pilotadvice", description="Receive the captain's inspirational advice ✈️")
 async def pilotadvice(interaction: discord.Interaction):
     """Fetch a random inspirational quote from GitHub for PA-style embed."""
@@ -354,10 +354,10 @@ async def pilotadvice(interaction: discord.Interaction):
         # Create embed
         embed = discord.Embed(
             title="✈️ Captain's Advice",
-            description=f'📢 Ladies and gentlemen, here’s today’s captain’s advice:\n\n***{text}***',
+            description=f'📢 Ladies and gentlemen, here’s today’s captain’s advice:\n\n"{text}"',
             color=discord.Color.teal()
         )
-        embed.set_footer(text=f"- {author}")  # Removed plane emoji
+        embed.set_footer(text=f"- {author} | Brought to you by The Pilot 🚀")
 
         await interaction.response.send_message(embed=embed)
 
