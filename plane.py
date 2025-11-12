@@ -2,18 +2,10 @@
 import discord
 from discord import app_commands
 import random
-from PIL import Image, ImageDraw
 import io
-import requests
-from datetime import datetime
-import pytz
+from PIL import Image, ImageDraw
 
-UK_TZ = pytz.timezone("Europe/London")
-
-def setup_plane_commands(tree: app_commands.CommandTree, allowed_ids: list):
-
-    def user_allowed(member: discord.Member):
-        return any(role.id in allowed_ids for role in member.roles)
+def setup_plane_commands(tree: app_commands.CommandTree):
 
     # ===== Messages =====
     upgrade_messages = [
@@ -24,7 +16,7 @@ def setup_plane_commands(tree: app_commands.CommandTree, allowed_ids: list):
         "{user} upgraded! Your ego was too big for economy anyway, {user}.",
         "Seatbelt check: {user} strapped in… but still falling for their own bad ideas, {user}.",
         "First Class unlocked. {user}'s personality still smells like the cargo hold.",
-        "Upgraded because chaos doesn’t travel coach.",
+        "{user} upgraded because chaos doesn’t travel coach.",
         "Congratulations {user}! You’re now closer to the snacks and farther from being likable, {user}.",
         "Enjoy First Class, {user} — it’s the only place where people won’t notice how bad you are at life, {user}.",
         "Pilot says: 'If {user} survives this upgrade, miracles exist.'",
@@ -56,7 +48,9 @@ def setup_plane_commands(tree: app_commands.CommandTree, allowed_ids: list):
         "{user} now travels with 0 dignity and 100% elbow abuse. Literally zero.",
         "Downgraded because the universe hates you, {user}. Don’t fight it.",
         "{user} downgraded to economy… and yes, your life choices are also economy class.",
-        "Middle seat horror: {user}, you now sit between people who hate you politely."
+        "Middle seat horror: {user}, you now sit between people who hate you politely.",
+        "{user}, your downgrade includes a crying baby and a window that won’t open.",
+        "Downgraded, {user}. No upgrade will save you — just like your personality."
     ]
 
     turbulence_messages = [
@@ -67,15 +61,8 @@ def setup_plane_commands(tree: app_commands.CommandTree, allowed_ids: list):
         "Server shaking! {user} clearly violates the Geneva Conventions of Chat.",
         "Brace yourselves — {user} just hit enter and destroyed 3 servers simultaneously.",
         "Turbulence intensifies: {user} laughed at someone’s misfortune.",
-        "Passenger {user} activated 'chaotic evil mode.' All seats unsafe.",
+        "{user} activated 'chaotic evil mode.' All seats unsafe.",
         "Cabin crew reports: {user} is on fire. Figuratively, maybe literally.",
-        "⚠️ {user} caused turbulence by existing. Buckle up, everyone else is doomed.",
-        "Severe turbulence triggered by {user}. Gravity is suing for damages.",
-        "Extreme chaos: {user} just posted a hot take and now the plane is spinning.",
-        "Passenger {user} flapped their arms. Physics resigned immediately.",
-        "{user} laughed at turbulence. The cabin is filing a restraining order.",
-        "Brace yourselves — {user} just sneezed and broke structural integrity.",
-        "{user} activated maximum panic mode. No one survives emotionally.",
         "{user} typed 'oops'. The plane is now orbiting a trash fire."
     ]
 
@@ -89,115 +76,88 @@ def setup_plane_commands(tree: app_commands.CommandTree, allowed_ids: list):
         "Security flags: {user} may cause turbulence and emotional distress.",
         "Dangerous materials: {user}’s past tweets and bad memes.",
         "{user} failed the personality check. Security recommends permanent grounding.",
-        "Pat-down complete: {user} is carrying 100% chaos and 0 self-awareness.",
-        "{user} attempted to smuggle opinions. All confiscated, plus shame added.",
-        "Warning: {user} laughed at a rule. Immediate emotional destruction incoming.",
         "Contraband includes: sense of direction, sense of humor, and {user}.",
-        "{user} is too dangerous to board. Cabin may collapse just from breathing near them.",
-        "Security recommends therapy before allowing {user} to speak again.",
-        "🛃 Security finds {user} smuggling bad takes and expired memes. Confiscated.",
-        "Contraband detected: {user}’s ego, incompetence, and general uselessness.",
-        "{user} failed the personality check. Security recommends permanent grounding.",
-        "Pat-down complete: {user} is carrying lethal levels of sarcasm, attitude, and general misery."
+        "{user} attempted to smuggle drama. Detected and roasted.",
+        "Warning: {user} laughed at a rule. Immediate emotional destruction incoming."
     ]
 
     # ===== Slash Commands =====
     @tree.command(name="upgrade", description="Savagely upgrade a member to First Class")
     @app_commands.describe(member="The member to upgrade")
     async def upgrade(interaction: discord.Interaction, member: discord.Member):
-        if not user_allowed(interaction.user):
-            await interaction.response.send_message("❌ No permission.", ephemeral=True)
-            return
-        await interaction.response.send_message(random.choice(upgrade_messages).format(user=member.mention))
+        msg = random.choice(upgrade_messages).format(user=member.mention)
+        await interaction.response.send_message(msg)
 
-    @tree.command(name="downgrade", description="Savagely downgrade a member")
+    @tree.command(name="downgrade", description="Savagely downgrade a member to cargo/middle seat")
     @app_commands.describe(member="The member to downgrade")
     async def downgrade(interaction: discord.Interaction, member: discord.Member):
-        if not user_allowed(interaction.user):
-            await interaction.response.send_message("❌ No permission.", ephemeral=True)
-            return
-        await interaction.response.send_message(random.choice(downgrade_messages).format(user=member.mention))
+        msg = random.choice(downgrade_messages).format(user=member.mention)
+        await interaction.response.send_message(msg)
 
     @tree.command(name="turbulence", description="Cause chaotic turbulence for a member")
     @app_commands.describe(member="The member to target")
     async def turbulence(interaction: discord.Interaction, member: discord.Member):
-        if not user_allowed(interaction.user):
-            await interaction.response.send_message("❌ No permission.", ephemeral=True)
-            return
-        await interaction.response.send_message(random.choice(turbulence_messages).format(user=member.mention))
+        msg = random.choice(turbulence_messages).format(user=member.mention)
+        await interaction.response.send_message(msg)
 
     @tree.command(name="securitycheck", description="Perform a savage security check on a member")
     @app_commands.describe(member="The member to check")
     async def securitycheck(interaction: discord.Interaction, member: discord.Member):
-        if not user_allowed(interaction.user):
-            await interaction.response.send_message("❌ No permission.", ephemeral=True)
-            return
-        await interaction.response.send_message(random.choice(securitycheck_messages).format(user=member.mention))
+        msg = random.choice(securitycheck_messages).format(user=member.mention)
+        await interaction.response.send_message(msg)
 
-    # ===== Wingmates Command =====
-    @tree.command(name="wingmates", description="Pair two members together (meme-style poster)")
+    @tree.command(name="wingmates", description="Pair two members together (fun embed)")
     @app_commands.describe(user1="First member", user2="Second member")
     async def wingmates(interaction: discord.Interaction, user1: discord.Member, user2: discord.Member):
-        if not user1 or not user2:
-            await interaction.response.send_message("❌ You must tag exactly two users!", ephemeral=True)
-            return
+        ship_types = ["good", "bad", "chaos"]
+        ship_type = random.choice(ship_types)
 
-        good_ships = ["Power Couple of Turbulence","Snack Cart Soulmates","Window Seat Sweethearts",
-                      "In-Flight Romance Legends","Legroom Lovers","Frequent Flyer Lovebirds"]
-        bad_ships = ["Middle Seat Misery","Elbow Battle Partners","Screaming Baby Survivors",
-                     "Lost Luggage Lovers","Coffee Spill Conspirators","Legroom Losers"]
-        chaos_ships = ["Flight Attendant's Worst Nightmare","Oxygen Mask Enthusiasts","Black Hole of Drama",
-                       "Emergency Exit Elopers","Snack Cart Sabotage Squad","Cockpit Chaos Crew"]
-        in_flight_comments = ["Pilot says: don't talk to each other ever.",
-                              "Flight attendants are filing a restraining order.",
-                              "Brace for turbulence, the cabin fears you.",
-                              "Your compatibility is low… but your chaos is high.",
-                              "Cabin crew recommends therapy before boarding again."]
+        good_ships = ["Power Couple of Turbulence","Snack Cart Soulmates","Window Seat Sweethearts"]
+        bad_ships = ["Middle Seat Misery","Elbow Battle Partners","Screaming Baby Survivors"]
+        chaos_ships = ["Flight Attendant's Worst Nightmare","Oxygen Mask Enthusiasts","Black Hole of Drama"]
 
-        ship_type = random.choice(["good", "bad", "chaos"])
+        comments = [
+            "Pilot says: don't talk to each other ever.",
+            "Flight attendants are filing a restraining order.",
+            "Brace for turbulence, the cabin fears you."
+        ]
+
         if ship_type == "good":
             result = random.choice(good_ships)
-            percent = random.randint(70, 100)
             emoji = "❤️"
-            border_color = (255, 182, 193)
+            percent = random.randint(70, 100)
         elif ship_type == "bad":
             result = random.choice(bad_ships)
-            percent = random.randint(0, 40)
             emoji = "💔"
-            border_color = (255, 0, 0)
+            percent = random.randint(0, 40)
         else:
             result = random.choice(chaos_ships)
-            percent = random.randint(30, 80)
             emoji = "⚡"
-            border_color = (255, 255, 0)
+            percent = random.randint(30, 80)
 
-        comment = random.choice(in_flight_comments)
+        comment = random.choice(comments)
 
+        # Load avatars
         avatar1_bytes = await user1.display_avatar.read()
         avatar2_bytes = await user2.display_avatar.read()
         avatar1 = Image.open(io.BytesIO(avatar1_bytes)).convert("RGBA").resize((256, 256))
         avatar2 = Image.open(io.BytesIO(avatar2_bytes)).convert("RGBA").resize((256, 256))
 
-        width, height = 512, 256
-        combined = Image.new("RGBA", (width, height), (255, 255, 255, 255))
-        combined.paste(avatar1, (0, 0))
-        combined.paste(avatar2, (256, 0))
+        combined = Image.new("RGBA", (512, 256), (255, 255, 255, 255))
+        combined.paste(avatar1, (0,0))
+        combined.paste(avatar2, (256,0))
 
         draw = ImageDraw.Draw(combined)
-        for i in range(8):
-            draw.rectangle([i, i, width-i-1, height-i-1], outline=border_color)
-        draw.text((width//2 - 10, height//2 - 20), emoji, fill=(255,0,0))
+        draw.text((256-10, 128-20), emoji, fill=(255,0,0))
 
         buffer = io.BytesIO()
         combined.save(buffer, format="PNG")
         buffer.seek(0)
         file = discord.File(fp=buffer, filename="wingmates.png")
 
-        embed = discord.Embed(
-            title=f"{emoji} Wingmate Result",
-            description=f"{user1.mention} + {user2.mention}",
-            color=random.randint(0, 0xFFFFFF)
-        )
+        embed = discord.Embed(title=f"{emoji} Wingmate Result",
+                              description=f"{user1.mention} + {user2.mention}",
+                              color=random.randint(0, 0xFFFFFF))
         embed.add_field(name="Ship Name", value=result, inline=False)
         embed.add_field(name="Compatibility", value=f"{percent}%", inline=False)
         embed.add_field(name="In-Flight Commentary", value=comment, inline=False)
@@ -206,25 +166,23 @@ def setup_plane_commands(tree: app_commands.CommandTree, allowed_ids: list):
 
         await interaction.response.send_message(embed=embed, file=file)
 
-    # ===== Boarding Pass Command =====
     @tree.command(name="boardingpass", description="View a passenger's flight details 🛫")
-    @app_commands.describe(member="The passenger to check in (optional)")
+    @app_commands.describe(member="Optional passenger")
     async def boardingpass(interaction: discord.Interaction, member: discord.Member = None):
         member = member or interaction.user
         join_date = member.joined_at.strftime("%d/%m/%y")
-        days_in_server = (discord.utils.utcnow() - member.joined_at).days
+        days_on_board = (discord.utils.utcnow() - member.joined_at).days
         roles = [r.mention for r in member.roles if r.name != "@everyone"]
-        role_list = ", ".join(roles) if roles else "No roles assigned"
-        flight_number = f"PA{random.randint(1000, 9999)}"
+        role_list = ", ".join(roles) if roles else "No roles"
 
-        embed = discord.Embed(
-            title=f"🎫 Boarding Pass for {member.display_name}",
-            color=discord.Color.purple()
-        )
+        flight_number = f"PA{random.randint(1000,9999)}"
+
+        embed = discord.Embed(title=f"🎫 Boarding Pass for {member.display_name}",
+                              color=discord.Color.purple())
         embed.set_thumbnail(url=member.display_avatar.url)
-        embed.add_field(name="🪪 Passenger", value=f"{member}", inline=False)
+        embed.add_field(name="🪪 Passenger", value=str(member), inline=False)
         embed.add_field(name="📅 Joined Flight Crew", value=join_date, inline=True)
-        embed.add_field(name="🧭 Days on Board", value=f"{days_in_server} days", inline=True)
+        embed.add_field(name="🧭 Days on Board", value=f"{days_on_board} days", inline=True)
         embed.add_field(name="🎟️ Roles", value=role_list, inline=False)
         embed.add_field(name="✈️ Flight Number", value=flight_number, inline=True)
         embed.add_field(name="🛫 Server", value=interaction.guild.name, inline=True)
@@ -232,43 +190,17 @@ def setup_plane_commands(tree: app_commands.CommandTree, allowed_ids: list):
 
         await interaction.response.send_message(embed=embed)
 
-    # ===== Pilot Advice Command =====
     @tree.command(name="pilotadvice", description="Receive the captain's inspirational advice ✈️")
     async def pilotadvice(interaction: discord.Interaction):
-        await interaction.response.defer()
-        pa_announcements = [
+        announcements = [
             "⚠️ Please remain seated while we avoid turbulence of the mind.",
-            "Ladies and gentlemen, remember: the Wi-Fi may fail but optimism should not.",
-            "Cabin crew advises: hydration is important, sarcasm optional.",
             "Keep your tray tables up and your expectations realistic.",
             "Flight attendants recommend smiling — it burns extra calories.",
-            "Attention passengers: caffeine levels may affect judgment.",
-            "Remember: the pilot’s humor is free, unlike our snacks.",
-            "Ladies and gentlemen, enjoy our complimentary chaos today.",
-            "Please fasten your seatbelts, the upcoming life advice may be bumpy."
+            "Ladies and gentlemen, enjoy our complimentary chaos today."
         ]
-
-        URL = "https://raw.githubusercontent.com/JamesFT/Database-Quotes-JSON/master/quotes.json"
-
-        try:
-            response = requests.get(URL, timeout=5)
-            response.raise_for_status()
-            data = response.json()
-            valid_quotes = [q for q in data if q.get("quoteText") and q.get("quoteText").strip() != ""]
-            if valid_quotes and random.random() < 0.7:
-                quote = random.choice(valid_quotes)
-                text = quote.get("quoteText")
-                author = quote.get("quoteAuthor") or "The Captain"
-            else:
-                text = random.choice(pa_announcements)
-                author = "Captain PA"
-
-            embed = discord.Embed(
-                title="✈️ Captain's Advice",
-                description=f'📢 Ladies and gentlemen, here’s today’s captain’s advice:\n\n***{text}***',
-                color=discord.Color.purple()
-            )
-            embed.set_footer(text=f"- {author}")
-            await interaction.followup.send(embed=embed)
-        except Exception as e:
-            await interaction.followup.send(f"❌ The captain can’t give advice right now.\nError: {e}")
+        text = random.choice(announcements)
+        embed = discord.Embed(title="✈️ Captain's Advice",
+                              description=f"📢 {text}",
+                              color=discord.Color.purple())
+        embed.set_footer(text="- Captain PA")
+        await interaction.response.send_message(embed=embed)
