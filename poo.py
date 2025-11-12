@@ -11,7 +11,7 @@ GENERAL_CHANNEL_ID = 1398508734506078240
 def setup_poo_commands(tree: app_commands.CommandTree, allowed_role_ids):
 
     def user_allowed(member: discord.Member):
-        return any(role.id in allowed_roles for role in member.roles)
+        return any(role.id in allowed_role_ids for role in member.roles)
 
     async def clear_poo_role(guild):
         poo_role = guild.get_role(POO_ROLE_ID)
@@ -62,7 +62,7 @@ def setup_poo_commands(tree: app_commands.CommandTree, allowed_role_ids):
         await interaction.response.send_message(f"🎉 {member.mention} has been manually assigned the poo role.")
 
     @tree.command(name="testpoo", description="Test the poo automation using server sorter outer role")
-    async def testpoo_command(interaction: discord.Interaction):
+    async def testpoo(interaction: discord.Interaction):
         if not user_allowed(interaction.user):
             await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
             return
