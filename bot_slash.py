@@ -2,34 +2,34 @@
 import discord
 from discord.ext import tasks
 from discord import app_commands
-import random
+import os
+import json
 import datetime
 import pytz
-import os
 from flask import Flask
 from threading import Thread
 
 # ===== CONFIG =====
-TOKEN = os.getenv("TOKEN")  # use Render environment variable
-POO_ROLE_ID = 1429934009550373059    # poo role
-PASSENGERS_ROLE_ID = 1404100554807971971 # passengers role
-WILLIAM_ROLE_ID = 1404098545006546954  # William role for test
-GENERAL_CHANNEL_ID = 1398508734506078240 # general channel
+TOKEN = os.getenv("TOKEN")  # Render environment variable
 UK_TZ = pytz.timezone("Europe/London")
+POO_ROLE_ID = 1429934009550373059
+PASSENGERS_ROLE_ID = 1404100554807971971
+WILLIAM_ROLE_ID = 1404098545006546954
+GENERAL_CHANNEL_ID = 1398508734506078240
 
-# Roles allowed to run commands (by ID)
+# Roles allowed to manage tournaments
 ALLOWED_ROLE_IDS = [
-    1413545658006110401,  # William/Admin
+    1413545658006110401,  # Admin/William
     1404098545006546954,
     1420817462290681936,
     1406242523952713820
 ]
-# ==================
 
+# ===== Bot Setup =====
 intents = discord.Intents.default()
 intents.members = True
 
-class PooBot(discord.Client):
+class PilotBot(discord.Client):
     def __init__(self):
         super().__init__(intents=intents)
         self.tree = app_commands.CommandTree(self)
@@ -38,395 +38,69 @@ class PooBot(discord.Client):
         await self.tree.sync()
         scheduled_tasks.start(self)
 
-client = PooBot()
+client = PilotBot()
 
 # ===== Helper Functions =====
 def user_allowed(member: discord.Member):
-    """Check if user has one of the allowed roles by ID."""
     return any(role.id in ALLOWED_ROLE_IDS for role in member.roles)
 
-async def clear_poo_role(guild):
-    poo_role = guild.get_role(POO_ROLE_ID)
-    for member in guild.members:
-        if poo_role in member.roles:
-            await member.remove_roles(poo_role)
+# ===== JSON Storage =====
+DATA_FILE = "tournament.json"
 
-async def assign_random_poo(guild):
-    poo_role = guild.get_role(POO_ROLE_ID)
-    passengers_role = guild.get_role(PASSENGERS_ROLE_ID)
-    general_channel = guild.get_channel(GENERAL_CHANNEL_ID)
-    
-    if passengers_role.members:
-        selected = random.choice(passengers_role.members)
-        await selected.add_roles(poo_role)
-        await general_channel.send(f"🎉 {selected.mention} is today’s poo!")
-    else:
-        await general_channel.send("No passengers available to assign poo!")
+def load_data():
+    try:
+        with open(DATA_FILE, "r") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {"tournament": None}
 
-async def test_poo(guild):
-    poo_role = guild.get_role(POO_ROLE_ID)
-    william_role = guild.get_role(WILLIAM_ROLE_ID)
-    general_channel = guild.get_channel(GENERAL_CHANNEL_ID)
+def save_data(data):
+    with open(DATA_FILE, "w") as f:
+        json.dump(data, f, indent=4)
 
-    if william_role.members:
-        selected = random.choice(william_role.members)
-        await selected.add_roles(poo_role)
-        await general_channel.send(f"🧪 Test poo assigned to {selected.mention}!")
-    else:
-        await general_channel.send("No members in allocated role for test.")
-
-# ===== Automation Task =====
+# ===== Scheduled Tasks =====
 @tasks.loop(seconds=60)
 async def scheduled_tasks(bot_client):
     now = datetime.datetime.now(UK_TZ)
     if not bot_client.guilds:
         return
-    guild = bot_client.guilds[0]  # assumes 1 server
-    # 11AM: Clear poo role
+    guild = bot_client.guilds[0]
+
+    # 11AM clear poo
     if now.hour == 11 and now.minute == 0:
-        await clear_poo_role(guild)
-        print("11AM: Cleared poo role")
-    # 12PM: Assign poo randomly and announce
+        poo_role = guild.get_role(POO_ROLE_ID)
+        for member in guild.members:
+            if poo_role in member.roles:
+                await member.remove_roles(poo_role)
+        print("Cleared poo role")
+
+    # 12PM assign poo
     if now.hour == 12 and now.minute == 0:
-        await clear_poo_role(guild)
-        await assign_random_poo(guild)
-        print("12PM: Assigned random poo and announced")
-
-# ===== Savage / Funny Messages =====
-upgrade_messages = [
-    "💺 {user} has been upgraded to First Class because the pilot lost a bet and no one can stop them.",
-    "First Class achieved! Congratulations, {user}, you now have more space than your personality deserves.",
-    "{user} has been upgraded for loud whining and an inflated sense of self. Enjoy legroom, champ.",
-    "Flight attendants collectively groaned when {user} sat down. Welcome to First Class, {user}.",
-    "{user} upgraded! Your ego was too big for economy anyway, {user}.",
-    "Seatbelt check: {user} strapped in… but still falling for their own bad ideas, {user}.",
-    "First Class unlocked. {user}'s personality still smells like the cargo hold.",
-    "{user} upgraded because chaos doesn’t travel coach.",
-    "Congratulations {user}! You’re now closer to the snacks and farther from being likable, {user}.",
-    "Enjoy First Class, {user} — it’s the only place where people won’t notice how bad you are at life, {user}.",
-    "Pilot says: 'If {user} survives this upgrade, miracles exist.'",
-    "You now have a seat next to someone who actually understands social cues, {user}. Good luck!",
-    "Upgraded for reasons no human or God can explain, {user}. Welcome aboard.",
-    "{user} upgraded because the pilot lost a bet… and honestly, nobody else deserves First Class either.",
-    "First Class welcomes {user} — try not to scream at the staff about your imaginary problems.",
-    "{user} upgraded! Finally, a seat as inflated as your ego.",
-    "Congratulations {user}, you now have legroom and zero social skills.",
-    "{user} upgraded… the pilot is crying quietly in the cockpit.",
-    "First Class unlocked for {user}. Warning: your personality still stinks like luggage.",
-    "{user} now has a window seat to watch your dignity fly out the door.",
-    "Emergency exit reserved for {user} — not that you’ll ever escape your own bad decisions.",
-    "Pilot notes: {user} is dangerous but at least comfortable now.",
-    "Upgraded, {user}. Try not to ruin the cabin like you ruin conversations."
-]
-
-downgrade_messages = [
-    "{user} downgraded to cargo. Enjoy your eternal suffering with the luggage, {user}.",
-    "Middle seat eternity activated. Hope you like being elbowed and ignored, {user}.",
-    "{user}, your seat has 0 legroom, 100% regret, and a complimentary crying baby.",
-    "Pilot just laughed at {user}’s face. Downgrade complete, {user}.",
-    "You now sit between someone’s smelly socks and a guy who just sneezed, {user}. Enjoy.",
-    "Emergency exit denied. You’re the human pretzel now, {user}.",
-    "Congratulations, {user} — your downgrade comes with bonus humiliation.",
-    "{user} has been assigned the window that won’t open, the snack cart that won’t stop, and eternal sadness.",
-    "Middle seat: where {user}’s dreams go to die. Have fun!",
-    "{user}, if you die of boredom, the pilot is not liable.",
-    "Seat folds if you cry, {user}. Warning: tears expected.",
-    "{user} now travels with 0 dignity and 100% elbow abuse.",
-    "Downgraded because the universe hates you, {user}. Don’t fight it.",
-    "{user} downgraded to economy… and yes, your life choices are also economy class.",
-    "Middle seat eternity granted to {user} — may your knees ache forever.",
-    "{user}, enjoy elbow battles with strangers and zero personal space. Literally zero.",
-    "Congratulations {user}, your seat is collapsing faster than your social life.",
-    "Pilot declares {user} a human pretzel — no escape, no dignity.",
-    "{user}, your downgrade includes a crying baby and a window that won’t open.",
-    "Seatbelt locked. {user}, your embarrassment is mandatory.",
-    "Middle seat horror: {user}, you now sit between people who hate you politely.",
-    "{user}, enjoy 0 legroom and infinite regret for the next 6 hours.",
-    "Downgraded, {user}. No upgrade will save you — just like your personality."
-]
-
-turbulence_messages = [
-    "⚠️ Mild turbulence: {user} just blinked and broke physics.",
-    "Moderate turbulence: {user} sneezed. Cabin lost structural integrity.",
-    "Severe turbulence: {user} posted a hot take. Plane is spinning out of orbit.",
-    "Extreme turbulence: {user} just typed 'hello'. Everyone panic!",
-    "Server shaking! {user} clearly violates the Geneva Conventions of Chat.",
-    "Brace yourselves — {user} just hit enter and destroyed 3 servers simultaneously.",
-    "Turbulence intensifies: {user} laughed at someone’s misfortune.",
-    "Passenger {user} activated 'chaotic evil mode.' All seats unsafe.",
-    "Cabin crew reports: {user} is on fire. Figuratively, maybe literally.",
-    "The plane is trembling because {user} exists.",
-    "Server integrity compromised. Blame {user} and their existential dread.",
-    "Warning: {user} flapped their arms and shattered the concept of gravity.",
-    "Turbulence upgrade: {user} just posted a controversial opinion AND a meme at the same time.",
-    "⚠️ {user} caused turbulence by existing. Buckle up, everyone else is doomed.",
-    "Severe turbulence triggered by {user}. Gravity is suing for damages.",
-    "Extreme chaos: {user} just posted a hot take and now the plane is spinning.",
-    "Passenger {user} flapped their arms. Physics resigned immediately.",
-    "{user} laughed at turbulence. The cabin is filing a restraining order.",
-    "Brace yourselves — {user} just sneezed and broke structural integrity.",
-    "{user} activated maximum panic mode. No one survives emotionally.",
-    "Cabin crew report: {user} is on fire figuratively. Literally may follow.",
-    "Turbulence intensifies: {user} just disagreed with someone. Everyone suffers.",
-    "{user} typed 'oops'. The plane is now orbiting a trash fire."
-]
-
-securitycheck_messages = [
-    "🛃 Security finds: {user} smuggling 3 lies, 2 bad decisions, and a cursed emoji.",
-    "Contraband detected: {user}’s ego and expired personality.",
-    "Threat level: {user} is chaotic evil. Boarding allowed at your own risk.",
-    "Security confiscated: {user}’s dignity. Flight may proceed.",
-    "Pat-down complete: {user} is suspiciously ridiculous.",
-    "Found in carry-on: 0 self-awareness, 100% stupidity. Thanks, {user}.",
-    "Security flags: {user} may cause turbulence and emotional distress.",
-    "Dangerous materials: {user}’s past tweets and bad memes.",
-    "Contraband includes: sense of direction, sense of humor, and {user}.",
-    "Security recommends therapy before allowing {user} to breathe near passengers, {user}.",
-    "{user} attempted to smuggle drama. Detected and roasted.",
-    "Warning: {user} laughed at turbulence. Immediate interrogation required.",
-    "Confiscated: {user}’s life choices. Remain seated for embarrassment, {user}.",
-    "🛃 Security finds {user} smuggling bad takes and expired memes. Confiscated.",
-    "Contraband detected: {user}’s ego, incompetence, and general uselessness.",
-    "{user} failed the personality check. Security recommends permanent grounding.",
-    "Pat-down complete: {user} is carrying 100% chaos and 0 self-awareness.",
-    "{user} attempted to smuggle opinions. All confiscated, plus shame added.",
-    "Security confiscates: {user}’s dignity, lunch, and last shred of credibility.",
-    "Warning: {user} laughed at a rule. Immediate emotional destruction incoming.",
-    "{user} is too dangerous to board. Cabin may collapse just from breathing near them.",
-    "Security recommends therapy before allowing {user} to speak again.",
-    "{user} is carrying lethal levels of sarcasm, attitude, and general misery."
-]
-
-# ===== Slash Commands =====
-@client.tree.command(name="clearpoo", description="Clear the poo role from everyone")
-async def clearpoo(interaction: discord.Interaction):
-    if not user_allowed(interaction.user):
-        await interaction.response.send_message("❌ You do not have permission to use this command.", ephemeral=True)
-        return
-    await clear_poo_role(interaction.guild)
-    await interaction.response.send_message("✅ Cleared the poo role from everyone.")
-
-@client.tree.command(name="assignpoo", description="Manually assign the poo role to a member")
-@app_commands.describe(member="The member to assign the poo role")
-async def assignpoo(interaction: discord.Interaction, member: discord.Member):
-    if not user_allowed(interaction.user):
-        await interaction.response.send_message("❌ You do not have permission to use this command.", ephemeral=True)
-        return
-    poo_role = interaction.guild.get_role(POO_ROLE_ID)
-    await member.add_roles(poo_role)
-    await interaction.response.send_message(f"🎉 {member.mention} has been manually assigned the poo role.")
-
-@client.tree.command(name="testpoo", description="Test the poo automation using server sorter outer role")
-async def testpoo(interaction: discord.Interaction):
-    if not user_allowed(interaction.user):
-        await interaction.response.send_message("❌ You do not have permission to use this command.", ephemeral=True)
-        return
-    await test_poo(interaction.guild)
-    await interaction.response.send_message("🧪 Test poo completed!")
-
-# Savage/Funny Commands
-@client.tree.command(name="upgrade", description="Savagely upgrade a member to First Class")
-@app_commands.describe(member="The member to upgrade")
-async def upgrade(interaction: discord.Interaction, member: discord.Member):
-    msg = random.choice(upgrade_messages).format(user=member.mention)
-    await interaction.response.send_message(msg)
-
-@client.tree.command(name="downgrade", description="Savagely downgrade a member to cargo/middle seat")
-@app_commands.describe(member="The member to downgrade")
-async def downgrade(interaction: discord.Interaction, member: discord.Member):
-    msg = random.choice(downgrade_messages).format(user=member.mention)
-    await interaction.response.send_message(msg)
-
-@client.tree.command(name="turbulence", description="Cause chaotic turbulence for a member")
-@app_commands.describe(member="The member to target")
-async def turbulence(interaction: discord.Interaction, member: discord.Member):
-    msg = random.choice(turbulence_messages).format(user=member.mention)
-    await interaction.response.send_message(msg)
-
-@client.tree.command(name="securitycheck", description="Perform a savage security check on a member")
-@app_commands.describe(member="The member to check")
-async def securitycheck(interaction: discord.Interaction, member: discord.Member):
-    msg = random.choice(securitycheck_messages).format(user=member.mention)
-    await interaction.response.send_message(msg)
-
-# ===== /wingmates command (embed-friendly) =====
-from PIL import Image, ImageDraw
-import io
-import random
-
-@client.tree.command(name="wingmates", description="Pair two members together (meme-style poster)")
-@app_commands.describe(user1="First member", user2="Second member")
-async def wingmates(interaction: discord.Interaction, user1: discord.Member, user2: discord.Member):
-    if not user1 or not user2:
-        await interaction.response.send_message("❌ You must tag exactly two users!", ephemeral=True)
-        return
-
-    # ===== Ship Lists =====
-    good_ships = ["Power Couple of Turbulence","Snack Cart Soulmates","Window Seat Sweethearts",
-                  "In-Flight Romance Legends","Legroom Lovers","Frequent Flyer Lovebirds"]
-    bad_ships = ["Middle Seat Misery","Elbow Battle Partners","Screaming Baby Survivors",
-                 "Lost Luggage Lovers","Coffee Spill Conspirators","Legroom Losers"]
-    chaos_ships = ["Flight Attendant's Worst Nightmare","Oxygen Mask Enthusiasts","Black Hole of Drama",
-                   "Emergency Exit Elopers","Snack Cart Sabotage Squad","Cockpit Chaos Crew"]
-    in_flight_comments = ["Pilot says: don't talk to each other ever.",
-                          "Flight attendants are filing a restraining order.",
-                          "Brace for turbulence, the cabin fears you.",
-                          "Your compatibility is low… but your chaos is high.",
-                          "Cabin crew recommends therapy before boarding again."]
-
-    # ===== Random Ship Type & Result =====
-    ship_type = random.choice(["good", "bad", "chaos"])
-    if ship_type == "good":
-        result = random.choice(good_ships)
-        percent = random.randint(70, 100)
-        emoji = "❤️"
-        border_color = (255, 182, 193)
-    elif ship_type == "bad":
-        result = random.choice(bad_ships)
-        percent = random.randint(0, 40)
-        emoji = "💔"
-        border_color = (255, 0, 0)
-    else:
-        result = random.choice(chaos_ships)
-        percent = random.randint(30, 80)
-        emoji = "⚡"
-        border_color = (255, 255, 0)
-
-    comment = random.choice(in_flight_comments)
-
-    # ===== Load Avatars =====
-    avatar1_bytes = await user1.display_avatar.read()
-    avatar2_bytes = await user2.display_avatar.read()
-    avatar1 = Image.open(io.BytesIO(avatar1_bytes)).convert("RGBA").resize((256, 256))
-    avatar2 = Image.open(io.BytesIO(avatar2_bytes)).convert("RGBA").resize((256, 256))
-
-    # ===== Create Base Image =====
-    width, height = 512, 256
-    combined = Image.new("RGBA", (width, height), (255, 255, 255, 255))
-    combined.paste(avatar1, (0, 0))
-    combined.paste(avatar2, (256, 0))
-
-    # ===== Draw Border & Emoji =====
-    draw = ImageDraw.Draw(combined)
-    for i in range(8):
-        draw.rectangle([i, i, width-i-1, height-i-1], outline=border_color)
-    draw.text((width//2 - 10, height//2 - 20), emoji, fill=(255,0,0))
-
-    # ===== Save to Buffer =====
-    buffer = io.BytesIO()
-    combined.save(buffer, format="PNG")
-    buffer.seek(0)
-    file = discord.File(fp=buffer, filename="wingmates.png")
-
-    # ===== Send Embed =====
-    embed = discord.Embed(
-        title=f"{emoji} Wingmate Result",
-        description=f"{user1.mention} + {user2.mention}",
-        color=random.randint(0, 0xFFFFFF)
-    )
-    embed.add_field(name="Ship Name", value=result, inline=False)
-    embed.add_field(name="Compatibility", value=f"{percent}%", inline=False)
-    embed.add_field(name="In-Flight Commentary", value=comment, inline=False)
-    embed.set_image(url="attachment://wingmates.png")
-    embed.set_footer(text="Generated by The Pilot 🚀")
-
-    await interaction.response.send_message(embed=embed, file=file)
-
-# ===== Pilot Advice Command (Fixed: Skip Empty Quotes + PA Announcements) =====
-@client.tree.command(name="pilotadvice", description="Receive the captain's inspirational advice ✈️")
-async def pilotadvice(interaction: discord.Interaction):
-    import requests, random
-
-    await interaction.response.defer()  # acknowledge immediately
-
-    # PA-style announcements
-    pa_announcements = [
-        "⚠️ Please remain seated while we avoid turbulence of the mind.",
-        "Ladies and gentlemen, remember: the Wi-Fi may fail but optimism should not.",
-        "Cabin crew advises: hydration is important, sarcasm optional.",
-        "Keep your tray tables up and your expectations realistic.",
-        "Flight attendants recommend smiling — it burns extra calories.",
-        "Attention passengers: caffeine levels may affect judgment.",
-        "Remember: the pilot’s humor is free, unlike our snacks.",
-        "Ladies and gentlemen, enjoy our complimentary chaos today.",
-        "Please fasten your seatbelts, the upcoming life advice may be bumpy."
-    ]
-
-    URL = "https://raw.githubusercontent.com/JamesFT/Database-Quotes-JSON/master/quotes.json"
-
-    try:
-        response = requests.get(URL, timeout=5)
-        response.raise_for_status()
-        data = response.json()
-
-        # Filter out entries without a non-empty 'quoteText'
-        valid_quotes = [q for q in data if q.get("quoteText") and q.get("quoteText").strip() != ""]
-
-        # Decide whether to use a quote or a PA announcement
-        if valid_quotes and random.random() < 0.7:  # 70% chance to use a quote
-            quote = random.choice(valid_quotes)
-            text = quote.get("quoteText")
-            author = quote.get("quoteAuthor") or "The Captain"
+        poo_role = guild.get_role(POO_ROLE_ID)
+        passengers_role = guild.get_role(PASSENGERS_ROLE_ID)
+        general_channel = guild.get_channel(GENERAL_CHANNEL_ID)
+        if passengers_role.members:
+            selected = random.choice(passengers_role.members)
+            await selected.add_roles(poo_role)
+            await general_channel.send(f"🎉 {selected.mention} is today’s poo!")
         else:
-            text = random.choice(pa_announcements)
-            author = "Captain PA"
+            await general_channel.send("No passengers available to assign poo!")
 
-        # Create embed
-        embed = discord.Embed(
-            title="✈️ Captain's Advice",
-            description=f'📢 Ladies and gentlemen, here’s today’s captain’s advice:\n\n***{text}***',
-            color=discord.Color.purple()
-        )
-        embed.set_footer(text=f"- {author}")
+# ===== Module Imports =====
+from plane import setup_plane_commands
+from poo import setup_poo_commands
+from tournament import setup_tournament_commands
 
-        await interaction.followup.send(embed=embed)
+setup_plane_commands(client.tree)
+setup_poo_commands(client.tree, ALLOWED_ROLE_IDS, POO_ROLE_ID, PASSENGERS_ROLE_ID, GENERAL_CHANNEL_ID)
+setup_tournament_commands(client.tree, ALLOWED_ROLE_IDS, DATA_FILE)
 
-    except Exception as e:
-        await interaction.followup.send(f"❌ The captain can’t give advice right now.\nError: {e}")
-    
-# ===== Boarding Pass Command =====
-@client.tree.command(name="boardingpass", description="View a passenger's flight details 🛫")
-@app_commands.describe(member="The passenger to check in (optional)")
-async def boardingpass(interaction: discord.Interaction, member: discord.Member = None):
-    """Shows a boarding pass-style profile for the user."""
-    await interaction.response.defer()
-
-    member = member or interaction.user  # default to the user running the command
-
-    # Calculate join date & days in server
-    join_date = member.joined_at.strftime("%d/%m/%y")
-    days_in_server = (discord.utils.utcnow() - member.joined_at).days
-
-    # Roles (excluding @everyone)
-    roles = [r.mention for r in member.roles if r.name != "@everyone"]
-    role_list = ", ".join(roles) if roles else "No roles assigned"
-
-    # Random flight number for fun
-    import random
-    flight_number = f"PA{random.randint(1000, 9999)}"
-
-    # Create embed
-    embed = discord.Embed(
-        title=f"🎫 Boarding Pass for {member.display_name}",
-        color=discord.Color.purple()
-    )
-    embed.set_thumbnail(url=member.display_avatar.url)
-    embed.add_field(name="🪪 Passenger", value=f"{member}", inline=False)
-    embed.add_field(name="📅 Joined Flight Crew", value=join_date, inline=True)
-    embed.add_field(name="🧭 Days on Board", value=f"{days_in_server} days", inline=True)
-    embed.add_field(name="🎟️ Roles", value=role_list, inline=False)
-    embed.add_field(name="✈️ Flight Number", value=flight_number, inline=True)
-    embed.add_field(name="🛫 Server", value=interaction.guild.name, inline=True)
-    embed.set_footer(text="Issued by The Pilot 🛩️")
-
-    await interaction.followup.send(embed=embed)
-
-# ===== Keep-alive web server for Uptime Robot =====
+# ===== Keep-alive Web Server =====
 app = Flask("")
 
 @app.route("/")
 def home():
-    return "Poo Bot is alive!"
+    return "The Pilot is alive!"
 
 def run():
     port = int(os.environ.get("PORT", 8080))
