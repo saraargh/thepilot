@@ -8,7 +8,6 @@ import os
 
 TOURNAMENT_JSON = "tournament_data.json"
 
-# Helper functions to read/write JSON
 def load_data():
     if not os.path.exists(TOURNAMENT_JSON):
         with open(TOURNAMENT_JSON, "w") as f:
@@ -28,7 +27,6 @@ def save_data(data):
     with open(TOURNAMENT_JSON, "w") as f:
         json.dump(data, f, indent=4)
 
-# Restricted commands
 def setup_tournament_commands(tree: app_commands.CommandTree, allowed_roles):
 
     def user_allowed(member: discord.Member):
@@ -51,9 +49,9 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_roles):
                 await message.add_reaction("🇧")
 
                 if test_mode:
-                    await asyncio.sleep(10)  # test mode
+                    await asyncio.sleep(10)
                 else:
-                    await asyncio.sleep(86400)  # 24 hours
+                    await asyncio.sleep(86400)
 
                 message = await channel.fetch_message(message.id)
                 a_votes = sum(reaction.count - 1 for reaction in message.reactions if str(reaction.emoji) == "🇦")
@@ -70,10 +68,9 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_roles):
             save_data(data)
             next_round = []
 
-        # Tournament finished
         winner = current[0]
         embed = discord.Embed(title=f"🏆 {data['title']} Winner!", description=f"The champion is **{winner}**!")
-        embed.set_image(url="YOUR_WINNER_GIF_URL_HERE")  # Only for overall winner
+        embed.set_image(url="YOUR_WINNER_GIF_URL_HERE")
         await channel.send(embed=embed)
         data["running"] = False
         save_data(data)
