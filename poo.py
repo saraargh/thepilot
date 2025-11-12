@@ -8,7 +8,7 @@ PASSENGERS_ROLE_ID = 1404100554807971971
 WILLIAM_ROLE_ID = 1404098545006546954
 GENERAL_CHANNEL_ID = 1398508734506078240
 
-def setup_poo_commands(tree: app_commands.CommandTree, allowed_roles):
+def setup_poo_commands(tree: app_commands.CommandTree, allowed_role_ids):
 
     def user_allowed(member: discord.Member):
         return any(role.id in allowed_roles for role in member.roles)
