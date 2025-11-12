@@ -1,196 +1,163 @@
 # tournament.py
 import discord
 from discord import app_commands
-from discord.ext import tasks
 import json
 import random
 import asyncio
-import os
 
 TOURNAMENT_JSON = "tournament_data.json"
 
 def load_data():
-    if not os.path.exists(TOURNAMENT_JSON):
-        with open(TOURNAMENT_JSON, "w") as f:
-            json.dump({
-                "items": [],
-                "current_round": [],
-                "next_round": [],
-                "scores": {},
-                "running": False,
-                "title": "",
-                "test_mode": False
-            }, f)
     with open(TOURNAMENT_JSON, "r") as f:
         return json.load(f)
 
 def save_data(data):
     with open(TOURNAMENT_JSON, "w") as f:
-        json.dump(data, f, indent=4)
+        json.dump(data, f, indent=2)
 
-def setup_tournament_commands(tree: app_commands.CommandTree, allowed_roles):
+def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
 
     def user_allowed(member: discord.Member):
-        return any(role.id in allowed_roles for role in member.roles)
+        return any(role.id in allowed_role_ids for role in member.roles)
 
-    # ===== Item Commands =====
-    @tree.command(name="addwcitem", description="Add an item to the world cup")
-    @app_commands.describe(item="The item to add")
+    async def reset_tournament():
+        data = load_data()
+        data["items"] = []
+        data["current_round"] = []
+        data["next_round"] = []
+        data["scores"] = {}
+        data["running"] = False
+        data["title"] = ""
+        data["test_mode"] = False
+        save_data(data)
+
+    @tree.command(name="addwcitem", description="Add an item to the tournament")
+    @app_commands.describe(item="Item name to add")
     async def addwcitem(interaction: discord.Interaction, item: str):
         if not user_allowed(interaction.user):
-            await interaction.response.send_message("❌ You cannot use this command.", ephemeral=True)
-            return
-        data = load_data()
-        if item in data["items"]:
-            await interaction.response.send_message(f"⚠️ '{item}' is already in the list.")
-            return
-        data["items"].append(item)
-        save_data(data)
-        await interaction.response.send_message(f"✅ Added '{item}' to the items list.")
-
-    @tree.command(name="removewcitem", description="Remove an item from the world cup")
-    @app_commands.describe(item="The item to remove")
-    async def removewcitem(interaction: discord.Interaction, item: str):
-        if not user_allowed(interaction.user):
-            await interaction.response.send_message("❌ You cannot use this command.", ephemeral=True)
+            await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
             return
         data = load_data()
         if item not in data["items"]:
-            await interaction.response.send_message(f"⚠️ '{item}' not found in the list.")
-            return
-        data["items"].remove(item)
-        save_data(data)
-        await interaction.response.send_message(f"✅ Removed '{item}' from the items list.")
+            data["items"].append(item)
+            save_data(data)
+            await interaction.response.send_message(f"✅ Added {item} to the tournament.")
+        else:
+            await interaction.response.send_message("⚠️ Item already exists.", ephemeral=True)
 
-    @tree.command(name="listwcitems", description="List current items for the world cup")
+    @tree.command(name="removewcitem", description="Remove an item from the tournament")
+    @app_commands.describe(item="Item name to remove")
+    async def removewcitem(interaction: discord.Interaction, item: str):
+        if not user_allowed(interaction.user):
+            await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
+            return
+        data = load_data()
+        if item in data["items"]:
+            data["items"].remove(item)
+            save_data(data)
+            await interaction.response.send_message(f"✅ Removed {item} from the tournament.")
+        else:
+            await interaction.response.send_message("⚠️ Item not found.", ephemeral=True)
+
+    @tree.command(name="listwcitems", description="List all items in the tournament")
     async def listwcitems(interaction: discord.Interaction):
         data = load_data()
-        items = data["items"]
-        if not items:
-            await interaction.response.send_message("📋 No items in the list yet.")
+        if data["items"]:
+            await interaction.response.send_message("🏆 Tournament items:\n" + "\n".join(data["items"]))
         else:
-            await interaction.response.send_message("📋 Items:\n" + "\n".join(f"- {i}" for i in items))
+            await interaction.response.send_message("No items added yet.")
 
-    # ===== Reset Command =====
-    @tree.command(name="resetwc", description="Reset the world cup")
+    @tree.command(name="resetwc", description="Reset the entire tournament")
     async def resetwc(interaction: discord.Interaction):
         if not user_allowed(interaction.user):
-            await interaction.response.send_message("❌ You cannot use this command.", ephemeral=True)
+            await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
             return
-        data = {
-            "items": [],
-            "current_round": [],
-            "next_round": [],
-            "scores": {},
-            "running": False,
-            "title": "",
-            "test_mode": False
-        }
-        save_data(data)
-        await interaction.response.send_message("🔄 World Cup has been reset.")
+        await reset_tournament()
+        await interaction.response.send_message("♻️ Tournament has been reset.")
 
-    # ===== Start Tournament =====
-    @tree.command(name="startwc", description="Start the world cup tournament")
-    @app_commands.describe(title="Name of the tournament", test="Enable test mode for quick rounds")
+    @tree.command(name="startwc", description="Start the tournament")
+    @app_commands.describe(title="Custom World Cup title", test="Run in test mode (10 sec rounds)")
     async def startwc(interaction: discord.Interaction, title: str, test: bool = False):
         if not user_allowed(interaction.user):
-            await interaction.response.send_message("❌ You cannot use this command.", ephemeral=True)
+            await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
             return
+
         data = load_data()
-        if data["running"]:
-            await interaction.response.send_message("⚠️ Tournament already running.")
+        if len(data["items"]) < 2:
+            await interaction.response.send_message("⚠️ Need at least 2 items to start a tournament.")
             return
-        if len(data["items"]) < 2 or len(data["items"]) % 2 != 0:
-            await interaction.response.send_message("❌ Number of items must be even and ≥2 to start.")
+        if len(data["items"]) % 2 != 0:
+            await interaction.response.send_message("❌ Tournament cannot start with an odd number of items.")
             return
 
         data["running"] = True
+        data["title"] = f"Landing Strip World Cup Of {title}"
+        data["test_mode"] = test
         data["current_round"] = data["items"].copy()
         data["next_round"] = []
-        data["scores"] = {i: 0 for i in data["items"]}
-        data["title"] = title
-        data["test_mode"] = test
+        data["scores"] = {item: 0 for item in data["items"]}
         save_data(data)
 
-        await interaction.response.send_message(f"🏆 **Landing Strip World Cup of {title}** started!\nTest mode: {'ON' if test else 'OFF'}")
+        await interaction.response.send_message(f"🏁 Tournament **{data['title']}** started!" + (" (Test mode 10s rounds)" if test else ""))
 
-        # Start first round
-        await run_round(interaction.channel, test)
+        await run_round(interaction.channel, data)
 
-    # ===== Round Logic =====
-    async def run_round(channel: discord.TextChannel, test: bool):
-        data = load_data()
+    async def run_round(channel, data):
+        # Voting per round
         current = data["current_round"]
+        next_round = []
 
-        if len(current) == 1:
-            winner = current[0]
-            embed = discord.Embed(
-                title=f"🏆 Landing Strip World Cup Winner!",
-                description=f"The champion is **{winner}**!",
-                color=discord.Color.gold()
-            )
-            embed.set_image(url="https://media.giphy.com/media/3ohzdIuqJoo8QdKlnW/giphy.gif")  # winner GIF
-            await channel.send(embed=embed)
-            data["running"] = False
-            save_data(data)
-            return
+        while len(current) > 1:
+            round_pairs = [current[i:i+2] for i in range(0, len(current), 2)]
+            for pair in round_pairs:
+                if len(pair) < 2:
+                    next_round.append(pair[0])
+                    continue
 
-        random.shuffle(current)
-        pairs = [current[i:i+2] for i in range(0, len(current), 2)]
+                embed = discord.Embed(title=f"Vote for your favorite", description=f"A: {pair[0]} vs B: {pair[1]}")
+                message = await channel.send(embed=embed)
+                await message.add_reaction("🇦")
+                await message.add_reaction("🇧")
 
-        for a, b in pairs:
-            if len(pairs[-1]) == 1:
-                # Odd number safety
-                await channel.send(f"⚠️ Odd number of items, last item moves automatically: {a}")
-                data["next_round"].append(a)
-                continue
+                def check(reaction, user):
+                    return str(reaction.emoji) in ["🇦", "🇧"] and not user.bot and reaction.message.id == message.id
 
-            # Voting embed
-            embed = discord.Embed(
-                title=f"Vote for your favorite!",
-                description=f"React with 🇦 for **{a}** or 🇧 for **{b}**",
-                color=discord.Color.blue()
-            )
-            msg = await channel.send(embed=embed)
-            await msg.add_reaction("🇦")
-            await msg.add_reaction("🇧")
+                # Wait for votes
+                if data["test_mode"]:
+                    await asyncio.sleep(10)
+                else:
+                    await asyncio.sleep(86400)  # 24 hours
 
-            # Wait for votes
-            wait_time = 10 if test else 60 * 60 * 24  # 10s for test, 24h normally
-            await asyncio.sleep(wait_time)
+                message = await channel.fetch_message(message.id)
+                a_votes = sum(1 for r in message.reactions if str(r.emoji) == "🇦" for u in await r.users().flatten() if not u.bot)
+                b_votes = sum(1 for r in message.reactions if str(r.emoji) == "🇧" for u in await r.users().flatten() if not u.bot)
 
-            # Fetch reactions
-            msg = await channel.fetch_message(msg.id)
-            a_votes = discord.utils.get(msg.reactions, emoji="🇦").count - 1
-            b_votes = discord.utils.get(msg.reactions, emoji="🇧").count - 1
+                winner = pair[0] if a_votes >= b_votes else pair[1]
+                next_round.append(winner)
+                data["scores"][winner] += 1
+                save_data(data)
 
-            if a_votes >= b_votes:
-                winner = a
-            else:
-                winner = b
-            data["next_round"].append(winner)
-            data["scores"][winner] += 1
+            current = next_round
+            next_round = []
+            data["current_round"] = current
             save_data(data)
 
-        # Prepare next round
-        data["current_round"] = data["next_round"]
-        data["next_round"] = []
+        # Tournament winner
+        winner = current[0]
+        embed = discord.Embed(title=f"🏆 {winner} wins the {data['title']}!")
+        embed.set_image(url="https://media.giphy.com/media/3o6Zt6ML6BklcajjsA/giphy.gif")  # winning GIF
+        await channel.send(embed=embed)
+        data["running"] = False
         save_data(data)
-        await run_round(channel, test)
 
-    # ===== Scoreboard =====
     @tree.command(name="scoreboard", description="View the current tournament scoreboard")
     async def scoreboard(interaction: discord.Interaction):
         data = load_data()
-        if not data["running"]:
-            await interaction.response.send_message("⚠️ No tournament currently running.")
+        if not data["scores"]:
+            await interaction.response.send_message("No scores yet.")
             return
-        scores = data["scores"]
-        sorted_scores = sorted(scores.items(), key=lambda x: x[1], reverse=True)
-        description = "\n".join([f"**{k}**: {v} points" for k, v in sorted_scores])
-        embed = discord.Embed(
-            title=f"📊 {data['title']} Scoreboard",
-            description=description,
-            color=discord.Color.green()
-        )
+        sorted_scores = sorted(data["scores"].items(), key=lambda x: x[1], reverse=True)
+        embed = discord.Embed(title=f"📊 {data['title']} Scoreboard")
+        for item, score in sorted_scores:
+            embed.add_field(name=item, value=str(score), inline=False)
         await interaction.response.send_message(embed=embed)
