@@ -1,5 +1,9 @@
 {
-  "tournament": null,
-  "items_pool": [],
-  "scoreboard": {}
+  "items": [],
+  "current_round": [],
+  "next_round": [],
+  "scores": {},
+  "running": false,
+  "title": "",
+  "test_mode": false
 }
