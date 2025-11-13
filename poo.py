@@ -1,4 +1,4 @@
-# poo.py
+## poo.py
 import discord
 from discord.ext import tasks
 from discord import app_commands
@@ -123,3 +123,12 @@ async def testpoo(interaction: discord.Interaction):
         return
     await test_poo(interaction.guild)
     await interaction.response.send_message("🧪 Test poo completed!")
+    
+    # poo.py (at the very end)
+def setup_poo_commands(tree: discord.app_commands.CommandTree, allowed_role_ids=None):
+    """Register poo commands with the bot tree."""
+    # Nothing extra needed — all @tree.command decorators are already applied
+    # Just store allowed roles if passed
+    global ALLOWED_ROLE_IDS
+    if allowed_role_ids is not None:
+        ALLOWED_ROLE_IDS = allowed_role_ids
