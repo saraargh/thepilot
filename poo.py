@@ -61,6 +61,20 @@ def setup_poo_commands(tree: app_commands.CommandTree, allowed_role_ids):
         await member.add_roles(poo_role)
         await interaction.response.send_message(f"🎉 {member.mention} has been manually assigned the poo role.")
 
+@tree.command(name="removepoo", description="Remove the poo role from a member")
+@app_commands.describe(member="The member to remove the poo role from")
+async def removepoo(interaction: discord.Interaction, member: discord.Member):
+    if not user_allowed(interaction.user):
+        await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
+        return
+
+    poo_role = interaction.guild.get_role(POO_ROLE_ID)
+    if poo_role in member.roles:
+        await member.remove_roles(poo_role)
+        await interaction.response.send_message(f"✅ {member.mention} no longer has the poo role.")
+    else:
+        await interaction.response.send_message(f"ℹ️ {member.mention} does not have the poo role.")
+
     @tree.command(name="testpoo", description="Test the poo automation using server sorter outer role")
     async def testpoo(interaction: discord.Interaction):
         if not user_allowed(interaction.user):
