@@ -80,7 +80,7 @@ async def scheduled_tasks(bot_client):
     if now.hour == 11 and now.minute == 0:
         await clear_poo_role(guild)
     # 2:30PM: assign poo role
-    if now.hour == 14 and now.minute == 30:
+    if now.hour == 14 and now.minute == 35:
         await clear_poo_role(guild)
         await assign_random_poo(guild)
 
