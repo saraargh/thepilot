@@ -4,13 +4,18 @@ from discord import app_commands
 import random
 import asyncio
 from datetime import datetime, timedelta
+import pytz
 
 POO_ROLE_ID = 1429934009550373059
 PASSENGERS_ROLE_ID = 1404100554807971971
 WILLIAM_ROLE_ID = 1404098545006546954
 GENERAL_CHANNEL_ID = 1398508734506078240
 
-def setup_poo_commands(tree: app_commands.CommandTree, client, allowed_role_ids):
+UK_TZ = pytz.timezone("Europe/London")
+
+def setup_poo_commands(tree: app_commands.CommandTree, client: discord.Client, allowed_role_ids=None):
+
+    allowed_role_ids = allowed_role_ids or []
 
     def user_allowed(member: discord.Member):
         return any(role.id in allowed_role_ids for role in member.roles)
@@ -45,6 +50,7 @@ def setup_poo_commands(tree: app_commands.CommandTree, client, allowed_role_ids)
         else:
             await general_channel.send("No members in allocated role for test.")
 
+    # ===== Commands =====
     @tree.command(name="clearpoo", description="Clear the poo role from everyone")
     async def clearpoo(interaction: discord.Interaction):
         if not user_allowed(interaction.user):
@@ -63,6 +69,14 @@ def setup_poo_commands(tree: app_commands.CommandTree, client, allowed_role_ids)
         await member.add_roles(poo_role)
         await interaction.response.send_message(f"🎉 {member.mention} has been manually assigned the poo role.")
 
+    @tree.command(name="testpoo", description="Test the poo automation using server sorter outer role")
+    async def testpoo(interaction: discord.Interaction):
+        if not user_allowed(interaction.user):
+            await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
+            return
+        await test_poo(interaction.guild)
+        await interaction.response.send_message("🧪 Test poo completed!")
+
     @tree.command(name="removepoo", description="Remove the poo role from a member")
     @app_commands.describe(member="The member to remove the poo role from")
     async def removepoo(interaction: discord.Interaction, member: discord.Member):
@@ -72,35 +86,26 @@ def setup_poo_commands(tree: app_commands.CommandTree, client, allowed_role_ids)
         poo_role = interaction.guild.get_role(POO_ROLE_ID)
         if poo_role in member.roles:
             await member.remove_roles(poo_role)
-            await interaction.response.send_message(f"🧹 Removed poo role from {member.mention}.")
+            await interaction.response.send_message(f"💨 Removed poo role from {member.mention}.")
         else:
-            await interaction.response.send_message(f"{member.mention} does not have the poo role.", ephemeral=True)
+            await interaction.response.send_message(f"⚠️ {member.mention} does not have the poo role.")
 
-    @tree.command(name="testpoo", description="Test the poo automation using server sorter outer role")
-    async def testpoo_command(interaction: discord.Interaction):
-        if not user_allowed(interaction.user):
-            await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
-            return
-        await test_poo(interaction.guild)
-        await interaction.response.send_message("🧪 Test poo completed!")
-
+    # ===== Daily Task =====
     async def daily_poo_task():
         await client.wait_until_ready()
-        while True:
-            now = datetime.now()
-            # Schedule for 12:35 PM
-            target = now.replace(hour=12, minute=35, second=0, microsecond=0)
-            if now >= target:
-                target += timedelta(days=1)
-            wait_seconds = (target - now).total_seconds()
+        while not client.is_closed():
+            now = datetime.now(UK_TZ)
+            next_run = now.replace(hour=13, minute=0, second=0, microsecond=0)
+            if now >= next_run:
+                next_run += timedelta(days=1)
+            wait_seconds = (next_run - now).total_seconds()
             await asyncio.sleep(wait_seconds)
             try:
-                for guild in client.guilds:
+                guild = client.get_guild(interaction.guild.id if (interaction := None) else None)  # Use first guild
+                if guild:
                     await assign_random_poo(guild)
             except Exception as e:
                 print(f"Error in daily poo task: {e}")
-            # Wait 24 hours for the next day
-            await asyncio.sleep(24*60*60)
 
-    # Schedule the daily task using client.loop
+    # Schedule the daily task
     client.loop.create_task(daily_poo_task())
