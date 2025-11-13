@@ -43,7 +43,7 @@ from poo import setup_poo_commands
 # ===== Register Commands =====
 setup_plane_commands(client.tree)  # Everyone can use plane commands
 setup_tournament_commands(client.tree, allowed_role_ids=ALLOWED_ROLE_IDS)  # Restricted
-setup_poo_commands(client.tree, client, allowed_role_ids=ALLOWED_ROLE_IDS)  # Restricted – client added
+setup_poo_commands(client.tree, allowed_role_ids=ALLOWED_ROLE_IDS)  # Restricted – client added
 
 # ===== Automation Tasks Placeholder =====
 @tasks.loop(minutes=1)
