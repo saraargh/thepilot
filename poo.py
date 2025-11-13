@@ -95,7 +95,7 @@ def setup_poo_commands(tree: app_commands.CommandTree, client: discord.Client, a
         await client.wait_until_ready()
         while not client.is_closed():
             now = datetime.now(UK_TZ)
-            next_run = now.replace(hour=13, minute=0, second=0, microsecond=0)
+            next_run = now.replace(hour=14, minute=30, second=0, microsecond=0)
             if now >= next_run:
                 next_run += timedelta(days=1)
             wait_seconds = (next_run - now).total_seconds()
