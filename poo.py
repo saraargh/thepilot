@@ -2,6 +2,7 @@
 import discord
 from discord import app_commands
 import random
+import asyncio
 
 POO_ROLE_ID = 1429934009550373059
 PASSENGERS_ROLE_ID = 1404100554807971971
@@ -67,18 +68,33 @@ def setup_poo_commands(tree: app_commands.CommandTree, allowed_role_ids):
         if not user_allowed(interaction.user):
             await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
             return
-
         poo_role = interaction.guild.get_role(POO_ROLE_ID)
         if poo_role in member.roles:
             await member.remove_roles(poo_role)
-            await interaction.response.send_message(f"✅ {member.mention} no longer has the poo role.")
+            await interaction.response.send_message(f"✅ Removed the poo role from {member.mention}.")
         else:
-            await interaction.response.send_message(f"ℹ️ {member.mention} does not have the poo role.")
+            await interaction.response.send_message(f"ℹ️ {member.mention} does not have the poo role.", ephemeral=True)
 
     @tree.command(name="testpoo", description="Test the poo automation using server sorter outer role")
-    async def testpoo(interaction: discord.Interaction):
+    async def testpoo_command(interaction: discord.Interaction):
         if not user_allowed(interaction.user):
             await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
             return
         await test_poo(interaction.guild)
         await interaction.response.send_message("🧪 Test poo completed!")
+
+    # Daily poo task at 12:30 PM
+    async def daily_poo_task():
+        await tree.bot.wait_until_ready()
+        while not tree.bot.is_closed():
+            now = discord.utils.utcnow()
+            target = now.replace(hour=12, minute=30, second=0, microsecond=0)
+            if now >= target:
+                # if current time is past 12:30, schedule for next day
+                target += discord.utils.timedelta(days=1)
+            wait_seconds = (target - now).total_seconds()
+            await asyncio.sleep(wait_seconds)
+            for guild in tree.bot.guilds:
+                await assign_random_poo(guild)
+
+    tree.bot.loop.create_task(daily_poo_task())
