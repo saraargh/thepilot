@@ -20,7 +20,6 @@ ALLOWED_ROLE_IDS = [
 ]
 
 # ==================
-
 intents = discord.Intents.default()
 intents.members = True
 
@@ -31,6 +30,7 @@ class ThePilot(discord.Client):
 
     async def setup_hook(self):
         await self.tree.sync()
+        # Start any future scheduled tasks here if needed
         scheduled_tasks.start(self)
 
 client = ThePilot()
@@ -43,12 +43,12 @@ from poo import setup_poo_commands
 # ===== Register Commands =====
 setup_plane_commands(client.tree)  # Everyone can use plane commands
 setup_tournament_commands(client.tree, allowed_role_ids=ALLOWED_ROLE_IDS)  # Restricted
-setup_poo_commands(client.tree, allowed_role_ids=ALLOWED_ROLE_IDS)  # Restricted – client added
+setup_poo_commands(client.tree, client, allowed_role_ids=ALLOWED_ROLE_IDS)  # Restricted
 
 # ===== Automation Tasks Placeholder =====
 @tasks.loop(minutes=1)
 async def scheduled_tasks(bot_client):
-    # Example scheduled task; can add future automation here
+    # Placeholder: you can add scheduled checks or other automation here
     pass
 
 # ===== Keep-alive web server for Uptime Robot =====
