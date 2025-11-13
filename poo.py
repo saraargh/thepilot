@@ -3,13 +3,14 @@ import discord
 from discord import app_commands
 import random
 import asyncio
+from datetime import datetime, timedelta
 
 POO_ROLE_ID = 1429934009550373059
 PASSENGERS_ROLE_ID = 1404100554807971971
 WILLIAM_ROLE_ID = 1404098545006546954
 GENERAL_CHANNEL_ID = 1398508734506078240
 
-def setup_poo_commands(tree: app_commands.CommandTree, allowed_role_ids):
+def setup_poo_commands(tree: app_commands.CommandTree, client, allowed_role_ids):
 
     def user_allowed(member: discord.Member):
         return any(role.id in allowed_role_ids for role in member.roles)
@@ -71,9 +72,9 @@ def setup_poo_commands(tree: app_commands.CommandTree, allowed_role_ids):
         poo_role = interaction.guild.get_role(POO_ROLE_ID)
         if poo_role in member.roles:
             await member.remove_roles(poo_role)
-            await interaction.response.send_message(f"✅ Removed the poo role from {member.mention}.")
+            await interaction.response.send_message(f"🧹 Removed poo role from {member.mention}.")
         else:
-            await interaction.response.send_message(f"ℹ️ {member.mention} does not have the poo role.", ephemeral=True)
+            await interaction.response.send_message(f"{member.mention} does not have the poo role.", ephemeral=True)
 
     @tree.command(name="testpoo", description="Test the poo automation using server sorter outer role")
     async def testpoo_command(interaction: discord.Interaction):
@@ -83,18 +84,23 @@ def setup_poo_commands(tree: app_commands.CommandTree, allowed_role_ids):
         await test_poo(interaction.guild)
         await interaction.response.send_message("🧪 Test poo completed!")
 
-    # Daily poo task at 12:30 PM
     async def daily_poo_task():
-        await tree.bot.wait_until_ready()
-        while not tree.bot.is_closed():
-            now = discord.utils.utcnow()
-            target = now.replace(hour=12, minute=30, second=0, microsecond=0)
+        await client.wait_until_ready()
+        while True:
+            now = datetime.now()
+            # Schedule for 12:35 PM
+            target = now.replace(hour=12, minute=35, second=0, microsecond=0)
             if now >= target:
-                # if current time is past 12:30, schedule for next day
-                target += discord.utils.timedelta(days=1)
+                target += timedelta(days=1)
             wait_seconds = (target - now).total_seconds()
             await asyncio.sleep(wait_seconds)
-            for guild in tree.bot.guilds:
-                await assign_random_poo(guild)
+            try:
+                for guild in client.guilds:
+                    await assign_random_poo(guild)
+            except Exception as e:
+                print(f"Error in daily poo task: {e}")
+            # Wait 24 hours for the next day
+            await asyncio.sleep(24*60*60)
 
-    tree.bot.loop.create_task(daily_poo_task())
+    # Schedule the daily task using client.loop
+    client.loop.create_task(daily_poo_task())
