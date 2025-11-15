@@ -7,19 +7,16 @@ import os
 from flask import Flask
 from threading import Thread
 
-# ===== CONFIG =====
-TOKEN = os.getenv("TOKEN")  # Render environment variable
+TOKEN = os.getenv("TOKEN")
 UK_TZ = pytz.timezone("Europe/London")
 
-# Roles allowed to run restricted commands (tournament/poo)
 ALLOWED_ROLE_IDS = [
-    1413545658006110401,  # William/Admin
+    1413545658006110401,
     1404098545006546954,
     1420817462290681936,
     1406242523952713820
 ]
 
-# ==================
 intents = discord.Intents.default()
 intents.members = True
 
@@ -30,28 +27,28 @@ class ThePilot(discord.Client):
 
     async def setup_hook(self):
         await self.tree.sync()
-        # Start any future scheduled tasks here if needed
-        scheduled_tasks.start(self)
+
+        # START DAILY TASK PROPERLY HERE
+        from poo import daily_poo_run
+        @tasks.loop(minutes=1)
+        async def daily_task():
+            await daily_poo_run(self, ALLOWED_ROLE_IDS)
+
+        daily_task.start()
 
 client = ThePilot()
 
-# ===== Import Command Modules =====
+# Imports AFTER client exists
 from plane import setup_plane_commands
 from tournament import setup_tournament_commands
 from poo import setup_poo_commands
 
-# ===== Register Commands =====
-setup_plane_commands(client.tree)  # Everyone can use plane commands
-setup_tournament_commands(client.tree, allowed_role_ids=ALLOWED_ROLE_IDS)  # Restricted
-setup_poo_commands(client.tree, client, allowed_role_ids=ALLOWED_ROLE_IDS)  # Restricted
+# Register slash commands
+setup_plane_commands(client.tree)
+setup_tournament_commands(client.tree, allowed_role_ids=ALLOWED_ROLE_IDS)
+setup_poo_commands(client.tree, client, allowed_role_ids=ALLOWED_ROLE_IDS)
 
-# ===== Automation Tasks Placeholder =====
-@tasks.loop(minutes=1)
-async def scheduled_tasks(bot_client):
-    # Placeholder: you can add scheduled checks or other automation here
-    pass
-
-# ===== Keep-alive web server for Uptime Robot =====
+# Keep-alive server
 app = Flask("")
 
 @app.route("/")
@@ -62,8 +59,6 @@ def run():
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
 
-t = Thread(target=run)
-t.start()
+Thread(target=run).start()
 
-# ===== Run Bot =====
 client.run(TOKEN)
