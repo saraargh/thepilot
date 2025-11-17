@@ -11,7 +11,7 @@ from threading import Thread
 TOKEN = os.getenv("TOKEN")  # Render environment variable
 UK_TZ = pytz.timezone("Europe/London")
 
-# Roles allowed to run restricted commands
+# Roles allowed to run restricted commands (tournament/poo)
 ALLOWED_ROLE_IDS = [
     1413545658006110401,  # William/Admin
     1404098545006546954,
@@ -20,6 +20,7 @@ ALLOWED_ROLE_IDS = [
 ]
 
 # ==================
+
 intents = discord.Intents.default()
 intents.members = True
 
@@ -29,9 +30,7 @@ class ThePilot(discord.Client):
         self.tree = app_commands.CommandTree(self)
 
     async def setup_hook(self):
-        # Sync commands first
         await self.tree.sync()
-        # Start any scheduled tasks here
         scheduled_tasks.start(self)
 
 client = ThePilot()
@@ -39,12 +38,11 @@ client = ThePilot()
 # ===== Import Command Modules =====
 from plane import setup_plane_commands
 from tournament import setup_tournament_commands
-from poo import setup_poo_commands
+import poo  # just import to register commands and scheduled tasks
 
 # ===== Register Commands =====
 setup_plane_commands(client.tree)  # Everyone can use plane commands
 setup_tournament_commands(client.tree, allowed_role_ids=ALLOWED_ROLE_IDS)  # Restricted
-setup_poo_commands(client.tree, client, allowed_role_ids=ALLOWED_ROLE_IDS)  # Restricted
 
 # ===== Automation Tasks Placeholder =====
 @tasks.loop(minutes=1)
