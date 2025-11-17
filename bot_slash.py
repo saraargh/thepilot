@@ -4,8 +4,6 @@ from discord.ext import tasks
 from discord import app_commands
 import pytz
 import os
-from flask import Flask
-from threading import Thread
 
 # ===== CONFIG =====
 TOKEN = os.getenv("TOKEN")  # Render environment variable
@@ -30,39 +28,28 @@ class ThePilot(discord.Client):
         self.tree = app_commands.CommandTree(self)
 
     async def setup_hook(self):
+        # Sync commands
         await self.tree.sync()
-        scheduled_tasks.start(self)
+        # Start any scheduled tasks if needed (you can add more here)
+        pass
 
 client = ThePilot()
 
 # ===== Import Command Modules =====
 from plane import setup_plane_commands
 from tournament import setup_tournament_commands
-import poo  # just import to register commands and scheduled tasks
+from poo import setup_poo_commands
 
 # ===== Register Commands =====
 setup_plane_commands(client.tree)  # Everyone can use plane commands
 setup_tournament_commands(client.tree, allowed_role_ids=ALLOWED_ROLE_IDS)  # Restricted
+setup_poo_commands(client.tree, client, allowed_role_ids=ALLOWED_ROLE_IDS)  # Restricted
 
 # ===== Automation Tasks Placeholder =====
 @tasks.loop(minutes=1)
 async def scheduled_tasks(bot_client):
-    # Example scheduled task; can add future automation here
+    # Future automation tasks can go here
     pass
-
-# ===== Keep-alive web server for Uptime Robot =====
-app = Flask("")
-
-@app.route("/")
-def home():
-    return "The Pilot Bot is alive!"
-
-def run():
-    port = int(os.environ.get("PORT", 8080))
-    app.run(host="0.0.0.0", port=port)
-
-t = Thread(target=run)
-t.start()
 
 # ===== Run Bot =====
 client.run(TOKEN)
