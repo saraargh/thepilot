@@ -46,7 +46,7 @@ async def daily_poo_task(client, allowed_role_ids):
             if now.hour == 11 and now.minute == 0:
                 await clear_poo_role(guild)
             # 1 PM: Assign poo
-            if now.hour == 13 and now.minute == 0:
+            if now.hour == 13 and now.minute == 15:
                 await assign_random_poo(guild)
         await discord.utils.sleep_until(now + datetime.timedelta(minutes=1))
 
