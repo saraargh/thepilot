@@ -1,9 +1,11 @@
 {
-  "items": [],
-  "current_round": [],
-  "next_round": [],
-  "scores": {},
-  "running": false,
-  "title": "",
-  "test_mode": false
+    "items": [
+        "1"
+    ],
+    "current_round": [],
+    "next_round": [],
+    "scores": {},
+    "running": false,
+    "title": "",
+    "test_mode": false
 }
