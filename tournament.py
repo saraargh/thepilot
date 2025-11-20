@@ -5,6 +5,7 @@ import os
 import asyncio
 import random
 
+# ------------------- CONFIG -------------------
 TOURNAMENT_JSON = "/mnt/data/tournament_data.json"
 DEFAULT_DATA = {
     "items": [],
@@ -19,11 +20,8 @@ DEFAULT_DATA = {
 # ------------------- JSON Helpers -------------------
 def ensure_json():
     """Ensure the JSON file exists; create if missing."""
-    if os.path.isdir(TOURNAMENT_JSON):
-        # If it's accidentally a folder, remove it
-        os.rmdir(TOURNAMENT_JSON)
+    os.makedirs(os.path.dirname(TOURNAMENT_JSON), exist_ok=True)
     if not os.path.exists(TOURNAMENT_JSON):
-        os.makedirs(os.path.dirname(TOURNAMENT_JSON), exist_ok=True)
         with open(TOURNAMENT_JSON, "w") as f:
             json.dump(DEFAULT_DATA, f, indent=4)
 
@@ -44,9 +42,9 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
         return any(role.id in allowed_role_ids for role in member.roles)
 
     async def start_match(interaction: discord.Interaction, a_item, b_item):
-        """Send the matchup and collect votes"""
+        """Send the matchup and collect votes."""
         embed = discord.Embed(
-            title=f"Vote for the winner!",
+            title="Vote for the winner!",
             description=f"🇦 {a_item}\n🇧 {b_item}"
         )
         msg = await interaction.channel.send(embed=embed)
@@ -57,11 +55,13 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
             return str(reaction.emoji) in ["🇦", "🇧"] and not user.bot
 
         votes = {"🇦": 0, "🇧": 0}
-        timeout = 10 if load_data().get("test_mode") else 86400  # 10s test, 24h normal
+        timeout = 10 if load_data().get("test_mode") else 86400  # 10s for test, 24h normal
 
         try:
             while True:
-                reaction, user = await interaction.client.wait_for('reaction_add', timeout=timeout, check=check)
+                reaction, user = await interaction.client.wait_for(
+                    "reaction_add", timeout=timeout, check=check
+                )
                 votes[str(reaction.emoji)] += 1
         except asyncio.TimeoutError:
             pass
@@ -104,7 +104,7 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
             save_data(data)
 
         winner = data["current_round"][0]
-        await interaction.channel.send(f"🎉 **{winner}** wins the **{title}**!", file=discord.File("winner.gif"))
+        await interaction.channel.send(f"🎉 **{winner}** wins the **{title}**!")
         data["running"] = False
         save_data(data)
 
