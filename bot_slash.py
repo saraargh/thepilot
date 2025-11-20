@@ -1,12 +1,9 @@
 import discord
-from discord.ext import tasks
 from discord import app_commands
-import pytz
 import os
-
-# ===== CONFIG =====
-TOKEN = os.getenv("TOKEN")
-UK_TZ = pytz.timezone("Europe/London")
+from poo import setup_poo_commands
+from plane import setup_plane_commands
+from tournament import setup_tournament_commands
 
 ALLOWED_ROLE_IDS = [
     1413545658006110401,
@@ -25,13 +22,11 @@ class ThePilot(discord.Client):
 
     async def setup_hook(self):
         await self.tree.sync()
+        # start poo background task safely
+        import poo
+        self.loop.create_task(poo.daily_poo_task(self, ALLOWED_ROLE_IDS))
 
 client = ThePilot()
-
-# ===== Import Command Modules =====
-from plane import setup_plane_commands
-from tournament import setup_tournament_commands
-from poo import setup_poo_commands
 
 # ===== Register Commands =====
 setup_plane_commands(client.tree)
@@ -39,4 +34,5 @@ setup_tournament_commands(client.tree, allowed_role_ids=ALLOWED_ROLE_IDS)
 setup_poo_commands(client.tree, client, allowed_role_ids=ALLOWED_ROLE_IDS)
 
 # ===== Run Bot =====
+TOKEN = os.getenv("TOKEN")
 client.run(TOKEN)
