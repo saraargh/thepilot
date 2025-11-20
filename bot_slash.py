@@ -29,6 +29,7 @@ class ThePilot(discord.Client):
         self.tree = app_commands.CommandTree(self)
 
     async def setup_hook(self):
+        # Sync commands and start scheduled tasks
         await self.tree.sync()
         scheduled_tasks.start(self)
 
@@ -47,14 +48,21 @@ setup_poo_commands(client.tree, client, allowed_role_ids=ALLOWED_ROLE_IDS)  # Re
 # ===== Automation Tasks =====
 @tasks.loop(minutes=1)
 async def scheduled_tasks(bot_client):
-    """Placeholder for automated tasks"""
+    """Daily/periodic tasks can go here."""
     now = discord.utils.utcnow().astimezone(UK_TZ)
     guild = bot_client.guilds[0] if bot_client.guilds else None
     if guild:
-        # Future tasks like daily Poo assignment can go here
-        pass
+        # Example: automatic Poo assignment
+        # Only run at 1pm UK time
+        if now.hour == 13 and now.minute == 0:
+            # If your poo.py has a function like assign_daily_poo(), call it here
+            try:
+                from poo import assign_daily_poo
+                await assign_daily_poo(bot_client, ALLOWED_ROLE_IDS)
+            except Exception as e:
+                print("Error running daily poo task:", e)
 
-# ===== Flask Keep-Alive =====
+# ===== Flask Keep-Alive for Render =====
 app = Flask("")
 
 @app.route("/")
