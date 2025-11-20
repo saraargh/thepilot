@@ -4,8 +4,9 @@ import json
 import os
 import asyncio
 import random
+import shutil  # For safely removing directories if needed
 
-# ------------------- CONFIG -------------------
+# ------------------- Config -------------------
 TOURNAMENT_JSON = "/mnt/data/tournament_data.json"
 DEFAULT_DATA = {
     "items": [],
@@ -20,7 +21,14 @@ DEFAULT_DATA = {
 # ------------------- JSON Helpers -------------------
 def ensure_json():
     """Ensure the JSON file exists; create if missing."""
+    # Ensure the parent folder exists
     os.makedirs(os.path.dirname(TOURNAMENT_JSON), exist_ok=True)
+
+    # If a directory exists where the JSON file should be, remove it
+    if os.path.isdir(TOURNAMENT_JSON):
+        shutil.rmtree(TOURNAMENT_JSON)
+
+    # Create file if missing
     if not os.path.exists(TOURNAMENT_JSON):
         with open(TOURNAMENT_JSON, "w") as f:
             json.dump(DEFAULT_DATA, f, indent=4)
@@ -35,16 +43,16 @@ def save_data(data):
     with open(TOURNAMENT_JSON, "w") as f:
         json.dump(data, f, indent=4)
 
-# ------------------- Tournament Logic -------------------
+# ------------------- Tournament Commands -------------------
 def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
 
     def user_allowed(member: discord.Member):
         return any(role.id in allowed_role_ids for role in member.roles)
 
     async def start_match(interaction: discord.Interaction, a_item, b_item):
-        """Send the matchup and collect votes."""
+        """Send the matchup and collect votes"""
         embed = discord.Embed(
-            title="Vote for the winner!",
+            title=f"Vote for the winner!",
             description=f"🇦 {a_item}\n🇧 {b_item}"
         )
         msg = await interaction.channel.send(embed=embed)
@@ -55,13 +63,11 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
             return str(reaction.emoji) in ["🇦", "🇧"] and not user.bot
 
         votes = {"🇦": 0, "🇧": 0}
-        timeout = 10 if load_data().get("test_mode") else 86400  # 10s for test, 24h normal
+        timeout = 10 if load_data().get("test_mode") else 86400  # 10s test, 24h normal
 
         try:
             while True:
-                reaction, user = await interaction.client.wait_for(
-                    "reaction_add", timeout=timeout, check=check
-                )
+                reaction, user = await interaction.client.wait_for('reaction_add', timeout=timeout, check=check)
                 votes[str(reaction.emoji)] += 1
         except asyncio.TimeoutError:
             pass
@@ -104,11 +110,11 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
             save_data(data)
 
         winner = data["current_round"][0]
-        await interaction.channel.send(f"🎉 **{winner}** wins the **{title}**!")
+        await interaction.channel.send(f"🎉 **{winner}** wins the **{title}**!", file=discord.File("winner.gif"))
         data["running"] = False
         save_data(data)
 
-    # ------------------- Commands -------------------
+    # ------------------- Slash Commands -------------------
     @tree.command(name="startwc", description="Start the World Cup of something")
     @app_commands.describe(title="The World Cup title (e.g. Pizza)")
     async def startwc(interaction: discord.Interaction, title: str):
