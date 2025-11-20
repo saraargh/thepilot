@@ -3,3 +3,4 @@ pytz
 flask
 Pillow
 requests
+aiohttp
