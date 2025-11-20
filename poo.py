@@ -1,64 +1,94 @@
-# poo.py
 import discord
-from discord import app_commands
 from discord.ext import tasks
+from discord import app_commands
 import random
 import datetime
 import pytz
 
-# ===== CONFIG =====
-POO_ROLE_ID = 1429934009550373059    # poo role
-PASSENGERS_ROLE_ID = 1404100554807971971 # passengers role
-GENERAL_CHANNEL_ID = 1398508734506078240 # general channel
 UK_TZ = pytz.timezone("Europe/London")
 
-# ===== Helper Functions =====
-def user_allowed(member: discord.Member, allowed_role_ids):
-    """Check if user has one of the allowed roles by ID."""
-    return any(role.id in allowed_role_ids for role in member.roles)
+# ===== CONFIG =====
+POO_ROLE_ID = 1429934009550373059
+PASSENGERS_ROLE_ID = 1404100554807971971
+GENERAL_CHANNEL_ID = 1398508734506078240
 
-async def clear_poo_role(guild):
+# Roles allowed to use restricted commands
+ALLOWED_ROLE_IDS = [
+    1413545658006110401,  # William/Admin
+    1404098545006546954,
+    1420817462290681936,
+    1406242523952713820
+]
+
+# ===== Helper Functions =====
+def user_allowed(member: discord.Member, allowed_roles=None):
+    allowed_roles = allowed_roles or ALLOWED_ROLE_IDS
+    return any(role.id in allowed_roles for role in member.roles)
+
+async def clear_poo_role(guild: discord.Guild):
     poo_role = guild.get_role(POO_ROLE_ID)
     for member in guild.members:
         if poo_role in member.roles:
             await member.remove_roles(poo_role)
 
-async def assign_random_poo(guild):
+async def assign_random_poo(guild: discord.Guild):
     poo_role = guild.get_role(POO_ROLE_ID)
     passengers_role = guild.get_role(PASSENGERS_ROLE_ID)
     general_channel = guild.get_channel(GENERAL_CHANNEL_ID)
-    
+
     if passengers_role.members:
-        selected = random.choice(passengers_role.members)
-        await selected.add_roles(poo_role)
-        await general_channel.send(f"🎉 {selected.mention} is today’s poo!")
+        chosen = random.choice(passengers_role.members)
+        await chosen.add_roles(poo_role)
+        await general_channel.send(f"🎉 {chosen.mention} is today’s poo!")
     else:
         await general_channel.send("No passengers available to assign poo!")
 
-# ===== Scheduled Daily Poo Task =====
+async def test_poo(guild: discord.Guild):
+    poo_role = guild.get_role(POO_ROLE_ID)
+    general_channel = guild.get_channel(GENERAL_CHANNEL_ID)
+
+    # Just pick a random passenger to test
+    passengers_role = guild.get_role(PASSENGERS_ROLE_ID)
+    if passengers_role.members:
+        chosen = random.choice(passengers_role.members)
+        await chosen.add_roles(poo_role)
+        await general_channel.send(f"🧪 Test poo assigned to {chosen.mention}!")
+    else:
+        await general_channel.send("No passengers available for test.")
+
+# ===== Scheduled Task =====
 async def daily_poo_task(client, allowed_role_ids):
-    await client.wait_until_ready()
-    while not client.is_closed():
+    while True:
         now = datetime.datetime.now(UK_TZ)
-        if client.guilds:
-            guild = client.guilds[0]
-            # 11 AM: Clear poo role
-            if now.hour == 11 and now.minute == 0:
-                await clear_poo_role(guild)
-            # 1 PM: Assign poo
-            if now.hour == 13 and now.minute == 15:
-                await assign_random_poo(guild)
+        if not client.guilds:
+            await discord.utils.sleep_until(datetime.datetime.now() + datetime.timedelta(seconds=60))
+            continue
+        guild = client.guilds[0]
+
+        # Automatic clear at 11am
+        if now.hour == 11 and now.minute == 0:
+            await clear_poo_role(guild)
+            print("11AM: Cleared poo role")
+
+        # Automatic assign at 1pm
+        if now.hour == 13 and now.minute == 0:
+            await clear_poo_role(guild)
+            await assign_random_poo(guild)
+            print("1PM: Assigned random poo")
+
         await discord.utils.sleep_until(now + datetime.timedelta(minutes=1))
 
-# ===== Setup Function =====
-def setup_poo_commands(tree, client, allowed_role_ids):
+# ===== Slash Command Setup =====
+def setup_poo_commands(tree: app_commands.CommandTree, client: discord.Client, allowed_role_ids=None):
+    allowed_role_ids = allowed_role_ids or ALLOWED_ROLE_IDS
+
     @tree.command(name="clearpoo", description="Clear the poo role from everyone")
     async def clearpoo(interaction: discord.Interaction):
         if not user_allowed(interaction.user, allowed_role_ids):
             await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
             return
         await clear_poo_role(interaction.guild)
-        await interaction.response.send_message("✅ Cleared the poo role from everyone.")
+        await interaction.response.send_message("✅ Cleared poo role from everyone.")
 
     @tree.command(name="assignpoo", description="Manually assign the poo role to a member")
     @app_commands.describe(member="The member to assign the poo role")
@@ -66,9 +96,9 @@ def setup_poo_commands(tree, client, allowed_role_ids):
         if not user_allowed(interaction.user, allowed_role_ids):
             await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
             return
-        poo_role = interaction.guild.get_role(POO_ROLE_ID)
-        await member.add_roles(poo_role)
-        await interaction.response.send_message(f"🎉 {member.mention} has been manually assigned the poo role.")
+        role = interaction.guild.get_role(POO_ROLE_ID)
+        await member.add_roles(role)
+        await interaction.response.send_message(f"🎉 {member.mention} has been assigned the poo role.")
 
     @tree.command(name="removepoo", description="Remove the poo role from a member")
     @app_commands.describe(member="The member to remove the poo role from")
@@ -76,9 +106,17 @@ def setup_poo_commands(tree, client, allowed_role_ids):
         if not user_allowed(interaction.user, allowed_role_ids):
             await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
             return
-        poo_role = interaction.guild.get_role(POO_ROLE_ID)
-        await member.remove_roles(poo_role)
-        await interaction.response.send_message(f"✅ Removed the poo role from {member.mention}.")
+        role = interaction.guild.get_role(POO_ROLE_ID)
+        await member.remove_roles(role)
+        await interaction.response.send_message(f"❌ {member.mention} has had the poo role removed.")
 
-    # Start the daily poo task
+    @tree.command(name="testpoo", description="Test the poo automation")
+    async def testpoo_command(interaction: discord.Interaction):
+        if not user_allowed(interaction.user, allowed_role_ids):
+            await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
+            return
+        await test_poo(interaction.guild)
+        await interaction.response.send_message("🧪 Test poo completed!")
+
+    # Start background task
     client.loop.create_task(daily_poo_task(client, allowed_role_ids))
