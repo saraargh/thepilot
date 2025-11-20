@@ -4,10 +4,21 @@ import json
 import os
 import asyncio
 import random
-import shutil  # For safely removing directories if needed
+import base64
+import requests
 
-# ------------------- Config -------------------
-TOURNAMENT_JSON = "/mnt/data/tournament_data.json"
+# ------------------- GitHub Config -------------------
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+GITHUB_REPO = os.getenv("GITHUB_REPO")  # e.g., saraargh/the-pilot
+JSON_FILE_PATH = os.getenv("JSON_FILE_PATH", "tournament_data.json")
+GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{JSON_FILE_PATH}"
+
+HEADERS = {
+    "Authorization": f"token {GITHUB_TOKEN}",
+    "Accept": "application/vnd.github.v3+json"
+}
+
+# Default structure
 DEFAULT_DATA = {
     "items": [],
     "current_round": [],
@@ -18,32 +29,36 @@ DEFAULT_DATA = {
     "test_mode": False
 }
 
-# ------------------- JSON Helpers -------------------
-def ensure_json():
-    """Ensure the JSON file exists; create if missing."""
-    # Ensure the parent folder exists
-    os.makedirs(os.path.dirname(TOURNAMENT_JSON), exist_ok=True)
-
-    # If a directory exists where the JSON file should be, remove it
-    if os.path.isdir(TOURNAMENT_JSON):
-        shutil.rmtree(TOURNAMENT_JSON)
-
-    # Create file if missing
-    if not os.path.exists(TOURNAMENT_JSON):
-        with open(TOURNAMENT_JSON, "w") as f:
-            json.dump(DEFAULT_DATA, f, indent=4)
-
+# ------------------- GitHub Helpers -------------------
 def load_data():
-    ensure_json()
-    with open(TOURNAMENT_JSON, "r") as f:
-        return json.load(f)
+    """Load JSON from GitHub; return default if not found."""
+    r = requests.get(GITHUB_API_URL, headers=HEADERS)
+    if r.status_code == 200:
+        content = r.json().get("content", "")
+        if content:
+            decoded = base64.b64decode(content).decode()
+            return json.loads(decoded)
+    return DEFAULT_DATA.copy()
 
-def save_data(data):
-    ensure_json()
-    with open(TOURNAMENT_JSON, "w") as f:
-        json.dump(data, f, indent=4)
+def save_data(data, message="Update tournament data"):
+    """Save JSON to GitHub."""
+    # Get current SHA if exists
+    r = requests.get(GITHUB_API_URL, headers=HEADERS)
+    sha = r.json().get("sha") if r.status_code == 200 else None
 
-# ------------------- Tournament Commands -------------------
+    encoded = base64.b64encode(json.dumps(data, indent=4).encode()).decode()
+    payload = {
+        "message": message,
+        "content": encoded,
+    }
+    if sha:
+        payload["sha"] = sha
+
+    r2 = requests.put(GITHUB_API_URL, headers=HEADERS, json=payload)
+    if r2.status_code not in [200, 201]:
+        print("Failed to save JSON:", r2.text)
+
+# ------------------- Tournament Logic -------------------
 def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
 
     def user_allowed(member: discord.Member):
@@ -63,7 +78,8 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
             return str(reaction.emoji) in ["🇦", "🇧"] and not user.bot
 
         votes = {"🇦": 0, "🇧": 0}
-        timeout = 10 if load_data().get("test_mode") else 86400  # 10s test, 24h normal
+        data = load_data()
+        timeout = 10 if data.get("test_mode") else 86400  # 10s test, 24h normal
 
         try:
             while True:
@@ -102,7 +118,6 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
                     next_round.append(winner)
                     data["scores"][winner] += 1
                 else:
-                    # Odd item advances automatically
                     next_round.append(items[i])
                     data["scores"][items[i]] += 1
                     await interaction.channel.send(f"{items[i]} automatically advances due to odd number of items.")
@@ -114,7 +129,7 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
         data["running"] = False
         save_data(data)
 
-    # ------------------- Slash Commands -------------------
+    # ------------------- Commands -------------------
     @tree.command(name="startwc", description="Start the World Cup of something")
     @app_commands.describe(title="The World Cup title (e.g. Pizza)")
     async def startwc(interaction: discord.Interaction, title: str):
