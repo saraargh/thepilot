@@ -1,22 +1,33 @@
-import json
-import os
 import discord
 from discord import app_commands
+from json_api import get_json, save_json  # your existing JSON API functions
 
-WARNINGS_FILE = 'warnings.json'
+# JSON key for warnings (separate from World Cup)
+WARNINGS_KEY = "pilot_warnings"
 
-# Ensure the warnings file exists
-if not os.path.exists(WARNINGS_FILE):
-    with open(WARNINGS_FILE, 'w') as f:
-        json.dump({}, f, indent=4)
+# Role IDs
+PASSENGERS_ROLE_ID = 1404100554807971971
+WILLIAM_ROLE_ID = 1413545658006110401
+SAZZLES_ROLE_ID = 1404104881098195015
+
+
+# ------------------ Utilities ------------------ #
+def ordinal(n: int) -> str:
+    """Return ordinal string for a number: 1 → 1st, 2 → 2nd, 11 → 11th, etc."""
+    if 10 <= n % 100 <= 20:
+        suffix = 'th'
+    else:
+        suffix = {1:'st',2:'nd',3:'rd'}.get(n % 10, 'th')
+    return f"{n}{suffix}"
+
 
 def load_warnings():
-    with open(WARNINGS_FILE, 'r') as f:
-        return json.load(f)
+    return get_json(WARNINGS_KEY) or {}
 
-def save_warnings(warnings_data):
-    with open(WARNINGS_FILE, 'w') as f:
-        json.dump(warnings_data, f, indent=4)
+
+def save_warnings(data):
+    save_json(WARNINGS_KEY, data)
+
 
 def add_warning(user_id, reason=None):
     warnings_data = load_warnings()
@@ -25,6 +36,7 @@ def add_warning(user_id, reason=None):
     warnings_data[str(user_id)].append(reason if reason else "No reason provided")
     save_warnings(warnings_data)
     return len(warnings_data[str(user_id)])
+
 
 def remove_warning(user_id, index=None):
     warnings_data = load_warnings()
@@ -45,9 +57,11 @@ def remove_warning(user_id, index=None):
     save_warnings(warnings_data)
     return True
 
+
 def get_warnings(user_id):
     warnings_data = load_warnings()
     return warnings_data.get(str(user_id), [])
+
 
 def clear_warnings(user_id):
     warnings_data = load_warnings()
@@ -57,35 +71,20 @@ def clear_warnings(user_id):
         return True
     return False
 
+
 def get_all_warnings():
     return load_warnings()
 
 
-# ------------------ Utility ------------------ #
-def ordinal(n: int) -> str:
-    """Return ordinal string for a number: 1 → 1st, 2 → 2nd, 11 → 11th, etc."""
-    if 10 <= n % 100 <= 20:
-        suffix = 'th'
-    else:
-        suffix = {1:'st',2:'nd',3:'rd'}.get(n % 10, 'th')
-    return f"{n}{suffix}"
-
-
-# ------------------ Setup Function ------------------ #
+# ------------------ Command Setup ------------------ #
 def setup_warnings_commands(tree: app_commands.CommandTree, allowed_role_ids=None):
     ALLOWED_ROLES_IDS = allowed_role_ids or []
-    PASSENGERS_ROLE_ID = 1404100554807971971
-    WILLIAM_ROLE_ID = 1413545658006110401
-    SAZZLES_ROLE_ID = 1404104881098195015
 
     def can_warn(interaction: discord.Interaction, target_member: discord.Member):
-        # Cannot warn Sazzles
         if any(role.id == SAZZLES_ROLE_ID for role in target_member.roles):
             return False
-
         author_role_ids = [role.id for role in interaction.user.roles]
         target_role_ids = [role.id for role in target_member.roles]
-
         if any(role_id in ALLOWED_ROLES_IDS for role_id in author_role_ids):
             return True
         if PASSENGERS_ROLE_ID in author_role_ids and WILLIAM_ROLE_ID in target_role_ids:
@@ -98,7 +97,7 @@ def setup_warnings_commands(tree: app_commands.CommandTree, allowed_role_ids=Non
         if any(role.id == SAZZLES_ROLE_ID for role in member.roles):
             await interaction.response.send_message(
                 "⚠️ You cannot warn this user as she is the best and made this so you could all warn William 🖤",
-                ephemeral=False  # visible to everyone
+                ephemeral=False
             )
             return
 
@@ -122,6 +121,7 @@ def setup_warnings_commands(tree: app_commands.CommandTree, allowed_role_ids=Non
         if not user_warnings:
             await interaction.response.send_message(f"{member.mention} has no warnings.", ephemeral=False)
         else:
+            # Show all warnings with reasons
             msg = "\n".join([f"{i+1}. {w}" for i, w in enumerate(user_warnings)])
             await interaction.response.send_message(f"{member.mention} warnings:\n{msg}", ephemeral=False)
 
@@ -155,4 +155,4 @@ def setup_warnings_commands(tree: app_commands.CommandTree, allowed_role_ids=Non
         if success:
             await interaction.response.send_message(f"✅ All warnings cleared for {member.mention}.", ephemeral=False)
         else:
-            await interaction.response.send_message(f"{member.mention} has no warnings to clear.", ephemeral=False)
+            await interaction.response.send_message(f"{member.mention} has no warnings.", ephemeral=False)
