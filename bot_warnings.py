@@ -1,19 +1,52 @@
 import discord
 from discord import app_commands
-from json_api import get_json, save_json  # your existing JSON API functions
+import requests
+import base64
+import os
+import json
 
-# JSON key for warnings (separate from World Cup)
-WARNINGS_KEY = "pilot_warnings"
+# ------------------- GitHub Config -------------------
+GITHUB_REPO = "saraargh/the-pilot"
+GITHUB_FILE_PATH = "warnings.json"
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"}
 
-# Role IDs
+# ------------------- Default Data -------------------
+DEFAULT_DATA = {}  # empty initially
+
+# ------------------- GitHub Helpers -------------------
+def load_data():
+    url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
+    r = requests.get(url, headers=HEADERS)
+    if r.status_code == 200:
+        content = r.json()
+        data = base64.b64decode(content["content"]).decode()
+        return json.loads(data), content["sha"]
+    # file does not exist yet, create it
+    sha = save_data(DEFAULT_DATA.copy())
+    return DEFAULT_DATA.copy(), sha
+
+def save_data(data, sha=None):
+    url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
+    encoded_content = base64.b64encode(json.dumps(data, indent=4).encode()).decode()
+    payload = {"message": "Update warnings", "content": encoded_content}
+    if sha:
+        payload["sha"] = sha
+    r = requests.put(url, headers=HEADERS, data=json.dumps(payload))
+    if r.status_code not in [200, 201]:
+        print(f"GitHub save error: {r.status_code} {r.text}")
+        return sha
+    return r.json().get("content", {}).get("sha")
+
+
+# ------------------- Role IDs -------------------
+ALLOWED_ROLES_IDS = [1420817462290681936, 1413545658006110401, 1404105470204969000, 1404098545006546954]  # Admin, William, Moderator, Helper
 PASSENGERS_ROLE_ID = 1404100554807971971
 WILLIAM_ROLE_ID = 1413545658006110401
 SAZZLES_ROLE_ID = 1404104881098195015
 
-
-# ------------------ Utilities ------------------ #
+# ------------------- Utilities -------------------
 def ordinal(n: int) -> str:
-    """Return ordinal string for a number: 1 → 1st, 2 → 2nd, 11 → 11th, etc."""
     if 10 <= n % 100 <= 20:
         suffix = 'th'
     else:
@@ -21,80 +54,53 @@ def ordinal(n: int) -> str:
     return f"{n}{suffix}"
 
 
-def load_warnings():
-    return get_json(WARNINGS_KEY) or {}
-
-
-def save_warnings(data):
-    save_json(WARNINGS_KEY, data)
-
-
 def add_warning(user_id, reason=None):
-    warnings_data = load_warnings()
-    if str(user_id) not in warnings_data:
-        warnings_data[str(user_id)] = []
-    warnings_data[str(user_id)].append(reason if reason else "No reason provided")
-    save_warnings(warnings_data)
-    return len(warnings_data[str(user_id)])
-
-
-def remove_warning(user_id, index=None):
-    warnings_data = load_warnings()
-    user_warnings = warnings_data.get(str(user_id), [])
-    if not user_warnings:
-        return False
-    if index is None:
-        user_warnings.pop()
-    else:
-        if 0 <= index < len(user_warnings):
-            user_warnings.pop(index)
-        else:
-            return False
-    if user_warnings:
-        warnings_data[str(user_id)] = user_warnings
-    else:
-        del warnings_data[str(user_id)]
-    save_warnings(warnings_data)
-    return True
+    data, sha = load_data()
+    if str(user_id) not in data:
+        data[str(user_id)] = []
+    data[str(user_id)].append(reason if reason else "No reason provided")
+    save_data(data, sha)
+    return len(data[str(user_id)])
 
 
 def get_warnings(user_id):
-    warnings_data = load_warnings()
-    return warnings_data.get(str(user_id), [])
+    data, _ = load_data()
+    return data.get(str(user_id), [])
 
 
 def clear_warnings(user_id):
-    warnings_data = load_warnings()
-    if str(user_id) in warnings_data:
-        del warnings_data[str(user_id)]
-        save_warnings(warnings_data)
+    data, sha = load_data()
+    if str(user_id) in data:
+        del data[str(user_id)]
+        save_data(data, sha)
         return True
     return False
 
 
 def get_all_warnings():
-    return load_warnings()
+    data, _ = load_data()
+    return data
 
 
-# ------------------ Command Setup ------------------ #
+# ------------------- Command Setup -------------------
 def setup_warnings_commands(tree: app_commands.CommandTree, allowed_role_ids=None):
-    ALLOWED_ROLES_IDS = allowed_role_ids or []
+    ALLOWED_ROLES_IDS_SET = set(allowed_role_ids or ALLOWED_ROLES_IDS)
 
     def can_warn(interaction: discord.Interaction, target_member: discord.Member):
-        if any(role.id == SAZZLES_ROLE_ID for role in target_member.roles):
+        if SAZZLES_ROLE_ID in [r.id for r in target_member.roles]:
             return False
-        author_role_ids = [role.id for role in interaction.user.roles]
-        target_role_ids = [role.id for role in target_member.roles]
-        if any(role_id in ALLOWED_ROLES_IDS for role_id in author_role_ids):
+        author_roles = [r.id for r in interaction.user.roles]
+        target_roles = [r.id for r in target_member.roles]
+        if any(r in ALLOWED_ROLES_IDS_SET for r in author_roles):
             return True
-        if PASSENGERS_ROLE_ID in author_role_ids and WILLIAM_ROLE_ID in target_role_ids:
+        if PASSENGERS_ROLE_ID in author_roles and WILLIAM_ROLE_ID in target_roles:
             return True
         return False
 
     @tree.command(name="warn", description="Warn a user")
     @app_commands.describe(member="Member to warn", reason="Reason for warning (optional)")
     async def warn(interaction: discord.Interaction, member: discord.Member, reason: str = None):
-        if any(role.id == SAZZLES_ROLE_ID for role in member.roles):
+        if SAZZLES_ROLE_ID in [r.id for r in member.roles]:
             await interaction.response.send_message(
                 "⚠️ You cannot warn this user as she is the best and made this so you could all warn William 🖤",
                 ephemeral=False
@@ -117,36 +123,25 @@ def setup_warnings_commands(tree: app_commands.CommandTree, allowed_role_ids=Non
     @tree.command(name="warnings_list", description="List warnings for a user")
     @app_commands.describe(member="Member to see warnings for")
     async def warnings_list(interaction: discord.Interaction, member: discord.Member):
-        user_warnings = get_warnings(member.id)
-        if not user_warnings:
+        warns = get_warnings(member.id)
+        if not warns:
             await interaction.response.send_message(f"{member.mention} has no warnings.", ephemeral=False)
         else:
-            # Show all warnings with reasons
-            msg = "\n".join([f"{i+1}. {w}" for i, w in enumerate(user_warnings)])
+            msg = "\n".join([f"{i+1}. {w}" for i, w in enumerate(warns)])
             await interaction.response.send_message(f"{member.mention} warnings:\n{msg}", ephemeral=False)
 
     @tree.command(name="server_warnings", description="List all warnings on the server")
     async def server_warnings(interaction: discord.Interaction):
-        all_warnings = get_all_warnings()
-        if not all_warnings:
+        data = get_all_warnings()
+        if not data:
             await interaction.response.send_message("No warnings on this server.", ephemeral=False)
             return
-
         msg_list = []
-        for user_id, warns in all_warnings.items():
+        for user_id, warns in data.items():
             user = interaction.guild.get_member(int(user_id))
             if user:
                 msg_list.append(f"{user.display_name}: {len(warns)} warning(s)")
         await interaction.response.send_message("\n".join(msg_list) if msg_list else "No warnings found.", ephemeral=False)
-
-    @tree.command(name="remove_warn", description="Remove a warning from a user")
-    @app_commands.describe(member="Member to remove warning from", index="Index of warning to remove (optional)")
-    async def remove_warn(interaction: discord.Interaction, member: discord.Member, index: int = None):
-        success = remove_warning(member.id, index-1 if index else None)
-        if success:
-            await interaction.response.send_message(f"✅ Warning removed from {member.mention}.", ephemeral=False)
-        else:
-            await interaction.response.send_message(f"❌ Could not remove warning from {member.mention}.", ephemeral=False)
 
     @tree.command(name="clear_warns", description="Clear all warnings for a user")
     @app_commands.describe(member="Member to clear warnings for")
