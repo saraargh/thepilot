@@ -12,32 +12,7 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"}
 
 # ------------------- Default Data -------------------
-DEFAULT_DATA = {}  # empty initially
-
-# ------------------- GitHub Helpers -------------------
-def load_data():
-    url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
-    r = requests.get(url, headers=HEADERS)
-    if r.status_code == 200:
-        content = r.json()
-        data = base64.b64decode(content["content"]).decode()
-        return json.loads(data), content["sha"]
-    # file does not exist yet, create it
-    sha = save_data(DEFAULT_DATA.copy())
-    return DEFAULT_DATA.copy(), sha
-
-def save_data(data, sha=None):
-    url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
-    encoded_content = base64.b64encode(json.dumps(data, indent=4).encode()).decode()
-    payload = {"message": "Update warnings", "content": encoded_content}
-    if sha:
-        payload["sha"] = sha
-    r = requests.put(url, headers=HEADERS, data=json.dumps(payload))
-    if r.status_code not in [200, 201]:
-        print(f"GitHub save error: {r.status_code} {r.text}")
-        return sha
-    return r.json().get("content", {}).get("sha")
-
+DEFAULT_DATA = {}
 
 # ------------------- Role IDs -------------------
 ALLOWED_ROLES_IDS = [1420817462290681936, 1413545658006110401, 1404105470204969000, 1404098545006546954]  # Admin, William, Moderator, Helper
@@ -53,7 +28,38 @@ def ordinal(n: int) -> str:
         suffix = {1:'st',2:'nd',3:'rd'}.get(n % 10, 'th')
     return f"{n}{suffix}"
 
+# ------------------- GitHub Helpers -------------------
+def load_data():
+    try:
+        url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
+        r = requests.get(url, headers=HEADERS)
+        if r.status_code == 200:
+            content = r.json()
+            data = base64.b64decode(content["content"]).decode()
+            return json.loads(data), content["sha"]
+        # File missing: create it
+        return DEFAULT_DATA.copy(), save_data(DEFAULT_DATA.copy())
+    except Exception as e:
+        print("Exception in load_data:", e)
+        return DEFAULT_DATA.copy(), None
 
+def save_data(data, sha=None):
+    try:
+        url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
+        encoded_content = base64.b64encode(json.dumps(data, indent=4).encode()).decode()
+        payload = {"message": "Update warnings", "content": encoded_content}
+        if sha:
+            payload["sha"] = sha
+        r = requests.put(url, headers=HEADERS, data=json.dumps(payload))
+        if r.status_code not in [200, 201]:
+            print(f"GitHub save error: {r.status_code} {r.text}")
+            return None
+        return r.json().get("content", {}).get("sha")
+    except Exception as e:
+        print("Exception in save_data:", e)
+        return None
+
+# ------------------- Warning Functions -------------------
 def add_warning(user_id, reason=None):
     data, sha = load_data()
     if str(user_id) not in data:
@@ -62,11 +68,9 @@ def add_warning(user_id, reason=None):
     save_data(data, sha)
     return len(data[str(user_id)])
 
-
 def get_warnings(user_id):
     data, _ = load_data()
     return data.get(str(user_id), [])
-
 
 def clear_warnings(user_id):
     data, sha = load_data()
@@ -76,11 +80,9 @@ def clear_warnings(user_id):
         return True
     return False
 
-
 def get_all_warnings():
     data, _ = load_data()
     return data
-
 
 # ------------------- Command Setup -------------------
 def setup_warnings_commands(tree: app_commands.CommandTree, allowed_role_ids=None):
