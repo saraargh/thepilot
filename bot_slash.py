@@ -43,6 +43,8 @@ setup_plane_commands(client.tree)
 setup_tournament_commands(client.tree, allowed_role_ids=ALLOWED_ROLE_IDS)
 setup_poo_commands(client.tree, client, allowed_role_ids=ALLOWED_ROLE_IDS)
 
+setup_warnings_commands(client.tree, allowed_role_ids=ALLOWED_ROLE_IDS)
+
 # ===== Automation Tasks =====
 @tasks.loop(minutes=1)
 async def scheduled_tasks(bot_client):
