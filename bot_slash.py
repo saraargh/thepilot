@@ -43,7 +43,13 @@ setup_plane_commands(client.tree)
 setup_tournament_commands(client.tree, allowed_role_ids=ALLOWED_ROLE_IDS)
 setup_poo_commands(client.tree, client, allowed_role_ids=ALLOWED_ROLE_IDS)
 
-setup_warnings_commands(client.tree, allowed_role_ids=ALLOWED_ROLE_IDS)
+#warnings bot#
+from bot_warnings import setup_warnings_commands
+
+# Example: roles allowed to warn
+ALLOWED_WARNROLE_IDS = [1420817462290681936, 1413545658006110401, 1404105470204969000, 1404098545006546954]
+
+setup_warnings_commands(client.tree, allowed_role_ids=ALLOWED_WARNROLE_IDS)
 
 # ===== Automation Tasks =====
 @tasks.loop(minutes=1)
