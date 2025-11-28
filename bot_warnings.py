@@ -61,6 +61,16 @@ def get_all_warnings():
     return load_warnings()
 
 
+# ------------------ Utility ------------------ #
+def ordinal(n: int) -> str:
+    """Return ordinal string for a number: 1 → 1st, 2 → 2nd, 11 → 11th, etc."""
+    if 10 <= n % 100 <= 20:
+        suffix = 'th'
+    else:
+        suffix = {1:'st',2:'nd',3:'rd'}.get(n % 10, 'th')
+    return f"{n}{suffix}"
+
+
 # ------------------ Setup Function ------------------ #
 def setup_warnings_commands(tree: app_commands.CommandTree, allowed_role_ids=None):
     ALLOWED_ROLES_IDS = allowed_role_ids or []
@@ -87,7 +97,8 @@ def setup_warnings_commands(tree: app_commands.CommandTree, allowed_role_ids=Non
     async def warn(interaction: discord.Interaction, member: discord.Member, reason: str = None):
         if any(role.id == SAZZLES_ROLE_ID for role in member.roles):
             await interaction.response.send_message(
-                "⚠️ You cannot warn this user as she is the best and made this so you could all warn William 🖤"
+                "⚠️ You cannot warn this user as she is the best and made this so you could all warn William 🖤",
+                ephemeral=False  # visible to everyone
             )
             return
 
@@ -101,48 +112,47 @@ def setup_warnings_commands(tree: app_commands.CommandTree, allowed_role_ids=Non
         msg = f"⚠️ {member.mention} was warned"
         if reason:
             msg += f" for {reason}"
-        msg += f", this is their {count}{'st' if count==1 else 'nd' if count==2 else 'rd' if count==3 else 'th'} warning."
-        await interaction.response.send_message(msg)
+        msg += f", this is their {ordinal(count)} warning."
+        await interaction.response.send_message(msg, ephemeral=False)
 
     @tree.command(name="warnings_list", description="List warnings for a user")
     @app_commands.describe(member="Member to see warnings for")
     async def warnings_list(interaction: discord.Interaction, member: discord.Member):
         user_warnings = get_warnings(member.id)
         if not user_warnings:
-            await interaction.response.send_message(f"{member.mention} has no warnings.", ephemeral=True)
+            await interaction.response.send_message(f"{member.mention} has no warnings.", ephemeral=False)
         else:
             msg = "\n".join([f"{i+1}. {w}" for i, w in enumerate(user_warnings)])
-            await interaction.response.send_message(f"{member.mention} warnings:\n{msg}", ephemeral=True)
+            await interaction.response.send_message(f"{member.mention} warnings:\n{msg}", ephemeral=False)
 
     @tree.command(name="server_warnings", description="List all warnings on the server")
     async def server_warnings(interaction: discord.Interaction):
         all_warnings = get_all_warnings()
         if not all_warnings:
-            await interaction.response.send_message("No warnings on this server.", ephemeral=True)
+            await interaction.response.send_message("No warnings on this server.", ephemeral=False)
             return
 
         msg_list = []
         for user_id, warns in all_warnings.items():
             user = interaction.guild.get_member(int(user_id))
             if user:
-                warns_text = ", ".join(warns)
-                msg_list.append(f"{user.display_name}: {warns_text}")
-        await interaction.response.send_message("\n".join(msg_list) if msg_list else "No warnings found.", ephemeral=True)
+                msg_list.append(f"{user.display_name}: {len(warns)} warning(s)")
+        await interaction.response.send_message("\n".join(msg_list) if msg_list else "No warnings found.", ephemeral=False)
 
     @tree.command(name="remove_warn", description="Remove a warning from a user")
     @app_commands.describe(member="Member to remove warning from", index="Index of warning to remove (optional)")
     async def remove_warn(interaction: discord.Interaction, member: discord.Member, index: int = None):
         success = remove_warning(member.id, index-1 if index else None)
         if success:
-            await interaction.response.send_message(f"✅ Warning removed from {member.mention}.")
+            await interaction.response.send_message(f"✅ Warning removed from {member.mention}.", ephemeral=False)
         else:
-            await interaction.response.send_message(f"❌ Could not remove warning from {member.mention}.")
+            await interaction.response.send_message(f"❌ Could not remove warning from {member.mention}.", ephemeral=False)
 
     @tree.command(name="clear_warns", description="Clear all warnings for a user")
     @app_commands.describe(member="Member to clear warnings for")
     async def clear_warns(interaction: discord.Interaction, member: discord.Member):
         success = clear_warnings(member.id)
         if success:
-            await interaction.response.send_message(f"✅ All warnings cleared for {member.mention}.")
+            await interaction.response.send_message(f"✅ All warnings cleared for {member.mention}.", ephemeral=False)
         else:
-            await interaction.response.send_message(f"{member.mention} has no warnings to clear.")
+            await interaction.response.send_message(f"{member.mention} has no warnings to clear.", ephemeral=False)
