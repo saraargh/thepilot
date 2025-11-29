@@ -69,7 +69,7 @@
         "Headboard": 0,
         "Bean Bag": 1
     },
-    "running": true,
+    "running": false,
     "title": "Landing Strip World Cup Of house items",
     "last_winner": "Sofa",
     "last_match": {
