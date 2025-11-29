@@ -52,7 +52,8 @@
         "Chest",
         "Chair",
         "Cabinet",
-        "Sofa"
+        "Sofa",
+        "Lamp"
     ],
     "scores": {
         "Sofa": 1,
@@ -67,7 +68,7 @@
         "Chair": 1,
         "Nightstand": 0,
         "Dresser": 0,
-        "Lamp": 0,
+        "Lamp": 1,
         "Rug": 1,
         "Mirror": 0,
         "Curtain": 0,
@@ -90,13 +91,8 @@
     },
     "running": true,
     "title": "Landing Strip World Cup Of house items",
-    "last_winner": "Sofa",
-    "last_match": {
-        "a": "Dining Table",
-        "b": "Lamp",
-        "message_id": 1444334408906576012,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Lamp",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Nightstand",
@@ -188,6 +184,13 @@
             "winner": "Sofa",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Dining Table",
+            "b": "Lamp",
+            "winner": "Lamp",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
