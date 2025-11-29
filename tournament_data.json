@@ -101,7 +101,12 @@
     "running": true,
     "title": "Accessories",
     "last_winner": "Necklace",
-    "last_match": null,
+    "last_match": {
+        "a": "Cufflinks",
+        "b": "Phone_case",
+        "message_id": 1444399330537640068,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Beanie",
