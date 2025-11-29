@@ -144,10 +144,16 @@ def setup_warnings_commands(tree: app_commands.CommandTree, allowed_role_ids=Non
             )
             return
         if not can_warn(interaction, member):
-            await interaction.response.send_message(
-                f"❌ You do not have permission to warn {member.mention}.",
-                ephemeral=True
-            )
+            if PASSENGERS_ROLE_ID in [r.id for r in interaction.user.roles]:
+                await interaction.response.send_message(
+                    "❌ You cannot warn your fellow passengers, you can only warn William!",
+                    ephemeral=False
+                )
+            else:
+                await interaction.response.send_message(
+                    f"❌ You do not have permission to warn {member.mention}.",
+                    ephemeral=False
+                )
             return
         count = add_warning(member.id, reason)
         msg = f"⚠️ {member.mention} was warned"
@@ -188,7 +194,7 @@ def setup_warnings_commands(tree: app_commands.CommandTree, allowed_role_ids=Non
         if not (author_roles & allowed_set):
             await interaction.response.send_message(
                 "❌ You do not have permission to clear warnings.",
-                ephemeral=True
+                ephemeral=False
             )
             return
 
@@ -215,7 +221,7 @@ def setup_warnings_commands(tree: app_commands.CommandTree, allowed_role_ids=Non
         if not (author_roles & allowed_set):
             await interaction.response.send_message(
                 "❌ You do not have permission to clear server warnings.",
-                ephemeral=True
+                ephemeral=False
             )
             return
 
