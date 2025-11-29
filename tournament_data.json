@@ -64,7 +64,8 @@
         "Purse"
     ],
     "next_round": [
-        "Watch"
+        "Watch",
+        "Lanyard"
     ],
     "scores": {
         "Sunglasses": 0,
@@ -92,7 +93,7 @@
         "Boots": 0,
         "Beanie": 0,
         "Sunglasses_case": 0,
-        "Lanyard": 0,
+        "Lanyard": 1,
         "Umbrella": 0,
         "Phone_case": 0,
         "Water_bottle": 0,
@@ -102,13 +103,8 @@
     },
     "running": true,
     "title": "Accessories",
-    "last_winner": "Watch",
-    "last_match": {
-        "a": "Lanyard",
-        "b": "Sunglasses_case",
-        "message_id": 1444396505594073149,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Lanyard",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Beanie",
@@ -116,6 +112,13 @@
             "winner": "Watch",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Lanyard",
+            "b": "Sunglasses_case",
+            "winner": "Lanyard",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
