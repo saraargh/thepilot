@@ -9,7 +9,7 @@ from discord import app_commands
 # ------------------- GitHub Config -------------------
 GITHUB_REPO = os.getenv("GITHUB_REPO", "saraargh/the-pilot")
 GITHUB_FILE_PATH = "warnings.json"
-GITHUB_TOKEN = os.getenv("GITHUB_TEST_TOKEN")  # your test token
+GITHUB_TOKEN = os.getenv("GITHUB_TEST_TOKEN")  # test token
 HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
 
 # ------------------- Roles -------------------
@@ -26,8 +26,9 @@ SAZZLES_ROLE_ID = 1404104881098195015
 
 # ------------------- Default JSON structure -------------------
 DEFAULT_DATA = {
-    "warnings": {},        # user_id(str) -> list of reasons
-    "last_reset": None
+    "warnings": {},
+    "last_reset": None,
+    "extra_var": None
 }
 
 # ------------------- Helpers -------------------
@@ -52,8 +53,7 @@ def load_data():
             raw = base64.b64decode(content["content"]).decode()
             data = json.loads(raw) if raw.strip() else DEFAULT_DATA.copy()
             sha = content.get("sha")
-            print(f"✅ Loaded warnings.json with SHA={sha}")
-            # ensure warnings key exists
+            print(f"✅ Loaded warnings.json, SHA={sha}")
             if "warnings" not in data:
                 data["warnings"] = {}
             return data, sha
@@ -61,7 +61,7 @@ def load_data():
             print("⚠️ warnings.json not found, creating new.")
             return DEFAULT_DATA.copy(), None
         else:
-            print("❌ Unexpected status:", r.status_code, r.text)
+            print("❌ Unexpected GET status:", r.status_code, r.text)
             return DEFAULT_DATA.copy(), None
     except Exception as e:
         print("❌ Exception in load_data:", e)
@@ -77,12 +77,12 @@ def save_data(data, sha=None):
         if sha:
             payload["sha"] = sha
             print(f"Using SHA: {sha}")
-        r = requests.put(_gh_url(), headers=HEADERS, data=json.dumps(payload), timeout=10)
-        print("PUT status:", r.status_code)
-        print("PUT response:", r.text)
+        r = requests.put(_gh_url(), headers=HEADERS, data=json.dumps(payload))
+        print(f"PUT status: {r.status_code}")
+        print(f"PUT response: {r.text}")
         if r.status_code in (200, 201):
             new_sha = r.json().get("content", {}).get("sha")
-            print(f"✅ warnings.json saved successfully, new SHA={new_sha}")
+            print(f"✅ Saved warnings.json, new SHA={new_sha}")
             return new_sha
         else:
             print("❌ Failed to save warnings.json")
@@ -99,7 +99,9 @@ def add_warning(user_id: int, reason: str | None = None):
     if uid not in data["warnings"]:
         data["warnings"][uid] = []
     data["warnings"][uid].append(reason or "No reason provided")
-    sha = save_data(data, sha)
+    print(f"Warnings before saving: {data['warnings'][uid]}")
+    new_sha = save_data(data, sha)
+    print(f"New SHA after save: {new_sha}")
     return len(data["warnings"][uid])
 
 def get_warnings(user_id: int):
