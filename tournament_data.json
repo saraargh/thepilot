@@ -103,7 +103,12 @@
     "running": true,
     "title": "Accessories",
     "last_winner": null,
-    "last_match": null,
+    "last_match": {
+        "a": "Sandals",
+        "b": "Brooch",
+        "message_id": 1444418258600988713,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [],
     "round_stage": "Round of 32"
 }
