@@ -65,7 +65,9 @@
         "Hairpin",
         "Keychain"
     ],
-    "next_round": [],
+    "next_round": [
+        "Brooch"
+    ],
     "scores": {
         "Sunglasses": 0,
         "Watch": 0,
@@ -85,7 +87,7 @@
         "Tie": 0,
         "Cufflinks": 0,
         "Hairpin": 0,
-        "Brooch": 0,
+        "Brooch": 1,
         "Socks": 0,
         "Shoes": 0,
         "Sandals": 0,
@@ -102,14 +104,16 @@
     },
     "running": true,
     "title": "Accessories",
-    "last_winner": null,
-    "last_match": {
-        "a": "Brooch",
-        "b": "Notebook",
-        "message_id": 1444404873574481940,
-        "channel_id": 1438277790179921971,
-        "voters": {}
-    },
-    "finished_matches": [],
+    "last_winner": "Brooch",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "Brooch",
+            "b": "Notebook",
+            "winner": "Brooch",
+            "a_votes": 1,
+            "b_votes": 0
+        }
+    ],
     "round_stage": "Round of 32"
 }
