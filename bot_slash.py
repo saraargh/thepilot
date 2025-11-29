@@ -31,12 +31,12 @@ class ThePilot(discord.Client):
         # Load scheduled tasks
         scheduled_tasks.start(self)
 
-        # Load command cogs
-        # Bot command modules
+        # Load command modules
         from plane import setup_plane_commands
         from tournament import setup_tournament_commands
         from poo import setup_poo_commands
         from bot_warnings import setup_warnings_commands
+        from mute import setup_mute_commands  # Import mute setup function
 
         # Setup commands
         setup_plane_commands(self.tree)
@@ -44,11 +44,16 @@ class ThePilot(discord.Client):
         setup_poo_commands(self.tree, self, allowed_role_ids=ALLOWED_ROLE_IDS)
 
         # Warnings
-        ALLOWED_WARNROLE_IDS = [1420817462290681936, 1413545658006110401, 1404105470204969000, 1404098545006546954]
+        ALLOWED_WARNROLE_IDS = [
+            1420817462290681936,
+            1413545658006110401,
+            1404105470204969000,
+            1404098545006546954
+        ]
         setup_warnings_commands(self.tree, allowed_role_ids=ALLOWED_WARNROLE_IDS)
 
-        # Load mute cog
-        await self.load_extension("mute")  # <--- Add this line to load mute.py
+        # Setup mute commands
+        setup_mute_commands(self.tree)
 
         # Sync all slash commands
         await self.tree.sync()
@@ -62,7 +67,7 @@ async def scheduled_tasks(bot_client):
     now = discord.utils.utcnow().astimezone(UK_TZ)
     guild = bot_client.guilds[0] if bot_client.guilds else None
     if guild:
-        # You can add more scheduled tasks here
+        # Add more scheduled tasks here if needed
         pass
 
 # ===== Flask Keep-Alive =====
