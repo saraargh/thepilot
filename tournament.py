@@ -244,4 +244,4 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
             await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
             return
         sha = save_data(DEFAULT_DATA.copy())
-        await interaction.response.send_message("🔄 World Cup has been reset.", ephemeral=False
+        await interaction.response.send_message("🔄 World Cup has been reset.", ephemeral=False)
