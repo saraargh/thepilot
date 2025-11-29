@@ -1,8 +1,12 @@
 {
-    "items": [],
+    "items": [
+        "1"
+    ],
     "current_round": [],
     "next_round": [],
-    "scores": {},
+    "scores": {
+        "1": 0
+    },
     "running": false,
     "title": "",
     "last_winner": null,
