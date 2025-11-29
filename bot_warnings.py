@@ -10,7 +10,7 @@ from discord import app_commands
 GITHUB_REPO = "saraargh/the-pilot"
 GITHUB_FILE_PATH = "warnings.json"
 GITHUB_TOKEN = os.getenv("GITHUB_TESTTOKEN")
-HEADERS = {"Authorization": f"token {GITHUB_TESTTOKEN}"} if GITHUB_TESTTOKEN else {}
+HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
 
 # ------------------- Roles -------------------
 DEFAULT_ALLOWED_ROLES = [
