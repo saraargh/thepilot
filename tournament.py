@@ -300,4 +300,4 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids=N
             ),
             color=discord.Color.green()
         )
-        await interaction.response.send_message(embed=embed
+        await interaction.response.send_message(embed=embed, ephemeral=True)
