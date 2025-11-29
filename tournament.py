@@ -27,35 +27,27 @@ DEFAULT_DATA = {
 def load_data():
     url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
     r = requests.get(url, headers=HEADERS)
-
     if r.status_code == 200:
         content = r.json()
         data = base64.b64decode(content["content"]).decode()
         return json.loads(data), content["sha"]
-
-    sha = save_data(DEFAULT_DATA.copy())
-    return DEFAULT_DATA.copy(), sha
-
+    else:
+        # File missing or error → create it
+        save_data(DEFAULT_DATA.copy())
+        return DEFAULT_DATA.copy(), None
 
 def save_data(data, sha=None):
     url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
     encoded_content = base64.b64encode(json.dumps(data, indent=4).encode()).decode()
-
     payload = {
         "message": "Update tournament data",
-        "content": encoded_content
+        "content": encoded_content,
     }
-
     if sha:
         payload["sha"] = sha
-
     r = requests.put(url, headers=HEADERS, data=json.dumps(payload))
-
     if r.status_code not in [200, 201]:
         print(f"GitHub save error: {r.status_code} {r.text}")
-        return sha
-
-    return r.json().get("content", {}).get("sha")
 
 # ------------------- Tournament Logic -------------------
 def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
@@ -63,212 +55,152 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
     def user_allowed(member: discord.Member):
         return any(role.id in allowed_role_ids for role in member.roles)
 
-    async def run_next_match(interaction: discord.Interaction):
-        data, sha = load_data()
-
-        if not data["running"]:
-            await interaction.response.send_message("❌ No World Cup running.", ephemeral=True)
-            return
-
-        # Tournament finished?
-        if not data["current_round"]:
-            winner = data["next_round"][0]
-            data["last_winner"] = winner
-            data["running"] = False
-            save_data(data, sha)
-            await interaction.response.send_message(f"🎉 **{winner}** wins the **{data['title']}**!")
-            return
-
-        items = data["current_round"]
-
-        # Odd leftover auto-advance
-        if len(items) < 2:
-            data["next_round"].append(items[0])
-            data["last_winner"] = items[0]
-            data["current_round"] = []
-            save_data(data, sha)
-
-            await interaction.response.send_message(
-                f"🏆 {items[0]} automatically moves to next round."
-            )
-            return
-
-        # Do a match
-        a_item, b_item = items[0], items[1]
-
+    async def start_match(interaction: discord.Interaction, a_item, b_item):
         embed = discord.Embed(
-            title=f"{data['title']}",
+            title="Vote for the winner!",
             description=f"🇦 {a_item}\n🇧 {b_item}"
         )
-
         msg = await interaction.channel.send(embed=embed)
         await msg.add_reaction("🇦")
         await msg.add_reaction("🇧")
 
         def check(reaction, user):
-            return (
-                str(reaction.emoji) in ["🇦", "🇧"]
-                and reaction.message.id == msg.id
-                and not user.bot
-            )
+            return str(reaction.emoji) in ["🇦", "🇧"] and not user.bot
 
         votes = {"🇦": 0, "🇧": 0}
 
         try:
             while True:
                 reaction, user = await interaction.client.wait_for(
-                    "reaction_add",
-                    timeout=10,
-                    check=check
+                    "reaction_add", timeout=10, check=check
                 )
                 votes[str(reaction.emoji)] += 1
-
         except asyncio.TimeoutError:
             pass
 
-        # Decide match winner
         winner = a_item if votes["🇦"] >= votes["🇧"] else b_item
-        data["last_winner"] = winner
+        await interaction.channel.send(f"🏆 {winner} wins this matchup!")
+        return winner
 
-        # Score update
-        data["scores"][winner] = data["scores"].get(winner, 0) + 1
+    async def run_next_match(interaction: discord.Interaction):
+        data, sha = load_data()
+        if not data["running"]:
+            await interaction.response.send_message("❌ No active World Cup.", ephemeral=True)
+            return
 
-        # Advance winner
-        data["next_round"].append(winner)
-        data["current_round"] = items[2:]
-
-        # Round done → move next_round to current_round
         if not data["current_round"]:
-            data["current_round"] = data["next_round"]
-            data["next_round"] = []
+            await interaction.response.send_message("✅ Round completed. Moving to next round...", ephemeral=True)
+            if data["next_round"]:
+                data["current_round"] = data["next_round"]
+                data["next_round"] = []
+                save_data(data, sha)
+            else:
+                await interaction.response.send_message("🎉 Tournament finished!", ephemeral=True)
+            return
 
+        items = data["current_round"]
+        if len(items) == 1:
+            winner = items[0]
+            data["running"] = False
+            data["last_winner"] = winner
+            await interaction.response.send_message(f"🎉 **{winner}** wins the **{data['title']}**!")
+            save_data(data, sha)
+            return
+
+        # Only handle the first matchup in the list
+        a_item = items.pop(0)
+        b_item = items.pop(0)
+        winner = await start_match(interaction, a_item, b_item)
+        data["next_round"].append(winner)
+        data["last_winner"] = winner
+        data["current_round"] = items
         save_data(data, sha)
-
-        await interaction.channel.send(f"🏆 **{winner}** wins this matchup!")
+        await interaction.response.send_message(f"✅ Last matchup winner: {winner}")
 
     # ------------------- Commands -------------------
-
     @tree.command(name="startwc", description="Start the World Cup of something")
+    @app_commands.describe(title="The World Cup title (e.g. Pizza)")
     async def startwc(interaction: discord.Interaction, title: str):
+        data, sha = load_data()
         if not user_allowed(interaction.user):
             await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
             return
-
-        data, sha = load_data()
-
-        # 🔥 BLOCK IF ODD NUMBER OF ITEMS
-        if len(data["items"]) % 2 != 0:
-            await interaction.response.send_message(
-                f"❌ You must have an **even number** of items to start.\n"
-                f"Current count: **{len(data['items'])}**",
-                ephemeral=True
-            )
+        if data["running"]:
+            await interaction.response.send_message("❌ A World Cup is already running!", ephemeral=True)
             return
-
-        if not data["items"]:
-            await interaction.response.send_message("❌ No items added yet.", ephemeral=True)
+        if len(data["items"]) < 2:
+            await interaction.response.send_message("❌ Not enough items to start (need at least 2).", ephemeral=True)
+            return
+        if len(data["items"]) % 2 != 0:
+            await interaction.response.send_message("❌ Cannot start with odd number of items.", ephemeral=True)
             return
 
         title_text = f"Landing Strip World Cup Of {title}"
-
         data["title"] = title_text
         data["current_round"] = data["items"].copy()
         random.shuffle(data["current_round"])
         data["next_round"] = []
         data["scores"] = {item: 0 for item in data["items"]}
         data["running"] = True
-        data["last_winner"] = None
-
         save_data(data, sha)
         await interaction.response.send_message(f"🏁 Starting **{title_text}**!")
 
-    @tree.command(name="addwcitem", description="Add multiple items (comma separated)")
-    async def addwcitem(interaction: discord.Interaction, items: str):
+    @tree.command(name="addwcitem", description="Add item(s) to the World Cup (comma-separated)")
+    @app_commands.describe(item="Item(s) to add, separated by commas")
+    async def addwcitem(interaction: discord.Interaction, item: str):
         if not user_allowed(interaction.user):
-            await interaction.response.send_message("❌ Permission denied.", ephemeral=True)
+            await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
             return
-
         data, sha = load_data()
-
-        added = []
-        for item in [i.strip() for i in items.split(",") if i.strip()]:
-            if item not in data["items"]:
-                data["items"].append(item)
-                data["scores"][item] = 0
-                added.append(item)
-
+        items_to_add = [i.strip() for i in item.split(",") if i.strip()]
+        data["items"].extend(items_to_add)
         save_data(data, sha)
+        await interaction.response.send_message(f"✅ Added: {', '.join(items_to_add)}")
 
-        await interaction.response.send_message(f"✅ Added: {', '.join(added)}")
-
-    @tree.command(name="removewcitem", description="Remove multiple items (comma separated)")
-    async def removewcitem(interaction: discord.Interaction, items: str):
+    @tree.command(name="removewcitem", description="Remove an item from the World Cup")
+    @app_commands.describe(item="The item to remove")
+    async def removewcitem(interaction: discord.Interaction, item: str):
         if not user_allowed(interaction.user):
-            await interaction.response.send_message("❌ Permission denied.", ephemeral=True)
+            await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
             return
-
         data, sha = load_data()
-
-        removed = []
-        for item in [i.strip() for i in items.split(",") if i.strip()]:
-            if item in data["items"]:
-                data["items"].remove(item)
-                data["scores"].pop(item, None)
-                removed.append(item)
-
-        save_data(data, sha)
-
-        if removed:
-            await interaction.response.send_message(f"🗑 Removed: {', '.join(removed)}")
+        if item in data["items"]:
+            data["items"].remove(item)
+            save_data(data, sha)
+            await interaction.response.send_message(f"✅ Removed {item}")
         else:
-            await interaction.response.send_message("❌ No matching items found.")
+            await interaction.response.send_message("❌ Item not found.", ephemeral=True)
 
     @tree.command(name="listwcitems", description="List all items in the World Cup")
     async def listwcitems(interaction: discord.Interaction):
         data, _ = load_data()
-
         if not data["items"]:
-            await interaction.response.send_message("No items added.", ephemeral=True)
+            await interaction.response.send_message("No items in the World Cup yet.", ephemeral=True)
             return
+        await interaction.response.send_message("📋 Items:\n" + "\n".join(data["items"]))
 
-        msg = "📋 **World Cup Items:**\n" + "\n".join(data["items"])
-        await interaction.response.send_message(msg)
-
-    @tree.command(name="scoreboard", description="Show the scoreboard")
+    @tree.command(name="scoreboard", description="View the current tournament scoreboard")
     async def scoreboard(interaction: discord.Interaction):
         data, _ = load_data()
-
-        if not data["scores"]:
-            await interaction.response.send_message("No scores yet.", ephemeral=True)
+        scores = data.get("scores", {})
+        if not scores:
+            await interaction.response.send_message("No scoreboard yet.", ephemeral=True)
             return
-
         msg = "📊 **Scoreboard:**\n"
-        for item, score in data["scores"].items():
+        for item, score in scores.items():
             msg += f"{item}: {score}\n"
-
         await interaction.response.send_message(msg)
 
-    @tree.command(name="lastwinner", description="Show the last match winner")
-    async def lastwinner(interaction: discord.Interaction):
-        data, _ = load_data()
-
-        if not data["last_winner"]:
-            await interaction.response.send_message("No match played yet.", ephemeral=True)
-            return
-
-        await interaction.response.send_message(f"🏆 Last winner: **{data['last_winner']}**")
-
-    @tree.command(name="resetwc", description="Reset the entire World Cup")
+    @tree.command(name="resetwc", description="Reset the World Cup completely")
     async def resetwc(interaction: discord.Interaction):
         if not user_allowed(interaction.user):
-            await interaction.response.send_message("❌ No permission.", ephemeral=True)
+            await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
             return
+        data, sha = load_data()
+        data = DEFAULT_DATA.copy()
+        save_data(data, sha)
+        await interaction.response.send_message("🔄 World Cup reset. All items, scores, and state cleared.")
 
-        _, sha = load_data()
-        save_data(DEFAULT_DATA.copy(), sha)
-
-        await interaction.response.send_message("🔄 World Cup reset.")
-
-    @tree.command(name="nextwcround", description="Run the next match")
+    @tree.command(name="nextwcround", description="Run the next matchup of the current World Cup")
     async def nextwcround(interaction: discord.Interaction):
         await run_next_match(interaction)
