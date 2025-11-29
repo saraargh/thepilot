@@ -61,7 +61,8 @@
         "Mattress",
         "Footstool",
         "Pillow",
-        "Vanity"
+        "Vanity",
+        "Bean Bag"
     ],
     "scores": {
         "Sofa": 0,
@@ -95,17 +96,12 @@
         "Bookcase": 0,
         "Footstool": 1,
         "Headboard": 0,
-        "Bean Bag": 0
+        "Bean Bag": 1
     },
     "running": true,
     "title": "Landing Strip World Cup Of house items",
-    "last_winner": "Vanity",
-    "last_match": {
-        "a": "Recliner",
-        "b": "Bean Bag",
-        "message_id": 1444334127514915008,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Bean Bag",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Nightstand",
@@ -134,6 +130,13 @@
             "winner": "Vanity",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Recliner",
+            "b": "Bean Bag",
+            "winner": "Bean Bag",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
