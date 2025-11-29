@@ -289,14 +289,3 @@ async def run_next_matchup(interaction: discord.Interaction):
     sha = save_data(data, sha)
 
     await interaction.channel.send(f"🏆 **{winner}** wins this matchup! Use /nextwcround to continue.")
-
-# ------------------- Register Commands -------------------
-@client.event
-async def on_ready():
-    setup_tournament_commands(client.tree)
-    await client.tree.sync()
-    print(f"Logged in as {client.user}")
-
-# ------------------- Run -------------------
-TOKEN = os.getenv("TOKEN")
-client.run(TOKEN)
