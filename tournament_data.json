@@ -51,7 +51,8 @@
         "Chair",
         "Cabinet",
         "Sofa",
-        "Lamp"
+        "Lamp",
+        "Bookshelf"
     ],
     "scores": {
         "Sofa": 1,
@@ -61,7 +62,7 @@
         "Bed": 0,
         "Mattress": 1,
         "Wardrobe": 0,
-        "Bookshelf": 0,
+        "Bookshelf": 1,
         "Desk": 1,
         "Chair": 1,
         "Nightstand": 0,
@@ -89,13 +90,8 @@
     },
     "running": true,
     "title": "Landing Strip World Cup Of house items",
-    "last_winner": "Lamp",
-    "last_match": {
-        "a": "Mirror",
-        "b": "Bookshelf",
-        "message_id": 1444334440980680858,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Bookshelf",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Nightstand",
@@ -192,6 +188,13 @@
             "a": "Dining Table",
             "b": "Lamp",
             "winner": "Lamp",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Mirror",
+            "b": "Bookshelf",
+            "winner": "Bookshelf",
             "a_votes": 0,
             "b_votes": 1
         }
