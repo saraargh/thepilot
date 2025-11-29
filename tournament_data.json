@@ -37,7 +37,9 @@
         "Chair",
         "Sofa"
     ],
-    "next_round": [],
+    "next_round": [
+        "Pillow"
+    ],
     "scores": {
         "Sofa": 3,
         "Armchair": 1,
@@ -55,7 +57,7 @@
         "Rug": 3,
         "Mirror": 0,
         "Curtain": 0,
-        "Pillow": 3,
+        "Pillow": 4,
         "Blanket": 2,
         "Ottoman": 0,
         "TV Stand": 0,
@@ -74,13 +76,8 @@
     },
     "running": true,
     "title": "Landing Strip World Cup Of house items",
-    "last_winner": "Sofa",
-    "last_match": {
-        "a": "Pillow",
-        "b": "Rug",
-        "message_id": 1444335364243329206,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Pillow",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Nightstand",
@@ -275,6 +272,13 @@
             "a": "Sofa",
             "b": "Bookshelf",
             "winner": "Sofa",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Pillow",
+            "b": "Rug",
+            "winner": "Pillow",
             "a_votes": 1,
             "b_votes": 0
         }
