@@ -9,7 +9,7 @@ from discord import app_commands
 # ------------------- GitHub Config -------------------
 GITHUB_REPO = os.getenv("GITHUB_REPO", "saraargh/the-pilot")
 GITHUB_FILE_PATH = "warnings.json"
-GITHUB_TOKEN = os.getenv("GITHUB_TEST_TOKEN")  # test token
+GITHUB_TOKEN = os.getenv("GITHUB_TEST_TOKEN")  # your test token
 HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
 
 # ------------------- Roles -------------------
@@ -59,13 +59,16 @@ def load_data():
             return data, sha
         elif r.status_code == 404:
             print("⚠️ warnings.json not found, creating new.")
-            return DEFAULT_DATA.copy(), None
+            sha = save_data(DEFAULT_DATA.copy())
+            return DEFAULT_DATA.copy(), sha
         else:
             print("❌ Unexpected GET status:", r.status_code, r.text)
-            return DEFAULT_DATA.copy(), None
+            sha = save_data(DEFAULT_DATA.copy())
+            return DEFAULT_DATA.copy(), sha
     except Exception as e:
         print("❌ Exception in load_data:", e)
-        return DEFAULT_DATA.copy(), None
+        sha = save_data(DEFAULT_DATA.copy())
+        return DEFAULT_DATA.copy(), sha
 
 def save_data(data, sha=None):
     print("🔧 Saving warnings.json to GitHub...")
@@ -100,8 +103,8 @@ def add_warning(user_id: int, reason: str | None = None):
         data["warnings"][uid] = []
     data["warnings"][uid].append(reason or "No reason provided")
     print(f"Warnings before saving: {data['warnings'][uid]}")
-    new_sha = save_data(data, sha)
-    print(f"New SHA after save: {new_sha}")
+    sha = save_data(data, sha)
+    print(f"New SHA after save: {sha}")
     return len(data["warnings"][uid])
 
 def get_warnings(user_id: int):
