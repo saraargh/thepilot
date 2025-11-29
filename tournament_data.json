@@ -66,8 +66,6 @@
         "Sunglasses_strap"
     ],
     "current_round": [
-        "Stool",
-        "Sideboard",
         "Mirror",
         "Umbrella",
         "Gloves",
@@ -131,7 +129,9 @@
         "Wallet",
         "Dining Table"
     ],
-    "next_round": [],
+    "next_round": [
+        "Stool"
+    ],
     "scores": {
         "Sofa": 0,
         "Armchair": 0,
@@ -200,7 +200,7 @@
     },
     "running": true,
     "title": "accessories",
-    "last_winner": "Sofa",
+    "last_winner": "Stool",
     "last_match": {
         "a": "Pillow",
         "b": "Sofa",
