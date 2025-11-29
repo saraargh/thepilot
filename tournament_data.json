@@ -5,5 +5,8 @@
     "scores": {},
     "running": false,
     "title": "",
-    "last_winner": null
+    "last_winner": null,
+    "last_match": null,
+    "finished_matches": [],
+    "round_stage": ""
 }
