@@ -7,9 +7,9 @@ import discord
 from discord import app_commands
 
 # ------------------- GitHub Config -------------------
-GITHUB_REPO = "saraargh/the-pilot"
+GITHUB_REPO = os.getenv("GITHUB_REPO", "saraargh/the-pilot")
 GITHUB_FILE_PATH = "warnings.json"
-GITHUB_TOKEN = os.getenv("GITHUB_TESTTOKEN")
+GITHUB_TOKEN = os.getenv("GITHUB_TEST_TOKEN")  # Use your test token here
 HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
 
 # ------------------- Roles -------------------
@@ -35,30 +35,34 @@ def ordinal(n: int) -> str:
 def _gh_url():
     return f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
 
-# ------------------- GitHub Load/Save -------------------
+# ------------------- GitHub Load/Save with Debug -------------------
 def load_data():
-    """Load full JSON from GitHub."""
+    """Load full JSON from GitHub with debug prints."""
     try:
+        print("🔍 Loading warnings.json from GitHub...")
         r = requests.get(_gh_url(), headers=HEADERS, timeout=10)
+        print(f"GET status: {r.status_code}")
         if r.status_code == 200:
             content = r.json()
             raw = base64.b64decode(content["content"]).decode()
             data = json.loads(raw)
             sha = content.get("sha")
+            print(f"✅ Loaded warnings.json, SHA={sha}")
             if "warnings" not in data:
                 data["warnings"] = {}
             return data, sha
         elif r.status_code == 404:
+            print("⚠️ warnings.json not found on GitHub, creating new file.")
             return {"warnings": {}}, None
         else:
-            print(f"❌ load_data: status {r.status_code} - {r.text}")
+            print(f"❌ load_data: unexpected status {r.status_code} - {r.text}")
             return {"warnings": {}}, None
     except Exception as e:
         print("❌ Exception in load_data:", e)
         return {"warnings": {}}, None
 
 def save_data(data, sha=None):
-    """Save full JSON to GitHub."""
+    """Save full JSON to GitHub with debug prints."""
     try:
         payload = {
             "message": "Update warnings.json",
@@ -66,12 +70,17 @@ def save_data(data, sha=None):
         }
         if sha:
             payload["sha"] = sha
+            print(f"Using SHA: {sha}")
+        print("🔧 Saving warnings.json to GitHub...")
         r = requests.put(_gh_url(), headers=HEADERS, data=json.dumps(payload), timeout=10)
+        print(f"PUT status: {r.status_code}")
+        print(f"PUT response: {r.text}")
         if r.status_code in (200, 201):
             new_sha = r.json().get("content", {}).get("sha")
+            print(f"✅ warnings.json saved successfully, new SHA={new_sha}")
             return new_sha
         else:
-            print("❌ save_data failed:", r.status_code, r.text)
+            print("❌ save_data FAILED")
             return sha
     except Exception as e:
         print("❌ Exception in save_data():", e)
