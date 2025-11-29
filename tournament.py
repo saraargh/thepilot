@@ -249,6 +249,21 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids=N
         else:
             await interaction.response.send_message("❌ Item not found.", ephemeral=True)
 
+@tree.command(name="listwcitems", description="List all items in the World Cup")
+async def listwcitems(interaction: discord.Interaction):
+    data, _ = load_data()
+    if not data["items"]:
+        await interaction.response.send_message("No items in the World Cup yet.", ephemeral=False)
+        return
+    # Nicely format the items with bullets
+    item_list = "\n".join(f"• {item}" for item in data["items"])
+    embed = discord.Embed(
+        title=f"📋 World Cup Items",
+        description=item_list,
+        color=discord.Color.blurple()
+    )
+    await interaction.response.send_message(embed=embed)
+
     @tree.command(name="resetwc", description="Reset the World Cup completely")
     async def resetwc(interaction: discord.Interaction):
         if not can_use(interaction):
