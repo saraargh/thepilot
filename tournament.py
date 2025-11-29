@@ -239,15 +239,20 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
 
     # ------------------- /listwcitems -------------------
     @tree.command(name="listwcitems", description="List all items in the World Cup")
-    async def listwcitems(interaction: discord.Interaction):
-        data, _ = load_data()
-        if not data["items"]:
-            await interaction.response.send_message("No items added yet.", ephemeral=True)
-            return
-        embed = discord.Embed(title="📋 World Cup Items", color=discord.Color.teal())
-        for i, item in enumerate(data["items"], start=1):
-            embed.add_field(name=f"{i}.", value=item, inline=False)
-        await interaction.response.send_message(embed=embed, ephemeral=False)
+async def listwcitems(interaction: discord.Interaction):
+    data, _ = load_data()
+    if not data["items"]:
+        await interaction.response.send_message("No items added yet.", ephemeral=True)
+        return
+
+    # Put all items in a single embed description to avoid 25-field limit
+    lines = [f"{i+1}. {item}" for i, item in enumerate(data["items"])]
+    embed = discord.Embed(
+        title=f"📋 World Cup of {data.get('title','Items')}",
+        description="\n".join(lines),
+        color=discord.Color.blurple()
+    )
+    await interaction.response.send_message(embed=embed, ephemeral=False)
             # ------------------- /startwc -------------------
     @tree.command(name="startwc", description="Start the World Cup (requires exactly 32 items)")
     @app_commands.describe(title="The 'of' part (e.g. Pizza) — bot will create 'World Cup of {title}'")
