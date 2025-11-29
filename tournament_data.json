@@ -83,7 +83,12 @@
     "running": true,
     "title": "Landing Strip World Cup Of house items",
     "last_winner": "Blanket",
-    "last_match": null,
+    "last_match": {
+        "a": "Chair",
+        "b": "Cabinet",
+        "message_id": 1444334789078286529,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Nightstand",
