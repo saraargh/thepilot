@@ -1,18 +1,20 @@
+import os
+import json
+import base64
+import requests
 import discord
 from discord import app_commands
-import requests
-import base64
-import json
-import os
 import random
 import asyncio
+from datetime import datetime
 
 # ------------------- GitHub Config -------------------
-GITHUB_REPO = "saraargh/the-pilot"  # owner/repo
+GITHUB_REPO = os.getenv("GITHUB_REPO", "saraargh/the-pilot")
 GITHUB_FILE_PATH = "tournament_data.json"
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
-HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"}
+HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
 
+# ------------------- Default JSON structure -------------------
 DEFAULT_DATA = {
     "items": [],
     "current_round": [],
@@ -23,31 +25,61 @@ DEFAULT_DATA = {
     "last_winner": None
 }
 
-# ------------------- GitHub Helpers -------------------
+# ------------------- Helpers -------------------
+def _gh_url():
+    return f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
+
 def load_data():
-    url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
-    r = requests.get(url, headers=HEADERS)
-    if r.status_code == 200:
-        content = r.json()
-        data = base64.b64decode(content["content"]).decode()
-        return json.loads(data), content["sha"]
-    else:
-        # File missing → create it
-        save_data(DEFAULT_DATA.copy())
-        return DEFAULT_DATA.copy(), None
+    print("🔍 Loading tournament_data.json from GitHub...")
+    try:
+        r = requests.get(_gh_url(), headers=HEADERS, timeout=10)
+        print("GET status:", r.status_code)
+        if r.status_code == 200:
+            content = r.json()
+            raw = base64.b64decode(content["content"]).decode()
+            data = json.loads(raw) if raw.strip() else DEFAULT_DATA.copy()
+            sha = content.get("sha")
+            print(f"✅ Loaded tournament_data.json, SHA={sha}")
+            for key in DEFAULT_DATA:
+                if key not in data:
+                    data[key] = DEFAULT_DATA[key]
+            return data, sha
+        elif r.status_code == 404:
+            print("⚠️ tournament_data.json not found, creating new.")
+            sha = save_data(DEFAULT_DATA.copy())
+            return DEFAULT_DATA.copy(), sha
+        else:
+            print("❌ Unexpected GET status:", r.status_code, r.text)
+            sha = save_data(DEFAULT_DATA.copy())
+            return DEFAULT_DATA.copy(), sha
+    except Exception as e:
+        print("❌ Exception in load_data:", e)
+        sha = save_data(DEFAULT_DATA.copy())
+        return DEFAULT_DATA.copy(), sha
 
 def save_data(data, sha=None):
-    url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
-    encoded_content = base64.b64encode(json.dumps(data, indent=4).encode()).decode()
-    payload = {
-        "message": "Update tournament data",
-        "content": encoded_content,
-    }
-    if sha:
-        payload["sha"] = sha
-    r = requests.put(url, headers=HEADERS, data=json.dumps(payload))
-    if r.status_code not in [200, 201]:
-        print(f"GitHub save error: {r.status_code} {r.text}")
+    print("🔧 Saving tournament_data.json to GitHub...")
+    try:
+        payload = {
+            "message": "Update tournament data",
+            "content": base64.b64encode(json.dumps(data, indent=4).encode()).decode()
+        }
+        if sha:
+            payload["sha"] = sha
+            print(f"Using SHA: {sha}")
+        r = requests.put(_gh_url(), headers=HEADERS, data=json.dumps(payload))
+        print(f"PUT status: {r.status_code}")
+        print(f"PUT response: {r.text}")
+        if r.status_code in (200, 201):
+            new_sha = r.json().get("content", {}).get("sha")
+            print(f"✅ Saved tournament_data.json, new SHA={new_sha}")
+            return new_sha
+        else:
+            print("❌ Failed to save tournament_data.json")
+            return sha
+    except Exception as e:
+        print("❌ Exception in save_data:", e)
+        return sha
 
 # ------------------- Tournament Logic -------------------
 def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
@@ -149,8 +181,9 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
             return
         data, sha = load_data()
         for item in [i.strip() for i in items.split(",") if i.strip()]:
-            data["items"].append(item)
-            data["scores"][item] = 0
+            if item not in data["items"]:
+                data["items"].append(item)
+                data["scores"][item] = 0
         save_data(data, sha)
         await interaction.response.send_message(f"✅ Added items: {items}")
 
