@@ -9,7 +9,7 @@ from discord import app_commands
 # ------------------- GitHub Config -------------------
 GITHUB_REPO = os.getenv("GITHUB_REPO", "saraargh/the-pilot")
 GITHUB_FILE_PATH = "warnings.json"
-GITHUB_TOKEN = os.getenv("GITHUB_TEST_TOKEN")  # Use your test token here
+GITHUB_TOKEN = os.getenv("GITHUB_TEST_TOKEN")  # replace with your test token
 HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
 
 # ------------------- Roles -------------------
@@ -24,6 +24,13 @@ PASSENGERS_ROLE_ID = 1404100554807971971
 WILLIAM_ROLE_ID = 1413545658006110401
 SAZZLES_ROLE_ID = 1404104881098195015
 
+# ------------------- Default JSON structure -------------------
+DEFAULT_DATA = {
+    "warnings": {},        # user_id(str) -> list of reasons
+    "last_reset": None,    # optional extra variable
+    "extra_var": None      # placeholder for any future use
+}
+
 # ------------------- Helpers -------------------
 def ordinal(n: int) -> str:
     if 10 <= n % 100 <= 20:
@@ -35,9 +42,9 @@ def ordinal(n: int) -> str:
 def _gh_url():
     return f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
 
-# ------------------- GitHub Load/Save with Debug -------------------
+# ------------------- GitHub Load/Save -------------------
 def load_data():
-    """Load full JSON from GitHub with debug prints."""
+    """Load JSON from GitHub, fallback to DEFAULT_DATA if missing or empty."""
     try:
         print("🔍 Loading warnings.json from GitHub...")
         r = requests.get(_gh_url(), headers=HEADERS, timeout=10)
@@ -45,24 +52,26 @@ def load_data():
         if r.status_code == 200:
             content = r.json()
             raw = base64.b64decode(content["content"]).decode()
-            data = json.loads(raw)
+            data = json.loads(raw) if raw.strip() else DEFAULT_DATA.copy()
             sha = content.get("sha")
             print(f"✅ Loaded warnings.json, SHA={sha}")
-            if "warnings" not in data:
-                data["warnings"] = {}
+            # ensure all keys exist
+            for k, v in DEFAULT_DATA.items():
+                if k not in data:
+                    data[k] = v
             return data, sha
         elif r.status_code == 404:
-            print("⚠️ warnings.json not found on GitHub, creating new file.")
-            return {"warnings": {}}, None
+            print("⚠️ warnings.json not found, creating new file.")
+            return DEFAULT_DATA.copy(), None
         else:
             print(f"❌ load_data: unexpected status {r.status_code} - {r.text}")
-            return {"warnings": {}}, None
+            return DEFAULT_DATA.copy(), None
     except Exception as e:
         print("❌ Exception in load_data:", e)
-        return {"warnings": {}}, None
+        return DEFAULT_DATA.copy(), None
 
 def save_data(data, sha=None):
-    """Save full JSON to GitHub with debug prints."""
+    """Save JSON to GitHub with debug."""
     try:
         payload = {
             "message": "Update warnings.json",
