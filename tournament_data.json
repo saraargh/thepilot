@@ -88,7 +88,12 @@
     "running": true,
     "title": "Landing Strip World Cup Of house items",
     "last_winner": "Bookshelf",
-    "last_match": null,
+    "last_match": {
+        "a": "Armchair",
+        "b": "Coffee Table",
+        "message_id": 1444334532512976997,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Nightstand",
