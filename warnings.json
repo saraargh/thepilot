@@ -1,12 +1,5 @@
 {
-    "warnings": {
-        "1258358477903102024": [
-            "First warning reason",
-            "No reason provided",
-            "No reason provided",
-            "No reason provided"
-        ]
-    },
-    "last_reset": "2025-11-29T10:17:40.076913",
+    "warnings": {},
+    "last_reset": "2025-11-29T10:17:56.459298",
     "extra_var": 123
 }
