@@ -65,7 +65,9 @@
         "Brooch",
         "Purse"
     ],
-    "next_round": [],
+    "next_round": [
+        "Headphones"
+    ],
     "scores": {
         "Sunglasses": 0,
         "Watch": 0,
@@ -81,7 +83,7 @@
         "Purse": 0,
         "Wallet": 0,
         "Keychain": 0,
-        "Headphones": 0,
+        "Headphones": 1,
         "Tie": 0,
         "Cufflinks": 0,
         "Hairpin": 0,
@@ -102,13 +104,16 @@
     },
     "running": true,
     "title": "Accessories",
-    "last_winner": null,
-    "last_match": {
-        "a": "Earrings",
-        "b": "Headphones",
-        "message_id": 1444427071756439703,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [],
+    "last_winner": "Headphones",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "Earrings",
+            "b": "Headphones",
+            "winner": "Headphones",
+            "a_votes": 0,
+            "b_votes": 1
+        }
+    ],
     "round_stage": "Round of 32"
 }
