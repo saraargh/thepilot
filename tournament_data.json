@@ -65,10 +65,12 @@
         "Tie",
         "Purse"
     ],
-    "next_round": [],
+    "next_round": [
+        "Watch"
+    ],
     "scores": {
         "Sunglasses": 0,
-        "Watch": 0,
+        "Watch": 1,
         "Necklace": 0,
         "Bracelet": 0,
         "Ring": 0,
@@ -102,13 +104,16 @@
     },
     "running": true,
     "title": "Accessories",
-    "last_winner": null,
-    "last_match": {
-        "a": "Beanie",
-        "b": "Watch",
-        "message_id": 1444394635802837055,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [],
+    "last_winner": "Watch",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "Beanie",
+            "b": "Watch",
+            "winner": "Watch",
+            "a_votes": 0,
+            "b_votes": 1
+        }
+    ],
     "round_stage": "Round of 32"
 }
