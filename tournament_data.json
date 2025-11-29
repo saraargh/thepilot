@@ -103,7 +103,12 @@
     "running": true,
     "title": "Accessories",
     "last_winner": "Brooch",
-    "last_match": null,
+    "last_match": {
+        "a": "Headphones",
+        "b": "Sandals",
+        "message_id": 1444407350847864833,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Brooch",
