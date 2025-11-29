@@ -26,7 +26,7 @@ def setup_mute_commands(client: discord.Client, tree: app_commands.CommandTree):
         unmute_time = datetime.utcnow() + timedelta(minutes=minutes)
         muted_users[member.id] = unmute_time
 
-        await interaction.response.send_message(f"✅ {member.mention} has been hard-muted for {minutes} minutes.")
+        await interaction.response.send_message(f"✅ {member.mention} has been muted for {minutes} minutes.")
 
     @tree.command(name="unmute", description="Remove a hard mute from a member")
     @app_commands.describe(member="The member to unmute")
