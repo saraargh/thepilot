@@ -9,7 +9,7 @@ from discord import app_commands
 # ------------------- GitHub Config -------------------
 GITHUB_REPO = os.getenv("GITHUB_REPO", "saraargh/the-pilot")
 GITHUB_FILE_PATH = "warnings.json"
-GITHUB_TOKEN = os.getenv("GITHUB_TEST_TOKEN")  # your test token
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")  # your token
 HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
 
 # ------------------- Roles -------------------
