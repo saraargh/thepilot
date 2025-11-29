@@ -103,7 +103,12 @@
     "running": true,
     "title": "Landing Strip World Cup Of accessories",
     "last_winner": "Sandals",
-    "last_match": null,
+    "last_match": {
+        "a": "Lanyard",
+        "b": "Earrings",
+        "message_id": 1444388785528897658,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sandals",
