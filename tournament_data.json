@@ -1,13 +1,8 @@
 {
-    "items": [
-        "pizza",
-        "1"
-    ],
+    "items": [],
     "current_round": [],
     "next_round": [],
-    "scores": {
-        "1": 0
-    },
+    "scores": {},
     "running": false,
     "title": "",
     "last_winner": null
