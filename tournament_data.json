@@ -102,7 +102,12 @@
     "running": true,
     "title": "Accessories",
     "last_winner": "Lanyard",
-    "last_match": null,
+    "last_match": {
+        "a": "Necklace",
+        "b": "Ring",
+        "message_id": 1444399012831691043,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Beanie",
