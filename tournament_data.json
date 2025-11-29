@@ -103,7 +103,12 @@
     "running": true,
     "title": "Landing Strip World Cup Of house items",
     "last_winner": null,
-    "last_match": null,
+    "last_match": {
+        "a": "Nightstand",
+        "b": "Mattress",
+        "message_id": 1444333947202048201,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [],
     "round_stage": "Round of 32"
 }
