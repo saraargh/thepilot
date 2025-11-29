@@ -54,7 +54,8 @@
         "Desk",
         "Blanket",
         "Chest",
-        "Chair"
+        "Chair",
+        "Cabinet"
     ],
     "scores": {
         "Sofa": 0,
@@ -79,7 +80,7 @@
         "TV Stand": 0,
         "Recliner": 0,
         "Stool": 0,
-        "Cabinet": 0,
+        "Cabinet": 1,
         "Side Table": 1,
         "Chest": 1,
         "Vanity": 1,
@@ -92,13 +93,8 @@
     },
     "running": true,
     "title": "Landing Strip World Cup Of house items",
-    "last_winner": "Chair",
-    "last_match": {
-        "a": "Cabinet",
-        "b": "Headboard",
-        "message_id": 1444334339272867920,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Cabinet",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Nightstand",
@@ -176,6 +172,13 @@
             "winner": "Chair",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Cabinet",
+            "b": "Headboard",
+            "winner": "Cabinet",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
