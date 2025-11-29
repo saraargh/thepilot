@@ -5,6 +5,7 @@ import base64
 import requests
 import discord
 from discord import app_commands
+from datetime import datetime
 
 # ------------------- GitHub Config -------------------
 GITHUB_REPO = os.getenv("GITHUB_REPO", "saraargh/the-pilot")
@@ -102,6 +103,7 @@ def add_warning(user_id: int, reason: str | None = None):
     if uid not in data["warnings"]:
         data["warnings"][uid] = []
     data["warnings"][uid].append(reason or "No reason provided")
+    data["last_reset"] = data.get("last_reset")  # keep last_reset untouched
     print(f"Warnings before saving: {data['warnings'][uid]}")
     sha = save_data(data, sha)
     print(f"New SHA after save: {sha}")
@@ -177,3 +179,57 @@ def setup_warnings_commands(tree: app_commands.CommandTree, allowed_role_ids=Non
             if user:
                 lines.append(f"{user.display_name}: {len(warns)} warning(s)")
         await interaction.response.send_message("\n".join(lines) if lines else "No warnings found for this server.", ephemeral=False)
+
+    # ---------------- /clear_warnings ----------------
+    @tree.command(name="clear_warnings", description="Clear all warnings for a user.")
+    @app_commands.describe(member="Member to clear warnings for")
+    async def clear_warnings(interaction: discord.Interaction, member: discord.Member):
+        author_roles = {r.id for r in interaction.user.roles}
+        if not (author_roles & allowed_set):
+            await interaction.response.send_message(
+                "❌ You do not have permission to clear warnings.",
+                ephemeral=True
+            )
+            return
+
+        data, sha = load_data()
+        uid = str(member.id)
+        if uid in data["warnings"]:
+            data["warnings"].pop(uid)
+            data["last_reset"] = datetime.utcnow().isoformat()
+            sha = save_data(data, sha)
+            await interaction.response.send_message(
+                f"✅ All warnings for {member.mention} have been cleared.",
+                ephemeral=False
+            )
+        else:
+            await interaction.response.send_message(
+                f"{member.mention} has no warnings to clear.",
+                ephemeral=False
+            )
+
+    # ---------------- /clear_server_warnings ----------------
+    @tree.command(name="clear_server_warnings", description="Clear all warnings for the server.")
+    async def clear_server_warnings(interaction: discord.Interaction):
+        author_roles = {r.id for r in interaction.user.roles}
+        if not (author_roles & allowed_set):
+            await interaction.response.send_message(
+                "❌ You do not have permission to clear server warnings.",
+                ephemeral=True
+            )
+            return
+
+        data, sha = load_data()
+        guild_member_ids = {str(m.id) for m in interaction.guild.members}
+        removed = 0
+        for uid in list(data["warnings"].keys()):
+            if uid in guild_member_ids:
+                data["warnings"].pop(uid)
+                removed += 1
+
+        data["last_reset"] = datetime.utcnow().isoformat()
+        sha = save_data(data, sha)
+        await interaction.response.send_message(
+            f"✅ Cleared {removed} warnings from the server.",
+            ephemeral=False
+        )
