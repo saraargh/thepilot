@@ -64,7 +64,8 @@
         "Pen"
     ],
     "next_round": [
-        "Sandals"
+        "Sandals",
+        "Earrings"
     ],
     "scores": {
         "Sunglasses": 0,
@@ -72,7 +73,7 @@
         "Necklace": 0,
         "Bracelet": 0,
         "Ring": 0,
-        "Earrings": 0,
+        "Earrings": 1,
         "Hat": 0,
         "Scarf": 0,
         "Gloves": 0,
@@ -102,13 +103,8 @@
     },
     "running": true,
     "title": "Landing Strip World Cup Of accessories",
-    "last_winner": "Sandals",
-    "last_match": {
-        "a": "Lanyard",
-        "b": "Earrings",
-        "message_id": 1444388785528897658,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Earrings",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sandals",
@@ -116,6 +112,13 @@
             "winner": "Sandals",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Lanyard",
+            "b": "Earrings",
+            "winner": "Earrings",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
