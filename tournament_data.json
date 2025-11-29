@@ -33,8 +33,7 @@
         "Headboard",
         "Bean Bag"
     ],
-    "current_round": [],
-    "next_round": [
+    "current_round": [
         "Mattress",
         "Footstool",
         "Pillow",
@@ -52,6 +51,7 @@
         "Bookshelf",
         "Armchair"
     ],
+    "next_round": [],
     "scores": {
         "Sofa": 1,
         "Armchair": 1,
@@ -204,5 +204,5 @@
             "b_votes": 0
         }
     ],
-    "round_stage": "Round of 32"
+    "round_stage": "Round of 16"
 }
