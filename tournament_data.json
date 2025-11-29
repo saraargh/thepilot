@@ -63,12 +63,13 @@
     ],
     "next_round": [
         "Watch",
-        "Lanyard"
+        "Lanyard",
+        "Necklace"
     ],
     "scores": {
         "Sunglasses": 0,
         "Watch": 1,
-        "Necklace": 0,
+        "Necklace": 1,
         "Bracelet": 0,
         "Ring": 0,
         "Earrings": 0,
@@ -101,13 +102,8 @@
     },
     "running": true,
     "title": "Accessories",
-    "last_winner": "Lanyard",
-    "last_match": {
-        "a": "Necklace",
-        "b": "Ring",
-        "message_id": 1444399012831691043,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Necklace",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Beanie",
@@ -121,6 +117,13 @@
             "b": "Sunglasses_case",
             "winner": "Lanyard",
             "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Necklace",
+            "b": "Ring",
+            "winner": "Necklace",
+            "a_votes": 0,
             "b_votes": 0
         }
     ],
