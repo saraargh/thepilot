@@ -21,6 +21,7 @@ ALLOWED_ROLE_IDS = [
 # ===== Discord Client =====
 intents = discord.Intents.default()
 intents.members = True
+intents.message_content = True  # Needed for on_message deletion
 
 class ThePilot(discord.Client):
     def __init__(self):
@@ -28,7 +29,7 @@ class ThePilot(discord.Client):
         self.tree = app_commands.CommandTree(self)
 
     async def setup_hook(self):
-        # Load scheduled tasks
+        # Start scheduled tasks
         scheduled_tasks.start(self)
 
         # Load command modules
@@ -36,6 +37,7 @@ class ThePilot(discord.Client):
         from tournament import setup_tournament_commands
         from poo import setup_poo_commands
         from bot_warnings import setup_warnings_commands
+        from mute import setup_mute_commands  # Hard-mute commands
 
         # Setup commands
         setup_plane_commands(self.tree)
@@ -51,33 +53,8 @@ class ThePilot(discord.Client):
         ]
         setup_warnings_commands(self.tree, allowed_role_ids=ALLOWED_WARNROLE_IDS)
 
-        # ===== Setup Mute/Unmute (Discord timeout) =====
-        from datetime import timedelta
-
-        @self.tree.command(name="mute", description="Temporarily mute a member using Discord timeout")
-        @app_commands.describe(member="The member to mute", minutes="Duration in minutes")
-        async def mute(interaction: discord.Interaction, member: discord.Member, minutes: int):
-            if not any(role.id in ALLOWED_ROLE_IDS for role in interaction.user.roles):
-                await interaction.response.send_message("❌ You cannot mute anyone.", ephemeral=True)
-                return
-
-            if interaction.guild.me.top_role <= member.top_role:
-                await interaction.response.send_message("❌ I cannot mute this member because their role is higher than mine.", ephemeral=True)
-                return
-
-            duration = timedelta(minutes=minutes)
-            await member.timeout(duration, reason=f"Muted by {interaction.user}")
-            await interaction.response.send_message(f"✅ {member.mention} has been muted for {minutes} minutes.")
-
-        @self.tree.command(name="unmute", description="Remove a timeout from a member")
-        @app_commands.describe(member="The member to unmute")
-        async def unmute(interaction: discord.Interaction, member: discord.Member):
-            if not any(role.id in ALLOWED_ROLE_IDS for role in interaction.user.roles):
-                await interaction.response.send_message("❌ You cannot unmute anyone.", ephemeral=True)
-                return
-
-            await member.timeout(None, reason=f"Unmuted by {interaction.user}")
-            await interaction.response.send_message(f"✅ {member.mention} has been unmuted.")
+        # Setup hard-mute commands and listener
+        setup_mute_commands(self, self.tree)
 
         # Sync all slash commands
         await self.tree.sync()
