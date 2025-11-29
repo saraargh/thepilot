@@ -75,7 +75,12 @@
     "running": true,
     "title": "Landing Strip World Cup Of house items",
     "last_winner": "Sofa",
-    "last_match": null,
+    "last_match": {
+        "a": "Pillow",
+        "b": "Rug",
+        "message_id": 1444335364243329206,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Nightstand",
