@@ -51,6 +51,7 @@ def load_data():
             raw = base64.b64decode(content["content"]).decode()
             data = json.loads(raw) if raw.strip() else DEFAULT_DATA.copy()
             sha = content.get("sha")
+            # ensure keys
             for k in DEFAULT_DATA:
                 if k not in data:
                     data[k] = DEFAULT_DATA[k]
@@ -76,7 +77,8 @@ def save_data(data, sha=None):
             payload["sha"] = sha
         r = requests.put(_gh_url(), headers=HEADERS, data=json.dumps(payload))
         if r.status_code in (200, 201):
-            return r.json().get("content", {}).get("sha")
+            new_sha = r.json().get("content", {}).get("sha")
+            return new_sha
         else:
             return sha
     except Exception as e:
@@ -120,9 +122,10 @@ async def count_votes_from_message(guild, channel_id, message_id):
                 b_users.add(u.id)
                 b_names[u.id] = u.display_name
 
-    # Enforce single vote: if user reacted to both, keep only last reaction
+    # Enforce single vote: keep only last reaction for each user
     common = a_users & b_users
     for uid in common:
+        # Remove from a_users if VOTE_B exists later
         if uid in b_users:
             a_users.remove(uid)
             a_names.pop(uid, None)
@@ -131,7 +134,8 @@ async def count_votes_from_message(guild, channel_id, message_id):
             b_names.pop(uid, None)
 
     return len(a_users), len(b_users), a_names, b_names
-    # ------------------- Main Command Setup -------------------
+
+# ------------------- Main Command Setup -------------------
 def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
 
     # ------------------- Post Next Match -------------------
@@ -141,6 +145,7 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
 
         a = data["current_round"].pop(0)
         b = data["current_round"].pop(0)
+
         sha = save_data(data, sha)
 
         # Embed with voter placeholders
@@ -151,6 +156,7 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
         )
         embed.set_footer(text="use /showwcmatchups to keep track of the World Cup!", icon_url=None)
 
+        await channel.send(f"@everyone, the next World Cup of {data['title']} fixture is upon us! 🗳️")
         msg = await channel.send(embed=embed)
         await msg.add_reaction(VOTE_A)
         await msg.add_reaction(VOTE_B)
@@ -162,22 +168,29 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
             "channel_id": channel.id
         }
         sha = save_data(data, sha)
-
-        # Task to update embed dynamically with voters
+                # Task to update embed dynamically with voters
         async def update_votes_loop():
             while data.get("last_match") and data["last_match"]["message_id"] == msg.id:
                 a_count, b_count, a_names, b_names = await count_votes_from_message(channel.guild, msg.channel.id, msg.id)
+                
                 desc = f"{VOTE_A} {a} — {a_count} votes\n"
                 desc += "\n".join([f"• {n}" for n in a_names.values()]) or "_No votes yet_"
                 desc += f"\n\n{VOTE_B} {b} — {b_count} votes\n"
                 desc += "\n".join([f"• {n}" for n in b_names.values()]) or "_No votes yet_"
+
+                embed = discord.Embed(
+                    title=f"🎮 {data.get('round_stage','Matchup')}",
+                    description=desc,
+                    color=discord.Color.random()
+                )
+                embed.set_footer(text="use /showwcmatchups to keep track of the World Cup!", icon_url=None)
+
                 try:
-                    embed_edit = discord.Embed(title=f"🎮 {data.get('round_stage','Matchup')}", description=desc, color=discord.Color.random())
-                    embed_edit.set_footer(text="use /showwcmatchups to keep track of the World Cup!")
-                    await msg.edit(embed=embed_edit)
+                    await msg.edit(embed=embed)
                 except Exception:
                     pass
-                await asyncio.sleep(10)  # Update every 10s
+
+                await asyncio.sleep(2)  # Update every 2 seconds
 
         asyncio.create_task(update_votes_loop())
         return sha
@@ -231,8 +244,8 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
         if not data["items"]:
             await interaction.response.send_message("No items added yet.", ephemeral=True)
             return
-        embed = discord.Embed(title="📋 World Cup Items", color=discord.Color.blue())
-        for i, item in enumerate(data["items"], 1):
+        embed = discord.Embed(title="📋 World Cup Items", color=discord.Color.teal())
+        for i, item in enumerate(data["items"], start=1):
             embed.add_field(name=f"{i}.", value=item, inline=False)
         await interaction.response.send_message(embed=embed, ephemeral=False)
             # ------------------- /startwc -------------------
@@ -263,11 +276,13 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
         data["round_stage"] = STAGE_BY_COUNT.get(len(data["current_round"]), "Round")
         sha = save_data(data, sha)
 
-        # Announcement + preview
-        await interaction.channel.send(f"@everyone, the World Cup of {data['title']} is starting - view the match ups below and cast your votes now! 🤗🎉")
+        # Announcement only
+        await interaction.channel.send(
+            f"@everyone, the World Cup of {data['title']} is starting - view the match ups below and cast your votes now! 🤗🎉"
+        )
         await showwcmatchups_internal(interaction.channel, data)
 
-        # First matchup (quiet, no @everyone)
+        # First matchup quietly (no @everyone)
         sha = await post_next_match(interaction.channel, data, sha)
         await interaction.response.send_message("✅ World Cup started and first matchup posted.", ephemeral=True)
 
@@ -301,20 +316,21 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
         sha = save_data(data, sha)
 
         # Announce winner
-        embed = discord.Embed(title="🏆 Match Result",
-                              description=f"**{winner}** wins!\n\nVotes — {VOTE_A} {a_item}: {a_votes} | {VOTE_B} {b_item}: {b_votes}",
-                              color=discord.Color.gold())
+        embed = discord.Embed(
+            title="🏆 Match Result",
+            description=f"**{winner}** wins!\n\nVotes — {VOTE_A} {a_item}: {a_votes} | {VOTE_B} {b_item}: {b_votes}",
+            color=discord.Color.gold()
+        )
         await interaction.channel.send(embed=embed)
 
-        # Handle next match or round promotion
+        # Next matchup with @everyone
         if len(data["current_round"]) >= 2:
-            # Next matchup @everyone
-            msg_text = f"@everyone, the next World Cup of {data['title']} fixture is upon us! 🗳️"
-            await interaction.channel.send(msg_text)
             sha = await post_next_match(interaction.channel, data, sha)
+            await interaction.channel.send(f"@everyone, the next World Cup of {data['title']} fixture is live! 🗳️")
             await interaction.response.send_message("✅ Winner recorded and next matchup posted.", ephemeral=True)
             return
 
+        # Promote round if current_round empty
         if not data["current_round"]:
             prev_stage = data.get("round_stage", "Round")
             data["current_round"] = data["next_round"].copy()
@@ -323,59 +339,37 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
             data["round_stage"] = STAGE_BY_COUNT.get(new_count, f"{new_count}-items round")
             sha = save_data(data, sha)
 
-            # Announce round completion
             contenders = ", ".join(data["current_round"]) if data["current_round"] else "No contenders"
-            embed = discord.Embed(title=f"✅ {prev_stage} complete!",
-                                  description=f"We are now in **{data['round_stage']}**.\nContenders:\n{contenders}",
-                                  color=discord.Color.purple())
+            embed = discord.Embed(
+                title=f"✅ {prev_stage} complete!",
+                description=f"We are now in **{data['round_stage']}**.\nContenders:\n{contenders}",
+                color=discord.Color.purple()
+            )
             await interaction.channel.send(embed=embed)
 
-            # Only one left -> tournament winner
             if len(data["current_round"]) == 1:
                 final = data["current_round"][0]
                 data["running"] = False
                 data["last_winner"] = final
                 sha = save_data(data, sha)
-                embed = discord.Embed(title="🏁 Tournament Winner!",
-                                      description=f"🎉 **{final}** wins the **{data['title']}**! Thank you everyone for voting! 🥳",
-                                      color=discord.Color.green())
+                embed = discord.Embed(
+                    title="🏁 Tournament Winner!",
+                    description=f"🎉 **{final}** wins the **{data['title']}**! Thank you everyone for voting! 🥳",
+                    color=discord.Color.green()
+                )
                 embed.set_image(url="https://media1.tenor.com/m/XU8DIUrUZaoAAAAd/happy-dance.gif")
                 await interaction.channel.send(f"@everyone, we have a World Cup of {data['title']} winner")
                 await interaction.channel.send(embed=embed)
                 await interaction.response.send_message("✅ Tournament concluded.", ephemeral=True)
                 return
 
-            # Else post next matchup in the new round
             if len(data["current_round"]) >= 2:
-                msg_text = f"@everyone, the next World Cup of {data['title']} fixture is upon us! 🗳️"
-                await interaction.channel.send(msg_text)
                 sha = await post_next_match(interaction.channel, data, sha)
+                await interaction.channel.send(f"@everyone, the next World Cup of {data['title']} fixture is live! 🗳️")
                 await interaction.response.send_message("✅ Round promoted and next matchup posted.", ephemeral=True)
                 return
 
         await interaction.response.send_message("✅ Done processing the match.", ephemeral=True)
-
-    # ------------------- Internal Show Matchups -------------------
-    async def showwcmatchups_internal(channel, data):
-        finished = data.get("finished_matches", [])
-        lines_finished = [f"{i+1}. {f['a']} vs {f['b']} → {f['winner']} ({VOTE_A} {f['a_votes']} | {VOTE_B} {f['b_votes']})"
-                          for i, f in enumerate(finished)]
-        last = data.get("last_match")
-        current_pair = f"{last['a']} vs {last['b']} (voting now)" if last else None
-        upcoming_pairs = []
-        cr = data.get("current_round", []).copy()
-        for i in range(0, len(cr), 2):
-            if i + 1 < len(cr):
-                upcoming_pairs.append(f"{cr[i]} vs {cr[i+1]}")
-            else:
-                upcoming_pairs.append(f"{cr[i]} (auto-advance if odd)")
-        embed = discord.Embed(title="📋 World Cup Matchup Overview", color=discord.Color.teal())
-        embed.add_field(name="Tournament", value=data.get("title") or "No title", inline=False)
-        embed.add_field(name="Round Stage", value=data.get("round_stage") or "N/A", inline=False)
-        embed.add_field(name="Finished Matches", value="\n".join(lines_finished) if lines_finished else "None", inline=False)
-        embed.add_field(name="Current Match (voting)", value=current_pair or "None", inline=False)
-        embed.add_field(name="Upcoming Matchups", value="\n".join(upcoming_pairs) if upcoming_pairs else "None", inline=False)
-        await channel.send(embed=embed)
 
     # ------------------- /showwcmatchups -------------------
     @tree.command(name="showwcmatchups", description="Show finished, current, and upcoming World Cup matchups")
@@ -404,9 +398,12 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
             return
 
         winner = data.get("last_winner") or "Unknown"
-        embed = discord.Embed(title="🎉 World Cup Finished!",
-                              description=f"🏆 **{winner}** wins the **{data.get('title','World Cup')}**! Thank you everyone for voting! 🥳🎊",
-                              color=discord.Color.green())
+
+        embed = discord.Embed(
+            title="🎉 World Cup Finished!",
+            description=f"🏆 **{winner}** wins the **{data.get('title','World Cup')}**! Thank you everyone for voting! 🥳🎊",
+            color=discord.Color.green()
+        )
         embed.set_image(url="https://media1.tenor.com/m/XU8DIUrUZaoAAAAd/happy-dance.gif")
         await interaction.channel.send(f"@everyone, we have a World Cup of {data.get('title')} winner")
         await interaction.channel.send(embed=embed)
@@ -430,4 +427,3 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
         embed.add_field(name="/resetwc", value="Reset the World Cup (clears all data) 🔄", inline=False)
         embed.add_field(name="/endwc", value="Announce the winner (does not clear items) 🎉", inline=False)
         await interaction.response.send_message(embed=embed, ephemeral=True)
-        
