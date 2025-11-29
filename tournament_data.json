@@ -60,7 +60,8 @@
         "Footstool",
         "Pillow",
         "Vanity",
-        "Bean Bag"
+        "Bean Bag",
+        "Side Table"
     ],
     "scores": {
         "Sofa": 0,
@@ -86,7 +87,7 @@
         "Recliner": 0,
         "Stool": 0,
         "Cabinet": 0,
-        "Side Table": 0,
+        "Side Table": 1,
         "Chest": 0,
         "Vanity": 1,
         "Shelf": 0,
@@ -98,13 +99,8 @@
     },
     "running": true,
     "title": "Landing Strip World Cup Of house items",
-    "last_winner": "Bean Bag",
-    "last_match": {
-        "a": "Side Table",
-        "b": "Bookcase",
-        "message_id": 1444334159404470373,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Side Table",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Nightstand",
@@ -140,6 +136,13 @@
             "winner": "Bean Bag",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Side Table",
+            "b": "Bookcase",
+            "winner": "Side Table",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
