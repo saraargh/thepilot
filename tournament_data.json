@@ -33,10 +33,7 @@
         "Headboard",
         "Bean Bag"
     ],
-    "current_round": [
-        "Bookshelf",
-        "Armchair"
-    ],
+    "current_round": [],
     "next_round": [
         "Mattress",
         "Pillow",
