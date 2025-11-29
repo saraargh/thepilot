@@ -154,9 +154,9 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
             description=f"{VOTE_A} {a}\n\n_No votes yet_\n\n{VOTE_B} {b}\n\n_No votes yet_",
             color=discord.Color.random()
         )
-        embed.set_footer(text="*Use the scoreboard and showwcmatchups slash commands to keep track of how the matchups are looking and scoring!*")
+        embed.set_footer(text="Use the showwcmatchups command to keep track of the tournament!")
 
-        await channel.send(f"@everyone, the next world cup of {data['title']} fixture is upon us! 🗳️")
+        await channel.send(f"@everyone, the next World Cup of {data['title']} fixture is upon us! 🗳️")
         msg = await channel.send(embed=embed)
         await msg.add_reaction(VOTE_A)
         await msg.add_reaction(VOTE_B)
@@ -383,19 +383,6 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
         await showwcmatchups_internal(interaction.channel, data)
         await interaction.response.send_message("✅ Matchups displayed.", ephemeral=True)
 
-    # ------------------- /wcscoreboard -------------------
-    @tree.command(name="wcscoreboard", description="Show the current World Cup scoreboard")
-    async def wcscoreboard(interaction: discord.Interaction):
-        data, _ = load_data()
-        if not data.get("scores"):
-            await interaction.response.send_message("No scores yet.", ephemeral=True)
-            return
-        lines = sorted(data["scores"].items(), key=lambda x: -x[1])
-        embed = discord.Embed(title="📊 World Cup Scoreboard", color=discord.Color.orange())
-        for item, score in lines:
-            embed.add_field(name=item, value=f"{score} points", inline=False)
-        await interaction.response.send_message(embed=embed)
-
     # ------------------- /resetwc -------------------
     @tree.command(name="resetwc", description="Reset the World Cup (clears items and scores)")
     async def resetwc(interaction: discord.Interaction):
@@ -438,9 +425,8 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
         embed.add_field(name="/removewcitem", value="Remove item(s) from the World Cup (comma-separated) 🗑️", inline=False)
         embed.add_field(name="/listwcitems", value="List all items in the World Cup 📋", inline=False)
         embed.add_field(name="/startwc", value="Start the World Cup (requires 32 items) 🏁", inline=False)
-        embed.add_field(name="/nextwcround", value="Record votes, announce winner, and post next matchup 🏆", inline=False)
+        embed.add_field(name="/nextwcround", value="Record votes, announce winner, post next matchup 🏆", inline=False)
         embed.add_field(name="/showwcmatchups", value="Show finished, current, and upcoming matchups 📊", inline=False)
-        embed.add_field(name="/wcscoreboard", value="Show the current World Cup scoreboard 🏅", inline=False)
         embed.add_field(name="/resetwc", value="Reset the World Cup (clears all data) 🔄", inline=False)
         embed.add_field(name="/endwc", value="Announce the winner (does not clear items) 🎉", inline=False)
         await interaction.response.send_message(embed=embed, ephemeral=True)
