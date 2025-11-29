@@ -313,6 +313,7 @@ async def listwcitems(interaction: discord.Interaction):
             description=(
                 "/addwcitem <item1, item2,...> - Add items\n"
                 "/removewcitem <item> - Remove an item\n"
+                "/listwcitems - See a list of current items\n"
                 "/startwc <title> - Start the World Cup\n"
                 "/nextwcmatch - Run next matchup\n"
                 "/showwcmatchup - Show current round items\n"
