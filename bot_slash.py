@@ -28,28 +28,32 @@ class ThePilot(discord.Client):
         self.tree = app_commands.CommandTree(self)
 
     async def setup_hook(self):
-        await self.tree.sync()
+        # Load scheduled tasks
         scheduled_tasks.start(self)
 
+        # Load command cogs
+        # Bot command modules
+        from plane import setup_plane_commands
+        from tournament import setup_tournament_commands
+        from poo import setup_poo_commands
+        from bot_warnings import setup_warnings_commands
+
+        # Setup commands
+        setup_plane_commands(self.tree)
+        setup_tournament_commands(self.tree, allowed_role_ids=ALLOWED_ROLE_IDS)
+        setup_poo_commands(self.tree, self, allowed_role_ids=ALLOWED_ROLE_IDS)
+
+        # Warnings
+        ALLOWED_WARNROLE_IDS = [1420817462290681936, 1413545658006110401, 1404105470204969000, 1404098545006546954]
+        setup_warnings_commands(self.tree, allowed_role_ids=ALLOWED_WARNROLE_IDS)
+
+        # Load mute cog
+        await self.load_extension("mute")  # <--- Add this line to load mute.py
+
+        # Sync all slash commands
+        await self.tree.sync()
+
 client = ThePilot()
-
-# ===== Import Command Modules =====
-from plane import setup_plane_commands
-from tournament import setup_tournament_commands
-from poo import setup_poo_commands
-
-# ===== Register Commands =====
-setup_plane_commands(client.tree)
-setup_tournament_commands(client.tree, allowed_role_ids=ALLOWED_ROLE_IDS)
-setup_poo_commands(client.tree, client, allowed_role_ids=ALLOWED_ROLE_IDS)
-
-#warnings bot#
-from bot_warnings import setup_warnings_commands
-
-# Example: roles allowed to warn
-ALLOWED_WARNROLE_IDS = [1420817462290681936, 1413545658006110401, 1404105470204969000, 1404098545006546954]
-
-setup_warnings_commands(client.tree, allowed_role_ids=ALLOWED_WARNROLE_IDS)
 
 # ===== Automation Tasks =====
 @tasks.loop(minutes=1)
