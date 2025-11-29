@@ -34,8 +34,6 @@
         "Sunglasses_strap"
     ],
     "current_round": [
-        "Brooch",
-        "Notebook",
         "Headphones",
         "Sandals",
         "Boots",
@@ -105,7 +103,13 @@
     "running": true,
     "title": "Accessories",
     "last_winner": null,
-    "last_match": null,
+    "last_match": {
+        "a": "Brooch",
+        "b": "Notebook",
+        "message_id": null,
+        "channel_id": 1438277790179921971,
+        "voters": {}
+    },
     "finished_matches": [],
     "round_stage": "Round of 32"
 }
