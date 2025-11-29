@@ -33,13 +33,13 @@
         "Headboard",
         "Bean Bag"
     ],
-    "current_round": [],
-    "next_round": [
+    "current_round": [
         "Pillow",
         "Rug",
         "Chair",
         "Sofa"
     ],
+    "next_round": [],
     "scores": {
         "Sofa": 3,
         "Armchair": 1,
@@ -276,5 +276,5 @@
             "b_votes": 0
         }
     ],
-    "round_stage": "Quarter Finals"
+    "round_stage": "Semi Finals"
 }
