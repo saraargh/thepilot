@@ -65,7 +65,9 @@
         "Avocado Toast",
         "Philly Cheesesteak"
     ],
-    "next_round": [],
+    "next_round": [
+        "Flaming Hot Cheetos"
+    ],
     "scores": {
         "Rainbow Sushi": 0,
         "Spicy Ramen": 0,
@@ -81,7 +83,7 @@
         "Dragonfruit Smoothie": 0,
         "Avocado Toast": 0,
         "Cosmic Burrito": 0,
-        "Flaming Hot Cheetos": 0,
+        "Flaming Hot Cheetos": 1,
         "Garlic Breadsticks": 0,
         "Sushi Burrito": 0,
         "Waffle Taco": 0,
@@ -102,13 +104,16 @@
     },
     "running": true,
     "title": "Food",
-    "last_winner": null,
-    "last_match": {
-        "a": "Sushi Burrito",
-        "b": "Flaming Hot Cheetos",
-        "message_id": 1444730482355863592,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [],
+    "last_winner": "Flaming Hot Cheetos",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "Sushi Burrito",
+            "b": "Flaming Hot Cheetos",
+            "winner": "Flaming Hot Cheetos",
+            "a_votes": 0,
+            "b_votes": 1
+        }
+    ],
     "round_stage": "Round of 32"
 }
