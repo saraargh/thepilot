@@ -88,7 +88,12 @@
     "running": true,
     "title": "Accessories",
     "last_winner": "Sunglasses",
-    "last_match": null,
+    "last_match": {
+        "a": "Watch",
+        "b": "Necklace",
+        "message_id": 1444708000580239412,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sunglasses_strap",
