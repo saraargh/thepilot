@@ -95,7 +95,12 @@
     "running": true,
     "title": "Food",
     "last_winner": "Pad Thai with Extra Peanuts",
-    "last_match": null,
+    "last_match": {
+        "a": "Rainbow Sushi",
+        "b": "Strawberry Milkshake",
+        "message_id": 1444742516913082529,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sushi Burrito",
