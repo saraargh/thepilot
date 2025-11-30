@@ -101,7 +101,12 @@
     "running": true,
     "title": "Celebs",
     "last_winner": "Drake",
-    "last_match": null,
+    "last_match": {
+        "a": "Billie Eilish",
+        "b": "Chris Evans",
+        "message_id": 1444751572302168247,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Justin Bieber",
