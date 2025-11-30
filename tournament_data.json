@@ -82,7 +82,12 @@
     "running": true,
     "title": "Celebs",
     "last_winner": "Selena Gomez",
-    "last_match": null,
+    "last_match": {
+        "a": "Margot Robbie",
+        "b": "Kanye West",
+        "message_id": 1444755243190452429,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Justin Bieber",
