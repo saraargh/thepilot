@@ -33,8 +33,7 @@
         "Pen",
         "Sunglasses_strap"
     ],
-    "current_round": [],
-    "next_round": [
+    "current_round": [
         "Purse",
         "Shoes",
         "Boots",
@@ -43,6 +42,7 @@
         "Scarf",
         "Necklace"
     ],
+    "next_round": [],
     "scores": {
         "Sunglasses": 1,
         "Watch": 0,
@@ -244,5 +244,5 @@
             "b_votes": 1
         }
     ],
-    "round_stage": "Round of 16"
+    "round_stage": "7-items round"
 }
