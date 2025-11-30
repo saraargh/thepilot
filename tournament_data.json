@@ -56,10 +56,11 @@
         "Chicken Katsu Curry",
         "Cheeseburger Tower",
         "Mac & Cheese Pizza",
-        "Pad Thai with Extra Peanuts"
+        "Pad Thai with Extra Peanuts",
+        "Rainbow Sushi"
     ],
     "scores": {
-        "Rainbow Sushi": 0,
+        "Rainbow Sushi": 1,
         "Spicy Ramen": 0,
         "Cheeseburger Tower": 2,
         "Chocolate Lava Cake": 0,
@@ -94,13 +95,8 @@
     },
     "running": true,
     "title": "Food",
-    "last_winner": "Pad Thai with Extra Peanuts",
-    "last_match": {
-        "a": "Rainbow Sushi",
-        "b": "Strawberry Milkshake",
-        "message_id": 1444742516913082529,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Rainbow Sushi",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sushi Burrito",
@@ -162,6 +158,13 @@
             "a": "Pad Thai with Extra Peanuts",
             "b": "Fried Pickles",
             "winner": "Pad Thai with Extra Peanuts",
+            "a_votes": 1,
+            "b_votes": 1
+        },
+        {
+            "a": "Rainbow Sushi",
+            "b": "Strawberry Milkshake",
+            "winner": "Rainbow Sushi",
             "a_votes": 1,
             "b_votes": 1
         }
