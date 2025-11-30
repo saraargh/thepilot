@@ -103,7 +103,12 @@
     "running": true,
     "title": "Food",
     "last_winner": "Flaming Hot Cheetos",
-    "last_match": null,
+    "last_match": {
+        "a": "Buffalo Wings",
+        "b": "Cosmic Burrito",
+        "message_id": 1444730532456955915,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sushi Burrito",
