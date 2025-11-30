@@ -46,11 +46,12 @@
     ],
     "next_round": [
         "Cardi B",
-        "Drake"
+        "Drake",
+        "Taylor Swift"
     ],
     "scores": {
         "Dwayne Johnson": 0,
-        "Taylor Swift": 1,
+        "Taylor Swift": 2,
         "Leonardo DiCaprio": 0,
         "Beyonc\u00e9": 1,
         "Chris Hemsworth": 0,
@@ -84,13 +85,8 @@
     },
     "running": true,
     "title": "Celebs",
-    "last_winner": "Drake",
-    "last_match": {
-        "a": "Scarlett Johansson",
-        "b": "Taylor Swift",
-        "message_id": 1444755131987132607,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Taylor Swift",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Justin Bieber",
@@ -210,6 +206,13 @@
             "winner": "Drake",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Scarlett Johansson",
+            "b": "Taylor Swift",
+            "winner": "Taylor Swift",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "15-items round"
