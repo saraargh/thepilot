@@ -42,7 +42,8 @@
         "Taylor Swift",
         "Shakira",
         "Selena Gomez",
-        "Kanye West"
+        "Kanye West",
+        "Ariana Grande"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -52,7 +53,7 @@
         "Chris Hemsworth": 0,
         "Rihanna": 0,
         "Tom Holland": 0,
-        "Ariana Grande": 1,
+        "Ariana Grande": 2,
         "Will Smith": 0,
         "Zendaya": 0,
         "Robert Downey Jr.": 1,
@@ -80,13 +81,8 @@
     },
     "running": true,
     "title": "Celebs",
-    "last_winner": "Kanye West",
-    "last_match": {
-        "a": "Emma Stone",
-        "b": "Ariana Grande",
-        "message_id": 1444755280163373076,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Ariana Grande",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Justin Bieber",
@@ -232,6 +228,13 @@
             "a": "Margot Robbie",
             "b": "Kanye West",
             "winner": "Kanye West",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Emma Stone",
+            "b": "Ariana Grande",
+            "winner": "Ariana Grande",
             "a_votes": 0,
             "b_votes": 1
         }
