@@ -40,12 +40,13 @@
         "Boots",
         "Phone_case",
         "Ring",
-        "Scarf"
+        "Scarf",
+        "Necklace"
     ],
     "scores": {
         "Sunglasses": 1,
         "Watch": 0,
-        "Necklace": 1,
+        "Necklace": 2,
         "Bracelet": 1,
         "Ring": 2,
         "Earrings": 1,
@@ -78,13 +79,8 @@
     },
     "running": true,
     "title": "Accessories",
-    "last_winner": "Scarf",
-    "last_match": {
-        "a": "Sunglasses",
-        "b": "Necklace",
-        "message_id": 1444723050644897947,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Necklace",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sunglasses_strap",
@@ -239,6 +235,13 @@
             "winner": "Scarf",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Sunglasses",
+            "b": "Necklace",
+            "winner": "Necklace",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 16"
