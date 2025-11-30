@@ -62,7 +62,8 @@
     "next_round": [
         "Gloves",
         "Purse",
-        "Shoes"
+        "Shoes",
+        "Lanyard"
     ],
     "scores": {
         "Sunglasses": 0,
@@ -90,7 +91,7 @@
         "Boots": 0,
         "Beanie": 0,
         "Sunglasses_case": 0,
-        "Lanyard": 0,
+        "Lanyard": 1,
         "Umbrella": 0,
         "Phone_case": 0,
         "Water_bottle": 0,
@@ -100,13 +101,8 @@
     },
     "running": true,
     "title": "Accessories",
-    "last_winner": "Shoes",
-    "last_match": {
-        "a": "Hat",
-        "b": "Lanyard",
-        "message_id": 1444690074607554703,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Lanyard",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sunglasses_strap",
@@ -126,6 +122,13 @@
             "a": "Cufflinks",
             "b": "Shoes",
             "winner": "Shoes",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Hat",
+            "b": "Lanyard",
+            "winner": "Lanyard",
             "a_votes": 0,
             "b_votes": 1
         }
