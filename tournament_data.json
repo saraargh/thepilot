@@ -64,7 +64,8 @@
         "Keanu Reeves"
     ],
     "next_round": [
-        "Robert Downey Jr."
+        "Robert Downey Jr.",
+        "Cardi B"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -93,7 +94,7 @@
         "Chris Evans": 0,
         "Kim Kardashian": 0,
         "Keanu Reeves": 0,
-        "Cardi B": 0,
+        "Cardi B": 1,
         "Gal Gadot": 0,
         "Bruno Mars": 0,
         "Shakira": 0,
@@ -102,13 +103,8 @@
     },
     "running": true,
     "title": "Celebs",
-    "last_winner": "Robert Downey Jr.",
-    "last_match": {
-        "a": "Cardi B",
-        "b": "Chris Hemsworth",
-        "message_id": 1444751433126776913,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Cardi B",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Justin Bieber",
@@ -116,6 +112,13 @@
             "winner": "Robert Downey Jr.",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Cardi B",
+            "b": "Chris Hemsworth",
+            "winner": "Cardi B",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
