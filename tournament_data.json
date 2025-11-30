@@ -44,7 +44,8 @@
         "Cardi B",
         "Drake",
         "Taylor Swift",
-        "Shakira"
+        "Shakira",
+        "Selena Gomez"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -67,7 +68,7 @@
         "Justin Bieber": 0,
         "Emma Stone": 1,
         "Michael B. Jordan": 1,
-        "Selena Gomez": 1,
+        "Selena Gomez": 2,
         "Hugh Jackman": 0,
         "Lady Gaga": 0,
         "Chris Evans": 0,
@@ -82,13 +83,8 @@
     },
     "running": true,
     "title": "Celebs",
-    "last_winner": "Shakira",
-    "last_match": {
-        "a": "Selena Gomez",
-        "b": "Kim Kardashian",
-        "message_id": 1444755206385565728,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Selena Gomez",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Justin Bieber",
@@ -220,6 +216,13 @@
             "a": "Shakira",
             "b": "Michael B. Jordan",
             "winner": "Shakira",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Selena Gomez",
+            "b": "Kim Kardashian",
+            "winner": "Selena Gomez",
             "a_votes": 1,
             "b_votes": 0
         }
