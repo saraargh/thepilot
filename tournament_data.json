@@ -77,7 +77,12 @@
     "running": true,
     "title": "Accessories",
     "last_winner": "Boots",
-    "last_match": null,
+    "last_match": {
+        "a": "Ring",
+        "b": "Scarf",
+        "message_id": 1444723429734486088,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sunglasses_strap",
