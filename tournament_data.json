@@ -101,7 +101,12 @@
     "running": true,
     "title": "Accessories",
     "last_winner": "Shoes",
-    "last_match": null,
+    "last_match": {
+        "a": "Hat",
+        "b": "Lanyard",
+        "message_id": 1444690074607554703,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sunglasses_strap",
