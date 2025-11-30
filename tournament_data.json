@@ -100,7 +100,12 @@
     "running": true,
     "title": "Food",
     "last_winner": "Rainbow Bagel",
-    "last_match": null,
+    "last_match": {
+        "a": "Churros with Chocolate",
+        "b": "S\u2019mores Dip",
+        "message_id": 1444730786279591986,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sushi Burrito",
