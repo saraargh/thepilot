@@ -93,7 +93,12 @@
     "running": true,
     "title": "Food",
     "last_winner": "Chocolate Lava Cake",
-    "last_match": null,
+    "last_match": {
+        "a": "Garlic Breadsticks",
+        "b": "Dragonfruit Smoothie",
+        "message_id": 1444742857008222258,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sushi Burrito",
