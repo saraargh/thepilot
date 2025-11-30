@@ -65,14 +65,16 @@
         "Purse",
         "Lanyard"
     ],
-    "next_round": [],
+    "next_round": [
+        "Earrings"
+    ],
     "scores": {
         "Sunglasses": 0,
         "Watch": 0,
         "Necklace": 0,
         "Bracelet": 0,
         "Ring": 0,
-        "Earrings": 0,
+        "Earrings": 1,
         "Hat": 0,
         "Scarf": 0,
         "Gloves": 0,
@@ -102,13 +104,16 @@
     },
     "running": true,
     "title": "Accessories",
-    "last_winner": null,
-    "last_match": {
-        "a": "Earrings",
-        "b": "Wallet",
-        "message_id": 1444682666149544068,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [],
+    "last_winner": "Earrings",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "Earrings",
+            "b": "Wallet",
+            "winner": "Earrings",
+            "a_votes": 1,
+            "b_votes": 0
+        }
+    ],
     "round_stage": "Round of 32"
 }
