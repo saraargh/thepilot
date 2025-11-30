@@ -64,7 +64,8 @@
         "Philly Cheesesteak"
     ],
     "next_round": [
-        "Flaming Hot Cheetos"
+        "Flaming Hot Cheetos",
+        "Buffalo Wings"
     ],
     "scores": {
         "Rainbow Sushi": 0,
@@ -75,7 +76,7 @@
         "Tacos al Pastor": 0,
         "Glitter Pancakes": 0,
         "Mango Sticky Rice": 0,
-        "Buffalo Wings": 0,
+        "Buffalo Wings": 1,
         "Mac & Cheese Pizza": 0,
         "Bubble Tea": 0,
         "Dragonfruit Smoothie": 0,
@@ -102,13 +103,8 @@
     },
     "running": true,
     "title": "Food",
-    "last_winner": "Flaming Hot Cheetos",
-    "last_match": {
-        "a": "Buffalo Wings",
-        "b": "Cosmic Burrito",
-        "message_id": 1444730532456955915,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Buffalo Wings",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sushi Burrito",
@@ -116,6 +112,13 @@
             "winner": "Flaming Hot Cheetos",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Buffalo Wings",
+            "b": "Cosmic Burrito",
+            "winner": "Buffalo Wings",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
