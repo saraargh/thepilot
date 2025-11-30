@@ -103,7 +103,12 @@
     "running": true,
     "title": "Celebs",
     "last_winner": "Robert Downey Jr.",
-    "last_match": null,
+    "last_match": {
+        "a": "Cardi B",
+        "b": "Chris Hemsworth",
+        "message_id": 1444751433126776913,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Justin Bieber",
