@@ -103,7 +103,12 @@
     "running": true,
     "title": "celebs",
     "last_winner": null,
-    "last_match": null,
+    "last_match": {
+        "a": "Lady Gaga",
+        "b": "Emma Stone",
+        "message_id": 1444758879756882020,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [],
     "round_stage": "Round of 32"
 }
