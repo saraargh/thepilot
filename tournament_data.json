@@ -62,7 +62,8 @@
     "next_round": [
         "Sloppy Joe",
         "Philly Cheesesteak",
-        "Glitter Pancakes"
+        "Glitter Pancakes",
+        "Waffle Taco"
     ],
     "scores": {
         "Pizza": 0,
@@ -83,7 +84,7 @@
         "Flaming Hot Cheetos": 0,
         "Garlic Breadsticks": 0,
         "Sushi Burrito": 0,
-        "Waffle Taco": 0,
+        "Waffle Taco": 1,
         "Rainbow Bagel": 0,
         "Kimchi Fries": 0,
         "Churros with Chocolate": 0,
@@ -100,13 +101,8 @@
     },
     "running": true,
     "title": "Foods",
-    "last_winner": "Glitter Pancakes",
-    "last_match": {
-        "a": "Kimchi Fries",
-        "b": "Waffle Taco",
-        "message_id": 1444725022861033726,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Waffle Taco",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Mango Sticky Rice",
@@ -128,6 +124,13 @@
             "winner": "Glitter Pancakes",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Kimchi Fries",
+            "b": "Waffle Taco",
+            "winner": "Waffle Taco",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
