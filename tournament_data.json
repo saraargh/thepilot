@@ -101,7 +101,12 @@
     "running": true,
     "title": "Food",
     "last_winner": "Glitter Pancakes",
-    "last_match": null,
+    "last_match": {
+        "a": "Rainbow Bagel",
+        "b": "Mango Sticky Rice",
+        "message_id": 1444730630167462010,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sushi Burrito",
