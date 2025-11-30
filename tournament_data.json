@@ -102,7 +102,12 @@
     "running": true,
     "title": "Food",
     "last_winner": "Buffalo Wings",
-    "last_match": null,
+    "last_match": {
+        "a": "Unicorn Donut",
+        "b": "Glitter Pancakes",
+        "message_id": 1444730586651689193,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sushi Burrito",
