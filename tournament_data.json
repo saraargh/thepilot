@@ -101,7 +101,12 @@
     "running": true,
     "title": "Foods",
     "last_winner": "Glitter Pancakes",
-    "last_match": null,
+    "last_match": {
+        "a": "Kimchi Fries",
+        "b": "Waffle Taco",
+        "message_id": 1444725022861033726,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Mango Sticky Rice",
