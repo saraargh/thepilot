@@ -59,12 +59,13 @@
         "Glitter Pancakes",
         "Rainbow Bagel",
         "Churros with Chocolate",
-        "Chicken Katsu Curry"
+        "Chicken Katsu Curry",
+        "Cheeseburger Tower"
     ],
     "scores": {
         "Rainbow Sushi": 0,
         "Spicy Ramen": 0,
-        "Cheeseburger Tower": 1,
+        "Cheeseburger Tower": 2,
         "Chocolate Lava Cake": 0,
         "Unicorn Donut": 0,
         "Tacos al Pastor": 0,
@@ -97,13 +98,8 @@
     },
     "running": true,
     "title": "Food",
-    "last_winner": "Chicken Katsu Curry",
-    "last_match": {
-        "a": "Cheeseburger Tower",
-        "b": "Tacos al Pastor",
-        "message_id": 1444738061022924800,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Cheeseburger Tower",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sushi Burrito",
@@ -144,6 +140,13 @@
             "a": "Chicken Katsu Curry",
             "b": "Waffle Taco",
             "winner": "Chicken Katsu Curry",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Cheeseburger Tower",
+            "b": "Tacos al Pastor",
+            "winner": "Cheeseburger Tower",
             "a_votes": 1,
             "b_votes": 0
         }
