@@ -57,7 +57,8 @@
         "Churros with Chocolate",
         "Chicken Katsu Curry",
         "Cheeseburger Tower",
-        "Mac & Cheese Pizza"
+        "Mac & Cheese Pizza",
+        "Pad Thai with Extra Peanuts"
     ],
     "scores": {
         "Rainbow Sushi": 0,
@@ -86,7 +87,7 @@
         "Fried Pickles": 0,
         "Strawberry Milkshake": 0,
         "Truffle Popcorn": 0,
-        "Pad Thai with Extra Peanuts": 0,
+        "Pad Thai with Extra Peanuts": 1,
         "Sloppy Joe": 0,
         "S\u2019mores Dip": 0,
         "Lemon Meringue Pie": 0,
@@ -95,13 +96,8 @@
     },
     "running": true,
     "title": "Food",
-    "last_winner": "Mac & Cheese Pizza",
-    "last_match": {
-        "a": "Pad Thai with Extra Peanuts",
-        "b": "Fried Pickles",
-        "message_id": 1444742351850307695,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Pad Thai with Extra Peanuts",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sushi Burrito",
@@ -158,6 +154,13 @@
             "winner": "Mac & Cheese Pizza",
             "a_votes": 0,
             "b_votes": 2
+        },
+        {
+            "a": "Pad Thai with Extra Peanuts",
+            "b": "Fried Pickles",
+            "winner": "Pad Thai with Extra Peanuts",
+            "a_votes": 1,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
