@@ -103,7 +103,12 @@
     "running": true,
     "title": "Foods",
     "last_winner": "Sloppy Joe",
-    "last_match": null,
+    "last_match": {
+        "a": "Tacos al Pastor",
+        "b": "Philly Cheesesteak",
+        "message_id": 1444724593838264342,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Mango Sticky Rice",
