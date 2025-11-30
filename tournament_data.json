@@ -82,7 +82,12 @@
     "running": true,
     "title": "Accessories",
     "last_winner": "Phone_case",
-    "last_match": null,
+    "last_match": {
+        "a": "Bracelet",
+        "b": "Ring",
+        "message_id": 1444719024931078197,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sunglasses_strap",
