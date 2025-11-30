@@ -98,7 +98,12 @@
     "running": true,
     "title": "Food",
     "last_winner": "Chicken Katsu Curry",
-    "last_match": null,
+    "last_match": {
+        "a": "Cheeseburger Tower",
+        "b": "Tacos al Pastor",
+        "message_id": 1444738061022924800,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sushi Burrito",
