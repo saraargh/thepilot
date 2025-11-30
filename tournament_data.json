@@ -55,13 +55,14 @@
         "Cheeseburger Tower",
         "Mac & Cheese Pizza",
         "Pad Thai with Extra Peanuts",
-        "Rainbow Sushi"
+        "Rainbow Sushi",
+        "Chocolate Lava Cake"
     ],
     "scores": {
         "Rainbow Sushi": 1,
         "Spicy Ramen": 0,
         "Cheeseburger Tower": 2,
-        "Chocolate Lava Cake": 0,
+        "Chocolate Lava Cake": 1,
         "Unicorn Donut": 0,
         "Tacos al Pastor": 0,
         "Glitter Pancakes": 1,
@@ -93,13 +94,8 @@
     },
     "running": true,
     "title": "Food",
-    "last_winner": "Rainbow Sushi",
-    "last_match": {
-        "a": "Chocolate Lava Cake",
-        "b": "Bubble Tea",
-        "message_id": 1444742665240576040,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Chocolate Lava Cake",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sushi Burrito",
@@ -168,6 +164,13 @@
             "a": "Rainbow Sushi",
             "b": "Strawberry Milkshake",
             "winner": "Rainbow Sushi",
+            "a_votes": 1,
+            "b_votes": 1
+        },
+        {
+            "a": "Chocolate Lava Cake",
+            "b": "Bubble Tea",
+            "winner": "Chocolate Lava Cake",
             "a_votes": 1,
             "b_votes": 1
         }
