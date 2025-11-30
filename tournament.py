@@ -229,47 +229,61 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
             await interaction.response.send_message("⚠️ No items removed.", ephemeral=False)
 
     # ------------------- /listwcitems -------------------
-    @tree.command(name="listwcitems", description="List all items in the World Cup")
-    async def listwcitems(interaction: discord.Interaction):
-        data, _ = load_data()
-        items = data["items"]
-        if not items:
-            await interaction.response.send_message("No items added yet.", ephemeral=True)
-            return
+    @tree.command(name="listwcitems", description="List World Cup items with pages")
+async def listwcitems(interaction: discord.Interaction):
+    data, _ = load_data()
+    items = data["items"]
+    if not items:
+        await interaction.response.send_message("No items added yet.", ephemeral=True)
+        return
 
-        items_per_page = 10
-        total_pages = (len(items) + items_per_page - 1) // items_per_page
+    # Pagination setup
+    page_size = 10
+    pages = [items[i:i + page_size] for i in range(0, len(items), page_size)]
+    total_pages = len(pages)
+    current_page = 0
 
-        page = 0  # start at first page
+    def build_embed(page):
         embed = discord.Embed(
             title="📋 World Cup Items",
-            description="\n".join([f"{i+1}. {items[i]}" for i in range(page*items_per_page, min((page+1)*items_per_page, len(items)))]),
-            color=discord.Color.blurple()
+            description="\n".join([f"{i+1}. {item}" for i, item in enumerate(pages[page], start=page * page_size + 1)]),
+            color=discord.Color.blue()
         )
         embed.set_footer(text=f"Page {page+1}/{total_pages}")
-        msg = await interaction.response.send_message(embed=embed, ephemeral=False, fetch_response=True)
+        return embed
 
-        await msg.add_reaction("⬅️")
-        await msg.add_reaction("➡️")
+    embed = build_embed(current_page)
 
-        def check(reaction, user):
-            return user != msg.author and str(reaction.emoji) in ["⬅️", "➡️"] and reaction.message.id == msg.id
+    # Send initial message
+    await interaction.response.send_message(embed=embed)
+    msg = await interaction.original_response()
 
-        while True:
-            try:
-                reaction, user = await interaction.client.wait_for("reaction_add", timeout=300.0, check=check)
-            except asyncio.TimeoutError:
-                break
+    # Add reactions
+    await msg.add_reaction("⬅️")
+    await msg.add_reaction("➡️")
+
+    # Wait loop for pagination
+    def check(reaction, user):
+        return (
+            user == interaction.user and
+            str(reaction.emoji) in ["⬅️", "➡️"] and
+            reaction.message.id == msg.id
+        )
+
+    while True:
+        try:
+            reaction, user = await bot.wait_for("reaction_add", timeout=60.0, check=check)
+
             if str(reaction.emoji) == "⬅️":
-                page = (page - 1) % total_pages  # wrap-around
+                current_page = (current_page - 1) % total_pages  # wrap-around
             elif str(reaction.emoji) == "➡️":
-                page = (page + 1) % total_pages  # wrap-around
-            new_desc = "\n".join([f"{i+1}. {items[i]}" for i in range(page*items_per_page, min((page+1)*items_per_page, len(items)))])
-            await msg.edit(embed=discord.Embed(title="📋 World Cup Items", description=new_desc, color=discord.Color.blurple()).set_footer(text=f"Page {page+1}/{total_pages}"))
-            try:
-                await msg.remove_reaction(reaction, user)
-            except:
-                pass
+                current_page = (current_page + 1) % total_pages  # wrap-around
+
+            await msg.edit(embed=build_embed(current_page))
+            await msg.remove_reaction(reaction.emoji, user)
+
+        except asyncio.TimeoutError:
+            break
 
     # ------------------- /startwc -------------------
         # ------------------- /startwc -------------------
