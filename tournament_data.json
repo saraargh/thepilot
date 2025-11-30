@@ -97,7 +97,12 @@
     "running": true,
     "title": "Food",
     "last_winner": "Cheeseburger Tower",
-    "last_match": null,
+    "last_match": {
+        "a": "Truffle Popcorn",
+        "b": "Mac & Cheese Pizza",
+        "message_id": 1444741658808680681,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sushi Burrito",
