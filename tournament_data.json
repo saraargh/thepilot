@@ -52,7 +52,8 @@
         "Kim Kardashian",
         "Margot Robbie",
         "Kanye West",
-        "Emma Stone"
+        "Emma Stone",
+        "Ariana Grande"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -62,7 +63,7 @@
         "Chris Hemsworth": 0,
         "Rihanna": 0,
         "Tom Holland": 0,
-        "Ariana Grande": 0,
+        "Ariana Grande": 1,
         "Will Smith": 0,
         "Zendaya": 0,
         "Robert Downey Jr.": 1,
@@ -90,13 +91,8 @@
     },
     "running": true,
     "title": "Celebs",
-    "last_winner": "Emma Stone",
-    "last_match": {
-        "a": "Ariana Grande",
-        "b": "Natalie Portman",
-        "message_id": 1444754753589481625,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Ariana Grande",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Justin Bieber",
@@ -188,6 +184,13 @@
             "winner": "Emma Stone",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Ariana Grande",
+            "b": "Natalie Portman",
+            "winner": "Ariana Grande",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
