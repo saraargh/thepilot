@@ -49,7 +49,8 @@
         "Garlic Breadsticks",
         "Sloppy Joe",
         "Pesto Pasta",
-        "Sweet Potato Fries"
+        "Sweet Potato Fries",
+        "Philly Cheesesteak"
     ],
     "scores": {
         "Rainbow Sushi": 1,
@@ -82,18 +83,13 @@
         "Sloppy Joe": 1,
         "S\u2019mores Dip": 0,
         "Lemon Meringue Pie": 0,
-        "Philly Cheesesteak": 0,
+        "Philly Cheesesteak": 1,
         "Chicken Katsu Curry": 1
     },
     "running": true,
     "title": "Food",
-    "last_winner": "Sweet Potato Fries",
-    "last_match": {
-        "a": "Avocado Toast",
-        "b": "Philly Cheesesteak",
-        "message_id": 1444743199590580246,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Philly Cheesesteak",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sushi Burrito",
@@ -198,6 +194,13 @@
             "b": "Kimchi Fries",
             "winner": "Sweet Potato Fries",
             "a_votes": 1,
+            "b_votes": 1
+        },
+        {
+            "a": "Avocado Toast",
+            "b": "Philly Cheesesteak",
+            "winner": "Philly Cheesesteak",
+            "a_votes": 0,
             "b_votes": 1
         }
     ],
