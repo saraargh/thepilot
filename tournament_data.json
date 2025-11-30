@@ -90,7 +90,12 @@
     "running": true,
     "title": "Celebs",
     "last_winner": "Ariana Grande",
-    "last_match": null,
+    "last_match": {
+        "a": "Gal Gadot",
+        "b": "Beyonc\u00e9",
+        "message_id": 1444754788670771421,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Justin Bieber",
