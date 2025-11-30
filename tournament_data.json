@@ -48,7 +48,9 @@
         "Ariana Grande",
         "Beyonc\u00e9"
     ],
-    "next_round": [],
+    "next_round": [
+        "Cardi B"
+    ],
     "scores": {
         "Dwayne Johnson": 0,
         "Taylor Swift": 1,
@@ -76,7 +78,7 @@
         "Chris Evans": 0,
         "Kim Kardashian": 1,
         "Keanu Reeves": 0,
-        "Cardi B": 1,
+        "Cardi B": 2,
         "Gal Gadot": 0,
         "Bruno Mars": 0,
         "Shakira": 1,
@@ -85,13 +87,8 @@
     },
     "running": true,
     "title": "Celebs",
-    "last_winner": "Beyonc\u00e9",
-    "last_match": {
-        "a": "Robert Downey Jr.",
-        "b": "Cardi B",
-        "message_id": 1444754843460702259,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Cardi B",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Justin Bieber",
@@ -195,6 +192,13 @@
             "a": "Gal Gadot",
             "b": "Beyonc\u00e9",
             "winner": "Beyonc\u00e9",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Robert Downey Jr.",
+            "b": "Cardi B",
+            "winner": "Cardi B",
             "a_votes": 0,
             "b_votes": 1
         }
