@@ -102,7 +102,7 @@
         "Pen": 0,
         "Sunglasses_strap": 0
     },
-    "running": true,
+    "running": false,
     "title": "Accessories",
     "last_winner": "Earrings",
     "last_match": null,
