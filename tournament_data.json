@@ -1,6 +1,5 @@
 {
     "items": [
-        "1",
         "Sunglasses",
         "Watch",
         "Necklace",
@@ -37,7 +36,6 @@
     "current_round": [],
     "next_round": [],
     "scores": {
-        "1": 0,
         "Sunglasses": 0,
         "Watch": 0,
         "Necklace": 0,
