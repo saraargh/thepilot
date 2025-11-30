@@ -60,7 +60,8 @@
         "Purse",
         "Shoes",
         "Lanyard",
-        "Sandals"
+        "Sandals",
+        "Boots"
     ],
     "scores": {
         "Sunglasses": 0,
@@ -85,7 +86,7 @@
         "Socks": 0,
         "Shoes": 1,
         "Sandals": 1,
-        "Boots": 0,
+        "Boots": 1,
         "Beanie": 0,
         "Sunglasses_case": 0,
         "Lanyard": 1,
@@ -98,13 +99,8 @@
     },
     "running": true,
     "title": "Accessories",
-    "last_winner": "Sandals",
-    "last_match": {
-        "a": "Boots",
-        "b": "Notebook",
-        "message_id": 1444690269072265316,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Boots",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sunglasses_strap",
@@ -138,6 +134,13 @@
             "a": "Sandals",
             "b": "Keychain",
             "winner": "Sandals",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Boots",
+            "b": "Notebook",
+            "winner": "Boots",
             "a_votes": 1,
             "b_votes": 0
         }
