@@ -53,7 +53,8 @@
         "Selena Gomez",
         "Kim Kardashian",
         "Margot Robbie",
-        "Kanye West"
+        "Kanye West",
+        "Emma Stone"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -74,7 +75,7 @@
         "Kanye West": 1,
         "Scarlett Johansson": 1,
         "Justin Bieber": 0,
-        "Emma Stone": 0,
+        "Emma Stone": 1,
         "Michael B. Jordan": 1,
         "Selena Gomez": 1,
         "Hugh Jackman": 0,
@@ -91,13 +92,8 @@
     },
     "running": true,
     "title": "Celebs",
-    "last_winner": "Kanye West",
-    "last_match": {
-        "a": "Rihanna",
-        "b": "Emma Stone",
-        "message_id": 1444754616423288965,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Emma Stone",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Justin Bieber",
@@ -182,6 +178,13 @@
             "winner": "Kanye West",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Rihanna",
+            "b": "Emma Stone",
+            "winner": "Emma Stone",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
