@@ -100,7 +100,7 @@
         "Pen": 0,
         "Sunglasses_strap": 0
     },
-    "running": true,
+    "running": false,
     "title": "accessories",
     "last_winner": "Hat",
     "last_match": {
