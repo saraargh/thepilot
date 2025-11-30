@@ -59,7 +59,8 @@
         "Shoes",
         "Lanyard",
         "Sandals",
-        "Boots"
+        "Boots",
+        "Brooch"
     ],
     "scores": {
         "Sunglasses": 0,
@@ -80,7 +81,7 @@
         "Tie": 0,
         "Cufflinks": 0,
         "Hairpin": 0,
-        "Brooch": 0,
+        "Brooch": 1,
         "Socks": 0,
         "Shoes": 1,
         "Sandals": 1,
@@ -97,13 +98,8 @@
     },
     "running": true,
     "title": "Accessories",
-    "last_winner": "Boots",
-    "last_match": {
-        "a": "Brooch",
-        "b": "Pen",
-        "message_id": 1444690397086355487,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Brooch",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sunglasses_strap",
@@ -145,6 +141,13 @@
             "b": "Notebook",
             "winner": "Boots",
             "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Brooch",
+            "b": "Pen",
+            "winner": "Brooch",
+            "a_votes": 0,
             "b_votes": 0
         }
     ],
