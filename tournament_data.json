@@ -65,7 +65,9 @@
         "Watch",
         "Necklace"
     ],
-    "next_round": [],
+    "next_round": [
+        "Gloves"
+    ],
     "scores": {
         "Sunglasses": 0,
         "Watch": 0,
@@ -75,7 +77,7 @@
         "Earrings": 1,
         "Hat": 0,
         "Scarf": 0,
-        "Gloves": 0,
+        "Gloves": 1,
         "Belt": 0,
         "Backpack": 0,
         "Purse": 0,
@@ -102,13 +104,16 @@
     },
     "running": true,
     "title": "Accessories",
-    "last_winner": null,
-    "last_match": {
-        "a": "Sunglasses_strap",
-        "b": "Gloves",
-        "message_id": 1444689465095225354,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [],
+    "last_winner": "Gloves",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "Sunglasses_strap",
+            "b": "Gloves",
+            "winner": "Gloves",
+            "a_votes": 0,
+            "b_votes": 1
+        }
+    ],
     "round_stage": "Round of 32"
 }
