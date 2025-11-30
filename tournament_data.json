@@ -65,7 +65,9 @@
         "Dragonfruit Smoothie",
         "Buffalo Wings"
     ],
-    "next_round": [],
+    "next_round": [
+        "Sloppy Joe"
+    ],
     "scores": {
         "Pizza": 0,
         "Rainbow Sushi": 0,
@@ -95,20 +97,23 @@
         "Strawberry Milkshake": 0,
         "Truffle Popcorn": 0,
         "Pad Thai with Extra Peanuts": 0,
-        "Sloppy Joe": 0,
+        "Sloppy Joe": 1,
         "S\u2019mores Dip": 0,
         "Lemon Meringue Pie": 0,
         "Philly Cheesesteak": 0
     },
     "running": true,
     "title": "Foods",
-    "last_winner": null,
-    "last_match": {
-        "a": "Mango Sticky Rice",
-        "b": "Sloppy Joe",
-        "message_id": 1444724448598036582,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [],
+    "last_winner": "Sloppy Joe",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "Mango Sticky Rice",
+            "b": "Sloppy Joe",
+            "winner": "Sloppy Joe",
+            "a_votes": 0,
+            "b_votes": 1
+        }
+    ],
     "round_stage": "Round of 32"
 }
