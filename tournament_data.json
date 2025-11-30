@@ -34,17 +34,40 @@
         "Natalie Portman"
     ],
     "current_round": [
-        "Beyonc\u00e9"
-    ],
-    "next_round": [
+        "Lady Gaga",
+        "Emma Stone",
+        "Ariana Grande",
+        "Rihanna",
+        "Michael B. Jordan",
+        "Jennifer Lawrence",
         "Cardi B",
-        "Drake",
         "Taylor Swift",
-        "Shakira",
-        "Selena Gomez",
+        "Zendaya",
+        "Bruno Mars",
+        "Leonardo DiCaprio",
+        "Jason Momoa",
+        "Will Smith",
         "Kanye West",
-        "Ariana Grande"
+        "Robert Downey Jr.",
+        "Kim Kardashian",
+        "Billie Eilish",
+        "Selena Gomez",
+        "Dwayne Johnson",
+        "Drake",
+        "Gal Gadot",
+        "Justin Bieber",
+        "Margot Robbie",
+        "Chris Hemsworth",
+        "Shakira",
+        "Beyonc\u00e9",
+        "Hugh Jackman",
+        "Tom Holland",
+        "Keanu Reeves",
+        "Scarlett Johansson",
+        "Chris Evans",
+        "Natalie Portman"
     ],
+    "next_round": [],
     "scores": {
         "Dwayne Johnson": 0,
         "Taylor Swift": 2,
@@ -79,165 +102,10 @@
         "Jason Momoa": 0,
         "Natalie Portman": 0
     },
-    "running": false,
-    "title": "Celebs",
-    "last_winner": "Ariana Grande",
+    "running": true,
+    "title": "celebs",
+    "last_winner": null,
     "last_match": null,
-    "finished_matches": [
-        {
-            "a": "Justin Bieber",
-            "b": "Robert Downey Jr.",
-            "winner": "Robert Downey Jr.",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Cardi B",
-            "b": "Chris Hemsworth",
-            "winner": "Cardi B",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Drake",
-            "b": "Hugh Jackman",
-            "winner": "Drake",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Billie Eilish",
-            "b": "Chris Evans",
-            "winner": "Billie Eilish",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Scarlett Johansson",
-            "b": "Dwayne Johnson",
-            "winner": "Scarlett Johansson",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Jason Momoa",
-            "b": "Taylor Swift",
-            "winner": "Taylor Swift",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Shakira",
-            "b": "Tom Holland",
-            "winner": "Shakira",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Michael B. Jordan",
-            "b": "Zendaya",
-            "winner": "Michael B. Jordan",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Bruno Mars",
-            "b": "Selena Gomez",
-            "winner": "Selena Gomez",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Kim Kardashian",
-            "b": "Lady Gaga",
-            "winner": "Kim Kardashian",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Margot Robbie",
-            "b": "Jennifer Lawrence",
-            "winner": "Margot Robbie",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Kanye West",
-            "b": "Leonardo DiCaprio",
-            "winner": "Kanye West",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Rihanna",
-            "b": "Emma Stone",
-            "winner": "Emma Stone",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Ariana Grande",
-            "b": "Natalie Portman",
-            "winner": "Ariana Grande",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Gal Gadot",
-            "b": "Beyonc\u00e9",
-            "winner": "Beyonc\u00e9",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Robert Downey Jr.",
-            "b": "Cardi B",
-            "winner": "Cardi B",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Drake",
-            "b": "Billie Eilish",
-            "winner": "Drake",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Scarlett Johansson",
-            "b": "Taylor Swift",
-            "winner": "Taylor Swift",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Shakira",
-            "b": "Michael B. Jordan",
-            "winner": "Shakira",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Selena Gomez",
-            "b": "Kim Kardashian",
-            "winner": "Selena Gomez",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Margot Robbie",
-            "b": "Kanye West",
-            "winner": "Kanye West",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Emma Stone",
-            "b": "Ariana Grande",
-            "winner": "Ariana Grande",
-            "a_votes": 0,
-            "b_votes": 1
-        }
-    ],
-    "round_stage": "15-items round"
+    "finished_matches": [],
+    "round_stage": "Round of 32"
 }
