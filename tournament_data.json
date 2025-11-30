@@ -62,7 +62,8 @@
     "next_round": [
         "Robert Downey Jr.",
         "Cardi B",
-        "Drake"
+        "Drake",
+        "Billie Eilish"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -76,7 +77,7 @@
         "Will Smith": 0,
         "Zendaya": 0,
         "Robert Downey Jr.": 1,
-        "Billie Eilish": 0,
+        "Billie Eilish": 1,
         "Jennifer Lawrence": 0,
         "Drake": 1,
         "Margot Robbie": 0,
@@ -100,13 +101,8 @@
     },
     "running": true,
     "title": "Celebs",
-    "last_winner": "Drake",
-    "last_match": {
-        "a": "Billie Eilish",
-        "b": "Chris Evans",
-        "message_id": 1444751572302168247,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Billie Eilish",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Justin Bieber",
@@ -126,6 +122,13 @@
             "a": "Drake",
             "b": "Hugh Jackman",
             "winner": "Drake",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Billie Eilish",
+            "b": "Chris Evans",
+            "winner": "Billie Eilish",
             "a_votes": 1,
             "b_votes": 0
         }
