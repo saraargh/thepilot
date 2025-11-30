@@ -65,7 +65,9 @@
         "Will Smith",
         "Keanu Reeves"
     ],
-    "next_round": [],
+    "next_round": [
+        "Robert Downey Jr."
+    ],
     "scores": {
         "Dwayne Johnson": 0,
         "Taylor Swift": 0,
@@ -77,7 +79,7 @@
         "Ariana Grande": 0,
         "Will Smith": 0,
         "Zendaya": 0,
-        "Robert Downey Jr.": 0,
+        "Robert Downey Jr.": 1,
         "Billie Eilish": 0,
         "Jennifer Lawrence": 0,
         "Drake": 0,
@@ -102,13 +104,16 @@
     },
     "running": true,
     "title": "Celebs",
-    "last_winner": null,
-    "last_match": {
-        "a": "Justin Bieber",
-        "b": "Robert Downey Jr.",
-        "message_id": 1444751098639548426,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [],
+    "last_winner": "Robert Downey Jr.",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "Justin Bieber",
+            "b": "Robert Downey Jr.",
+            "winner": "Robert Downey Jr.",
+            "a_votes": 0,
+            "b_votes": 1
+        }
+    ],
     "round_stage": "Round of 32"
 }
