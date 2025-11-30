@@ -88,7 +88,12 @@
     "running": true,
     "title": "Food",
     "last_winner": "Sweet Potato Fries",
-    "last_match": null,
+    "last_match": {
+        "a": "Avocado Toast",
+        "b": "Philly Cheesesteak",
+        "message_id": 1444743199590580246,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sushi Burrito",
