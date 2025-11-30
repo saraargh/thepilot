@@ -57,7 +57,8 @@
         "Scarlett Johansson",
         "Taylor Swift",
         "Shakira",
-        "Michael B. Jordan"
+        "Michael B. Jordan",
+        "Selena Gomez"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -80,7 +81,7 @@
         "Justin Bieber": 0,
         "Emma Stone": 0,
         "Michael B. Jordan": 1,
-        "Selena Gomez": 0,
+        "Selena Gomez": 1,
         "Hugh Jackman": 0,
         "Lady Gaga": 0,
         "Chris Evans": 0,
@@ -95,13 +96,8 @@
     },
     "running": true,
     "title": "Celebs",
-    "last_winner": "Michael B. Jordan",
-    "last_match": {
-        "a": "Bruno Mars",
-        "b": "Selena Gomez",
-        "message_id": 1444751754041364653,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Selena Gomez",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Justin Bieber",
@@ -158,6 +154,13 @@
             "winner": "Michael B. Jordan",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Bruno Mars",
+            "b": "Selena Gomez",
+            "winner": "Selena Gomez",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
