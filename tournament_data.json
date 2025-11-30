@@ -103,7 +103,12 @@
     "running": true,
     "title": "Celebrities",
     "last_winner": null,
-    "last_match": null,
+    "last_match": {
+        "a": "Jennifer Lawrence",
+        "b": "Lady Gaga",
+        "message_id": 1444746306005372948,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [],
     "round_stage": "Round of 32"
 }
