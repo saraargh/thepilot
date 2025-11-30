@@ -31,8 +31,7 @@
         "Sloppy Joe",
         "S\u2019mores Dip",
         "Lemon Meringue Pie",
-        "Philly Cheesesteak",
-        "Chicken Katsu Curry"
+        "Philly Cheesesteak"
     ],
     "current_round": [],
     "next_round": [],
@@ -68,8 +67,7 @@
         "Sloppy Joe": 0,
         "S\u2019mores Dip": 0,
         "Lemon Meringue Pie": 0,
-        "Philly Cheesesteak": 0,
-        "Chicken Katsu Curry": 0
+        "Philly Cheesesteak": 0
     },
     "running": false,
     "title": "",
