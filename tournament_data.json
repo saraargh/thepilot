@@ -90,7 +90,12 @@
     "running": true,
     "title": "Food",
     "last_winner": "Pesto Pasta",
-    "last_match": null,
+    "last_match": {
+        "a": "Sweet Potato Fries",
+        "b": "Kimchi Fries",
+        "message_id": 1444743132880179256,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sushi Burrito",
