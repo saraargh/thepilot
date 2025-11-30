@@ -94,7 +94,12 @@
     "running": true,
     "title": "Food",
     "last_winner": "Rainbow Sushi",
-    "last_match": null,
+    "last_match": {
+        "a": "Chocolate Lava Cake",
+        "b": "Bubble Tea",
+        "message_id": 1444742665240576040,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sushi Burrito",
