@@ -45,7 +45,8 @@
     "next_round": [
         "Cardi B",
         "Drake",
-        "Taylor Swift"
+        "Taylor Swift",
+        "Shakira"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -77,19 +78,14 @@
         "Cardi B": 2,
         "Gal Gadot": 0,
         "Bruno Mars": 0,
-        "Shakira": 1,
+        "Shakira": 2,
         "Jason Momoa": 0,
         "Natalie Portman": 0
     },
     "running": true,
     "title": "Celebs",
-    "last_winner": "Taylor Swift",
-    "last_match": {
-        "a": "Shakira",
-        "b": "Michael B. Jordan",
-        "message_id": 1444755161661837375,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Shakira",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Justin Bieber",
@@ -216,6 +212,13 @@
             "winner": "Taylor Swift",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Shakira",
+            "b": "Michael B. Jordan",
+            "winner": "Shakira",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "15-items round"
