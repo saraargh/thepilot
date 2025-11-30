@@ -33,10 +33,7 @@
         "Philly Cheesesteak",
         "Chicken Katsu Curry"
     ],
-    "current_round": [
-        "Avocado Toast",
-        "Philly Cheesesteak"
-    ],
+    "current_round": [],
     "next_round": [
         "Flaming Hot Cheetos",
         "Buffalo Wings",
