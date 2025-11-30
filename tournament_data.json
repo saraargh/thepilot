@@ -47,7 +47,8 @@
         "Beyonc\u00e9"
     ],
     "next_round": [
-        "Cardi B"
+        "Cardi B",
+        "Drake"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -63,7 +64,7 @@
         "Robert Downey Jr.": 1,
         "Billie Eilish": 1,
         "Jennifer Lawrence": 0,
-        "Drake": 1,
+        "Drake": 2,
         "Margot Robbie": 1,
         "Kanye West": 1,
         "Scarlett Johansson": 1,
@@ -85,13 +86,8 @@
     },
     "running": true,
     "title": "Celebs",
-    "last_winner": "Cardi B",
-    "last_match": {
-        "a": "Drake",
-        "b": "Billie Eilish",
-        "message_id": 1444755098340298792,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Drake",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Justin Bieber",
@@ -204,6 +200,13 @@
             "winner": "Cardi B",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Drake",
+            "b": "Billie Eilish",
+            "winner": "Drake",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "15-items round"
