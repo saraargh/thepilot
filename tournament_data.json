@@ -63,7 +63,8 @@
     ],
     "next_round": [
         "Gloves",
-        "Purse"
+        "Purse",
+        "Shoes"
     ],
     "scores": {
         "Sunglasses": 0,
@@ -86,7 +87,7 @@
         "Hairpin": 0,
         "Brooch": 0,
         "Socks": 0,
-        "Shoes": 0,
+        "Shoes": 1,
         "Sandals": 0,
         "Boots": 0,
         "Beanie": 0,
@@ -101,13 +102,8 @@
     },
     "running": true,
     "title": "Accessories",
-    "last_winner": "Purse",
-    "last_match": {
-        "a": "Cufflinks",
-        "b": "Shoes",
-        "message_id": 1444689969443639466,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Shoes",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sunglasses_strap",
@@ -120,6 +116,13 @@
             "a": "Socks",
             "b": "Purse",
             "winner": "Purse",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Cufflinks",
+            "b": "Shoes",
+            "winner": "Shoes",
             "a_votes": 0,
             "b_votes": 1
         }
