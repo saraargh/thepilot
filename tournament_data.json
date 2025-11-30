@@ -64,7 +64,8 @@
         "Buffalo Wings"
     ],
     "next_round": [
-        "Sloppy Joe"
+        "Sloppy Joe",
+        "Philly Cheesesteak"
     ],
     "scores": {
         "Pizza": 0,
@@ -98,22 +99,24 @@
         "Sloppy Joe": 1,
         "S\u2019mores Dip": 0,
         "Lemon Meringue Pie": 0,
-        "Philly Cheesesteak": 0
+        "Philly Cheesesteak": 1
     },
     "running": true,
     "title": "Foods",
-    "last_winner": "Sloppy Joe",
-    "last_match": {
-        "a": "Tacos al Pastor",
-        "b": "Philly Cheesesteak",
-        "message_id": 1444724593838264342,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Philly Cheesesteak",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Mango Sticky Rice",
             "b": "Sloppy Joe",
             "winner": "Sloppy Joe",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Tacos al Pastor",
+            "b": "Philly Cheesesteak",
+            "winner": "Philly Cheesesteak",
             "a_votes": 0,
             "b_votes": 1
         }
