@@ -1,6 +1,5 @@
 {
     "items": [
-        "Pizza",
         "Rainbow Sushi",
         "Spicy Ramen",
         "Cheeseburger Tower",
@@ -37,7 +36,6 @@
     "current_round": [],
     "next_round": [],
     "scores": {
-        "Pizza": 0,
         "Rainbow Sushi": 0,
         "Spicy Ramen": 0,
         "Cheeseburger Tower": 0,
