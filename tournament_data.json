@@ -55,7 +55,8 @@
         "Shakira",
         "Michael B. Jordan",
         "Selena Gomez",
-        "Kim Kardashian"
+        "Kim Kardashian",
+        "Margot Robbie"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -72,7 +73,7 @@
         "Billie Eilish": 1,
         "Jennifer Lawrence": 0,
         "Drake": 1,
-        "Margot Robbie": 0,
+        "Margot Robbie": 1,
         "Kanye West": 0,
         "Scarlett Johansson": 1,
         "Justin Bieber": 0,
@@ -93,13 +94,8 @@
     },
     "running": true,
     "title": "Celebs",
-    "last_winner": "Kim Kardashian",
-    "last_match": {
-        "a": "Margot Robbie",
-        "b": "Jennifer Lawrence",
-        "message_id": 1444751872044044390,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Margot Robbie",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Justin Bieber",
@@ -168,6 +164,13 @@
             "a": "Kim Kardashian",
             "b": "Lady Gaga",
             "winner": "Kim Kardashian",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Margot Robbie",
+            "b": "Jennifer Lawrence",
+            "winner": "Margot Robbie",
             "a_votes": 1,
             "b_votes": 0
         }
