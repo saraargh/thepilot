@@ -178,7 +178,7 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
                     await msg.edit(embed=discord.Embed(title=f"🎮 {data.get('round_stage','Matchup')}", description=desc, color=discord.Color.random()))
                 except Exception:
                     pass
-                await asyncio.sleep(10)  # Update every 10s
+                await asyncio.sleep(2)  # Update every 2s
 
         asyncio.create_task(update_votes_loop())
 
@@ -302,7 +302,7 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
         sha = save_data(data, sha)
 
         # 1️⃣ Announcement only
-        await interaction.channel.send(f"@everyone, the World Cup of {data['title']} is starting! 🏆🎮")
+        await interaction.channel.send(f"@everyone, the World Cup of {data['title']} is starting. See the matchups and cast your votes below!🏆🎮")
 
         # 2️⃣ Show matchups embed
         await showwcmatchups_internal(interaction.channel, data)
@@ -380,7 +380,7 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
                                       description=f"🎉 **{final}** wins the **World Cup of {data['title']}**! Thank you everyone for voting! 🥳",
                                       color=discord.Color.green())
                 embed.set_image(url="https://media1.tenor.com/m/XU8DIUrUZaoAAAAd/happy-dance.gif")
-                await interaction.channel.send(f"@everyone, we have a World Cup of {data['title']} winner")
+                await interaction.channel.send(f"@everyone, We have a World Cup of {data['title']} winner")
                 await interaction.channel.send(embed=embed)
                 await interaction.response.send_message("✅ Tournament concluded.", ephemeral=True)
                 return
@@ -447,7 +447,7 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
                               description=f"🏆 **{winner}** wins the **World Cup of {data.get('title','World Cup')}**! Thank you everyone for voting! 🥳🎊",
                               color=discord.Color.green())
         embed.set_image(url="https://media1.tenor.com/m/XU8DIUrUZaoAAAAd/happy-dance.gif")
-        await interaction.channel.send(f"@everyone, we have a World Cup of {data.get('title')} winner")
+        await interaction.channel.send(f"@everyone, We have a World Cup of {data.get('title')} winner")
         await interaction.channel.send(embed=embed)
         data["running"] = False
         sha = save_data(data, sha)
