@@ -65,7 +65,9 @@
         "Shoes",
         "Scarf"
     ],
-    "next_round": [],
+    "next_round": [
+        "Hat"
+    ],
     "scores": {
         "Sunglasses": 0,
         "Watch": 0,
@@ -73,7 +75,7 @@
         "Bracelet": 0,
         "Ring": 0,
         "Earrings": 0,
-        "Hat": 0,
+        "Hat": 1,
         "Scarf": 0,
         "Gloves": 0,
         "Belt": 0,
@@ -102,13 +104,16 @@
     },
     "running": true,
     "title": "accessories",
-    "last_winner": null,
-    "last_match": {
-        "a": "Hat",
-        "b": "Gloves",
-        "message_id": 1444676828642934904,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [],
+    "last_winner": "Hat",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "Hat",
+            "b": "Gloves",
+            "winner": "Hat",
+            "a_votes": 1,
+            "b_votes": 0
+        }
+    ],
     "round_stage": "Round of 32"
 }
