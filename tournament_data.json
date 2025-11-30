@@ -47,7 +47,8 @@
     ],
     "next_round": [
         "Purse",
-        "Shoes"
+        "Shoes",
+        "Boots"
     ],
     "scores": {
         "Sunglasses": 1,
@@ -72,7 +73,7 @@
         "Socks": 0,
         "Shoes": 2,
         "Sandals": 1,
-        "Boots": 1,
+        "Boots": 2,
         "Beanie": 0,
         "Sunglasses_case": 0,
         "Lanyard": 1,
@@ -85,13 +86,8 @@
     },
     "running": true,
     "title": "Accessories",
-    "last_winner": "Shoes",
-    "last_match": {
-        "a": "Sandals",
-        "b": "Boots",
-        "message_id": 1444713407688347801,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Boots",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sunglasses_strap",
@@ -218,6 +214,13 @@
             "winner": "Shoes",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Sandals",
+            "b": "Boots",
+            "winner": "Boots",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 16"
