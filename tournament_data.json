@@ -91,7 +91,12 @@
     "running": true,
     "title": "Accessories",
     "last_winner": "Scarf",
-    "last_match": null,
+    "last_match": {
+        "a": "Belt",
+        "b": "Tie",
+        "message_id": 1444707699144265768,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sunglasses_strap",
