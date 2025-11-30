@@ -58,7 +58,8 @@
         "Rainbow Bagel",
         "Churros with Chocolate",
         "Chicken Katsu Curry",
-        "Cheeseburger Tower"
+        "Cheeseburger Tower",
+        "Mac & Cheese Pizza"
     ],
     "scores": {
         "Rainbow Sushi": 0,
@@ -70,7 +71,7 @@
         "Glitter Pancakes": 1,
         "Mango Sticky Rice": 0,
         "Buffalo Wings": 1,
-        "Mac & Cheese Pizza": 0,
+        "Mac & Cheese Pizza": 1,
         "Bubble Tea": 0,
         "Dragonfruit Smoothie": 0,
         "Avocado Toast": 0,
@@ -96,13 +97,8 @@
     },
     "running": true,
     "title": "Food",
-    "last_winner": "Cheeseburger Tower",
-    "last_match": {
-        "a": "Truffle Popcorn",
-        "b": "Mac & Cheese Pizza",
-        "message_id": 1444741658808680681,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Mac & Cheese Pizza",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sushi Burrito",
@@ -152,6 +148,13 @@
             "winner": "Cheeseburger Tower",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Truffle Popcorn",
+            "b": "Mac & Cheese Pizza",
+            "winner": "Mac & Cheese Pizza",
+            "a_votes": 0,
+            "b_votes": 2
         }
     ],
     "round_stage": "Round of 32"
