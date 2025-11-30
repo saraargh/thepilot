@@ -86,7 +86,12 @@
     "running": true,
     "title": "Celebs",
     "last_winner": "Cardi B",
-    "last_match": null,
+    "last_match": {
+        "a": "Drake",
+        "b": "Billie Eilish",
+        "message_id": 1444755098340298792,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Justin Bieber",
