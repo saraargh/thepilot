@@ -56,7 +56,8 @@
         "Boots",
         "Brooch",
         "Hairpin",
-        "Phone_case"
+        "Phone_case",
+        "Wallet"
     ],
     "scores": {
         "Sunglasses": 0,
@@ -71,7 +72,7 @@
         "Belt": 0,
         "Backpack": 0,
         "Purse": 1,
-        "Wallet": 0,
+        "Wallet": 1,
         "Keychain": 0,
         "Headphones": 0,
         "Tie": 0,
@@ -94,13 +95,8 @@
     },
     "running": true,
     "title": "Accessories",
-    "last_winner": "Phone_case",
-    "last_match": {
-        "a": "Wallet",
-        "b": "Umbrella",
-        "message_id": 1444707250760454448,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Wallet",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sunglasses_strap",
@@ -164,6 +160,13 @@
             "winner": "Phone_case",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Wallet",
+            "b": "Umbrella",
+            "winner": "Wallet",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
