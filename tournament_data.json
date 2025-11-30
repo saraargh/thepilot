@@ -96,7 +96,12 @@
     "running": true,
     "title": "Food",
     "last_winner": "Mac & Cheese Pizza",
-    "last_match": null,
+    "last_match": {
+        "a": "Pad Thai with Extra Peanuts",
+        "b": "Fried Pickles",
+        "message_id": 1444742351850307695,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sushi Burrito",
