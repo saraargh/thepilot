@@ -53,7 +53,8 @@
         "Pad Thai with Extra Peanuts",
         "Rainbow Sushi",
         "Chocolate Lava Cake",
-        "Garlic Breadsticks"
+        "Garlic Breadsticks",
+        "Sloppy Joe"
     ],
     "scores": {
         "Rainbow Sushi": 1,
@@ -83,7 +84,7 @@
         "Strawberry Milkshake": 0,
         "Truffle Popcorn": 0,
         "Pad Thai with Extra Peanuts": 1,
-        "Sloppy Joe": 0,
+        "Sloppy Joe": 1,
         "S\u2019mores Dip": 0,
         "Lemon Meringue Pie": 0,
         "Philly Cheesesteak": 0,
@@ -91,13 +92,8 @@
     },
     "running": true,
     "title": "Food",
-    "last_winner": "Garlic Breadsticks",
-    "last_match": {
-        "a": "Spicy Ramen",
-        "b": "Sloppy Joe",
-        "message_id": 1444742961232478310,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Sloppy Joe",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sushi Burrito",
@@ -181,6 +177,13 @@
             "b": "Dragonfruit Smoothie",
             "winner": "Garlic Breadsticks",
             "a_votes": 1,
+            "b_votes": 1
+        },
+        {
+            "a": "Spicy Ramen",
+            "b": "Sloppy Joe",
+            "winner": "Sloppy Joe",
+            "a_votes": 0,
             "b_votes": 1
         }
     ],
