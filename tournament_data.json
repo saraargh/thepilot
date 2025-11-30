@@ -43,7 +43,8 @@
         "Drake",
         "Taylor Swift",
         "Shakira",
-        "Selena Gomez"
+        "Selena Gomez",
+        "Kanye West"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -61,7 +62,7 @@
         "Jennifer Lawrence": 0,
         "Drake": 2,
         "Margot Robbie": 1,
-        "Kanye West": 1,
+        "Kanye West": 2,
         "Scarlett Johansson": 1,
         "Justin Bieber": 0,
         "Emma Stone": 1,
@@ -81,13 +82,8 @@
     },
     "running": true,
     "title": "Celebs",
-    "last_winner": "Selena Gomez",
-    "last_match": {
-        "a": "Margot Robbie",
-        "b": "Kanye West",
-        "message_id": 1444755243190452429,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Kanye West",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Justin Bieber",
@@ -228,6 +224,13 @@
             "winner": "Selena Gomez",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Margot Robbie",
+            "b": "Kanye West",
+            "winner": "Kanye West",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "15-items round"
