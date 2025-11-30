@@ -96,7 +96,12 @@
     "running": true,
     "title": "Accessories",
     "last_winner": "Hairpin",
-    "last_match": null,
+    "last_match": {
+        "a": "Beanie",
+        "b": "Phone_case",
+        "message_id": 1444699199563235328,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sunglasses_strap",
