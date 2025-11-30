@@ -99,7 +99,12 @@
     "running": true,
     "title": "Celebs",
     "last_winner": "Scarlett Johansson",
-    "last_match": null,
+    "last_match": {
+        "a": "Jason Momoa",
+        "b": "Taylor Swift",
+        "message_id": 1444751642598576239,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Justin Bieber",
