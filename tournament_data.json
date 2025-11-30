@@ -102,7 +102,12 @@
     "running": true,
     "title": "Foods",
     "last_winner": "Philly Cheesesteak",
-    "last_match": null,
+    "last_match": {
+        "a": "Glitter Pancakes",
+        "b": "Pizza",
+        "message_id": 1444724809844920473,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Mango Sticky Rice",
