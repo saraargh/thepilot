@@ -63,7 +63,8 @@
     ],
     "next_round": [
         "Sloppy Joe",
-        "Philly Cheesesteak"
+        "Philly Cheesesteak",
+        "Glitter Pancakes"
     ],
     "scores": {
         "Pizza": 0,
@@ -73,7 +74,7 @@
         "Chocolate Lava Cake": 0,
         "Unicorn Donut": 0,
         "Tacos al Pastor": 0,
-        "Glitter Pancakes": 0,
+        "Glitter Pancakes": 1,
         "Mango Sticky Rice": 0,
         "Buffalo Wings": 0,
         "Mac & Cheese Pizza": 0,
@@ -101,13 +102,8 @@
     },
     "running": true,
     "title": "Foods",
-    "last_winner": "Philly Cheesesteak",
-    "last_match": {
-        "a": "Glitter Pancakes",
-        "b": "Pizza",
-        "message_id": 1444724809844920473,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Glitter Pancakes",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Mango Sticky Rice",
@@ -122,6 +118,13 @@
             "winner": "Philly Cheesesteak",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Glitter Pancakes",
+            "b": "Pizza",
+            "winner": "Glitter Pancakes",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
