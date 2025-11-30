@@ -43,14 +43,15 @@
         "Purse",
         "Shoes",
         "Boots",
-        "Phone_case"
+        "Phone_case",
+        "Ring"
     ],
     "scores": {
         "Sunglasses": 1,
         "Watch": 0,
         "Necklace": 1,
         "Bracelet": 1,
-        "Ring": 1,
+        "Ring": 2,
         "Earrings": 1,
         "Hat": 0,
         "Scarf": 1,
@@ -81,13 +82,8 @@
     },
     "running": true,
     "title": "Accessories",
-    "last_winner": "Phone_case",
-    "last_match": {
-        "a": "Bracelet",
-        "b": "Ring",
-        "message_id": 1444719024931078197,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Ring",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sunglasses_strap",
@@ -228,6 +224,13 @@
             "winner": "Phone_case",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Bracelet",
+            "b": "Ring",
+            "winner": "Ring",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 16"
