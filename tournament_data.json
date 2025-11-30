@@ -103,7 +103,12 @@
     "running": true,
     "title": "Food",
     "last_winner": null,
-    "last_match": null,
+    "last_match": {
+        "a": "Sushi Burrito",
+        "b": "Flaming Hot Cheetos",
+        "message_id": 1444730482355863592,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [],
     "round_stage": "Round of 32"
 }
