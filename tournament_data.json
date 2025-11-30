@@ -61,7 +61,8 @@
         "Robert Downey Jr.",
         "Cardi B",
         "Drake",
-        "Billie Eilish"
+        "Billie Eilish",
+        "Scarlett Johansson"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -80,7 +81,7 @@
         "Drake": 1,
         "Margot Robbie": 0,
         "Kanye West": 0,
-        "Scarlett Johansson": 0,
+        "Scarlett Johansson": 1,
         "Justin Bieber": 0,
         "Emma Stone": 0,
         "Michael B. Jordan": 0,
@@ -99,13 +100,8 @@
     },
     "running": true,
     "title": "Celebs",
-    "last_winner": "Billie Eilish",
-    "last_match": {
-        "a": "Scarlett Johansson",
-        "b": "Dwayne Johnson",
-        "message_id": 1444751608327045301,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Scarlett Johansson",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Justin Bieber",
@@ -132,6 +128,13 @@
             "a": "Billie Eilish",
             "b": "Chris Evans",
             "winner": "Billie Eilish",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Scarlett Johansson",
+            "b": "Dwayne Johnson",
+            "winner": "Scarlett Johansson",
             "a_votes": 1,
             "b_votes": 0
         }
