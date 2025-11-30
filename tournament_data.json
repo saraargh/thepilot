@@ -54,7 +54,8 @@
         "Mac & Cheese Pizza",
         "Pad Thai with Extra Peanuts",
         "Rainbow Sushi",
-        "Chocolate Lava Cake"
+        "Chocolate Lava Cake",
+        "Garlic Breadsticks"
     ],
     "scores": {
         "Rainbow Sushi": 1,
@@ -72,7 +73,7 @@
         "Avocado Toast": 0,
         "Cosmic Burrito": 0,
         "Flaming Hot Cheetos": 1,
-        "Garlic Breadsticks": 0,
+        "Garlic Breadsticks": 1,
         "Sushi Burrito": 0,
         "Waffle Taco": 0,
         "Rainbow Bagel": 1,
@@ -92,13 +93,8 @@
     },
     "running": true,
     "title": "Food",
-    "last_winner": "Chocolate Lava Cake",
-    "last_match": {
-        "a": "Garlic Breadsticks",
-        "b": "Dragonfruit Smoothie",
-        "message_id": 1444742857008222258,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Garlic Breadsticks",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sushi Burrito",
@@ -174,6 +170,13 @@
             "a": "Chocolate Lava Cake",
             "b": "Bubble Tea",
             "winner": "Chocolate Lava Cake",
+            "a_votes": 1,
+            "b_votes": 1
+        },
+        {
+            "a": "Garlic Breadsticks",
+            "b": "Dragonfruit Smoothie",
+            "winner": "Garlic Breadsticks",
             "a_votes": 1,
             "b_votes": 1
         }
