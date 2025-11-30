@@ -87,7 +87,12 @@
     "running": true,
     "title": "Accessories",
     "last_winner": "Purse",
-    "last_match": null,
+    "last_match": {
+        "a": "Shoes",
+        "b": "Lanyard",
+        "message_id": 1444708538168381611,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sunglasses_strap",
