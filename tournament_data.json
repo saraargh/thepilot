@@ -92,7 +92,12 @@
     "running": true,
     "title": "Food",
     "last_winner": "Garlic Breadsticks",
-    "last_match": null,
+    "last_match": {
+        "a": "Spicy Ramen",
+        "b": "Sloppy Joe",
+        "message_id": 1444742961232478310,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sushi Burrito",
