@@ -60,7 +60,8 @@
         "Buffalo Wings",
         "Glitter Pancakes",
         "Rainbow Bagel",
-        "Churros with Chocolate"
+        "Churros with Chocolate",
+        "Chicken Katsu Curry"
     ],
     "scores": {
         "Rainbow Sushi": 0,
@@ -94,17 +95,12 @@
         "S\u2019mores Dip": 0,
         "Lemon Meringue Pie": 0,
         "Philly Cheesesteak": 0,
-        "Chicken Katsu Curry": 0
+        "Chicken Katsu Curry": 1
     },
     "running": true,
     "title": "Food",
-    "last_winner": "Churros with Chocolate",
-    "last_match": {
-        "a": "Chicken Katsu Curry",
-        "b": "Waffle Taco",
-        "message_id": 1444735630415368353,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Chicken Katsu Curry",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sushi Burrito",
@@ -138,6 +134,13 @@
             "a": "Churros with Chocolate",
             "b": "S\u2019mores Dip",
             "winner": "Churros with Chocolate",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Chicken Katsu Curry",
+            "b": "Waffle Taco",
+            "winner": "Chicken Katsu Curry",
             "a_votes": 1,
             "b_votes": 0
         }
