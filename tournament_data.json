@@ -52,7 +52,8 @@
         "Rainbow Sushi",
         "Chocolate Lava Cake",
         "Garlic Breadsticks",
-        "Sloppy Joe"
+        "Sloppy Joe",
+        "Pesto Pasta"
     ],
     "scores": {
         "Rainbow Sushi": 1,
@@ -76,7 +77,7 @@
         "Rainbow Bagel": 1,
         "Kimchi Fries": 0,
         "Churros with Chocolate": 1,
-        "Pesto Pasta": 0,
+        "Pesto Pasta": 1,
         "Sweet Potato Fries": 0,
         "Fried Pickles": 0,
         "Strawberry Milkshake": 0,
@@ -90,13 +91,8 @@
     },
     "running": true,
     "title": "Food",
-    "last_winner": "Sloppy Joe",
-    "last_match": {
-        "a": "Pesto Pasta",
-        "b": "Lemon Meringue Pie",
-        "message_id": 1444743090714706162,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Pesto Pasta",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sushi Burrito",
@@ -188,6 +184,13 @@
             "winner": "Sloppy Joe",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Pesto Pasta",
+            "b": "Lemon Meringue Pie",
+            "winner": "Pesto Pasta",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
