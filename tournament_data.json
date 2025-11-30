@@ -91,7 +91,12 @@
     "running": true,
     "title": "Food",
     "last_winner": "Sloppy Joe",
-    "last_match": null,
+    "last_match": {
+        "a": "Pesto Pasta",
+        "b": "Lemon Meringue Pie",
+        "message_id": 1444743090714706162,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sushi Burrito",
