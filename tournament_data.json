@@ -62,7 +62,8 @@
     "next_round": [
         "Flaming Hot Cheetos",
         "Buffalo Wings",
-        "Glitter Pancakes"
+        "Glitter Pancakes",
+        "Rainbow Bagel"
     ],
     "scores": {
         "Rainbow Sushi": 0,
@@ -83,7 +84,7 @@
         "Garlic Breadsticks": 0,
         "Sushi Burrito": 0,
         "Waffle Taco": 0,
-        "Rainbow Bagel": 0,
+        "Rainbow Bagel": 1,
         "Kimchi Fries": 0,
         "Churros with Chocolate": 0,
         "Pesto Pasta": 0,
@@ -100,13 +101,8 @@
     },
     "running": true,
     "title": "Food",
-    "last_winner": "Glitter Pancakes",
-    "last_match": {
-        "a": "Rainbow Bagel",
-        "b": "Mango Sticky Rice",
-        "message_id": 1444730630167462010,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Rainbow Bagel",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sushi Burrito",
@@ -128,6 +124,13 @@
             "winner": "Glitter Pancakes",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Rainbow Bagel",
+            "b": "Mango Sticky Rice",
+            "winner": "Rainbow Bagel",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
