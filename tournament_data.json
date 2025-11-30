@@ -61,7 +61,8 @@
         "Flaming Hot Cheetos",
         "Buffalo Wings",
         "Glitter Pancakes",
-        "Rainbow Bagel"
+        "Rainbow Bagel",
+        "Churros with Chocolate"
     ],
     "scores": {
         "Rainbow Sushi": 0,
@@ -84,7 +85,7 @@
         "Waffle Taco": 0,
         "Rainbow Bagel": 1,
         "Kimchi Fries": 0,
-        "Churros with Chocolate": 0,
+        "Churros with Chocolate": 1,
         "Pesto Pasta": 0,
         "Sweet Potato Fries": 0,
         "Fried Pickles": 0,
@@ -99,13 +100,8 @@
     },
     "running": true,
     "title": "Food",
-    "last_winner": "Rainbow Bagel",
-    "last_match": {
-        "a": "Churros with Chocolate",
-        "b": "S\u2019mores Dip",
-        "message_id": 1444730786279591986,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Churros with Chocolate",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sushi Burrito",
@@ -132,6 +128,13 @@
             "a": "Rainbow Bagel",
             "b": "Mango Sticky Rice",
             "winner": "Rainbow Bagel",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Churros with Chocolate",
+            "b": "S\u2019mores Dip",
+            "winner": "Churros with Chocolate",
             "a_votes": 1,
             "b_votes": 0
         }
