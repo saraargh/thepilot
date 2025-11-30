@@ -99,7 +99,12 @@
     "running": true,
     "title": "Accessories",
     "last_winner": "Sandals",
-    "last_match": null,
+    "last_match": {
+        "a": "Boots",
+        "b": "Notebook",
+        "message_id": 1444690269072265316,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Sunglasses_strap",
