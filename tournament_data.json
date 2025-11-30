@@ -58,7 +58,8 @@
         "Billie Eilish",
         "Scarlett Johansson",
         "Taylor Swift",
-        "Shakira"
+        "Shakira",
+        "Michael B. Jordan"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -80,7 +81,7 @@
         "Scarlett Johansson": 1,
         "Justin Bieber": 0,
         "Emma Stone": 0,
-        "Michael B. Jordan": 0,
+        "Michael B. Jordan": 1,
         "Selena Gomez": 0,
         "Hugh Jackman": 0,
         "Lady Gaga": 0,
@@ -96,13 +97,8 @@
     },
     "running": true,
     "title": "Celebs",
-    "last_winner": "Shakira",
-    "last_match": {
-        "a": "Michael B. Jordan",
-        "b": "Zendaya",
-        "message_id": 1444751719291687003,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Michael B. Jordan",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Justin Bieber",
@@ -150,6 +146,13 @@
             "a": "Shakira",
             "b": "Tom Holland",
             "winner": "Shakira",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Michael B. Jordan",
+            "b": "Zendaya",
+            "winner": "Michael B. Jordan",
             "a_votes": 1,
             "b_votes": 0
         }
