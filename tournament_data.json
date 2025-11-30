@@ -57,7 +57,8 @@
         "Sandals",
         "Boots",
         "Brooch",
-        "Hairpin"
+        "Hairpin",
+        "Phone_case"
     ],
     "scores": {
         "Sunglasses": 0,
@@ -87,7 +88,7 @@
         "Sunglasses_case": 0,
         "Lanyard": 1,
         "Umbrella": 0,
-        "Phone_case": 0,
+        "Phone_case": 1,
         "Water_bottle": 0,
         "Notebook": 0,
         "Pen": 0,
@@ -95,13 +96,8 @@
     },
     "running": true,
     "title": "Accessories",
-    "last_winner": "Hairpin",
-    "last_match": {
-        "a": "Beanie",
-        "b": "Phone_case",
-        "message_id": 1444699199563235328,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Phone_case",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sunglasses_strap",
@@ -158,6 +154,13 @@
             "winner": "Hairpin",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Beanie",
+            "b": "Phone_case",
+            "winner": "Phone_case",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
