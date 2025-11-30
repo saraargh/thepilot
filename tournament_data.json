@@ -56,7 +56,8 @@
         "Taylor Swift",
         "Shakira",
         "Michael B. Jordan",
-        "Selena Gomez"
+        "Selena Gomez",
+        "Kim Kardashian"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -83,7 +84,7 @@
         "Hugh Jackman": 0,
         "Lady Gaga": 0,
         "Chris Evans": 0,
-        "Kim Kardashian": 0,
+        "Kim Kardashian": 1,
         "Keanu Reeves": 0,
         "Cardi B": 1,
         "Gal Gadot": 0,
@@ -94,13 +95,8 @@
     },
     "running": true,
     "title": "Celebs",
-    "last_winner": "Selena Gomez",
-    "last_match": {
-        "a": "Kim Kardashian",
-        "b": "Lady Gaga",
-        "message_id": 1444751787616764126,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Kim Kardashian",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Justin Bieber",
@@ -164,6 +160,13 @@
             "winner": "Selena Gomez",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Kim Kardashian",
+            "b": "Lady Gaga",
+            "winner": "Kim Kardashian",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
