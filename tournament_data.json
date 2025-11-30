@@ -31,8 +31,7 @@
         "S\u2019mores Dip",
         "Lemon Meringue Pie",
         "Philly Cheesesteak",
-        "Chicken Katsu Curry",
-        "pizza"
+        "Chicken Katsu Curry"
     ],
     "current_round": [],
     "next_round": [],
@@ -68,8 +67,7 @@
         "S\u2019mores Dip": 0,
         "Lemon Meringue Pie": 0,
         "Philly Cheesesteak": 0,
-        "Chicken Katsu Curry": 0,
-        "pizza": 0
+        "Chicken Katsu Curry": 0
     },
     "running": false,
     "title": "",
