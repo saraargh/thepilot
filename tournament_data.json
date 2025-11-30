@@ -51,7 +51,8 @@
         "Chocolate Lava Cake",
         "Garlic Breadsticks",
         "Sloppy Joe",
-        "Pesto Pasta"
+        "Pesto Pasta",
+        "Sweet Potato Fries"
     ],
     "scores": {
         "Rainbow Sushi": 1,
@@ -76,7 +77,7 @@
         "Kimchi Fries": 0,
         "Churros with Chocolate": 1,
         "Pesto Pasta": 1,
-        "Sweet Potato Fries": 0,
+        "Sweet Potato Fries": 1,
         "Fried Pickles": 0,
         "Strawberry Milkshake": 0,
         "Truffle Popcorn": 0,
@@ -89,13 +90,8 @@
     },
     "running": true,
     "title": "Food",
-    "last_winner": "Pesto Pasta",
-    "last_match": {
-        "a": "Sweet Potato Fries",
-        "b": "Kimchi Fries",
-        "message_id": 1444743132880179256,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Sweet Potato Fries",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Sushi Burrito",
@@ -194,6 +190,13 @@
             "winner": "Pesto Pasta",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Sweet Potato Fries",
+            "b": "Kimchi Fries",
+            "winner": "Sweet Potato Fries",
+            "a_votes": 1,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
