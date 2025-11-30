@@ -81,7 +81,12 @@
     "running": true,
     "title": "Celebs",
     "last_winner": "Kanye West",
-    "last_match": null,
+    "last_match": {
+        "a": "Emma Stone",
+        "b": "Ariana Grande",
+        "message_id": 1444755280163373076,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Justin Bieber",
