@@ -98,7 +98,12 @@
     "running": true,
     "title": "Celebs",
     "last_winner": "Taylor Swift",
-    "last_match": null,
+    "last_match": {
+        "a": "Shakira",
+        "b": "Tom Holland",
+        "message_id": 1444751673355534582,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Justin Bieber",
