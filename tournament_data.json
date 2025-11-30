@@ -60,11 +60,12 @@
         "Cardi B",
         "Drake",
         "Billie Eilish",
-        "Scarlett Johansson"
+        "Scarlett Johansson",
+        "Taylor Swift"
     ],
     "scores": {
         "Dwayne Johnson": 0,
-        "Taylor Swift": 0,
+        "Taylor Swift": 1,
         "Leonardo DiCaprio": 0,
         "Beyonc\u00e9": 0,
         "Chris Hemsworth": 0,
@@ -98,13 +99,8 @@
     },
     "running": true,
     "title": "Celebs",
-    "last_winner": "Scarlett Johansson",
-    "last_match": {
-        "a": "Jason Momoa",
-        "b": "Taylor Swift",
-        "message_id": 1444751642598576239,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Taylor Swift",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Justin Bieber",
@@ -140,6 +136,13 @@
             "winner": "Scarlett Johansson",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Jason Momoa",
+            "b": "Taylor Swift",
+            "winner": "Taylor Swift",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
