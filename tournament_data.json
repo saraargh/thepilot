@@ -60,7 +60,8 @@
         "Emma Stone",
         "Taylor Swift",
         "Selena Gomez",
-        "Robert Downey Jr."
+        "Robert Downey Jr.",
+        "Margot Robbie"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -77,7 +78,7 @@
         "Billie Eilish": 1,
         "Jennifer Lawrence": 0,
         "Drake": 2,
-        "Margot Robbie": 1,
+        "Margot Robbie": 2,
         "Kanye West": 2,
         "Scarlett Johansson": 1,
         "Justin Bieber": 0,
@@ -98,13 +99,8 @@
     },
     "running": true,
     "title": "celebs",
-    "last_winner": "Robert Downey Jr.",
-    "last_match": {
-        "a": "Margot Robbie",
-        "b": "Bruno Mars",
-        "message_id": 1448008533676261406,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Margot Robbie",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lady Gaga",
@@ -140,6 +136,13 @@
             "winner": "Robert Downey Jr.",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Margot Robbie",
+            "b": "Bruno Mars",
+            "winner": "Margot Robbie",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
