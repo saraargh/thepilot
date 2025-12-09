@@ -64,7 +64,8 @@
         "Style"
     ],
     "next_round": [
-        "Cornelia Street"
+        "Cornelia Street",
+        "Getaway Car"
     ],
     "scores": {
         "Love Story": 0,
@@ -86,7 +87,7 @@
         "marjorie": 0,
         "champagne problems": 0,
         "The Archer": 0,
-        "Getaway Car": 0,
+        "Getaway Car": 1,
         "Ready For It?": 0,
         "I Knew You Were Trouble": 0,
         "Red": 0,
@@ -102,13 +103,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Cornelia Street",
-    "last_match": {
-        "a": "Getaway Car",
-        "b": "I Knew You Were Trouble",
-        "message_id": 1448014638053593268,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Getaway Car",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -116,6 +112,13 @@
             "winner": "Cornelia Street",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Getaway Car",
+            "b": "I Knew You Were Trouble",
+            "winner": "Getaway Car",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
