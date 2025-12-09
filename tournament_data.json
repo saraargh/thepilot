@@ -51,7 +51,8 @@
         "cardigan",
         "Shake It Off",
         "august",
-        "Midnight Rain"
+        "Midnight Rain",
+        "New Romantics"
     ],
     "scores": {
         "Love Story": 0,
@@ -78,7 +79,7 @@
         "I Knew You Were Trouble": 0,
         "Red": 0,
         "Cornelia Street": 2,
-        "New Romantics": 2,
+        "New Romantics": 3,
         "Don\u2019t Blame Me": 2,
         "Bejeweled": 1,
         "Midnight Rain": 1,
@@ -89,13 +90,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Midnight Rain",
-    "last_match": {
-        "a": "New Romantics",
-        "b": "Lover",
-        "message_id": 1448040546185646110,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "New Romantics",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -194,6 +190,13 @@
             "winner": "Midnight Rain",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "New Romantics",
+            "b": "Lover",
+            "winner": "New Romantics",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
