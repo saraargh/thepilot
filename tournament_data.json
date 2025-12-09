@@ -39,7 +39,8 @@
     ],
     "next_round": [
         "Delicate",
-        "champagne problems"
+        "champagne problems",
+        "Getaway Car"
     ],
     "scores": {
         "Love Story": 0,
@@ -61,7 +62,7 @@
         "marjorie": 0,
         "champagne problems": 5,
         "The Archer": 0,
-        "Getaway Car": 4,
+        "Getaway Car": 5,
         "Ready For It?": 2,
         "I Knew You Were Trouble": 0,
         "Red": 0,
@@ -77,13 +78,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "champagne problems",
-    "last_match": {
-        "a": "Getaway Car",
-        "b": "cardigan",
-        "message_id": 1448041207434444940,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Getaway Car",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -266,6 +262,13 @@
             "winner": "champagne problems",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Getaway Car",
+            "b": "cardigan",
+            "winner": "Getaway Car",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Quarter Finals"
