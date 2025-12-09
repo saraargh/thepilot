@@ -62,7 +62,8 @@
     "next_round": [
         "Delicate",
         "Style",
-        "willow"
+        "willow",
+        "Don\u2019t Blame Me"
     ],
     "scores": {
         "Love Story": 0,
@@ -90,7 +91,7 @@
         "Red": 0,
         "Cornelia Street": 2,
         "New Romantics": 2,
-        "Don\u2019t Blame Me": 1,
+        "Don\u2019t Blame Me": 2,
         "Bejeweled": 1,
         "Midnight Rain": 0,
         "Karma": 1,
@@ -100,13 +101,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "willow",
-    "last_match": {
-        "a": "Don\u2019t Blame Me",
-        "b": "Red",
-        "message_id": 1448040099475488838,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Don\u2019t Blame Me",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -128,6 +124,13 @@
             "winner": "willow",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Don\u2019t Blame Me",
+            "b": "Red",
+            "winner": "Don\u2019t Blame Me",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
