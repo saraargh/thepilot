@@ -96,7 +96,12 @@
     "running": true,
     "title": "celebs",
     "last_winner": "Chris Evans",
-    "last_match": null,
+    "last_match": {
+        "a": "Cardi B",
+        "b": "Jennifer Lawrence",
+        "message_id": 1448009097403305996,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lady Gaga",
