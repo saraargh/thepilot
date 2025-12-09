@@ -53,7 +53,8 @@
         "Anti-Hero",
         "Getaway Car",
         "cardigan",
-        "Shake It Off"
+        "Shake It Off",
+        "august"
     ],
     "scores": {
         "Love Story": 0,
@@ -70,7 +71,7 @@
         "Enchanted": 0,
         "Look What You Made Me Do": 3,
         "cardigan": 1,
-        "august": 2,
+        "august": 3,
         "willow": 3,
         "marjorie": 0,
         "champagne problems": 3,
@@ -91,13 +92,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Shake It Off",
-    "last_match": {
-        "a": "august",
-        "b": "Wildest Dreams",
-        "message_id": 1448040483166224516,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "august",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -180,6 +176,13 @@
             "a": "Shake It Off",
             "b": "I Knew You Were Trouble",
             "winner": "Shake It Off",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "august",
+            "b": "Wildest Dreams",
+            "winner": "august",
             "a_votes": 1,
             "b_votes": 0
         }
