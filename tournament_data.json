@@ -62,7 +62,8 @@
     "next_round": [
         "Cornelia Street",
         "Getaway Car",
-        "Don\u2019t Blame Me"
+        "Don\u2019t Blame Me",
+        "Look What You Made Me Do"
     ],
     "scores": {
         "Love Story": 0,
@@ -77,7 +78,7 @@
         "Anti-Hero": 0,
         "Wildest Dreams": 0,
         "Enchanted": 0,
-        "Look What You Made Me Do": 0,
+        "Look What You Made Me Do": 1,
         "cardigan": 0,
         "august": 0,
         "willow": 0,
@@ -100,13 +101,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Don\u2019t Blame Me",
-    "last_match": {
-        "a": "Enchanted",
-        "b": "Look What You Made Me Do",
-        "message_id": 1448014763576529051,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Look What You Made Me Do",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -128,6 +124,13 @@
             "winner": "Don\u2019t Blame Me",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Enchanted",
+            "b": "Look What You Made Me Do",
+            "winner": "Look What You Made Me Do",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
