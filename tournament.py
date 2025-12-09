@@ -191,30 +191,32 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
             )
 
         async def reaction_loop():
-            client = channel.guild._state.client  # << THE ONLY CORRECT CLIENT
-            while data.get("last_match") and data["last_match"]["message_id"] == msg.id:
-                try:
-                    reaction, user = await client.wait_for("reaction_add", check=check)
+    while data.get("last_match") and data["last_match"]["message_id"] == msg.id:
+        try:
+            reaction, user = await interaction.client.wait_for(
+                "reaction_add",
+                check=check
+            )
 
-                    a_count, b_count, a_names, b_names = await count_votes_from_message(
-                        channel.guild, msg.channel.id, msg.id
-                    )
+            a_count, b_count, a_names, b_names = await count_votes_from_message(
+                channel.guild, msg.channel.id, msg.id
+            )
 
-                    desc = (
-                        f"{VOTE_A} {a} — {a_count} votes\n" +
-                        ("\n".join(f"• {n}" for n in a_names.values()) or "_No votes yet_") +
-                        f"\n\n{VOTE_B} {b} — {b_count} votes\n" +
-                        ("\n".join(f"• {n}" for n in b_names.values()) or "_No votes yet_")
-                    )
+            desc = f"{VOTE_A} {a} — {a_count} votes\n"
+            desc += "\n".join([f"• {n}" for n in a_names.values()]) or "_No votes yet_"
+            desc += f"\n\n{VOTE_B} {b} — {b_count} votes\n"
+            desc += "\n".join([f"• {n}" for n in b_names.values()]) or "_No votes yet_"
 
-                    await msg.edit(embed=discord.Embed(
-                        title=f"🎮 {data.get('round_stage', 'Matchup')}",
-                        description=desc,
-                        color=discord.Color.random()
-                    ))
+            await msg.edit(
+                embed=discord.Embed(
+                    title=f"🎮 {data.get('round_stage', 'Matchup')}",
+                    description=desc,
+                    color=discord.Color.random()
+                )
+            )
 
-                except Exception:
-                    continue
+        except Exception:
+            continue
 
         asyncio.create_task(reaction_loop())
 
