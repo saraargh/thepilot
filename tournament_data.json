@@ -100,7 +100,12 @@
     "running": true,
     "title": "celebs",
     "last_winner": "Selena Gomez",
-    "last_match": null,
+    "last_match": {
+        "a": "Zendaya",
+        "b": "Robert Downey Jr.",
+        "message_id": 1448008382773727455,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lady Gaga",
