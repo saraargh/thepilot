@@ -98,7 +98,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Fearless",
-    "last_match": null,
+    "last_match": {
+        "a": "marjorie",
+        "b": "Anti-Hero",
+        "message_id": 1448014931688685569,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lover",
