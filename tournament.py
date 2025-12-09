@@ -190,6 +190,7 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
         }
         sha = save_data(data, sha)
 
+        # ------------------ FIXED VOTING LOOP -------------------
         def check(reaction, user):
             return (
                 user != channel.guild.me
@@ -198,9 +199,12 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
             )
 
         async def reaction_loop():
+            client = channel.guild._state.client  # ✅ correct way to reach bot
+
             while data.get("last_match") and data["last_match"]["message_id"] == msg.id:
                 try:
-                    reaction, user = await channel.guild.me._client.wait_for("reaction_add", check=check)
+                    reaction, user = await client.wait_for("reaction_add", check=check)
+
                     a_count, b_count, a_names, b_names = await count_votes_from_message(
                         channel.guild, msg.channel.id, msg.id
                     )
@@ -217,6 +221,7 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
                             color=discord.Color.random()
                         )
                     )
+
                 except Exception:
                     continue
 
@@ -278,7 +283,7 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
         else:
             return await interaction.response.send_message("⚠️ No items removed.", ephemeral=False)
 
-    # ------------------- /listwcitems (TEXT ONLY now) -------------------
+    # ------------------- /listwcitems (TEXT ONLY) -------------------
     @tree.command(name="listwcitems", description="List all items in the World Cup")
     async def listwcitems(interaction: discord.Interaction):
         data, _ = load_data()
@@ -344,10 +349,10 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
 
         guild = interaction.guild
 
-        # ------------------ FIX APPLIED HERE ------------------
-        # Prevent early promotion if the last match hasn't been processed yet
+        # ------------------ If there is a pending match ------------------
         if data.get("last_match"):
             lm = data["last_match"]
+
             a_votes, b_votes, _, _ = await count_votes_from_message(
                 guild, lm["channel_id"], lm["message_id"]
             )
@@ -355,7 +360,7 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
             a_item = lm["a"]
             b_item = lm["b"]
 
-            # Pick winner or random tiebreaker
+            # Winner or random tiebreak
             if a_votes > b_votes:
                 winner = a_item
             elif b_votes > a_votes:
@@ -392,9 +397,8 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
                 sha = await post_next_match(interaction.channel, data, sha)
 
             return await interaction.followup.send("✔️ Match processed.", ephemeral=True)
-        # -----------------------------------------------------
 
-        # ------------------- Promote to next round ONLY when safe -------------------
+        # ------------------- Promote to next round -------------------
         if not data["current_round"] and data["next_round"]:
 
             prev_stage = data.get("round_stage", "Round")
