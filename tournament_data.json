@@ -33,8 +33,7 @@
         "Fearless",
         "Fifteen"
     ],
-    "current_round": [],
-    "next_round": [
+    "current_round": [
         "Delicate",
         "Don\u2019t Blame Me",
         "Look What You Made Me Do",
@@ -44,6 +43,7 @@
         "august",
         "Cruel Summer"
     ],
+    "next_round": [],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 2,
@@ -252,5 +252,5 @@
             "b_votes": 1
         }
     ],
-    "round_stage": "Round of 16"
+    "round_stage": "Quarter Finals"
 }
