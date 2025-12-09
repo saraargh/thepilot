@@ -57,7 +57,8 @@
         "Delicate",
         "Fearless",
         "Anti-Hero",
-        "New Romantics"
+        "New Romantics",
+        "Lavender Haze"
     ],
     "scores": {
         "Love Story": 0,
@@ -89,19 +90,14 @@
         "Bejeweled": 0,
         "Midnight Rain": 0,
         "Karma": 0,
-        "Lavender Haze": 0,
+        "Lavender Haze": 1,
         "Fearless": 1,
         "Fifteen": 0
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "New Romantics",
-    "last_match": {
-        "a": "Wildest Dreams",
-        "b": "Lavender Haze",
-        "message_id": 1448015006871322654,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Lavender Haze",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -156,6 +152,13 @@
             "a": "Love Story",
             "b": "New Romantics",
             "winner": "New Romantics",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Wildest Dreams",
+            "b": "Lavender Haze",
+            "winner": "Lavender Haze",
             "a_votes": 0,
             "b_votes": 1
         }
