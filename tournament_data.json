@@ -59,7 +59,8 @@
         "Don\u2019t Blame Me",
         "Look What You Made Me Do",
         "Delicate",
-        "Fearless"
+        "Fearless",
+        "Anti-Hero"
     ],
     "scores": {
         "Love Story": 0,
@@ -71,7 +72,7 @@
         "Lover": 0,
         "All Too Well": 0,
         "Style": 0,
-        "Anti-Hero": 0,
+        "Anti-Hero": 1,
         "Wildest Dreams": 0,
         "Enchanted": 0,
         "Look What You Made Me Do": 1,
@@ -97,13 +98,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Fearless",
-    "last_match": {
-        "a": "marjorie",
-        "b": "Anti-Hero",
-        "message_id": 1448014931688685569,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Anti-Hero",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -146,6 +142,13 @@
             "winner": "Fearless",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "marjorie",
+            "b": "Anti-Hero",
+            "winner": "Anti-Hero",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
