@@ -93,7 +93,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Style",
-    "last_match": null,
+    "last_match": {
+        "a": "Karma",
+        "b": "Red",
+        "message_id": 1448036632224727140,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "marjorie",
