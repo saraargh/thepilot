@@ -49,14 +49,16 @@
         "New Romantics",
         "Cruel Summer"
     ],
-    "next_round": [],
+    "next_round": [
+        "Delicate"
+    ],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 2,
         "Blank Space": 3,
         "Shake It Off": 1,
         "Cruel Summer": 3,
-        "Delicate": 3,
+        "Delicate": 4,
         "Lover": 0,
         "All Too Well": 0,
         "Style": 2,
@@ -86,13 +88,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Cruel Summer",
-    "last_match": {
-        "a": "Delicate",
-        "b": "Style",
-        "message_id": 1448040666017038537,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Delicate",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -205,6 +202,13 @@
             "winner": "Cruel Summer",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Delicate",
+            "b": "Style",
+            "winner": "Delicate",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 16"
