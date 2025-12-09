@@ -63,7 +63,8 @@
     ],
     "next_round": [
         "Cornelia Street",
-        "Getaway Car"
+        "Getaway Car",
+        "Don\u2019t Blame Me"
     ],
     "scores": {
         "Love Story": 0,
@@ -91,7 +92,7 @@
         "Red": 0,
         "Cornelia Street": 1,
         "New Romantics": 0,
-        "Don\u2019t Blame Me": 0,
+        "Don\u2019t Blame Me": 1,
         "Bejeweled": 0,
         "Midnight Rain": 0,
         "Karma": 0,
@@ -101,13 +102,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Getaway Car",
-    "last_match": {
-        "a": "Don\u2019t Blame Me",
-        "b": "cardigan",
-        "message_id": 1448014724745924759,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Don\u2019t Blame Me",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -120,6 +116,13 @@
             "a": "Getaway Car",
             "b": "I Knew You Were Trouble",
             "winner": "Getaway Car",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Don\u2019t Blame Me",
+            "b": "cardigan",
+            "winner": "Don\u2019t Blame Me",
             "a_votes": 1,
             "b_votes": 0
         }
