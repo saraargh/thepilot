@@ -103,7 +103,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": null,
-    "last_match": null,
+    "last_match": {
+        "a": "Lover",
+        "b": "Cornelia Street",
+        "message_id": 1448014420889571508,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [],
     "round_stage": "Round of 32"
 }
