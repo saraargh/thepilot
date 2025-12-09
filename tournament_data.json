@@ -65,14 +65,16 @@
         "Cornelia Street",
         "Cruel Summer"
     ],
-    "next_round": [],
+    "next_round": [
+        "Delicate"
+    ],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 2,
         "Blank Space": 2,
         "Shake It Off": 0,
         "Cruel Summer": 2,
-        "Delicate": 2,
+        "Delicate": 3,
         "Lover": 0,
         "All Too Well": 0,
         "Style": 1,
@@ -102,13 +104,16 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "champagne problems",
-    "last_match": {
-        "a": "Fifteen",
-        "b": "Delicate",
-        "message_id": 1448039976892764181,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [],
+    "last_winner": "Delicate",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "Fifteen",
+            "b": "Delicate",
+            "winner": "Delicate",
+            "a_votes": 0,
+            "b_votes": 1
+        }
+    ],
     "round_stage": "Round of 32"
 }
