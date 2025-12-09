@@ -37,14 +37,16 @@
         "Getaway Car",
         "august"
     ],
-    "next_round": [],
+    "next_round": [
+        "Delicate"
+    ],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 2,
         "Blank Space": 3,
         "Shake It Off": 1,
         "Cruel Summer": 4,
-        "Delicate": 5,
+        "Delicate": 6,
         "Lover": 0,
         "All Too Well": 0,
         "Style": 2,
@@ -74,13 +76,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "august",
-    "last_match": {
-        "a": "Delicate",
-        "b": "champagne problems",
-        "message_id": 1448041291144499230,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Delicate",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -275,6 +272,13 @@
             "a": "august",
             "b": "Cruel Summer",
             "winner": "august",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Delicate",
+            "b": "champagne problems",
+            "winner": "Delicate",
             "a_votes": 1,
             "b_votes": 0
         }
