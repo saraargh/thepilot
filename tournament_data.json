@@ -52,12 +52,13 @@
         "Michael B. Jordan",
         "Drake",
         "Dwayne Johnson",
-        "Ariana Grande"
+        "Ariana Grande",
+        "Leonardo DiCaprio"
     ],
     "scores": {
         "Dwayne Johnson": 1,
         "Taylor Swift": 3,
-        "Leonardo DiCaprio": 0,
+        "Leonardo DiCaprio": 1,
         "Beyonc\u00e9": 1,
         "Chris Hemsworth": 0,
         "Rihanna": 0,
@@ -90,13 +91,8 @@
     },
     "running": true,
     "title": "celebs",
-    "last_winner": "Ariana Grande",
-    "last_match": {
-        "a": "Leonardo DiCaprio",
-        "b": "Gal Gadot",
-        "message_id": 1448011679299539056,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Leonardo DiCaprio",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lady Gaga",
@@ -188,6 +184,13 @@
             "winner": "Ariana Grande",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Leonardo DiCaprio",
+            "b": "Gal Gadot",
+            "winner": "Leonardo DiCaprio",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
