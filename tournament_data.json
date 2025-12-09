@@ -55,7 +55,8 @@
         "Jason Momoa",
         "Chris Evans",
         "Cardi B",
-        "Michael B. Jordan"
+        "Michael B. Jordan",
+        "Drake"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -71,7 +72,7 @@
         "Robert Downey Jr.": 2,
         "Billie Eilish": 1,
         "Jennifer Lawrence": 0,
-        "Drake": 2,
+        "Drake": 3,
         "Margot Robbie": 2,
         "Kanye West": 2,
         "Scarlett Johansson": 1,
@@ -93,13 +94,8 @@
     },
     "running": true,
     "title": "celebs",
-    "last_winner": "Michael B. Jordan",
-    "last_match": {
-        "a": "Drake",
-        "b": "Tom Holland",
-        "message_id": 1448009803464048876,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Drake",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lady Gaga",
@@ -170,6 +166,13 @@
             "winner": "Michael B. Jordan",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Drake",
+            "b": "Tom Holland",
+            "winner": "Drake",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
