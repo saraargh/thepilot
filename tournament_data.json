@@ -59,7 +59,8 @@
         "Taylor Swift",
         "Selena Gomez",
         "Robert Downey Jr.",
-        "Margot Robbie"
+        "Margot Robbie",
+        "Jason Momoa"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -92,18 +93,13 @@
         "Gal Gadot": 0,
         "Bruno Mars": 0,
         "Shakira": 2,
-        "Jason Momoa": 0,
+        "Jason Momoa": 1,
         "Natalie Portman": 0
     },
     "running": true,
     "title": "celebs",
-    "last_winner": "Margot Robbie",
-    "last_match": {
-        "a": "Scarlett Johansson",
-        "b": "Jason Momoa",
-        "message_id": 1448008705663701065,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Jason Momoa",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lady Gaga",
@@ -146,6 +142,13 @@
             "winner": "Margot Robbie",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Scarlett Johansson",
+            "b": "Jason Momoa",
+            "winner": "Jason Momoa",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
