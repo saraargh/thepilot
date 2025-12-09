@@ -52,7 +52,8 @@
         "Bejeweled",
         "Style",
         "Karma",
-        "Cornelia Street"
+        "Cornelia Street",
+        "august"
     ],
     "scores": {
         "Love Story": 0,
@@ -69,7 +70,7 @@
         "Enchanted": 0,
         "Look What You Made Me Do": 2,
         "cardigan": 0,
-        "august": 1,
+        "august": 2,
         "willow": 2,
         "marjorie": 0,
         "champagne problems": 1,
@@ -90,13 +91,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Cornelia Street",
-    "last_match": {
-        "a": "august",
-        "b": "All Too Well",
-        "message_id": 1448036730061066455,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "august",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "marjorie",
@@ -188,6 +184,13 @@
             "winner": "Cornelia Street",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "august",
+            "b": "All Too Well",
+            "winner": "august",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
