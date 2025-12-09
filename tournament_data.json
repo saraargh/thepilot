@@ -49,14 +49,15 @@
         "Shake It Off",
         "august",
         "Midnight Rain",
-        "New Romantics"
+        "New Romantics",
+        "Cruel Summer"
     ],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 2,
         "Blank Space": 3,
         "Shake It Off": 1,
-        "Cruel Summer": 2,
+        "Cruel Summer": 3,
         "Delicate": 3,
         "Lover": 0,
         "All Too Well": 0,
@@ -87,13 +88,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "New Romantics",
-    "last_match": {
-        "a": "Cornelia Street",
-        "b": "Cruel Summer",
-        "message_id": 1448040576527241387,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Cruel Summer",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -199,6 +195,13 @@
             "winner": "New Romantics",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Cornelia Street",
+            "b": "Cruel Summer",
+            "winner": "Cruel Summer",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
