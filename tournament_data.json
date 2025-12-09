@@ -52,14 +52,15 @@
         "Blank Space",
         "You Belong With Me",
         "champagne problems",
-        "willow"
+        "willow",
+        "Cruel Summer"
     ],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 1,
         "Blank Space": 1,
         "Shake It Off": 0,
-        "Cruel Summer": 0,
+        "Cruel Summer": 1,
         "Delicate": 1,
         "Lover": 0,
         "All Too Well": 0,
@@ -90,13 +91,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "willow",
-    "last_match": {
-        "a": "Fifteen",
-        "b": "Cruel Summer",
-        "message_id": 1448015239512592595,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Cruel Summer",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -186,6 +182,13 @@
             "a": "Midnight Rain",
             "b": "willow",
             "winner": "willow",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Fifteen",
+            "b": "Cruel Summer",
+            "winner": "Cruel Summer",
             "a_votes": 0,
             "b_votes": 1
         }
