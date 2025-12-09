@@ -88,7 +88,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "champagne problems",
-    "last_match": null,
+    "last_match": {
+        "a": "Don\u2019t Blame Me",
+        "b": "The Archer",
+        "message_id": 1448036824055283794,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "marjorie",
