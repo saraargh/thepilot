@@ -94,7 +94,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Bejeweled",
-    "last_match": null,
+    "last_match": {
+        "a": "Enchanted",
+        "b": "Style",
+        "message_id": 1448036592609661009,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "marjorie",
