@@ -44,7 +44,8 @@
         "Don\u2019t Blame Me",
         "Look What You Made Me Do",
         "champagne problems",
-        "Getaway Car"
+        "Getaway Car",
+        "cardigan"
     ],
     "scores": {
         "Love Story": 0,
@@ -60,7 +61,7 @@
         "Wildest Dreams": 0,
         "Enchanted": 0,
         "Look What You Made Me Do": 4,
-        "cardigan": 1,
+        "cardigan": 2,
         "august": 3,
         "willow": 3,
         "marjorie": 0,
@@ -82,13 +83,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Getaway Car",
-    "last_match": {
-        "a": "cardigan",
-        "b": "Shake It Off",
-        "message_id": 1448040918593572947,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "cardigan",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -236,6 +232,13 @@
             "winner": "Getaway Car",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "cardigan",
+            "b": "Shake It Off",
+            "winner": "cardigan",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 16"
