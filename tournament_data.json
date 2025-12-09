@@ -33,11 +33,11 @@
         "Fearless",
         "Fifteen"
     ],
-    "current_round": [],
-    "next_round": [
+    "current_round": [
         "Delicate",
         "Getaway Car"
     ],
+    "next_round": [],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 2,
@@ -288,5 +288,5 @@
             "b_votes": 0
         }
     ],
-    "round_stage": "Semi Finals"
+    "round_stage": "Finals"
 }
