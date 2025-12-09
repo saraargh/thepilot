@@ -61,14 +61,15 @@
         "You Belong With Me",
         "Delicate",
         "willow",
-        "Ready For It?"
+        "Ready For It?",
+        "Cruel Summer"
     ],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 2,
         "Blank Space": 1,
         "Shake It Off": 0,
-        "Cruel Summer": 1,
+        "Cruel Summer": 2,
         "Delicate": 2,
         "Lover": 0,
         "All Too Well": 0,
@@ -99,13 +100,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Ready For It?",
-    "last_match": {
-        "a": "Cruel Summer",
-        "b": "cardigan",
-        "message_id": 1448036284541960316,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Cruel Summer",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "marjorie",
@@ -132,6 +128,13 @@
             "a": "Ready For It?",
             "b": "Lavender Haze",
             "winner": "Ready For It?",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Cruel Summer",
+            "b": "cardigan",
+            "winner": "Cruel Summer",
             "a_votes": 1,
             "b_votes": 0
         }
