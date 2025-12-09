@@ -83,7 +83,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Getaway Car",
-    "last_match": null,
+    "last_match": {
+        "a": "cardigan",
+        "b": "Shake It Off",
+        "message_id": 1448040918593572947,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Fifteen",
