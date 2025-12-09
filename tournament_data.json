@@ -54,10 +54,11 @@
         "Chris Evans",
         "Cardi B",
         "Michael B. Jordan",
-        "Drake"
+        "Drake",
+        "Dwayne Johnson"
     ],
     "scores": {
-        "Dwayne Johnson": 0,
+        "Dwayne Johnson": 1,
         "Taylor Swift": 3,
         "Leonardo DiCaprio": 0,
         "Beyonc\u00e9": 1,
@@ -92,13 +93,8 @@
     },
     "running": true,
     "title": "celebs",
-    "last_winner": "Drake",
-    "last_match": {
-        "a": "Dwayne Johnson",
-        "b": "Hugh Jackman",
-        "message_id": 1448010110080385115,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Dwayne Johnson",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lady Gaga",
@@ -174,6 +170,13 @@
             "a": "Drake",
             "b": "Tom Holland",
             "winner": "Drake",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Dwayne Johnson",
+            "b": "Hugh Jackman",
+            "winner": "Dwayne Johnson",
             "a_votes": 1,
             "b_votes": 0
         }
