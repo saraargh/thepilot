@@ -97,7 +97,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Ready For It?",
-    "last_match": null,
+    "last_match": {
+        "a": "marjorie",
+        "b": "champagne problems",
+        "message_id": 1448040249484644496,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Fifteen",
