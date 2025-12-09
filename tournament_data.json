@@ -51,7 +51,8 @@
         "Style",
         "Karma",
         "Cornelia Street",
-        "august"
+        "august",
+        "champagne problems"
     ],
     "scores": {
         "Love Story": 0,
@@ -71,7 +72,7 @@
         "august": 2,
         "willow": 2,
         "marjorie": 0,
-        "champagne problems": 1,
+        "champagne problems": 2,
         "The Archer": 0,
         "Getaway Car": 2,
         "Ready For It?": 1,
@@ -89,13 +90,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "august",
-    "last_match": {
-        "a": "champagne problems",
-        "b": "Fearless",
-        "message_id": 1448036765788016765,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "champagne problems",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "marjorie",
@@ -192,6 +188,13 @@
             "a": "august",
             "b": "All Too Well",
             "winner": "august",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "champagne problems",
+            "b": "Fearless",
+            "winner": "champagne problems",
             "a_votes": 1,
             "b_votes": 0
         }
