@@ -57,7 +57,8 @@
         "Robert Downey Jr.",
         "Margot Robbie",
         "Jason Momoa",
-        "Chris Evans"
+        "Chris Evans",
+        "Cardi B"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -86,7 +87,7 @@
         "Chris Evans": 1,
         "Kim Kardashian": 1,
         "Keanu Reeves": 0,
-        "Cardi B": 2,
+        "Cardi B": 3,
         "Gal Gadot": 0,
         "Bruno Mars": 0,
         "Shakira": 2,
@@ -95,13 +96,8 @@
     },
     "running": true,
     "title": "celebs",
-    "last_winner": "Chris Evans",
-    "last_match": {
-        "a": "Cardi B",
-        "b": "Jennifer Lawrence",
-        "message_id": 1448009097403305996,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Cardi B",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lady Gaga",
@@ -158,6 +154,13 @@
             "winner": "Chris Evans",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Cardi B",
+            "b": "Jennifer Lawrence",
+            "winner": "Cardi B",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
