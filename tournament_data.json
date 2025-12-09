@@ -87,7 +87,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Cruel Summer",
-    "last_match": null,
+    "last_match": {
+        "a": "Delicate",
+        "b": "Style",
+        "message_id": 1448040666017038537,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Fifteen",
