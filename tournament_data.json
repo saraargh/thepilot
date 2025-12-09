@@ -88,7 +88,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "New Romantics",
-    "last_match": null,
+    "last_match": {
+        "a": "Cornelia Street",
+        "b": "Cruel Summer",
+        "message_id": 1448040576527241387,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Fifteen",
