@@ -33,8 +33,7 @@
         "Fearless",
         "Fifteen"
     ],
-    "current_round": [],
-    "next_round": [
+    "current_round": [
         "Cornelia Street",
         "Getaway Car",
         "Don\u2019t Blame Me",
@@ -51,6 +50,7 @@
         "Cruel Summer",
         "august"
     ],
+    "next_round": [],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 1,
@@ -201,5 +201,5 @@
             "b_votes": 1
         }
     ],
-    "round_stage": "Round of 32"
+    "round_stage": "15-items round"
 }
