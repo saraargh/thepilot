@@ -59,7 +59,8 @@
         "willow",
         "Don\u2019t Blame Me",
         "Blank Space",
-        "Look What You Made Me Do"
+        "Look What You Made Me Do",
+        "Ready For It?"
     ],
     "scores": {
         "Love Story": 0,
@@ -82,7 +83,7 @@
         "champagne problems": 2,
         "The Archer": 0,
         "Getaway Car": 2,
-        "Ready For It?": 1,
+        "Ready For It?": 2,
         "I Knew You Were Trouble": 0,
         "Red": 0,
         "Cornelia Street": 2,
@@ -97,13 +98,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Look What You Made Me Do",
-    "last_match": {
-        "a": "Ready For It?",
-        "b": "Fearless",
-        "message_id": 1448040206249885908,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Ready For It?",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -146,6 +142,13 @@
             "winner": "Look What You Made Me Do",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Ready For It?",
+            "b": "Fearless",
+            "winner": "Ready For It?",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
