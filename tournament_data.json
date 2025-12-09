@@ -58,7 +58,8 @@
         "Look What You Made Me Do",
         "Delicate",
         "Fearless",
-        "Anti-Hero"
+        "Anti-Hero",
+        "New Romantics"
     ],
     "scores": {
         "Love Story": 0,
@@ -85,7 +86,7 @@
         "I Knew You Were Trouble": 0,
         "Red": 0,
         "Cornelia Street": 1,
-        "New Romantics": 0,
+        "New Romantics": 1,
         "Don\u2019t Blame Me": 1,
         "Bejeweled": 0,
         "Midnight Rain": 0,
@@ -96,13 +97,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Anti-Hero",
-    "last_match": {
-        "a": "Love Story",
-        "b": "New Romantics",
-        "message_id": 1448014968107696211,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "New Romantics",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -150,6 +146,13 @@
             "a": "marjorie",
             "b": "Anti-Hero",
             "winner": "Anti-Hero",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Love Story",
+            "b": "New Romantics",
+            "winner": "New Romantics",
             "a_votes": 0,
             "b_votes": 1
         }
