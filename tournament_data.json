@@ -64,7 +64,8 @@
         "Billie Eilish"
     ],
     "next_round": [
-        "Lady Gaga"
+        "Lady Gaga",
+        "Emma Stone"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -85,7 +86,7 @@
         "Kanye West": 2,
         "Scarlett Johansson": 1,
         "Justin Bieber": 0,
-        "Emma Stone": 1,
+        "Emma Stone": 2,
         "Michael B. Jordan": 1,
         "Selena Gomez": 2,
         "Hugh Jackman": 0,
@@ -102,13 +103,8 @@
     },
     "running": true,
     "title": "celebs",
-    "last_winner": "Lady Gaga",
-    "last_match": {
-        "a": "Will Smith",
-        "b": "Emma Stone",
-        "message_id": 1448007954656661786,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Emma Stone",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lady Gaga",
@@ -116,6 +112,13 @@
             "winner": "Lady Gaga",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Will Smith",
+            "b": "Emma Stone",
+            "winner": "Emma Stone",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
