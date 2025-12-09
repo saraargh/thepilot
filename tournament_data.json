@@ -103,7 +103,12 @@
     "running": true,
     "title": "celebs",
     "last_winner": "Lady Gaga",
-    "last_match": null,
+    "last_match": {
+        "a": "Will Smith",
+        "b": "Emma Stone",
+        "message_id": 1448007954656661786,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lady Gaga",
