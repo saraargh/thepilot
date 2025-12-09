@@ -96,7 +96,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "champagne problems",
-    "last_match": null,
+    "last_match": {
+        "a": "Bejeweled",
+        "b": "Anti-Hero",
+        "message_id": 1448040283949367447,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Fifteen",
