@@ -97,7 +97,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Look What You Made Me Do",
-    "last_match": null,
+    "last_match": {
+        "a": "Midnight Rain",
+        "b": "Getaway Car",
+        "message_id": 1448036478977441882,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "marjorie",
