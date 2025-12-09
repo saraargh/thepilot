@@ -55,7 +55,8 @@
         "Look What You Made Me Do",
         "Getaway Car",
         "Blank Space",
-        "Bejeweled"
+        "Bejeweled",
+        "Style"
     ],
     "scores": {
         "Love Story": 0,
@@ -66,7 +67,7 @@
         "Delicate": 2,
         "Lover": 0,
         "All Too Well": 0,
-        "Style": 0,
+        "Style": 1,
         "Anti-Hero": 1,
         "Wildest Dreams": 0,
         "Enchanted": 0,
@@ -93,13 +94,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Bejeweled",
-    "last_match": {
-        "a": "Enchanted",
-        "b": "Style",
-        "message_id": 1448036592609661009,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Style",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "marjorie",
@@ -168,6 +164,13 @@
             "a": "Lover",
             "b": "Bejeweled",
             "winner": "Bejeweled",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Enchanted",
+            "b": "Style",
+            "winner": "Style",
             "a_votes": 0,
             "b_votes": 1
         }
