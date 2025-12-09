@@ -99,7 +99,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Blank Space",
-    "last_match": null,
+    "last_match": {
+        "a": "Karma",
+        "b": "Look What You Made Me Do",
+        "message_id": 1448040168706805803,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Fifteen",
