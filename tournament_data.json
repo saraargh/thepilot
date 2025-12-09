@@ -54,13 +54,14 @@
         "champagne problems",
         "Anti-Hero",
         "Getaway Car",
-        "cardigan"
+        "cardigan",
+        "Shake It Off"
     ],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 2,
         "Blank Space": 3,
-        "Shake It Off": 0,
+        "Shake It Off": 1,
         "Cruel Summer": 2,
         "Delicate": 3,
         "Lover": 0,
@@ -92,13 +93,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "cardigan",
-    "last_match": {
-        "a": "Shake It Off",
-        "b": "I Knew You Were Trouble",
-        "message_id": 1448040396641927231,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Shake It Off",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -176,6 +172,13 @@
             "winner": "cardigan",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Shake It Off",
+            "b": "I Knew You Were Trouble",
+            "winner": "Shake It Off",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
