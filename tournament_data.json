@@ -101,7 +101,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "willow",
-    "last_match": null,
+    "last_match": {
+        "a": "Don\u2019t Blame Me",
+        "b": "Red",
+        "message_id": 1448040099475488838,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Fifteen",
