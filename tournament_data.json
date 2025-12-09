@@ -53,7 +53,8 @@
         "Lavender Haze",
         "Blank Space",
         "You Belong With Me",
-        "champagne problems"
+        "champagne problems",
+        "willow"
     ],
     "scores": {
         "Love Story": 0,
@@ -71,7 +72,7 @@
         "Look What You Made Me Do": 1,
         "cardigan": 0,
         "august": 0,
-        "willow": 0,
+        "willow": 1,
         "marjorie": 0,
         "champagne problems": 1,
         "The Archer": 0,
@@ -91,13 +92,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "champagne problems",
-    "last_match": {
-        "a": "Midnight Rain",
-        "b": "willow",
-        "message_id": 1448015198563864576,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "willow",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -182,6 +178,13 @@
             "winner": "champagne problems",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Midnight Rain",
+            "b": "willow",
+            "winner": "willow",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
