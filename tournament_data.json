@@ -75,7 +75,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "august",
-    "last_match": null,
+    "last_match": {
+        "a": "Delicate",
+        "b": "champagne problems",
+        "message_id": 1448041291144499230,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Fifteen",
