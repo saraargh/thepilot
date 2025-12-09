@@ -40,7 +40,8 @@
         "Cruel Summer"
     ],
     "next_round": [
-        "Delicate"
+        "Delicate",
+        "champagne problems"
     ],
     "scores": {
         "Love Story": 0,
@@ -60,7 +61,7 @@
         "august": 4,
         "willow": 3,
         "marjorie": 0,
-        "champagne problems": 4,
+        "champagne problems": 5,
         "The Archer": 0,
         "Getaway Car": 4,
         "Ready For It?": 2,
@@ -78,13 +79,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Delicate",
-    "last_match": {
-        "a": "Look What You Made Me Do",
-        "b": "champagne problems",
-        "message_id": 1448041174106378321,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "champagne problems",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -260,6 +256,13 @@
             "winner": "Delicate",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Look What You Made Me Do",
+            "b": "champagne problems",
+            "winner": "champagne problems",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Quarter Finals"
