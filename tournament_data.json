@@ -55,11 +55,12 @@
         "Anti-Hero",
         "New Romantics",
         "Lavender Haze",
-        "Blank Space"
+        "Blank Space",
+        "You Belong With Me"
     ],
     "scores": {
         "Love Story": 0,
-        "You Belong With Me": 0,
+        "You Belong With Me": 1,
         "Blank Space": 1,
         "Shake It Off": 0,
         "Cruel Summer": 0,
@@ -93,13 +94,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Blank Space",
-    "last_match": {
-        "a": "You Belong With Me",
-        "b": "Karma",
-        "message_id": 1448015109413929185,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "You Belong With Me",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -170,6 +166,13 @@
             "winner": "Blank Space",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "You Belong With Me",
+            "b": "Karma",
+            "winner": "You Belong With Me",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
