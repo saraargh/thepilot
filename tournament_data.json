@@ -51,14 +51,15 @@
         "Drake",
         "Dwayne Johnson",
         "Ariana Grande",
-        "Leonardo DiCaprio"
+        "Leonardo DiCaprio",
+        "Chris Hemsworth"
     ],
     "scores": {
         "Dwayne Johnson": 1,
         "Taylor Swift": 3,
         "Leonardo DiCaprio": 1,
         "Beyonc\u00e9": 1,
-        "Chris Hemsworth": 0,
+        "Chris Hemsworth": 1,
         "Rihanna": 0,
         "Tom Holland": 0,
         "Ariana Grande": 3,
@@ -89,13 +90,8 @@
     },
     "running": true,
     "title": "celebs",
-    "last_winner": "Leonardo DiCaprio",
-    "last_match": {
-        "a": "Natalie Portman",
-        "b": "Chris Hemsworth",
-        "message_id": 1448013584129986611,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Chris Hemsworth",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lady Gaga",
@@ -194,6 +190,13 @@
             "winner": "Leonardo DiCaprio",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Natalie Portman",
+            "b": "Chris Hemsworth",
+            "winner": "Chris Hemsworth",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
