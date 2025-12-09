@@ -90,7 +90,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "august",
-    "last_match": null,
+    "last_match": {
+        "a": "champagne problems",
+        "b": "Fearless",
+        "message_id": 1448036765788016765,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "marjorie",
