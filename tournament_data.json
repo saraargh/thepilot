@@ -37,7 +37,8 @@
     "next_round": [
         "Delicate",
         "champagne problems",
-        "Getaway Car"
+        "Getaway Car",
+        "august"
     ],
     "scores": {
         "Love Story": 0,
@@ -54,7 +55,7 @@
         "Enchanted": 0,
         "Look What You Made Me Do": 4,
         "cardigan": 2,
-        "august": 4,
+        "august": 5,
         "willow": 3,
         "marjorie": 0,
         "champagne problems": 5,
@@ -75,13 +76,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Getaway Car",
-    "last_match": {
-        "a": "august",
-        "b": "Cruel Summer",
-        "message_id": 1448041235141886165,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "august",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -269,6 +265,13 @@
             "a": "Getaway Car",
             "b": "cardigan",
             "winner": "Getaway Car",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "august",
+            "b": "Cruel Summer",
+            "winner": "august",
             "a_votes": 1,
             "b_votes": 0
         }
