@@ -88,7 +88,12 @@
     "running": true,
     "title": "celebs",
     "last_winner": "Chris Hemsworth",
-    "last_match": null,
+    "last_match": {
+        "a": "Rihanna",
+        "b": "Billie Eilish",
+        "message_id": 1448013694272278631,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lady Gaga",
