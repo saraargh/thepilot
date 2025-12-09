@@ -54,7 +54,8 @@
         "New Romantics",
         "Lavender Haze",
         "Blank Space",
-        "You Belong With Me"
+        "You Belong With Me",
+        "champagne problems"
     ],
     "scores": {
         "Love Story": 0,
@@ -74,7 +75,7 @@
         "august": 0,
         "willow": 0,
         "marjorie": 0,
-        "champagne problems": 0,
+        "champagne problems": 1,
         "The Archer": 0,
         "Getaway Car": 1,
         "Ready For It?": 0,
@@ -92,13 +93,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "You Belong With Me",
-    "last_match": {
-        "a": "champagne problems",
-        "b": "Red",
-        "message_id": 1448015152636104764,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "champagne problems",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -174,6 +170,13 @@
             "a": "You Belong With Me",
             "b": "Karma",
             "winner": "You Belong With Me",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "champagne problems",
+            "b": "Red",
+            "winner": "champagne problems",
             "a_votes": 1,
             "b_votes": 0
         }
