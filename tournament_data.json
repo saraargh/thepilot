@@ -92,7 +92,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Karma",
-    "last_match": null,
+    "last_match": {
+        "a": "Fifteen",
+        "b": "Cornelia Street",
+        "message_id": 1448036692626768097,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "marjorie",
