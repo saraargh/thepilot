@@ -56,7 +56,8 @@
         "Margot Robbie",
         "Jason Momoa",
         "Chris Evans",
-        "Cardi B"
+        "Cardi B",
+        "Michael B. Jordan"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -78,7 +79,7 @@
         "Scarlett Johansson": 1,
         "Justin Bieber": 0,
         "Emma Stone": 2,
-        "Michael B. Jordan": 1,
+        "Michael B. Jordan": 2,
         "Selena Gomez": 3,
         "Hugh Jackman": 0,
         "Lady Gaga": 1,
@@ -94,13 +95,8 @@
     },
     "running": true,
     "title": "celebs",
-    "last_winner": "Cardi B",
-    "last_match": {
-        "a": "Keanu Reeves",
-        "b": "Michael B. Jordan",
-        "message_id": 1448009396193071288,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Michael B. Jordan",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lady Gaga",
@@ -164,6 +160,13 @@
             "winner": "Cardi B",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Keanu Reeves",
+            "b": "Michael B. Jordan",
+            "winner": "Michael B. Jordan",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
