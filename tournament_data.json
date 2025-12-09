@@ -41,14 +41,15 @@
         "champagne problems",
         "Getaway Car",
         "cardigan",
-        "august"
+        "august",
+        "Cruel Summer"
     ],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 2,
         "Blank Space": 3,
         "Shake It Off": 1,
-        "Cruel Summer": 3,
+        "Cruel Summer": 4,
         "Delicate": 4,
         "Lover": 0,
         "All Too Well": 0,
@@ -79,13 +80,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "august",
-    "last_match": {
-        "a": "New Romantics",
-        "b": "Cruel Summer",
-        "message_id": 1448041021840818389,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Cruel Summer",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -247,6 +243,13 @@
             "winner": "august",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "New Romantics",
+            "b": "Cruel Summer",
+            "winner": "Cruel Summer",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 16"
