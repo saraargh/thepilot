@@ -61,12 +61,13 @@
         "Delicate",
         "Style",
         "willow",
-        "Don\u2019t Blame Me"
+        "Don\u2019t Blame Me",
+        "Blank Space"
     ],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 2,
-        "Blank Space": 2,
+        "Blank Space": 3,
         "Shake It Off": 0,
         "Cruel Summer": 2,
         "Delicate": 3,
@@ -99,13 +100,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Don\u2019t Blame Me",
-    "last_match": {
-        "a": "Blank Space",
-        "b": "Love Story",
-        "message_id": 1448040130483847201,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Blank Space",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -132,6 +128,13 @@
             "a": "Don\u2019t Blame Me",
             "b": "Red",
             "winner": "Don\u2019t Blame Me",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Blank Space",
+            "b": "Love Story",
+            "winner": "Blank Space",
             "a_votes": 1,
             "b_votes": 0
         }
