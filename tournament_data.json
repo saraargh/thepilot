@@ -45,7 +45,8 @@
         "Delicate",
         "Don\u2019t Blame Me",
         "Look What You Made Me Do",
-        "champagne problems"
+        "champagne problems",
+        "Getaway Car"
     ],
     "scores": {
         "Love Story": 0,
@@ -67,7 +68,7 @@
         "marjorie": 0,
         "champagne problems": 4,
         "The Archer": 0,
-        "Getaway Car": 3,
+        "Getaway Car": 4,
         "Ready For It?": 2,
         "I Knew You Were Trouble": 0,
         "Red": 0,
@@ -83,13 +84,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "champagne problems",
-    "last_match": {
-        "a": "Anti-Hero",
-        "b": "Getaway Car",
-        "message_id": 1448040878978498570,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Getaway Car",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -228,6 +224,13 @@
             "a": "Ready For It?",
             "b": "champagne problems",
             "winner": "champagne problems",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Anti-Hero",
+            "b": "Getaway Car",
+            "winner": "Getaway Car",
             "a_votes": 0,
             "b_votes": 1
         }
