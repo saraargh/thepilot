@@ -51,7 +51,8 @@
         "You Belong With Me",
         "champagne problems",
         "willow",
-        "Cruel Summer"
+        "Cruel Summer",
+        "august"
     ],
     "scores": {
         "Love Story": 0,
@@ -68,7 +69,7 @@
         "Enchanted": 0,
         "Look What You Made Me Do": 1,
         "cardigan": 0,
-        "august": 0,
+        "august": 1,
         "willow": 1,
         "marjorie": 0,
         "champagne problems": 1,
@@ -89,13 +90,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Cruel Summer",
-    "last_match": {
-        "a": "All Too Well",
-        "b": "august",
-        "message_id": 1448015288628019370,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "august",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -192,6 +188,13 @@
             "a": "Fifteen",
             "b": "Cruel Summer",
             "winner": "Cruel Summer",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "All Too Well",
+            "b": "august",
+            "winner": "august",
             "a_votes": 0,
             "b_votes": 1
         }
