@@ -65,10 +65,12 @@
         "Don\u2019t Blame Me",
         "The Archer"
     ],
-    "next_round": [],
+    "next_round": [
+        "You Belong With Me"
+    ],
     "scores": {
         "Love Story": 0,
-        "You Belong With Me": 1,
+        "You Belong With Me": 2,
         "Blank Space": 1,
         "Shake It Off": 0,
         "Cruel Summer": 1,
@@ -102,13 +104,16 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": null,
-    "last_match": {
-        "a": "marjorie",
-        "b": "You Belong With Me",
-        "message_id": 1448036116828782686,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [],
+    "last_winner": "You Belong With Me",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "marjorie",
+            "b": "You Belong With Me",
+            "winner": "You Belong With Me",
+            "a_votes": 0,
+            "b_votes": 1
+        }
+    ],
     "round_stage": "Round of 32"
 }
