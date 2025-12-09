@@ -58,7 +58,8 @@
         "Selena Gomez",
         "Robert Downey Jr.",
         "Margot Robbie",
-        "Jason Momoa"
+        "Jason Momoa",
+        "Chris Evans"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -84,7 +85,7 @@
         "Selena Gomez": 3,
         "Hugh Jackman": 0,
         "Lady Gaga": 1,
-        "Chris Evans": 0,
+        "Chris Evans": 1,
         "Kim Kardashian": 1,
         "Keanu Reeves": 0,
         "Cardi B": 2,
@@ -96,13 +97,8 @@
     },
     "running": true,
     "title": "celebs",
-    "last_winner": "Jason Momoa",
-    "last_match": {
-        "a": "Justin Bieber",
-        "b": "Chris Evans",
-        "message_id": 1448008878456307925,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Chris Evans",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lady Gaga",
@@ -150,6 +146,13 @@
             "a": "Scarlett Johansson",
             "b": "Jason Momoa",
             "winner": "Jason Momoa",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Justin Bieber",
+            "b": "Chris Evans",
+            "winner": "Chris Evans",
             "a_votes": 0,
             "b_votes": 1
         }
