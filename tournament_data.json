@@ -56,7 +56,8 @@
         "New Romantics",
         "Look What You Made Me Do",
         "Getaway Car",
-        "Blank Space"
+        "Blank Space",
+        "Bejeweled"
     ],
     "scores": {
         "Love Story": 0,
@@ -85,7 +86,7 @@
         "Cornelia Street": 1,
         "New Romantics": 2,
         "Don\u2019t Blame Me": 1,
-        "Bejeweled": 0,
+        "Bejeweled": 1,
         "Midnight Rain": 0,
         "Karma": 0,
         "Lavender Haze": 1,
@@ -94,13 +95,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Blank Space",
-    "last_match": {
-        "a": "Lover",
-        "b": "Bejeweled",
-        "message_id": 1448036548854550716,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Bejeweled",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "marjorie",
@@ -162,6 +158,13 @@
             "a": "I Knew You Were Trouble",
             "b": "Blank Space",
             "winner": "Blank Space",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Lover",
+            "b": "Bejeweled",
+            "winner": "Bejeweled",
             "a_votes": 0,
             "b_votes": 1
         }
