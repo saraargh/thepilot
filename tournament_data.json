@@ -55,7 +55,8 @@
         "Ready For It?",
         "champagne problems",
         "Anti-Hero",
-        "Getaway Car"
+        "Getaway Car",
+        "cardigan"
     ],
     "scores": {
         "Love Story": 0,
@@ -71,7 +72,7 @@
         "Wildest Dreams": 0,
         "Enchanted": 0,
         "Look What You Made Me Do": 3,
-        "cardigan": 0,
+        "cardigan": 1,
         "august": 2,
         "willow": 3,
         "marjorie": 0,
@@ -93,13 +94,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Getaway Car",
-    "last_match": {
-        "a": "The Archer",
-        "b": "cardigan",
-        "message_id": 1448040358062719038,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "cardigan",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -170,6 +166,13 @@
             "winner": "Getaway Car",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "The Archer",
+            "b": "cardigan",
+            "winner": "cardigan",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
