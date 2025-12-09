@@ -60,7 +60,8 @@
         "Delicate",
         "willow",
         "Ready For It?",
-        "Cruel Summer"
+        "Cruel Summer",
+        "New Romantics"
     ],
     "scores": {
         "Love Story": 0,
@@ -87,7 +88,7 @@
         "I Knew You Were Trouble": 0,
         "Red": 0,
         "Cornelia Street": 1,
-        "New Romantics": 1,
+        "New Romantics": 2,
         "Don\u2019t Blame Me": 1,
         "Bejeweled": 0,
         "Midnight Rain": 0,
@@ -98,13 +99,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Cruel Summer",
-    "last_match": {
-        "a": "Wildest Dreams",
-        "b": "New Romantics",
-        "message_id": 1448036393656909914,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "New Romantics",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "marjorie",
@@ -140,6 +136,13 @@
             "winner": "Cruel Summer",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Wildest Dreams",
+            "b": "New Romantics",
+            "winner": "New Romantics",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
