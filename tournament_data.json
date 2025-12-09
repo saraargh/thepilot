@@ -62,7 +62,8 @@
     "next_round": [
         "Lady Gaga",
         "Emma Stone",
-        "Taylor Swift"
+        "Taylor Swift",
+        "Selena Gomez"
     ],
     "scores": {
         "Dwayne Johnson": 0,
@@ -85,7 +86,7 @@
         "Justin Bieber": 0,
         "Emma Stone": 2,
         "Michael B. Jordan": 1,
-        "Selena Gomez": 2,
+        "Selena Gomez": 3,
         "Hugh Jackman": 0,
         "Lady Gaga": 1,
         "Chris Evans": 0,
@@ -100,13 +101,8 @@
     },
     "running": true,
     "title": "celebs",
-    "last_winner": "Taylor Swift",
-    "last_match": {
-        "a": "Selena Gomez",
-        "b": "Kim Kardashian",
-        "message_id": 1448008255128469605,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Selena Gomez",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lady Gaga",
@@ -126,6 +122,13 @@
             "a": "Taylor Swift",
             "b": "Kanye West",
             "winner": "Taylor Swift",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Selena Gomez",
+            "b": "Kim Kardashian",
+            "winner": "Selena Gomez",
             "a_votes": 1,
             "b_votes": 0
         }
