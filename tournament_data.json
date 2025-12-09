@@ -79,7 +79,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Cruel Summer",
-    "last_match": null,
+    "last_match": {
+        "a": "Delicate",
+        "b": "Don\u2019t Blame Me",
+        "message_id": 1448041081982681166,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Fifteen",
