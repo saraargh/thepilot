@@ -90,7 +90,12 @@
     "running": true,
     "title": "celebs",
     "last_winner": "Leonardo DiCaprio",
-    "last_match": null,
+    "last_match": {
+        "a": "Natalie Portman",
+        "b": "Chris Hemsworth",
+        "message_id": 1448013584129986611,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lady Gaga",
