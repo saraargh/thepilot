@@ -96,7 +96,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "New Romantics",
-    "last_match": null,
+    "last_match": {
+        "a": "Wildest Dreams",
+        "b": "Lavender Haze",
+        "message_id": 1448015006871322654,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lover",
