@@ -200,12 +200,14 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
 
         # ---------------- FIXED wait_for ----------------
         async def reaction_loop():
-            while data.get("last_match") and data["last_match"]["message_id"] == msg.id:
-                try:
-                    reaction, user = await msg.client.wait_for("reaction_add", check=check)
-                    a_count, b_count, a_names, b_names = await count_votes_from_message(
-                        channel.guild, msg.channel.id, msg.id
-                    )
+    client = channel.guild._state.client
+    while data.get("last_match") and data["last_match"]["message_id"] == msg.id:
+        try:
+            reaction, user = await client.wait_for("reaction_add", check=check)
+
+            a_count, b_count, a_names, b_names = await count_votes_from_message(
+                channel.guild, msg.channel.id, msg.id
+            )
 
                     desc = f"{VOTE_A} {a} — {a_count} votes\n"
                     desc += "\n".join([f"• {n}" for n in a_names.values()]) or "_No votes yet_"
