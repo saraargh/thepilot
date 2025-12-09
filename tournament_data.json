@@ -100,7 +100,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Ready For It?",
-    "last_match": null,
+    "last_match": {
+        "a": "Cruel Summer",
+        "b": "cardigan",
+        "message_id": 1448036284541960316,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "marjorie",
