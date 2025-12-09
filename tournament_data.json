@@ -56,12 +56,13 @@
         "Fearless",
         "Anti-Hero",
         "New Romantics",
-        "Lavender Haze"
+        "Lavender Haze",
+        "Blank Space"
     ],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 0,
-        "Blank Space": 0,
+        "Blank Space": 1,
         "Shake It Off": 0,
         "Cruel Summer": 0,
         "Delicate": 1,
@@ -94,13 +95,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Lavender Haze",
-    "last_match": {
-        "a": "Ready For It?",
-        "b": "Blank Space",
-        "message_id": 1448015050676899933,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Blank Space",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -162,6 +158,13 @@
             "a": "Wildest Dreams",
             "b": "Lavender Haze",
             "winner": "Lavender Haze",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Ready For It?",
+            "b": "Blank Space",
+            "winner": "Blank Space",
             "a_votes": 0,
             "b_votes": 1
         }
