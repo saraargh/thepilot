@@ -60,7 +60,8 @@
         "Getaway Car",
         "Don\u2019t Blame Me",
         "Look What You Made Me Do",
-        "Delicate"
+        "Delicate",
+        "Fearless"
     ],
     "scores": {
         "Love Story": 0,
@@ -93,18 +94,13 @@
         "Midnight Rain": 0,
         "Karma": 0,
         "Lavender Haze": 0,
-        "Fearless": 0,
+        "Fearless": 1,
         "Fifteen": 0
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Delicate",
-    "last_match": {
-        "a": "Fearless",
-        "b": "Bejeweled",
-        "message_id": 1448014836242841600,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Fearless",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -138,6 +134,13 @@
             "a": "Delicate",
             "b": "The Archer",
             "winner": "Delicate",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Fearless",
+            "b": "Bejeweled",
+            "winner": "Fearless",
             "a_votes": 1,
             "b_votes": 0
         }
