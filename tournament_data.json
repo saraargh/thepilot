@@ -53,7 +53,8 @@
         "Cardi B",
         "Michael B. Jordan",
         "Drake",
-        "Dwayne Johnson"
+        "Dwayne Johnson",
+        "Ariana Grande"
     ],
     "scores": {
         "Dwayne Johnson": 1,
@@ -63,7 +64,7 @@
         "Chris Hemsworth": 0,
         "Rihanna": 0,
         "Tom Holland": 0,
-        "Ariana Grande": 2,
+        "Ariana Grande": 3,
         "Will Smith": 0,
         "Zendaya": 0,
         "Robert Downey Jr.": 2,
@@ -91,13 +92,8 @@
     },
     "running": true,
     "title": "celebs",
-    "last_winner": "Dwayne Johnson",
-    "last_match": {
-        "a": "Beyonc\u00e9",
-        "b": "Ariana Grande",
-        "message_id": 1448010794108457060,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Ariana Grande",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lady Gaga",
@@ -182,6 +178,13 @@
             "winner": "Dwayne Johnson",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Beyonc\u00e9",
+            "b": "Ariana Grande",
+            "winner": "Ariana Grande",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
