@@ -47,7 +47,8 @@
     ],
     "next_round": [
         "Delicate",
-        "Don\u2019t Blame Me"
+        "Don\u2019t Blame Me",
+        "Look What You Made Me Do"
     ],
     "scores": {
         "Love Story": 0,
@@ -62,7 +63,7 @@
         "Anti-Hero": 2,
         "Wildest Dreams": 0,
         "Enchanted": 0,
-        "Look What You Made Me Do": 3,
+        "Look What You Made Me Do": 4,
         "cardigan": 1,
         "august": 3,
         "willow": 3,
@@ -85,13 +86,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Don\u2019t Blame Me",
-    "last_match": {
-        "a": "Blank Space",
-        "b": "Look What You Made Me Do",
-        "message_id": 1448040814843531347,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Look What You Made Me Do",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -216,6 +212,13 @@
             "a": "willow",
             "b": "Don\u2019t Blame Me",
             "winner": "Don\u2019t Blame Me",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Blank Space",
+            "b": "Look What You Made Me Do",
+            "winner": "Look What You Made Me Do",
             "a_votes": 0,
             "b_votes": 1
         }
