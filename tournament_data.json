@@ -46,7 +46,8 @@
     "next_round": [
         "Delicate",
         "Don\u2019t Blame Me",
-        "Look What You Made Me Do"
+        "Look What You Made Me Do",
+        "champagne problems"
     ],
     "scores": {
         "Love Story": 0,
@@ -66,7 +67,7 @@
         "august": 3,
         "willow": 3,
         "marjorie": 0,
-        "champagne problems": 3,
+        "champagne problems": 4,
         "The Archer": 0,
         "Getaway Car": 3,
         "Ready For It?": 2,
@@ -84,13 +85,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Look What You Made Me Do",
-    "last_match": {
-        "a": "Ready For It?",
-        "b": "champagne problems",
-        "message_id": 1448040848162951292,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "champagne problems",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -222,6 +218,13 @@
             "a": "Blank Space",
             "b": "Look What You Made Me Do",
             "winner": "Look What You Made Me Do",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Ready For It?",
+            "b": "champagne problems",
+            "winner": "champagne problems",
             "a_votes": 0,
             "b_votes": 1
         }
