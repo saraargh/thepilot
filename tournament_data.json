@@ -84,7 +84,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "champagne problems",
-    "last_match": null,
+    "last_match": {
+        "a": "Anti-Hero",
+        "b": "Getaway Car",
+        "message_id": 1448040878978498570,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Fifteen",
