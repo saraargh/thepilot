@@ -57,7 +57,8 @@
         "Blank Space",
         "Look What You Made Me Do",
         "Ready For It?",
-        "champagne problems"
+        "champagne problems",
+        "Anti-Hero"
     ],
     "scores": {
         "Love Story": 0,
@@ -69,7 +70,7 @@
         "Lover": 0,
         "All Too Well": 0,
         "Style": 2,
-        "Anti-Hero": 1,
+        "Anti-Hero": 2,
         "Wildest Dreams": 0,
         "Enchanted": 0,
         "Look What You Made Me Do": 3,
@@ -95,13 +96,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "champagne problems",
-    "last_match": {
-        "a": "Bejeweled",
-        "b": "Anti-Hero",
-        "message_id": 1448040283949367447,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Anti-Hero",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -156,6 +152,13 @@
             "a": "marjorie",
             "b": "champagne problems",
             "winner": "champagne problems",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Bejeweled",
+            "b": "Anti-Hero",
+            "winner": "Anti-Hero",
             "a_votes": 0,
             "b_votes": 1
         }
