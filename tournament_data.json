@@ -41,14 +41,16 @@
         "august",
         "Cruel Summer"
     ],
-    "next_round": [],
+    "next_round": [
+        "Delicate"
+    ],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 2,
         "Blank Space": 3,
         "Shake It Off": 1,
         "Cruel Summer": 4,
-        "Delicate": 4,
+        "Delicate": 5,
         "Lover": 0,
         "All Too Well": 0,
         "Style": 2,
@@ -78,13 +80,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Cruel Summer",
-    "last_match": {
-        "a": "Delicate",
-        "b": "Don\u2019t Blame Me",
-        "message_id": 1448041081982681166,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Delicate",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -253,6 +250,13 @@
             "winner": "Cruel Summer",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Delicate",
+            "b": "Don\u2019t Blame Me",
+            "winner": "Delicate",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Quarter Finals"
