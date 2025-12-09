@@ -95,7 +95,12 @@
     "running": true,
     "title": "celebs",
     "last_winner": "Cardi B",
-    "last_match": null,
+    "last_match": {
+        "a": "Keanu Reeves",
+        "b": "Michael B. Jordan",
+        "message_id": 1448009396193071288,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lady Gaga",
