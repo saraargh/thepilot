@@ -65,7 +65,9 @@
         "Shake It Off",
         "Style"
     ],
-    "next_round": [],
+    "next_round": [
+        "Cornelia Street"
+    ],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 0,
@@ -90,7 +92,7 @@
         "Ready For It?": 0,
         "I Knew You Were Trouble": 0,
         "Red": 0,
-        "Cornelia Street": 0,
+        "Cornelia Street": 1,
         "New Romantics": 0,
         "Don\u2019t Blame Me": 0,
         "Bejeweled": 0,
@@ -102,13 +104,16 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": null,
-    "last_match": {
-        "a": "Lover",
-        "b": "Cornelia Street",
-        "message_id": 1448014420889571508,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [],
+    "last_winner": "Cornelia Street",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "Lover",
+            "b": "Cornelia Street",
+            "winner": "Cornelia Street",
+            "a_votes": 0,
+            "b_votes": 1
+        }
+    ],
     "round_stage": "Round of 32"
 }
