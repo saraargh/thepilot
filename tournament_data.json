@@ -54,7 +54,8 @@
         "Getaway Car",
         "Blank Space",
         "Bejeweled",
-        "Style"
+        "Style",
+        "Karma"
     ],
     "scores": {
         "Love Story": 0,
@@ -85,20 +86,15 @@
         "Don\u2019t Blame Me": 1,
         "Bejeweled": 1,
         "Midnight Rain": 0,
-        "Karma": 0,
+        "Karma": 1,
         "Lavender Haze": 1,
         "Fearless": 1,
         "Fifteen": 0
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Style",
-    "last_match": {
-        "a": "Karma",
-        "b": "Red",
-        "message_id": 1448036632224727140,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Karma",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "marjorie",
@@ -176,6 +172,13 @@
             "winner": "Style",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Karma",
+            "b": "Red",
+            "winner": "Karma",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
