@@ -59,7 +59,8 @@
         "willow",
         "Ready For It?",
         "Cruel Summer",
-        "New Romantics"
+        "New Romantics",
+        "Look What You Made Me Do"
     ],
     "scores": {
         "Love Story": 0,
@@ -74,7 +75,7 @@
         "Anti-Hero": 1,
         "Wildest Dreams": 0,
         "Enchanted": 0,
-        "Look What You Made Me Do": 1,
+        "Look What You Made Me Do": 2,
         "cardigan": 0,
         "august": 1,
         "willow": 2,
@@ -97,13 +98,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "New Romantics",
-    "last_match": {
-        "a": "Look What You Made Me Do",
-        "b": "Love Story",
-        "message_id": 1448036432412278826,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Look What You Made Me Do",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "marjorie",
@@ -146,6 +142,13 @@
             "winner": "New Romantics",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Look What You Made Me Do",
+            "b": "Love Story",
+            "winner": "Look What You Made Me Do",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
