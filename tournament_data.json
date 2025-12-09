@@ -90,7 +90,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Midnight Rain",
-    "last_match": null,
+    "last_match": {
+        "a": "New Romantics",
+        "b": "Lover",
+        "message_id": 1448040546185646110,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Fifteen",
