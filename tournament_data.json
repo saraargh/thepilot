@@ -63,11 +63,12 @@
     ],
     "next_round": [
         "Lady Gaga",
-        "Emma Stone"
+        "Emma Stone",
+        "Taylor Swift"
     ],
     "scores": {
         "Dwayne Johnson": 0,
-        "Taylor Swift": 2,
+        "Taylor Swift": 3,
         "Leonardo DiCaprio": 0,
         "Beyonc\u00e9": 1,
         "Chris Hemsworth": 0,
@@ -101,13 +102,8 @@
     },
     "running": true,
     "title": "celebs",
-    "last_winner": "Emma Stone",
-    "last_match": {
-        "a": "Taylor Swift",
-        "b": "Kanye West",
-        "message_id": 1448008112887037963,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Taylor Swift",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lady Gaga",
@@ -122,6 +118,13 @@
             "winner": "Emma Stone",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Taylor Swift",
+            "b": "Kanye West",
+            "winner": "Taylor Swift",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
