@@ -64,7 +64,8 @@
         "Cruel Summer"
     ],
     "next_round": [
-        "Delicate"
+        "Delicate",
+        "Style"
     ],
     "scores": {
         "Love Story": 0,
@@ -75,7 +76,7 @@
         "Delicate": 3,
         "Lover": 0,
         "All Too Well": 0,
-        "Style": 1,
+        "Style": 2,
         "Anti-Hero": 1,
         "Wildest Dreams": 0,
         "Enchanted": 0,
@@ -102,13 +103,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Delicate",
-    "last_match": {
-        "a": "Style",
-        "b": "Enchanted",
-        "message_id": 1448040028260536452,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Style",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -116,6 +112,13 @@
             "winner": "Delicate",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Style",
+            "b": "Enchanted",
+            "winner": "Style",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
