@@ -103,7 +103,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "You Belong With Me",
-    "last_match": null,
+    "last_match": {
+        "a": "Delicate",
+        "b": "Anti-Hero",
+        "message_id": 1448036175561363527,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "marjorie",
