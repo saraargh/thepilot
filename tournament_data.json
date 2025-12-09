@@ -61,7 +61,8 @@
         "Cornelia Street",
         "Getaway Car",
         "Don\u2019t Blame Me",
-        "Look What You Made Me Do"
+        "Look What You Made Me Do",
+        "Delicate"
     ],
     "scores": {
         "Love Story": 0,
@@ -69,7 +70,7 @@
         "Blank Space": 0,
         "Shake It Off": 0,
         "Cruel Summer": 0,
-        "Delicate": 0,
+        "Delicate": 1,
         "Lover": 0,
         "All Too Well": 0,
         "Style": 0,
@@ -99,13 +100,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Look What You Made Me Do",
-    "last_match": {
-        "a": "Delicate",
-        "b": "The Archer",
-        "message_id": 1448014802877288644,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Delicate",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -134,6 +130,13 @@
             "winner": "Look What You Made Me Do",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Delicate",
+            "b": "The Archer",
+            "winner": "Delicate",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
