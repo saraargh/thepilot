@@ -57,12 +57,13 @@
         "Cruel Summer",
         "New Romantics",
         "Look What You Made Me Do",
-        "Getaway Car"
+        "Getaway Car",
+        "Blank Space"
     ],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 2,
-        "Blank Space": 1,
+        "Blank Space": 2,
         "Shake It Off": 0,
         "Cruel Summer": 2,
         "Delicate": 2,
@@ -95,13 +96,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Getaway Car",
-    "last_match": {
-        "a": "I Knew You Were Trouble",
-        "b": "Blank Space",
-        "message_id": 1448036514297544807,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Blank Space",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "marjorie",
@@ -156,6 +152,13 @@
             "a": "Midnight Rain",
             "b": "Getaway Car",
             "winner": "Getaway Car",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "I Knew You Were Trouble",
+            "b": "Blank Space",
+            "winner": "Blank Space",
             "a_votes": 0,
             "b_votes": 1
         }
