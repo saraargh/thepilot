@@ -82,7 +82,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "cardigan",
-    "last_match": null,
+    "last_match": {
+        "a": "august",
+        "b": "Midnight Rain",
+        "message_id": 1448040971878268988,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Fifteen",
