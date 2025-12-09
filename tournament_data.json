@@ -95,7 +95,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Lavender Haze",
-    "last_match": null,
+    "last_match": {
+        "a": "Ready For It?",
+        "b": "Blank Space",
+        "message_id": 1448015050676899933,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lover",
