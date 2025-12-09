@@ -33,8 +33,7 @@
         "Jason Momoa",
         "Natalie Portman"
     ],
-    "current_round": [],
-    "next_round": [
+    "current_round": [
         "Lady Gaga",
         "Emma Stone",
         "Taylor Swift",
@@ -51,6 +50,7 @@
         "Leonardo DiCaprio",
         "Chris Hemsworth"
     ],
+    "next_round": [],
     "scores": {
         "Dwayne Johnson": 1,
         "Taylor Swift": 3,
@@ -201,5 +201,5 @@
             "b_votes": 1
         }
     ],
-    "round_stage": "Round of 32"
+    "round_stage": "15-items round"
 }
