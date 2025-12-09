@@ -52,7 +52,8 @@
         "Getaway Car",
         "cardigan",
         "Shake It Off",
-        "august"
+        "august",
+        "Midnight Rain"
     ],
     "scores": {
         "Love Story": 0,
@@ -82,7 +83,7 @@
         "New Romantics": 2,
         "Don\u2019t Blame Me": 2,
         "Bejeweled": 1,
-        "Midnight Rain": 0,
+        "Midnight Rain": 1,
         "Karma": 1,
         "Lavender Haze": 1,
         "Fearless": 1,
@@ -90,13 +91,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "august",
-    "last_match": {
-        "a": "All Too Well",
-        "b": "Midnight Rain",
-        "message_id": 1448040514308931584,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Midnight Rain",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -188,6 +184,13 @@
             "winner": "august",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "All Too Well",
+            "b": "Midnight Rain",
+            "winner": "Midnight Rain",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
