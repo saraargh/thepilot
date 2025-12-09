@@ -94,7 +94,12 @@
     "running": true,
     "title": "celebs",
     "last_winner": "Michael B. Jordan",
-    "last_match": null,
+    "last_match": {
+        "a": "Drake",
+        "b": "Tom Holland",
+        "message_id": 1448009803464048876,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lady Gaga",
