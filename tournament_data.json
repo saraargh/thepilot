@@ -99,7 +99,12 @@
     "running": true,
     "title": "celebs",
     "last_winner": "Robert Downey Jr.",
-    "last_match": null,
+    "last_match": {
+        "a": "Margot Robbie",
+        "b": "Bruno Mars",
+        "message_id": 1448008533676261406,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lady Gaga",
