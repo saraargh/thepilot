@@ -102,7 +102,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Delicate",
-    "last_match": null,
+    "last_match": {
+        "a": "Shake It Off",
+        "b": "willow",
+        "message_id": 1448036217236230178,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "marjorie",
