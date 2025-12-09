@@ -95,7 +95,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Anti-Hero",
-    "last_match": null,
+    "last_match": {
+        "a": "Getaway Car",
+        "b": "Lavender Haze",
+        "message_id": 1448040328283160637,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Fifteen",
