@@ -63,7 +63,8 @@
     ],
     "next_round": [
         "You Belong With Me",
-        "Delicate"
+        "Delicate",
+        "willow"
     ],
     "scores": {
         "Love Story": 0,
@@ -81,7 +82,7 @@
         "Look What You Made Me Do": 1,
         "cardigan": 0,
         "august": 1,
-        "willow": 1,
+        "willow": 2,
         "marjorie": 0,
         "champagne problems": 1,
         "The Archer": 0,
@@ -101,13 +102,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Delicate",
-    "last_match": {
-        "a": "Shake It Off",
-        "b": "willow",
-        "message_id": 1448036217236230178,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "willow",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "marjorie",
@@ -122,6 +118,13 @@
             "winner": "Delicate",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Shake It Off",
+            "b": "willow",
+            "winner": "willow",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
