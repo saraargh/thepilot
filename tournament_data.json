@@ -74,7 +74,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Delicate",
-    "last_match": null,
+    "last_match": {
+        "a": "Getaway Car",
+        "b": "august",
+        "message_id": 1448041323503554582,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Fifteen",
