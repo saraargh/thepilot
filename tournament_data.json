@@ -93,7 +93,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "You Belong With Me",
-    "last_match": null,
+    "last_match": {
+        "a": "champagne problems",
+        "b": "Red",
+        "message_id": 1448015152636104764,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lover",
