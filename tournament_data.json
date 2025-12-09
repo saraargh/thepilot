@@ -62,7 +62,8 @@
     "next_round": [
         "You Belong With Me",
         "Delicate",
-        "willow"
+        "willow",
+        "Ready For It?"
     ],
     "scores": {
         "Love Story": 0,
@@ -85,7 +86,7 @@
         "champagne problems": 1,
         "The Archer": 0,
         "Getaway Car": 1,
-        "Ready For It?": 0,
+        "Ready For It?": 1,
         "I Knew You Were Trouble": 0,
         "Red": 0,
         "Cornelia Street": 1,
@@ -100,13 +101,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "willow",
-    "last_match": {
-        "a": "Ready For It?",
-        "b": "Lavender Haze",
-        "message_id": 1448036249893077053,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Ready For It?",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "marjorie",
@@ -128,6 +124,13 @@
             "winner": "willow",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Ready For It?",
+            "b": "Lavender Haze",
+            "winner": "Ready For It?",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
