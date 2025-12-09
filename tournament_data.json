@@ -53,7 +53,8 @@
         "Blank Space",
         "Bejeweled",
         "Style",
-        "Karma"
+        "Karma",
+        "Cornelia Street"
     ],
     "scores": {
         "Love Story": 0,
@@ -79,7 +80,7 @@
         "Ready For It?": 1,
         "I Knew You Were Trouble": 0,
         "Red": 0,
-        "Cornelia Street": 1,
+        "Cornelia Street": 2,
         "New Romantics": 2,
         "Don\u2019t Blame Me": 1,
         "Bejeweled": 1,
@@ -91,13 +92,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Karma",
-    "last_match": {
-        "a": "Fifteen",
-        "b": "Cornelia Street",
-        "message_id": 1448036692626768097,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Cornelia Street",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "marjorie",
@@ -182,6 +178,13 @@
             "winner": "Karma",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Fifteen",
+            "b": "Cornelia Street",
+            "winner": "Cornelia Street",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
