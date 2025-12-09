@@ -56,7 +56,8 @@
         "Look What You Made Me Do",
         "Ready For It?",
         "champagne problems",
-        "Anti-Hero"
+        "Anti-Hero",
+        "Getaway Car"
     ],
     "scores": {
         "Love Story": 0,
@@ -78,7 +79,7 @@
         "marjorie": 0,
         "champagne problems": 3,
         "The Archer": 0,
-        "Getaway Car": 2,
+        "Getaway Car": 3,
         "Ready For It?": 2,
         "I Knew You Were Trouble": 0,
         "Red": 0,
@@ -94,13 +95,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Anti-Hero",
-    "last_match": {
-        "a": "Getaway Car",
-        "b": "Lavender Haze",
-        "message_id": 1448040328283160637,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Getaway Car",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -164,6 +160,13 @@
             "winner": "Anti-Hero",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Getaway Car",
+            "b": "Lavender Haze",
+            "winner": "Getaway Car",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
