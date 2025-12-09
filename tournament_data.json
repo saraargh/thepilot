@@ -93,7 +93,12 @@
     "running": true,
     "title": "celebs",
     "last_winner": "Drake",
-    "last_match": null,
+    "last_match": {
+        "a": "Dwayne Johnson",
+        "b": "Hugh Jackman",
+        "message_id": 1448010110080385115,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lady Gaga",
