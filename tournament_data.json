@@ -43,7 +43,8 @@
         "Look What You Made Me Do",
         "champagne problems",
         "Getaway Car",
-        "cardigan"
+        "cardigan",
+        "august"
     ],
     "scores": {
         "Love Story": 0,
@@ -60,7 +61,7 @@
         "Enchanted": 0,
         "Look What You Made Me Do": 4,
         "cardigan": 2,
-        "august": 3,
+        "august": 4,
         "willow": 3,
         "marjorie": 0,
         "champagne problems": 4,
@@ -81,13 +82,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "cardigan",
-    "last_match": {
-        "a": "august",
-        "b": "Midnight Rain",
-        "message_id": 1448040971878268988,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "august",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Fifteen",
@@ -240,6 +236,13 @@
             "a": "cardigan",
             "b": "Shake It Off",
             "winner": "cardigan",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "august",
+            "b": "Midnight Rain",
+            "winner": "august",
             "a_votes": 1,
             "b_votes": 0
         }
