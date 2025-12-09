@@ -92,7 +92,12 @@
     "running": true,
     "title": "celebs",
     "last_winner": "Dwayne Johnson",
-    "last_match": null,
+    "last_match": {
+        "a": "Beyonc\u00e9",
+        "b": "Ariana Grande",
+        "message_id": 1448010794108457060,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lady Gaga",
