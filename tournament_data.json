@@ -101,7 +101,12 @@
     "running": true,
     "title": "celebs",
     "last_winner": "Taylor Swift",
-    "last_match": null,
+    "last_match": {
+        "a": "Selena Gomez",
+        "b": "Kim Kardashian",
+        "message_id": 1448008255128469605,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lady Gaga",
