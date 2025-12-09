@@ -91,7 +91,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "willow",
-    "last_match": null,
+    "last_match": {
+        "a": "Fifteen",
+        "b": "Cruel Summer",
+        "message_id": 1448015239512592595,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lover",
