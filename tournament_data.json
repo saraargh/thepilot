@@ -51,7 +51,8 @@
         "cardigan",
         "Karma",
         "Enchanted",
-        "Anti-Hero"
+        "Anti-Hero",
+        "august"
     ],
     "scores": {
         "Love Story": 1,
@@ -68,7 +69,7 @@
         "Enchanted": 1,
         "Look What You Made Me Do": 7,
         "cardigan": 4,
-        "august": 7,
+        "august": 8,
         "willow": 4,
         "marjorie": 1,
         "champagne problems": 8,
@@ -89,13 +90,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Anti-Hero",
-    "last_match": {
-        "a": "august",
-        "b": "Cornelia Street",
-        "message_id": 1448381925172707401,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "august",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -192,6 +188,13 @@
             "a": "You Belong With Me",
             "b": "Anti-Hero",
             "winner": "Anti-Hero",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "august",
+            "b": "Cornelia Street",
+            "winner": "august",
             "a_votes": 0,
             "b_votes": 0
         }
