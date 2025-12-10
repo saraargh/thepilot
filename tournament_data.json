@@ -80,7 +80,12 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": "Karma",
-    "last_match": null,
+    "last_match": {
+        "a": "august",
+        "b": "Lavender Haze",
+        "message_id": 1448393131765796975,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lover",
