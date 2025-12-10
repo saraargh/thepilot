@@ -58,7 +58,8 @@
         "Don\u2019t Blame Me",
         "The Archer",
         "I Knew You Were Trouble",
-        "Ready For It?"
+        "Ready For It?",
+        "champagne problems"
     ],
     "scores": {
         "Love Story": 0,
@@ -78,7 +79,7 @@
         "august": 5,
         "willow": 3,
         "marjorie": 0,
-        "champagne problems": 5,
+        "champagne problems": 6,
         "The Archer": 1,
         "Getaway Car": 7,
         "Ready For It?": 3,
@@ -96,13 +97,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Ready For It?",
-    "last_match": {
-        "a": "Love Story",
-        "b": "champagne problems",
-        "message_id": 1448364124387021064,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "champagne problems",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cruel Summer",
@@ -150,6 +146,13 @@
             "a": "Lavender Haze",
             "b": "Ready For It?",
             "winner": "Ready For It?",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Love Story",
+            "b": "champagne problems",
+            "winner": "champagne problems",
             "a_votes": 0,
             "b_votes": 1
         }
