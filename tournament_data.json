@@ -61,7 +61,8 @@
         "Cornelia Street",
         "Ready For It?",
         "Look What You Made Me Do",
-        "Style"
+        "Style",
+        "Fearless"
     ],
     "scores": {
         "Love Story": 0,
@@ -94,18 +95,13 @@
         "Midnight Rain": 3,
         "Karma": 2,
         "Lavender Haze": 1,
-        "Fearless": 1,
+        "Fearless": 2,
         "Fifteen": 0
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Style",
-    "last_match": {
-        "a": "Fearless",
-        "b": "Lavender Haze",
-        "message_id": 1448369020574236853,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Fearless",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cornelia Street",
@@ -132,6 +128,13 @@
             "a": "Style",
             "b": "The Archer",
             "winner": "Style",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Fearless",
+            "b": "Lavender Haze",
+            "winner": "Fearless",
             "a_votes": 1,
             "b_votes": 0
         }
