@@ -62,7 +62,8 @@
     "next_round": [
         "Holy Ground",
         "So It Goes\u2026",
-        "Death By a Thousand Cuts"
+        "Death By a Thousand Cuts",
+        "King of My Heart"
     ],
     "scores": {
         "Long Live": 0,
@@ -76,7 +77,7 @@
         "Clean": 0,
         "Out of the Woods": 0,
         "Call It What You Want": 0,
-        "King of My Heart": 0,
+        "King of My Heart": 1,
         "So It Goes\u2026": 1,
         "Miss Americana & The Heartbreak Prince": 0,
         "Death By a Thousand Cuts": 1,
@@ -100,13 +101,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Death By a Thousand Cuts",
-    "last_match": {
-        "a": "The Man",
-        "b": "King of My Heart",
-        "message_id": 1448406526350856394,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "King of My Heart",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -128,6 +124,13 @@
             "winner": "Death By a Thousand Cuts",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "The Man",
+            "b": "King of My Heart",
+            "winner": "King of My Heart",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
