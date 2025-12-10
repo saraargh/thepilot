@@ -33,8 +33,7 @@
         "glitch",
         "loml"
     ],
-    "current_round": [],
-    "next_round": [
+    "current_round": [
         "Holy Ground",
         "So It Goes\u2026",
         "Death By a Thousand Cuts",
@@ -52,6 +51,7 @@
         "tolerate it",
         "mirrorball"
     ],
+    "next_round": [],
     "scores": {
         "Long Live": 1,
         "The Story of Us": 0,
@@ -204,5 +204,5 @@
             "b_votes": 0
         }
     ],
-    "round_stage": "Round of 32"
+    "round_stage": "Round of 16"
 }
