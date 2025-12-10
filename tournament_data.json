@@ -102,7 +102,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "So It Goes\u2026",
-    "last_match": null,
+    "last_match": {
+        "a": "Death By a Thousand Cuts",
+        "b": "the last great american dynasty",
+        "message_id": 1448406419526258708,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "seven",
