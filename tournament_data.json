@@ -62,10 +62,11 @@
     "next_round": [
         "Cruel Summer",
         "Fifteen",
-        "Ready For It?"
+        "Ready For It?",
+        "Love Story"
     ],
     "scores": {
-        "Love Story": 0,
+        "Love Story": 1,
         "You Belong With Me": 3,
         "Blank Space": 3,
         "Shake It Off": 1,
@@ -100,13 +101,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Ready For It?",
-    "last_match": {
-        "a": "Love Story",
-        "b": "Lover",
-        "message_id": 1448381258060136569,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Love Story",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -126,6 +122,13 @@
             "a": "Ready For It?",
             "b": "Midnight Rain",
             "winner": "Ready For It?",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "Love Story",
+            "b": "Lover",
+            "winner": "Love Story",
             "a_votes": 0,
             "b_votes": 0
         }
