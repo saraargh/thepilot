@@ -97,7 +97,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "Call It What You Want",
-    "last_match": null,
+    "last_match": {
+        "a": "Miss Americana & The Heartbreak Prince",
+        "b": "Long Live",
+        "message_id": 1448406717053276234,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "seven",
