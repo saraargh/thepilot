@@ -103,7 +103,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": null,
-    "last_match": null,
+    "last_match": {
+        "a": "Cruel Summer",
+        "b": "Bejeweled",
+        "message_id": 1448363658114764952,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [],
     "round_stage": "Round of 32"
 }
