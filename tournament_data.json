@@ -34,7 +34,9 @@
         "Fifteen"
     ],
     "current_round": [],
-    "next_round": [],
+    "next_round": [
+        "august"
+    ],
     "scores": {
         "Love Story": 3,
         "You Belong With Me": 3,
@@ -50,7 +52,7 @@
         "Enchanted": 1,
         "Look What You Made Me Do": 7,
         "cardigan": 4,
-        "august": 11,
+        "august": 12,
         "willow": 4,
         "marjorie": 1,
         "champagne problems": 11,
@@ -72,12 +74,7 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": "august",
-    "last_match": {
-        "a": "champagne problems",
-        "b": "august",
-        "message_id": 1448382697071312947,
-        "channel_id": 1438277790179921971
-    },
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -288,6 +285,13 @@
             "winner": "august",
             "a_votes": 0,
             "b_votes": 0
+        },
+        {
+            "a": "champagne problems",
+            "b": "august",
+            "winner": "august",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Finals"
