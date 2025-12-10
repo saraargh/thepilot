@@ -46,7 +46,8 @@
     "next_round": [
         "So It Goes\u2026",
         "King of My Heart",
-        "Clean"
+        "Clean",
+        "Call It What You Want"
     ],
     "scores": {
         "Long Live": 1,
@@ -59,7 +60,7 @@
         "The Last Time": 0,
         "Clean": 2,
         "Out of the Woods": 0,
-        "Call It What You Want": 1,
+        "Call It What You Want": 2,
         "King of My Heart": 2,
         "So It Goes\u2026": 2,
         "Miss Americana & The Heartbreak Prince": 0,
@@ -84,13 +85,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Clean",
-    "last_match": {
-        "a": "Call It What You Want",
-        "b": "Long Live",
-        "message_id": 1448407548729233501,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Call It What You Want",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -222,6 +218,13 @@
             "a": "Clean",
             "b": "right where you left me",
             "winner": "Clean",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Call It What You Want",
+            "b": "Long Live",
+            "winner": "Call It What You Want",
             "a_votes": 1,
             "b_votes": 0
         }
