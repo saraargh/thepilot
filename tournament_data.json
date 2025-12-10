@@ -83,7 +83,12 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": "Fifteen",
-    "last_match": null,
+    "last_match": {
+        "a": "willow",
+        "b": "Getaway Car",
+        "message_id": 1448393068838653985,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lover",
