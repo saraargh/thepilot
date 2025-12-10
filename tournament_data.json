@@ -75,7 +75,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "exile",
-    "last_match": null,
+    "last_match": {
+        "a": "So It Goes\u2026",
+        "b": "Clean",
+        "message_id": 1448408076381196461,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "seven",
