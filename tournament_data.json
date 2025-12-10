@@ -33,10 +33,41 @@
         "Fearless",
         "Fifteen"
     ],
-    "current_round": [],
-    "next_round": [
-        "Getaway Car"
+    "current_round": [
+        "Cruel Summer",
+        "Bejeweled",
+        "willow",
+        "Anti-Hero",
+        "Look What You Made Me Do",
+        "Shake It Off",
+        "Don\u2019t Blame Me",
+        "marjorie",
+        "The Archer",
+        "Lover",
+        "Style",
+        "I Knew You Were Trouble",
+        "Lavender Haze",
+        "Ready For It?",
+        "Love Story",
+        "champagne problems",
+        "You Belong With Me",
+        "Fifteen",
+        "Midnight Rain",
+        "Fearless",
+        "Cornelia Street",
+        "Delicate",
+        "Enchanted",
+        "New Romantics",
+        "Getaway Car",
+        "All Too Well",
+        "Blank Space",
+        "cardigan",
+        "Red",
+        "Karma",
+        "august",
+        "Wildest Dreams"
     ],
+    "next_round": [],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 2,
@@ -71,228 +102,10 @@
         "Fearless": 1,
         "Fifteen": 0
     },
-    "running": false,
+    "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Getaway Car",
+    "last_winner": null,
     "last_match": null,
-    "finished_matches": [
-        {
-            "a": "Fifteen",
-            "b": "Delicate",
-            "winner": "Delicate",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Style",
-            "b": "Enchanted",
-            "winner": "Style",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "You Belong With Me",
-            "b": "willow",
-            "winner": "willow",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Don\u2019t Blame Me",
-            "b": "Red",
-            "winner": "Don\u2019t Blame Me",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Blank Space",
-            "b": "Love Story",
-            "winner": "Blank Space",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Karma",
-            "b": "Look What You Made Me Do",
-            "winner": "Look What You Made Me Do",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Ready For It?",
-            "b": "Fearless",
-            "winner": "Ready For It?",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "marjorie",
-            "b": "champagne problems",
-            "winner": "champagne problems",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Bejeweled",
-            "b": "Anti-Hero",
-            "winner": "Anti-Hero",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Getaway Car",
-            "b": "Lavender Haze",
-            "winner": "Getaway Car",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "The Archer",
-            "b": "cardigan",
-            "winner": "cardigan",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Shake It Off",
-            "b": "I Knew You Were Trouble",
-            "winner": "Shake It Off",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "august",
-            "b": "Wildest Dreams",
-            "winner": "august",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "All Too Well",
-            "b": "Midnight Rain",
-            "winner": "Midnight Rain",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "New Romantics",
-            "b": "Lover",
-            "winner": "New Romantics",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Cornelia Street",
-            "b": "Cruel Summer",
-            "winner": "Cruel Summer",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Delicate",
-            "b": "Style",
-            "winner": "Delicate",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "willow",
-            "b": "Don\u2019t Blame Me",
-            "winner": "Don\u2019t Blame Me",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Blank Space",
-            "b": "Look What You Made Me Do",
-            "winner": "Look What You Made Me Do",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Ready For It?",
-            "b": "champagne problems",
-            "winner": "champagne problems",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Anti-Hero",
-            "b": "Getaway Car",
-            "winner": "Getaway Car",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "cardigan",
-            "b": "Shake It Off",
-            "winner": "cardigan",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "august",
-            "b": "Midnight Rain",
-            "winner": "august",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "New Romantics",
-            "b": "Cruel Summer",
-            "winner": "Cruel Summer",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Delicate",
-            "b": "Don\u2019t Blame Me",
-            "winner": "Delicate",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Look What You Made Me Do",
-            "b": "champagne problems",
-            "winner": "champagne problems",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Getaway Car",
-            "b": "cardigan",
-            "winner": "Getaway Car",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "august",
-            "b": "Cruel Summer",
-            "winner": "august",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Delicate",
-            "b": "champagne problems",
-            "winner": "Delicate",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Getaway Car",
-            "b": "august",
-            "winner": "Getaway Car",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Delicate",
-            "b": "Getaway Car",
-            "winner": "Getaway Car",
-            "a_votes": 0,
-            "b_votes": 1
-        }
-    ],
-    "round_stage": "Finals"
+    "finished_matches": [],
+    "round_stage": "Round of 32"
 }
