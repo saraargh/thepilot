@@ -97,7 +97,12 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": "Red",
-    "last_match": null,
+    "last_match": {
+        "a": "Anti-Hero",
+        "b": "Midnight Rain",
+        "message_id": 1448392477663825940,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lover",
