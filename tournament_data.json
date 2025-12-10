@@ -45,7 +45,8 @@
         "Cruel Summer",
         "Love Story",
         "champagne problems",
-        "Wildest Dreams"
+        "Wildest Dreams",
+        "Lavender Haze"
     ],
     "scores": {
         "Love Story": 2,
@@ -77,19 +78,14 @@
         "Bejeweled": 1,
         "Midnight Rain": 3,
         "Karma": 3,
-        "Lavender Haze": 2,
+        "Lavender Haze": 3,
         "Fearless": 2,
         "Fifteen": 2
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Wildest Dreams",
-    "last_match": {
-        "a": "Getaway Car",
-        "b": "Lavender Haze",
-        "message_id": 1448382159223001158,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Lavender Haze",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -228,6 +224,13 @@
             "a": "marjorie",
             "b": "Wildest Dreams",
             "winner": "Wildest Dreams",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "Getaway Car",
+            "b": "Lavender Haze",
+            "winner": "Lavender Haze",
             "a_votes": 0,
             "b_votes": 0
         }
