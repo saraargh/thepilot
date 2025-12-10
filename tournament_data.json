@@ -57,7 +57,8 @@
         "champagne problems",
         "Cruel Summer",
         "Red",
-        "Anti-Hero"
+        "Anti-Hero",
+        "Fifteen"
     ],
     "scores": {
         "Love Story": 4,
@@ -91,17 +92,12 @@
         "Karma": 4,
         "Lavender Haze": 4,
         "Fearless": 2,
-        "Fifteen": 2
+        "Fifteen": 3
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Anti-Hero",
-    "last_match": {
-        "a": "Style",
-        "b": "Fifteen",
-        "message_id": 1448392511176573020,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Fifteen",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -158,6 +154,13 @@
             "winner": "Anti-Hero",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Style",
+            "b": "Fifteen",
+            "winner": "Fifteen",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
