@@ -87,7 +87,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "mirrorball",
-    "last_match": null,
+    "last_match": {
+        "a": "Holy Ground",
+        "b": "So It Goes\u2026",
+        "message_id": 1448407428222812302,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "seven",
