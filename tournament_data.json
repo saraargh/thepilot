@@ -57,7 +57,8 @@
         "champagne problems",
         "Look What You Made Me Do",
         "marjorie",
-        "Wildest Dreams"
+        "Wildest Dreams",
+        "Getaway Car"
     ],
     "scores": {
         "Love Story": 1,
@@ -79,7 +80,7 @@
         "marjorie": 1,
         "champagne problems": 8,
         "The Archer": 2,
-        "Getaway Car": 10,
+        "Getaway Car": 11,
         "Ready For It?": 5,
         "I Knew You Were Trouble": 2,
         "Red": 0,
@@ -95,13 +96,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Wildest Dreams",
-    "last_match": {
-        "a": "Bejeweled",
-        "b": "Getaway Car",
-        "message_id": 1448381695974965360,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Getaway Car",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -156,6 +152,13 @@
             "a": "New Romantics",
             "b": "Wildest Dreams",
             "winner": "Wildest Dreams",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "Bejeweled",
+            "b": "Getaway Car",
+            "winner": "Getaway Car",
             "a_votes": 0,
             "b_votes": 0
         }
