@@ -88,7 +88,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "tolerate it",
-    "last_match": null,
+    "last_match": {
+        "a": "mirrorball",
+        "b": "my tears ricochet",
+        "message_id": 1448407340368924946,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "seven",
