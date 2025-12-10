@@ -37,7 +37,8 @@
     "next_round": [
         "Love Story",
         "champagne problems",
-        "Lavender Haze"
+        "Lavender Haze",
+        "august"
     ],
     "scores": {
         "Love Story": 3,
@@ -54,7 +55,7 @@
         "Enchanted": 1,
         "Look What You Made Me Do": 7,
         "cardigan": 4,
-        "august": 9,
+        "august": 10,
         "willow": 4,
         "marjorie": 1,
         "champagne problems": 10,
@@ -75,13 +76,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Lavender Haze",
-    "last_match": {
-        "a": "Anti-Hero",
-        "b": "august",
-        "message_id": 1448382462546804828,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "august",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -269,6 +265,13 @@
             "a": "Lavender Haze",
             "b": "Karma",
             "winner": "Lavender Haze",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "Anti-Hero",
+            "b": "august",
+            "winner": "august",
             "a_votes": 0,
             "b_votes": 0
         }
