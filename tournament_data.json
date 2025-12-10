@@ -41,7 +41,9 @@
         "exile",
         "tolerate it"
     ],
-    "next_round": [],
+    "next_round": [
+        "So It Goes\u2026"
+    ],
     "scores": {
         "Long Live": 1,
         "The Story of Us": 0,
@@ -55,7 +57,7 @@
         "Out of the Woods": 0,
         "Call It What You Want": 2,
         "King of My Heart": 2,
-        "So It Goes\u2026": 2,
+        "So It Goes\u2026": 3,
         "Miss Americana & The Heartbreak Prince": 0,
         "Death By a Thousand Cuts": 1,
         "Cornelia Street": 0,
@@ -78,13 +80,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "tolerate it",
-    "last_match": {
-        "a": "So It Goes\u2026",
-        "b": "King of My Heart",
-        "message_id": 1448407793391505544,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "So It Goes\u2026",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -251,6 +248,13 @@
             "a": "tolerate it",
             "b": "mirrorball",
             "winner": "tolerate it",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "So It Goes\u2026",
+            "b": "King of My Heart",
+            "winner": "So It Goes\u2026",
             "a_votes": 1,
             "b_votes": 0
         }
