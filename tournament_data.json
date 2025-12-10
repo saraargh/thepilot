@@ -47,7 +47,8 @@
     ],
     "next_round": [
         "Delicate",
-        "Cornelia Street"
+        "Cornelia Street",
+        "champagne problems"
     ],
     "scores": {
         "Love Story": 4,
@@ -67,7 +68,7 @@
         "august": 13,
         "willow": 5,
         "marjorie": 1,
-        "champagne problems": 12,
+        "champagne problems": 13,
         "The Archer": 3,
         "Getaway Car": 12,
         "Ready For It?": 6,
@@ -85,13 +86,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Cornelia Street",
-    "last_match": {
-        "a": "champagne problems",
-        "b": "Cruel Summer",
-        "message_id": 1448392959715442841,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "champagne problems",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -216,6 +212,13 @@
             "a": "Cornelia Street",
             "b": "Ready For It?",
             "winner": "Cornelia Street",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "champagne problems",
+            "b": "Cruel Summer",
+            "winner": "champagne problems",
             "a_votes": 1,
             "b_votes": 0
         }
