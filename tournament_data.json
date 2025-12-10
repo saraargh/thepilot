@@ -94,7 +94,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Midnight Rain",
-    "last_match": null,
+    "last_match": {
+        "a": "Cornelia Street",
+        "b": "Delicate",
+        "message_id": 1448364319514431539,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Cruel Summer",
