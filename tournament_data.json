@@ -101,7 +101,12 @@
     "running": true,
     "title": "taylor swift sonfs",
     "last_winner": "Wildest Dreams",
-    "last_match": null,
+    "last_match": {
+        "a": "Anti-Hero",
+        "b": "Cruel Summer",
+        "message_id": 1448383134751133797,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "cardigan",
