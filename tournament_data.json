@@ -54,7 +54,8 @@
         "Anti-Hero",
         "Fifteen",
         "cardigan",
-        "willow"
+        "willow",
+        "Getaway Car"
     ],
     "scores": {
         "Love Story": 4,
@@ -76,7 +77,7 @@
         "marjorie": 1,
         "champagne problems": 12,
         "The Archer": 3,
-        "Getaway Car": 11,
+        "Getaway Car": 12,
         "Ready For It?": 6,
         "I Knew You Were Trouble": 2,
         "Red": 1,
@@ -92,13 +93,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "willow",
-    "last_match": {
-        "a": "Getaway Car",
-        "b": "Don\u2019t Blame Me",
-        "message_id": 1448392607649763409,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Getaway Car",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -174,6 +170,13 @@
             "a": "willow",
             "b": "Blank Space",
             "winner": "willow",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Getaway Car",
+            "b": "Don\u2019t Blame Me",
+            "winner": "Getaway Car",
             "a_votes": 1,
             "b_votes": 0
         }
