@@ -45,7 +45,8 @@
         "So It Goes\u2026",
         "King of My Heart",
         "Clean",
-        "Call It What You Want"
+        "Call It What You Want",
+        "The 1"
     ],
     "scores": {
         "Long Live": 1,
@@ -65,7 +66,7 @@
         "Death By a Thousand Cuts": 1,
         "Cornelia Street": 0,
         "The Man": 0,
-        "The 1": 1,
+        "The 1": 2,
         "the last great american dynasty": 0,
         "exile": 1,
         "my tears ricochet": 0,
@@ -83,13 +84,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Call It What You Want",
-    "last_match": {
-        "a": "Sparks Fly",
-        "b": "The 1",
-        "message_id": 1448407592115110030,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "The 1",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -230,6 +226,13 @@
             "winner": "Call It What You Want",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Sparks Fly",
+            "b": "The 1",
+            "winner": "The 1",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 16"
