@@ -53,11 +53,12 @@
         "Fifteen",
         "cardigan",
         "willow",
-        "Getaway Car"
+        "Getaway Car",
+        "You Belong With Me"
     ],
     "scores": {
         "Love Story": 4,
-        "You Belong With Me": 3,
+        "You Belong With Me": 4,
         "Blank Space": 3,
         "Shake It Off": 1,
         "Cruel Summer": 9,
@@ -91,13 +92,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Getaway Car",
-    "last_match": {
-        "a": "Shake It Off",
-        "b": "You Belong With Me",
-        "message_id": 1448392637475197230,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "You Belong With Me",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -182,6 +178,13 @@
             "winner": "Getaway Car",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Shake It Off",
+            "b": "You Belong With Me",
+            "winner": "You Belong With Me",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
