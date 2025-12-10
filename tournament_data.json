@@ -34,7 +34,9 @@
         "loml"
     ],
     "current_round": [],
-    "next_round": [],
+    "next_round": [
+        "exile"
+    ],
     "scores": {
         "Long Live": 1,
         "The Story of Us": 0,
@@ -55,7 +57,7 @@
         "The Man": 0,
         "The 1": 2,
         "the last great american dynasty": 0,
-        "exile": 4,
+        "exile": 5,
         "my tears ricochet": 0,
         "mirrorball": 1,
         "seven": 0,
@@ -72,12 +74,7 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "exile",
-    "last_match": {
-        "a": "Clean",
-        "b": "exile",
-        "message_id": 1448408276088651902,
-        "channel_id": 1438277790179921971
-    },
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -284,6 +281,13 @@
         },
         {
             "a": "loml",
+            "b": "exile",
+            "winner": "exile",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Clean",
             "b": "exile",
             "winner": "exile",
             "a_votes": 0,
