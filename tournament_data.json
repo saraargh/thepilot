@@ -37,7 +37,9 @@
         "loml",
         "exile"
     ],
-    "next_round": [],
+    "next_round": [
+        "Clean"
+    ],
     "scores": {
         "Long Live": 1,
         "The Story of Us": 0,
@@ -47,7 +49,7 @@
         "Holy Ground": 1,
         "Begin Again": 0,
         "The Last Time": 0,
-        "Clean": 3,
+        "Clean": 4,
         "Out of the Woods": 0,
         "Call It What You Want": 2,
         "King of My Heart": 2,
@@ -74,13 +76,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "exile",
-    "last_match": {
-        "a": "So It Goes\u2026",
-        "b": "Clean",
-        "message_id": 1448408076381196461,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Clean",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -277,6 +274,13 @@
             "winner": "exile",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "So It Goes\u2026",
+            "b": "Clean",
+            "winner": "Clean",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Semi Finals"
