@@ -88,7 +88,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Karma",
-    "last_match": null,
+    "last_match": {
+        "a": "august",
+        "b": "Wildest Dreams",
+        "message_id": 1448364569834819699,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Cruel Summer",
