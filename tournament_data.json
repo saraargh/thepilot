@@ -44,7 +44,8 @@
         "Don\u2019t Blame Me",
         "The Archer",
         "champagne problems",
-        "Midnight Rain"
+        "Midnight Rain",
+        "Delicate"
     ],
     "scores": {
         "Love Story": 0,
@@ -52,7 +53,7 @@
         "Blank Space": 3,
         "Shake It Off": 1,
         "Cruel Summer": 6,
-        "Delicate": 7,
+        "Delicate": 8,
         "Lover": 0,
         "All Too Well": 0,
         "Style": 2,
@@ -82,13 +83,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Midnight Rain",
-    "last_match": {
-        "a": "Delicate",
-        "b": "New Romantics",
-        "message_id": 1448368338576347146,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Delicate",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cruel Summer",
@@ -236,6 +232,13 @@
             "winner": "Midnight Rain",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Delicate",
+            "b": "New Romantics",
+            "winner": "Delicate",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 16"
