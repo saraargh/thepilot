@@ -63,7 +63,8 @@
     ],
     "next_round": [
         "Cruel Summer",
-        "Anti-Hero"
+        "Anti-Hero",
+        "Look What You Made Me Do"
     ],
     "scores": {
         "Love Story": 0,
@@ -78,7 +79,7 @@
         "Anti-Hero": 3,
         "Wildest Dreams": 0,
         "Enchanted": 0,
-        "Look What You Made Me Do": 4,
+        "Look What You Made Me Do": 5,
         "cardigan": 2,
         "august": 5,
         "willow": 3,
@@ -101,13 +102,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Anti-Hero",
-    "last_match": {
-        "a": "Look What You Made Me Do",
-        "b": "Shake It Off",
-        "message_id": 1448363821000429742,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Look What You Made Me Do",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cruel Summer",
@@ -122,6 +118,13 @@
             "winner": "Anti-Hero",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Look What You Made Me Do",
+            "b": "Shake It Off",
+            "winner": "Look What You Made Me Do",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
