@@ -63,7 +63,8 @@
     ],
     "next_round": [
         "Cornelia Street",
-        "Ready For It?"
+        "Ready For It?",
+        "Look What You Made Me Do"
     ],
     "scores": {
         "Love Story": 0,
@@ -78,7 +79,7 @@
         "Anti-Hero": 3,
         "Wildest Dreams": 0,
         "Enchanted": 0,
-        "Look What You Made Me Do": 5,
+        "Look What You Made Me Do": 6,
         "cardigan": 3,
         "august": 6,
         "willow": 3,
@@ -101,13 +102,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Ready For It?",
-    "last_match": {
-        "a": "Bejeweled",
-        "b": "Look What You Made Me Do",
-        "message_id": 1448368922385449041,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Look What You Made Me Do",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cornelia Street",
@@ -122,6 +118,13 @@
             "winner": "Ready For It?",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Bejeweled",
+            "b": "Look What You Made Me Do",
+            "winner": "Look What You Made Me Do",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
