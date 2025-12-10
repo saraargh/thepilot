@@ -92,7 +92,12 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": "Getaway Car",
-    "last_match": null,
+    "last_match": {
+        "a": "Shake It Off",
+        "b": "You Belong With Me",
+        "message_id": 1448392637475197230,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lover",
