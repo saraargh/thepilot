@@ -34,19 +34,38 @@
         "Fifteen"
     ],
     "current_round": [
-        "Look What You Made Me Do",
-        "Style",
-        "Fearless",
+        "Blank Space",
+        "Cruel Summer",
+        "Red",
         "Fifteen",
-        "Don\u2019t Blame Me",
-        "Anti-Hero",
-        "All Too Well",
+        "Ready For It?",
+        "Midnight Rain",
+        "Love Story",
+        "Lover",
         "willow",
+        "champagne problems",
+        "Style",
+        "Look What You Made Me Do",
+        "Don\u2019t Blame Me",
+        "marjorie",
+        "New Romantics",
         "Wildest Dreams",
-        "august",
+        "Bejeweled",
         "Getaway Car",
+        "Lavender Haze",
+        "I Knew You Were Trouble",
+        "cardigan",
+        "All Too Well",
+        "Karma",
+        "Shake It Off",
+        "Enchanted",
+        "Fearless",
+        "You Belong With Me",
+        "Anti-Hero",
+        "august",
+        "Cornelia Street",
         "Delicate",
-        "I Knew You Were Trouble"
+        "The Archer"
     ],
     "next_round": [],
     "scores": {
@@ -83,121 +102,10 @@
         "Fearless": 2,
         "Fifteen": 1
     },
-    "running": false,
-    "title": "taylor swift songs",
-    "last_winner": "I Knew You Were Trouble",
-    "last_match": {
-        "a": "Cornelia Street",
-        "b": "Ready For It?",
-        "message_id": 1448369540508422146,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [
-        {
-            "a": "Cornelia Street",
-            "b": "Red",
-            "winner": "Cornelia Street",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Ready For It?",
-            "b": "Love Story",
-            "winner": "Ready For It?",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Bejeweled",
-            "b": "Look What You Made Me Do",
-            "winner": "Look What You Made Me Do",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Style",
-            "b": "The Archer",
-            "winner": "Style",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Fearless",
-            "b": "Lavender Haze",
-            "winner": "Fearless",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Fifteen",
-            "b": "Blank Space",
-            "winner": "Fifteen",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Don\u2019t Blame Me",
-            "b": "Enchanted",
-            "winner": "Don\u2019t Blame Me",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Midnight Rain",
-            "b": "Anti-Hero",
-            "winner": "Anti-Hero",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Cruel Summer",
-            "b": "All Too Well",
-            "winner": "All Too Well",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "willow",
-            "b": "You Belong With Me",
-            "winner": "willow",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Wildest Dreams",
-            "b": "marjorie",
-            "winner": "Wildest Dreams",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "New Romantics",
-            "b": "august",
-            "winner": "august",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "champagne problems",
-            "b": "Getaway Car",
-            "winner": "Getaway Car",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "cardigan",
-            "b": "Delicate",
-            "winner": "Delicate",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Shake It Off",
-            "b": "I Knew You Were Trouble",
-            "winner": "I Knew You Were Trouble",
-            "a_votes": 0,
-            "b_votes": 1
-        }
-    ],
-    "round_stage": "15-items round"
+    "running": true,
+    "title": "Taylor Swift Songs",
+    "last_winner": null,
+    "last_match": null,
+    "finished_matches": [],
+    "round_stage": "Round of 32"
 }
