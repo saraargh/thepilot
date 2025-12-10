@@ -47,7 +47,8 @@
     ],
     "next_round": [
         "So It Goes\u2026",
-        "King of My Heart"
+        "King of My Heart",
+        "Clean"
     ],
     "scores": {
         "Long Live": 1,
@@ -58,7 +59,7 @@
         "Holy Ground": 1,
         "Begin Again": 0,
         "The Last Time": 0,
-        "Clean": 1,
+        "Clean": 2,
         "Out of the Woods": 0,
         "Call It What You Want": 1,
         "King of My Heart": 2,
@@ -85,13 +86,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "King of My Heart",
-    "last_match": {
-        "a": "Clean",
-        "b": "right where you left me",
-        "message_id": 1448407511677014172,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Clean",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -218,6 +214,13 @@
             "winner": "King of My Heart",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Clean",
+            "b": "right where you left me",
+            "winner": "Clean",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 16"
