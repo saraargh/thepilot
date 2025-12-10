@@ -90,7 +90,12 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": "Anti-Hero",
-    "last_match": null,
+    "last_match": {
+        "a": "august",
+        "b": "Cornelia Street",
+        "message_id": 1448381925172707401,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Blank Space",
