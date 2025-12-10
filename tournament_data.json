@@ -34,35 +34,40 @@
         "Fifteen"
     ],
     "current_round": [
-        "Getaway Car",
-        "Lover",
-        "marjorie",
-        "Blank Space",
-        "Red",
-        "Don\u2019t Blame Me",
+        "Cruel Summer",
+        "willow",
+        "champagne problems",
+        "Enchanted",
         "New Romantics",
+        "marjorie",
+        "cardigan",
+        "Delicate",
+        "Anti-Hero",
+        "Ready For It?",
+        "Fifteen",
+        "Red",
+        "Fearless",
+        "Don\u2019t Blame Me",
+        "The Archer",
+        "Look What You Made Me Do",
+        "Style",
+        "Midnight Rain",
+        "Bejeweled",
+        "You Belong With Me",
+        "Cornelia Street",
+        "I Knew You Were Trouble",
         "All Too Well",
         "Karma",
-        "Ready For It?",
-        "Enchanted",
         "Shake It Off",
-        "Delicate",
-        "Lavender Haze",
-        "Bejeweled",
-        "champagne problems",
-        "Cornelia Street",
-        "Fearless",
+        "Lover",
         "august",
-        "Midnight Rain",
-        "Fifteen",
-        "I Knew You Were Trouble"
-    ],
-    "next_round": [
+        "Lavender Haze",
         "Love Story",
-        "Look What You Made Me Do",
         "Wildest Dreams",
-        "Anti-Hero"
+        "Blank Space",
+        "Getaway Car"
     ],
+    "next_round": [],
     "scores": {
         "Love Story": 4,
         "You Belong With Me": 3,
@@ -97,44 +102,10 @@
         "Fearless": 2,
         "Fifteen": 2
     },
-    "running": false,
-    "title": "taylor swift sonfs",
-    "last_winner": "Anti-Hero",
-    "last_match": {
-        "a": "Style",
-        "b": "willow",
-        "message_id": 1448383165759754411,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [
-        {
-            "a": "cardigan",
-            "b": "Love Story",
-            "winner": "Love Story",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "The Archer",
-            "b": "Look What You Made Me Do",
-            "winner": "Look What You Made Me Do",
-            "a_votes": 0,
-            "b_votes": 0
-        },
-        {
-            "a": "Wildest Dreams",
-            "b": "You Belong With Me",
-            "winner": "Wildest Dreams",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Anti-Hero",
-            "b": "Cruel Summer",
-            "winner": "Anti-Hero",
-            "a_votes": 1,
-            "b_votes": 0
-        }
-    ],
+    "running": true,
+    "title": "poo",
+    "last_winner": null,
+    "last_match": null,
+    "finished_matches": [],
     "round_stage": "Round of 32"
 }
