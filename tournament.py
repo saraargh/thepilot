@@ -172,8 +172,7 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
         embed.add_field(name="Upcoming", value="\n".join(upcoming) or "None", inline=False)
 
         await channel.send(embed=embed)
-
-    # ------------------- Post Next Match -------------------
+            # ------------------- Post Next Match -------------------
     async def post_next_match(channel, data, sha):
         if len(data["current_round"]) < 2:
             return sha
@@ -233,7 +232,8 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
 
         asyncio.create_task(reaction_loop())
         return sha
-            # ------------------- /addwcitem -------------------
+
+    # ------------------- /addwcitem -------------------
     @tree.command(name="addwcitem", description="Add item(s) to the World Cup")
     @app_commands.describe(items="Comma-separated list")
     async def addwcitem(interaction: discord.Interaction, items: str):
@@ -375,7 +375,11 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
 
             sha = save_data(data, sha)
 
-            await interaction.channel.send("@everyone The next fixture in The World Cup of **{title}** is ready - Cast your votes below!🗳️")
+            # ------------------ FIX #1 APPLIED HERE ------------------
+            await interaction.channel.send(
+                f"@everyone The next fixture in The World Cup of **{data['title']}** is ready - Cast your votes below! 🗳️"
+            )
+            # ----------------------------------------------------------
 
             result_embed = discord.Embed(
                 title="Previous Match Result! 🏆",
@@ -417,7 +421,7 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
                 data["last_winner"] = final
                 save_data(data, sha)
 
-                await interaction.channel.send(f"@everyone We have a winner of The World Cup of **{title}** ‼️👀")
+                await interaction.channel.send(f"@everyone We have a winner of The World Cup of **{data['title']}**‼️👀")
 
                 winner_embed = discord.Embed(
                     title="🏁 Tournament Winner!",
