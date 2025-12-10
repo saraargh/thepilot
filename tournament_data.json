@@ -58,7 +58,8 @@
         "Love Story",
         "champagne problems",
         "Look What You Made Me Do",
-        "marjorie"
+        "marjorie",
+        "Wildest Dreams"
     ],
     "scores": {
         "Love Story": 1,
@@ -71,7 +72,7 @@
         "All Too Well": 1,
         "Style": 3,
         "Anti-Hero": 4,
-        "Wildest Dreams": 1,
+        "Wildest Dreams": 2,
         "Enchanted": 0,
         "Look What You Made Me Do": 7,
         "cardigan": 3,
@@ -96,13 +97,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "marjorie",
-    "last_match": {
-        "a": "New Romantics",
-        "b": "Wildest Dreams",
-        "message_id": 1448381664039272498,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Wildest Dreams",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -150,6 +146,13 @@
             "a": "Don\u2019t Blame Me",
             "b": "marjorie",
             "winner": "marjorie",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "New Romantics",
+            "b": "Wildest Dreams",
+            "winner": "Wildest Dreams",
             "a_votes": 0,
             "b_votes": 0
         }
