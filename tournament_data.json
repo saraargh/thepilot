@@ -102,7 +102,12 @@
     "running": true,
     "title": "taylor swift sonfs",
     "last_winner": "Look What You Made Me Do",
-    "last_match": null,
+    "last_match": {
+        "a": "Wildest Dreams",
+        "b": "You Belong With Me",
+        "message_id": 1448383105260982293,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "cardigan",
