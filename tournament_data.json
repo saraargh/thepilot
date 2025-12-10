@@ -51,7 +51,8 @@
         "Wildest Dreams",
         "august",
         "Getaway Car",
-        "Delicate"
+        "Delicate",
+        "I Knew You Were Trouble"
     ],
     "scores": {
         "Love Story": 0,
@@ -75,7 +76,7 @@
         "The Archer": 2,
         "Getaway Car": 10,
         "Ready For It?": 4,
-        "I Knew You Were Trouble": 1,
+        "I Knew You Were Trouble": 2,
         "Red": 0,
         "Cornelia Street": 3,
         "New Romantics": 4,
@@ -89,13 +90,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Delicate",
-    "last_match": {
-        "a": "Shake It Off",
-        "b": "I Knew You Were Trouble",
-        "message_id": 1448369476465590282,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "I Knew You Were Trouble",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cornelia Street",
@@ -192,6 +188,13 @@
             "a": "cardigan",
             "b": "Delicate",
             "winner": "Delicate",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Shake It Off",
+            "b": "I Knew You Were Trouble",
+            "winner": "I Knew You Were Trouble",
             "a_votes": 0,
             "b_votes": 1
         }
