@@ -94,7 +94,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "The 1",
-    "last_match": null,
+    "last_match": {
+        "a": "The Story of Us",
+        "b": "loml",
+        "message_id": 1448406953947824178,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "seven",
