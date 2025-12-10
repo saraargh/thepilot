@@ -63,7 +63,8 @@
     ],
     "next_round": [
         "Cruel Summer",
-        "Fifteen"
+        "Fifteen",
+        "Ready For It?"
     ],
     "scores": {
         "Love Story": 0,
@@ -86,7 +87,7 @@
         "champagne problems": 7,
         "The Archer": 2,
         "Getaway Car": 10,
-        "Ready For It?": 4,
+        "Ready For It?": 5,
         "I Knew You Were Trouble": 2,
         "Red": 0,
         "Cornelia Street": 3,
@@ -101,13 +102,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Fifteen",
-    "last_match": {
-        "a": "Ready For It?",
-        "b": "Midnight Rain",
-        "message_id": 1448381229127827487,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Ready For It?",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -122,6 +118,13 @@
             "winner": "Fifteen",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Ready For It?",
+            "b": "Midnight Rain",
+            "winner": "Ready For It?",
+            "a_votes": 0,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
