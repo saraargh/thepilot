@@ -52,7 +52,8 @@
         "Lavender Haze",
         "cardigan",
         "Karma",
-        "Enchanted"
+        "Enchanted",
+        "Anti-Hero"
     ],
     "scores": {
         "Love Story": 1,
@@ -64,7 +65,7 @@
         "Lover": 0,
         "All Too Well": 1,
         "Style": 3,
-        "Anti-Hero": 4,
+        "Anti-Hero": 5,
         "Wildest Dreams": 2,
         "Enchanted": 1,
         "Look What You Made Me Do": 7,
@@ -90,13 +91,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Enchanted",
-    "last_match": {
-        "a": "You Belong With Me",
-        "b": "Anti-Hero",
-        "message_id": 1448381895116197898,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Anti-Hero",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -186,6 +182,13 @@
             "a": "Enchanted",
             "b": "Fearless",
             "winner": "Enchanted",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "You Belong With Me",
+            "b": "Anti-Hero",
+            "winner": "Anti-Hero",
             "a_votes": 0,
             "b_votes": 0
         }
