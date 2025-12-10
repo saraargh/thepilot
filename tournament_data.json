@@ -86,7 +86,12 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": "Love Story",
-    "last_match": null,
+    "last_match": {
+        "a": "champagne problems",
+        "b": "Look What You Made Me Do",
+        "message_id": 1448382089232646174,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Blank Space",
