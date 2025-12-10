@@ -63,7 +63,8 @@
     ],
     "next_round": [
         "Lover",
-        "Delicate"
+        "Delicate",
+        "Cornelia Street"
     ],
     "scores": {
         "Love Story": 4,
@@ -89,7 +90,7 @@
         "Ready For It?": 5,
         "I Knew You Were Trouble": 2,
         "Red": 0,
-        "Cornelia Street": 3,
+        "Cornelia Street": 4,
         "New Romantics": 4,
         "Don\u2019t Blame Me": 6,
         "Bejeweled": 1,
@@ -101,13 +102,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Delicate",
-    "last_match": {
-        "a": "The Archer",
-        "b": "Cornelia Street",
-        "message_id": 1448392099408908370,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Cornelia Street",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -120,6 +116,13 @@
             "a": "All Too Well",
             "b": "Delicate",
             "winner": "Delicate",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "The Archer",
+            "b": "Cornelia Street",
+            "winner": "Cornelia Street",
             "a_votes": 0,
             "b_votes": 1
         }
