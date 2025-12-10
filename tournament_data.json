@@ -33,8 +33,7 @@
         "Fearless",
         "Fifteen"
     ],
-    "current_round": [],
-    "next_round": [
+    "current_round": [
         "Cruel Summer",
         "Anti-Hero",
         "Look What You Made Me Do",
@@ -52,6 +51,7 @@
         "Karma",
         "august"
     ],
+    "next_round": [],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 3,
@@ -204,5 +204,5 @@
             "b_votes": 0
         }
     ],
-    "round_stage": "Round of 32"
+    "round_stage": "Round of 16"
 }
