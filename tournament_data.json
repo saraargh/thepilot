@@ -46,7 +46,8 @@
     "next_round": [
         "Cruel Summer",
         "Don\u2019t Blame Me",
-        "The Archer"
+        "The Archer",
+        "champagne problems"
     ],
     "scores": {
         "Love Story": 0,
@@ -66,7 +67,7 @@
         "august": 6,
         "willow": 3,
         "marjorie": 0,
-        "champagne problems": 6,
+        "champagne problems": 7,
         "The Archer": 2,
         "Getaway Car": 8,
         "Ready For It?": 3,
@@ -84,13 +85,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "The Archer",
-    "last_match": {
-        "a": "Ready For It?",
-        "b": "champagne problems",
-        "message_id": 1448368192731873321,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "champagne problems",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cruel Summer",
@@ -224,6 +220,13 @@
             "winner": "The Archer",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Ready For It?",
+            "b": "champagne problems",
+            "winner": "champagne problems",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 16"
