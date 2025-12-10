@@ -58,10 +58,11 @@
         "King of My Heart",
         "Clean",
         "right where you left me",
-        "Call It What You Want"
+        "Call It What You Want",
+        "Long Live"
     ],
     "scores": {
-        "Long Live": 0,
+        "Long Live": 1,
         "The Story of Us": 0,
         "Sparks Fly": 0,
         "State of Grace": 0,
@@ -96,13 +97,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Call It What You Want",
-    "last_match": {
-        "a": "Miss Americana & The Heartbreak Prince",
-        "b": "Long Live",
-        "message_id": 1448406717053276234,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Long Live",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -150,6 +146,13 @@
             "a": "would\u2019ve could\u2019ve should\u2019ve",
             "b": "Call It What You Want",
             "winner": "Call It What You Want",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Miss Americana & The Heartbreak Prince",
+            "b": "Long Live",
+            "winner": "Long Live",
             "a_votes": 0,
             "b_votes": 1
         }
