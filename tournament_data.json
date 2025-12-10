@@ -49,7 +49,8 @@
         "Karma",
         "Enchanted",
         "Anti-Hero",
-        "august"
+        "august",
+        "The Archer"
     ],
     "scores": {
         "Love Story": 1,
@@ -70,7 +71,7 @@
         "willow": 4,
         "marjorie": 1,
         "champagne problems": 8,
-        "The Archer": 2,
+        "The Archer": 3,
         "Getaway Car": 11,
         "Ready For It?": 5,
         "I Knew You Were Trouble": 2,
@@ -87,13 +88,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "august",
-    "last_match": {
-        "a": "Delicate",
-        "b": "The Archer",
-        "message_id": 1448381950380216322,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "The Archer",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -197,6 +193,13 @@
             "a": "august",
             "b": "Cornelia Street",
             "winner": "august",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "Delicate",
+            "b": "The Archer",
+            "winner": "The Archer",
             "a_votes": 0,
             "b_votes": 0
         }
