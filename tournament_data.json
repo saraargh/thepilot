@@ -51,7 +51,8 @@
         "Delicate",
         "New Romantics",
         "Getaway Car",
-        "cardigan"
+        "cardigan",
+        "Karma"
     ],
     "scores": {
         "Love Story": 0,
@@ -82,20 +83,15 @@
         "Don\u2019t Blame Me": 4,
         "Bejeweled": 1,
         "Midnight Rain": 2,
-        "Karma": 1,
+        "Karma": 2,
         "Lavender Haze": 1,
         "Fearless": 1,
         "Fifteen": 0
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "cardigan",
-    "last_match": {
-        "a": "Red",
-        "b": "Karma",
-        "message_id": 1448364497717825719,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Karma",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cruel Summer",
@@ -192,6 +188,13 @@
             "a": "Blank Space",
             "b": "cardigan",
             "winner": "cardigan",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Red",
+            "b": "Karma",
+            "winner": "Karma",
             "a_votes": 0,
             "b_votes": 1
         }
