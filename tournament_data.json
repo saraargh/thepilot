@@ -86,7 +86,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Don\u2019t Blame Me",
-    "last_match": null,
+    "last_match": {
+        "a": "The Archer",
+        "b": "I Knew You Were Trouble",
+        "message_id": 1448368038075170948,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Cruel Summer",
