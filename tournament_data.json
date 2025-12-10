@@ -35,7 +35,8 @@
     ],
     "current_round": [],
     "next_round": [
-        "Delicate"
+        "Delicate",
+        "Getaway Car"
     ],
     "scores": {
         "Love Story": 4,
@@ -57,7 +58,7 @@
         "marjorie": 1,
         "champagne problems": 13,
         "The Archer": 3,
-        "Getaway Car": 14,
+        "Getaway Car": 15,
         "Ready For It?": 6,
         "I Knew You Were Trouble": 2,
         "Red": 1,
@@ -73,13 +74,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Delicate",
-    "last_match": {
-        "a": "Getaway Car",
-        "b": "august",
-        "message_id": 1448394332783775796,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Getaway Car",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -281,6 +277,13 @@
             "a": "Delicate",
             "b": "Anti-Hero",
             "winner": "Delicate",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Getaway Car",
+            "b": "august",
+            "winner": "Getaway Car",
             "a_votes": 1,
             "b_votes": 0
         }
