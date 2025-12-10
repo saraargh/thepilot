@@ -72,7 +72,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "exile",
-    "last_match": null,
+    "last_match": {
+        "a": "Clean",
+        "b": "exile",
+        "message_id": 1448408276088651902,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "seven",
