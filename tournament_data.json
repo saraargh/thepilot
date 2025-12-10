@@ -99,7 +99,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Fearless",
-    "last_match": null,
+    "last_match": {
+        "a": "Fifteen",
+        "b": "Blank Space",
+        "message_id": 1448369055198216404,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Cornelia Street",
