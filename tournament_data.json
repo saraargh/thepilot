@@ -102,7 +102,12 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": "Fifteen",
-    "last_match": null,
+    "last_match": {
+        "a": "Ready For It?",
+        "b": "Midnight Rain",
+        "message_id": 1448381229127827487,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Blank Space",
