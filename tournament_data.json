@@ -93,7 +93,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Wildest Dreams",
-    "last_match": null,
+    "last_match": {
+        "a": "New Romantics",
+        "b": "august",
+        "message_id": 1448369334387998750,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Cornelia Street",
