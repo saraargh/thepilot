@@ -54,7 +54,8 @@
         "Long Live",
         "Sparks Fly",
         "The 1",
-        "loml"
+        "loml",
+        "illicit affairs"
     ],
     "scores": {
         "Long Live": 1,
@@ -80,7 +81,7 @@
         "my tears ricochet": 0,
         "mirrorball": 0,
         "seven": 0,
-        "illicit affairs": 0,
+        "illicit affairs": 1,
         "gold rush": 0,
         "tolerate it": 0,
         "cowboy like me": 0,
@@ -92,13 +93,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "loml",
-    "last_match": {
-        "a": "The Last Time",
-        "b": "illicit affairs",
-        "message_id": 1448406991503495351,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "illicit affairs",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -174,6 +170,13 @@
             "a": "The Story of Us",
             "b": "loml",
             "winner": "loml",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "The Last Time",
+            "b": "illicit affairs",
+            "winner": "illicit affairs",
             "a_votes": 0,
             "b_votes": 1
         }
