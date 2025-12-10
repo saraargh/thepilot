@@ -99,7 +99,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "Clean",
-    "last_match": null,
+    "last_match": {
+        "a": "right where you left me",
+        "b": "Cornelia Street",
+        "message_id": 1448406639303721132,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "seven",
