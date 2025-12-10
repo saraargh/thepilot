@@ -325,7 +325,7 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
 
         sha = save_data(data, sha)
 
-        await interaction.channel.send(f"@everyone The World Cup of **{title}** begins! 🏆")
+        await interaction.channel.send(f"@everyone The World Cup of **{title}** is starting - See the matchups and start voting! 🏆")
         await showwcmatchups_internal(interaction.channel, data)
 
         if len(data["current_round"]) >= 2:
@@ -375,11 +375,11 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
 
             sha = save_data(data, sha)
 
-            await interaction.channel.send("@everyone Next fixture is ready!")
+            await interaction.channel.send("@everyone The next fixture in The World Cup of **{title}** is ready - Cast your votes below!🗳️")
 
             result_embed = discord.Embed(
-                title="🏆 Match Result",
-                description=f"**{winner}** wins!\n\n"
+                title="Previous Match Result! 🏆",
+                description=f"**{winner}** won the previous match!\n\n"
                             f"{VOTE_A} {a}: {a_votes} votes\n"
                             f"{VOTE_B} {b}: {b_votes} votes",
                 color=discord.Color.gold()
@@ -417,7 +417,7 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
                 data["last_winner"] = final
                 save_data(data, sha)
 
-                await interaction.channel.send(f"@everyone We have a winner!")
+                await interaction.channel.send(f"@everyone We have a winner of The World Cup of **{title}** ‼️👀")
 
                 winner_embed = discord.Embed(
                     title="🏁 Tournament Winner!",
