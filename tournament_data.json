@@ -59,7 +59,8 @@
         "Cornelia Street",
         "Ready For It?",
         "champagne problems",
-        "Cruel Summer"
+        "Cruel Summer",
+        "Red"
     ],
     "scores": {
         "Love Story": 4,
@@ -84,7 +85,7 @@
         "Getaway Car": 11,
         "Ready For It?": 6,
         "I Knew You Were Trouble": 2,
-        "Red": 0,
+        "Red": 1,
         "Cornelia Street": 4,
         "New Romantics": 4,
         "Don\u2019t Blame Me": 6,
@@ -97,13 +98,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Cruel Summer",
-    "last_match": {
-        "a": "Red",
-        "b": "Bejeweled",
-        "message_id": 1448392438384168980,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Red",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -146,6 +142,13 @@
             "winner": "Cruel Summer",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Red",
+            "b": "Bejeweled",
+            "winner": "Red",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
