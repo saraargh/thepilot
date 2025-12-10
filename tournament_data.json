@@ -98,7 +98,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "I Knew You Were Trouble",
-    "last_match": null,
+    "last_match": {
+        "a": "Lavender Haze",
+        "b": "Ready For It?",
+        "message_id": 1448364076244799550,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Cruel Summer",
