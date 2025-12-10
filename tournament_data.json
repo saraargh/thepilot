@@ -37,14 +37,16 @@
         "Getaway Car",
         "august"
     ],
-    "next_round": [],
+    "next_round": [
+        "Delicate"
+    ],
     "scores": {
         "Love Story": 4,
         "You Belong With Me": 4,
         "Blank Space": 3,
         "Shake It Off": 1,
         "Cruel Summer": 9,
-        "Delicate": 12,
+        "Delicate": 13,
         "Lover": 1,
         "All Too Well": 1,
         "Style": 3,
@@ -74,13 +76,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "august",
-    "last_match": {
-        "a": "Delicate",
-        "b": "Anti-Hero",
-        "message_id": 1448394158376222850,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Delicate",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -277,6 +274,13 @@
             "winner": "august",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Delicate",
+            "b": "Anti-Hero",
+            "winner": "Delicate",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Semi Finals"
