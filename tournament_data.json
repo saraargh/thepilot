@@ -98,7 +98,12 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": "Look What You Made Me Do",
-    "last_match": null,
+    "last_match": {
+        "a": "Don\u2019t Blame Me",
+        "b": "marjorie",
+        "message_id": 1448381638336839843,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Blank Space",
