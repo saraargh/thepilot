@@ -55,7 +55,8 @@
         "marjorie",
         "Wildest Dreams",
         "Getaway Car",
-        "Lavender Haze"
+        "Lavender Haze",
+        "cardigan"
     ],
     "scores": {
         "Love Story": 1,
@@ -71,7 +72,7 @@
         "Wildest Dreams": 2,
         "Enchanted": 0,
         "Look What You Made Me Do": 7,
-        "cardigan": 3,
+        "cardigan": 4,
         "august": 7,
         "willow": 4,
         "marjorie": 1,
@@ -93,13 +94,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Lavender Haze",
-    "last_match": {
-        "a": "cardigan",
-        "b": "All Too Well",
-        "message_id": 1448381800031457341,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "cardigan",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -168,6 +164,13 @@
             "a": "Lavender Haze",
             "b": "I Knew You Were Trouble",
             "winner": "Lavender Haze",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "cardigan",
+            "b": "All Too Well",
+            "winner": "cardigan",
             "a_votes": 0,
             "b_votes": 0
         }
