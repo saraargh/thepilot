@@ -102,7 +102,12 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": "Delicate",
-    "last_match": null,
+    "last_match": {
+        "a": "The Archer",
+        "b": "Cornelia Street",
+        "message_id": 1448392099408908370,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lover",
