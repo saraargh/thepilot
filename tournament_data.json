@@ -41,9 +41,11 @@
         "Anti-Hero",
         "august"
     ],
-    "next_round": [],
+    "next_round": [
+        "Love Story"
+    ],
     "scores": {
-        "Love Story": 2,
+        "Love Story": 3,
         "You Belong With Me": 3,
         "Blank Space": 3,
         "Shake It Off": 1,
@@ -78,13 +80,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "august",
-    "last_match": {
-        "a": "Cruel Summer",
-        "b": "Love Story",
-        "message_id": 1448382349271109843,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Love Story",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -251,6 +248,13 @@
             "a": "august",
             "b": "The Archer",
             "winner": "august",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "Cruel Summer",
+            "b": "Love Story",
+            "winner": "Love Story",
             "a_votes": 0,
             "b_votes": 0
         }
