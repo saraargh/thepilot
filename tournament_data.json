@@ -52,7 +52,8 @@
         "willow",
         "Wildest Dreams",
         "august",
-        "Getaway Car"
+        "Getaway Car",
+        "Delicate"
     ],
     "scores": {
         "Love Story": 0,
@@ -60,7 +61,7 @@
         "Blank Space": 3,
         "Shake It Off": 1,
         "Cruel Summer": 6,
-        "Delicate": 8,
+        "Delicate": 9,
         "Lover": 0,
         "All Too Well": 1,
         "Style": 3,
@@ -90,13 +91,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Getaway Car",
-    "last_match": {
-        "a": "cardigan",
-        "b": "Delicate",
-        "message_id": 1448369401421234176,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Delicate",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cornelia Street",
@@ -186,6 +182,13 @@
             "a": "champagne problems",
             "b": "Getaway Car",
             "winner": "Getaway Car",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "cardigan",
+            "b": "Delicate",
+            "winner": "Delicate",
             "a_votes": 0,
             "b_votes": 1
         }
