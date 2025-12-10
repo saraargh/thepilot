@@ -103,7 +103,12 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": null,
-    "last_match": null,
+    "last_match": {
+        "a": "Blank Space",
+        "b": "Cruel Summer",
+        "message_id": 1448381032645787679,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [],
     "round_stage": "Round of 32"
 }
