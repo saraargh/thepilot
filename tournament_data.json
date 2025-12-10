@@ -43,7 +43,8 @@
         "Clean",
         "Call It What You Want",
         "The 1",
-        "loml"
+        "loml",
+        "exile"
     ],
     "scores": {
         "Long Live": 1,
@@ -65,7 +66,7 @@
         "The Man": 0,
         "The 1": 2,
         "the last great american dynasty": 0,
-        "exile": 1,
+        "exile": 2,
         "my tears ricochet": 0,
         "mirrorball": 1,
         "seven": 0,
@@ -81,13 +82,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "loml",
-    "last_match": {
-        "a": "gold rush",
-        "b": "exile",
-        "message_id": 1448407676525477910,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "exile",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -242,6 +238,13 @@
             "winner": "loml",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "gold rush",
+            "b": "exile",
+            "winner": "exile",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 16"
