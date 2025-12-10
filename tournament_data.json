@@ -33,11 +33,11 @@
         "glitch",
         "loml"
     ],
-    "current_round": [],
-    "next_round": [
+    "current_round": [
         "Clean",
         "exile"
     ],
+    "next_round": [],
     "scores": {
         "Long Live": 1,
         "The Story of Us": 0,
@@ -288,5 +288,5 @@
             "b_votes": 1
         }
     ],
-    "round_stage": "Semi Finals"
+    "round_stage": "Finals"
 }
