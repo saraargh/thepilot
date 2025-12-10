@@ -59,7 +59,8 @@
         "Ready For It?",
         "Love Story",
         "champagne problems",
-        "Look What You Made Me Do"
+        "Look What You Made Me Do",
+        "marjorie"
     ],
     "scores": {
         "Love Story": 1,
@@ -78,7 +79,7 @@
         "cardigan": 3,
         "august": 7,
         "willow": 4,
-        "marjorie": 0,
+        "marjorie": 1,
         "champagne problems": 8,
         "The Archer": 2,
         "Getaway Car": 10,
@@ -97,13 +98,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Look What You Made Me Do",
-    "last_match": {
-        "a": "Don\u2019t Blame Me",
-        "b": "marjorie",
-        "message_id": 1448381638336839843,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "marjorie",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -144,6 +140,13 @@
             "a": "Style",
             "b": "Look What You Made Me Do",
             "winner": "Look What You Made Me Do",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "Don\u2019t Blame Me",
+            "b": "marjorie",
+            "winner": "marjorie",
             "a_votes": 0,
             "b_votes": 0
         }
