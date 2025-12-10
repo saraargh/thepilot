@@ -58,7 +58,8 @@
         "Ready For It?",
         "champagne problems",
         "Cruel Summer",
-        "Red"
+        "Red",
+        "Anti-Hero"
     ],
     "scores": {
         "Love Story": 4,
@@ -70,7 +71,7 @@
         "Lover": 1,
         "All Too Well": 1,
         "Style": 3,
-        "Anti-Hero": 7,
+        "Anti-Hero": 8,
         "Wildest Dreams": 4,
         "Enchanted": 1,
         "Look What You Made Me Do": 8,
@@ -96,13 +97,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Red",
-    "last_match": {
-        "a": "Anti-Hero",
-        "b": "Midnight Rain",
-        "message_id": 1448392477663825940,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Anti-Hero",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -150,6 +146,13 @@
             "a": "Red",
             "b": "Bejeweled",
             "winner": "Red",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Anti-Hero",
+            "b": "Midnight Rain",
+            "winner": "Anti-Hero",
             "a_votes": 1,
             "b_votes": 0
         }
