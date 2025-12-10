@@ -103,7 +103,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "Holy Ground",
-    "last_match": null,
+    "last_match": {
+        "a": "State of Grace",
+        "b": "So It Goes\u2026",
+        "message_id": 1448406367131013140,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "seven",
