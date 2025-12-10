@@ -91,7 +91,12 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": "You Belong With Me",
-    "last_match": null,
+    "last_match": {
+        "a": "Wildest Dreams",
+        "b": "Karma",
+        "message_id": 1448392667334447207,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lover",
