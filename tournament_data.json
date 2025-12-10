@@ -57,7 +57,8 @@
         "Fearless",
         "Fifteen",
         "Don\u2019t Blame Me",
-        "Anti-Hero"
+        "Anti-Hero",
+        "All Too Well"
     ],
     "scores": {
         "Love Story": 0,
@@ -67,7 +68,7 @@
         "Cruel Summer": 6,
         "Delicate": 8,
         "Lover": 0,
-        "All Too Well": 0,
+        "All Too Well": 1,
         "Style": 3,
         "Anti-Hero": 4,
         "Wildest Dreams": 0,
@@ -95,13 +96,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Anti-Hero",
-    "last_match": {
-        "a": "Cruel Summer",
-        "b": "All Too Well",
-        "message_id": 1448369192070811729,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "All Too Well",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cornelia Street",
@@ -156,6 +152,13 @@
             "a": "Midnight Rain",
             "b": "Anti-Hero",
             "winner": "Anti-Hero",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Cruel Summer",
+            "b": "All Too Well",
+            "winner": "All Too Well",
             "a_votes": 0,
             "b_votes": 1
         }
