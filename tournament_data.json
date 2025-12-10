@@ -33,8 +33,7 @@
         "Fearless",
         "Fifteen"
     ],
-    "current_round": [],
-    "next_round": [
+    "current_round": [
         "Cornelia Street",
         "Ready For It?",
         "Look What You Made Me Do",
@@ -51,6 +50,7 @@
         "Delicate",
         "I Knew You Were Trouble"
     ],
+    "next_round": [],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 3,
@@ -201,5 +201,5 @@
             "b_votes": 1
         }
     ],
-    "round_stage": "Round of 32"
+    "round_stage": "15-items round"
 }
