@@ -91,7 +91,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "gold rush",
-    "last_match": null,
+    "last_match": {
+        "a": "exile",
+        "b": "glitch",
+        "message_id": 1448407163704967258,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "seven",
