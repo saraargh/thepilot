@@ -37,7 +37,9 @@
         "Lavender Haze",
         "august"
     ],
-    "next_round": [],
+    "next_round": [
+        "champagne problems"
+    ],
     "scores": {
         "Love Story": 3,
         "You Belong With Me": 3,
@@ -56,7 +58,7 @@
         "august": 10,
         "willow": 4,
         "marjorie": 1,
-        "champagne problems": 10,
+        "champagne problems": 11,
         "The Archer": 3,
         "Getaway Car": 11,
         "Ready For It?": 5,
@@ -74,13 +76,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "august",
-    "last_match": {
-        "a": "Love Story",
-        "b": "champagne problems",
-        "message_id": 1448382524081438720,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "champagne problems",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -277,6 +274,13 @@
             "winner": "august",
             "a_votes": 0,
             "b_votes": 0
+        },
+        {
+            "a": "Love Story",
+            "b": "champagne problems",
+            "winner": "champagne problems",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Semi Finals"
