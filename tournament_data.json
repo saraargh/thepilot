@@ -47,7 +47,8 @@
     ],
     "next_round": [
         "Cruel Summer",
-        "Don\u2019t Blame Me"
+        "Don\u2019t Blame Me",
+        "The Archer"
     ],
     "scores": {
         "Love Story": 0,
@@ -68,7 +69,7 @@
         "willow": 3,
         "marjorie": 0,
         "champagne problems": 6,
-        "The Archer": 1,
+        "The Archer": 2,
         "Getaway Car": 8,
         "Ready For It?": 3,
         "I Knew You Were Trouble": 1,
@@ -85,13 +86,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Don\u2019t Blame Me",
-    "last_match": {
-        "a": "The Archer",
-        "b": "I Knew You Were Trouble",
-        "message_id": 1448368038075170948,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "The Archer",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cruel Summer",
@@ -218,6 +214,13 @@
             "winner": "Don\u2019t Blame Me",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "The Archer",
+            "b": "I Knew You Were Trouble",
+            "winner": "The Archer",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 16"
