@@ -51,7 +51,8 @@
         "loml",
         "illicit affairs",
         "gold rush",
-        "exile"
+        "exile",
+        "tolerate it"
     ],
     "scores": {
         "Long Live": 1,
@@ -79,7 +80,7 @@
         "seven": 0,
         "illicit affairs": 1,
         "gold rush": 1,
-        "tolerate it": 0,
+        "tolerate it": 1,
         "cowboy like me": 0,
         "right where you left me": 1,
         "would\u2019ve could\u2019ve should\u2019ve": 0,
@@ -89,13 +90,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "exile",
-    "last_match": {
-        "a": "cowboy like me",
-        "b": "tolerate it",
-        "message_id": 1448407209447919768,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "tolerate it",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -194,6 +190,13 @@
             "winner": "exile",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "cowboy like me",
+            "b": "tolerate it",
+            "winner": "tolerate it",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
