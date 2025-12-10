@@ -53,7 +53,8 @@
         "Sparks Fly",
         "The 1",
         "loml",
-        "illicit affairs"
+        "illicit affairs",
+        "gold rush"
     ],
     "scores": {
         "Long Live": 1,
@@ -80,7 +81,7 @@
         "mirrorball": 0,
         "seven": 0,
         "illicit affairs": 1,
-        "gold rush": 0,
+        "gold rush": 1,
         "tolerate it": 0,
         "cowboy like me": 0,
         "right where you left me": 1,
@@ -91,13 +92,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "illicit affairs",
-    "last_match": {
-        "a": "gold rush",
-        "b": "Out of the Woods",
-        "message_id": 1448407101415096513,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "gold rush",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -182,6 +178,13 @@
             "winner": "illicit affairs",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "gold rush",
+            "b": "Out of the Woods",
+            "winner": "gold rush",
+            "a_votes": 0,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
