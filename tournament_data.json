@@ -64,7 +64,8 @@
         "Wildest Dreams"
     ],
     "next_round": [
-        "Cruel Summer"
+        "Cruel Summer",
+        "Anti-Hero"
     ],
     "scores": {
         "Love Story": 0,
@@ -76,7 +77,7 @@
         "Lover": 0,
         "All Too Well": 0,
         "Style": 2,
-        "Anti-Hero": 2,
+        "Anti-Hero": 3,
         "Wildest Dreams": 0,
         "Enchanted": 0,
         "Look What You Made Me Do": 4,
@@ -102,13 +103,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Cruel Summer",
-    "last_match": {
-        "a": "willow",
-        "b": "Anti-Hero",
-        "message_id": 1448363706835669209,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Anti-Hero",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cruel Summer",
@@ -116,6 +112,13 @@
             "winner": "Cruel Summer",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "willow",
+            "b": "Anti-Hero",
+            "winner": "Anti-Hero",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
