@@ -45,7 +45,8 @@
         "Cruel Summer",
         "Don\u2019t Blame Me",
         "The Archer",
-        "champagne problems"
+        "champagne problems",
+        "Midnight Rain"
     ],
     "scores": {
         "Love Story": 0,
@@ -75,7 +76,7 @@
         "New Romantics": 4,
         "Don\u2019t Blame Me": 5,
         "Bejeweled": 1,
-        "Midnight Rain": 2,
+        "Midnight Rain": 3,
         "Karma": 2,
         "Lavender Haze": 1,
         "Fearless": 1,
@@ -83,13 +84,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "champagne problems",
-    "last_match": {
-        "a": "You Belong With Me",
-        "b": "Midnight Rain",
-        "message_id": 1448368231571132616,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Midnight Rain",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cruel Summer",
@@ -228,6 +224,13 @@
             "a": "Ready For It?",
             "b": "champagne problems",
             "winner": "champagne problems",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "You Belong With Me",
+            "b": "Midnight Rain",
+            "winner": "Midnight Rain",
             "a_votes": 0,
             "b_votes": 1
         }
