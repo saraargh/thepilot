@@ -64,7 +64,8 @@
         "I Knew You Were Trouble"
     ],
     "next_round": [
-        "Love Story"
+        "Love Story",
+        "Look What You Made Me Do"
     ],
     "scores": {
         "Love Story": 4,
@@ -79,7 +80,7 @@
         "Anti-Hero": 6,
         "Wildest Dreams": 3,
         "Enchanted": 1,
-        "Look What You Made Me Do": 7,
+        "Look What You Made Me Do": 8,
         "cardigan": 4,
         "august": 12,
         "willow": 4,
@@ -102,13 +103,8 @@
     },
     "running": true,
     "title": "taylor swift sonfs",
-    "last_winner": "Love Story",
-    "last_match": {
-        "a": "The Archer",
-        "b": "Look What You Made Me Do",
-        "message_id": 1448383050483368006,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Look What You Made Me Do",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "cardigan",
@@ -116,6 +112,13 @@
             "winner": "Love Story",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "The Archer",
+            "b": "Look What You Made Me Do",
+            "winner": "Look What You Made Me Do",
+            "a_votes": 0,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
