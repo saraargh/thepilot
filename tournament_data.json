@@ -60,7 +60,8 @@
         "So It Goes\u2026",
         "Death By a Thousand Cuts",
         "King of My Heart",
-        "Clean"
+        "Clean",
+        "right where you left me"
     ],
     "scores": {
         "Long Live": 0,
@@ -90,7 +91,7 @@
         "gold rush": 0,
         "tolerate it": 0,
         "cowboy like me": 0,
-        "right where you left me": 0,
+        "right where you left me": 1,
         "would\u2019ve could\u2019ve should\u2019ve": 0,
         "bigger than the whole sky": 0,
         "glitch": 0,
@@ -98,13 +99,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Clean",
-    "last_match": {
-        "a": "right where you left me",
-        "b": "Cornelia Street",
-        "message_id": 1448406639303721132,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "right where you left me",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -140,6 +136,13 @@
             "winner": "Clean",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "right where you left me",
+            "b": "Cornelia Street",
+            "winner": "right where you left me",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
