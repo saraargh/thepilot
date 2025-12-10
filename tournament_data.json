@@ -64,7 +64,8 @@
         "The Archer"
     ],
     "next_round": [
-        "Cruel Summer"
+        "Cruel Summer",
+        "Fifteen"
     ],
     "scores": {
         "Love Story": 0,
@@ -98,22 +99,24 @@
         "Karma": 2,
         "Lavender Haze": 1,
         "Fearless": 2,
-        "Fifteen": 1
+        "Fifteen": 2
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Cruel Summer",
-    "last_match": {
-        "a": "Red",
-        "b": "Fifteen",
-        "message_id": 1448381145841664201,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Fifteen",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
             "b": "Cruel Summer",
             "winner": "Cruel Summer",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Red",
+            "b": "Fifteen",
+            "winner": "Fifteen",
             "a_votes": 0,
             "b_votes": 1
         }
