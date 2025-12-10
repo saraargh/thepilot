@@ -95,7 +95,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "Sparks Fly",
-    "last_match": null,
+    "last_match": {
+        "a": "bigger than the whole sky",
+        "b": "The 1",
+        "message_id": 1448406898612371620,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "seven",
