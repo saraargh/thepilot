@@ -98,7 +98,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Fifteen",
-    "last_match": null,
+    "last_match": {
+        "a": "Don\u2019t Blame Me",
+        "b": "Enchanted",
+        "message_id": 1448369095996215409,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Cornelia Street",
