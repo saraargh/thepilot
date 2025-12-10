@@ -37,7 +37,8 @@
     "next_round": [
         "So It Goes\u2026",
         "Clean",
-        "loml"
+        "loml",
+        "exile"
     ],
     "scores": {
         "Long Live": 1,
@@ -59,7 +60,7 @@
         "The Man": 0,
         "The 1": 2,
         "the last great american dynasty": 0,
-        "exile": 2,
+        "exile": 3,
         "my tears ricochet": 0,
         "mirrorball": 1,
         "seven": 0,
@@ -75,13 +76,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "loml",
-    "last_match": {
-        "a": "exile",
-        "b": "tolerate it",
-        "message_id": 1448408001173131310,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "exile",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -271,6 +267,13 @@
             "winner": "loml",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "exile",
+            "b": "tolerate it",
+            "winner": "exile",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Quarter Finals"
