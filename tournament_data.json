@@ -93,7 +93,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Delicate",
-    "last_match": null,
+    "last_match": {
+        "a": "Enchanted",
+        "b": "New Romantics",
+        "message_id": 1448364355660943514,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Cruel Summer",
