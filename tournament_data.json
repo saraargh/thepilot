@@ -90,7 +90,12 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": "Karma",
-    "last_match": null,
+    "last_match": {
+        "a": "august",
+        "b": "New Romantics",
+        "message_id": 1448392704861016135,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lover",
