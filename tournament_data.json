@@ -56,7 +56,8 @@
         "Look What You Made Me Do",
         "marjorie",
         "Wildest Dreams",
-        "Getaway Car"
+        "Getaway Car",
+        "Lavender Haze"
     ],
     "scores": {
         "Love Story": 1,
@@ -88,19 +89,14 @@
         "Bejeweled": 1,
         "Midnight Rain": 3,
         "Karma": 2,
-        "Lavender Haze": 1,
+        "Lavender Haze": 2,
         "Fearless": 2,
         "Fifteen": 2
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Getaway Car",
-    "last_match": {
-        "a": "Lavender Haze",
-        "b": "I Knew You Were Trouble",
-        "message_id": 1448381774727217356,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Lavender Haze",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -162,6 +158,13 @@
             "a": "Bejeweled",
             "b": "Getaway Car",
             "winner": "Getaway Car",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "Lavender Haze",
+            "b": "I Knew You Were Trouble",
+            "winner": "Lavender Haze",
             "a_votes": 0,
             "b_votes": 0
         }
