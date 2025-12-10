@@ -61,7 +61,8 @@
         "Cruel Summer",
         "Fifteen",
         "Ready For It?",
-        "Love Story"
+        "Love Story",
+        "champagne problems"
     ],
     "scores": {
         "Love Story": 1,
@@ -81,7 +82,7 @@
         "august": 7,
         "willow": 4,
         "marjorie": 0,
-        "champagne problems": 7,
+        "champagne problems": 8,
         "The Archer": 2,
         "Getaway Car": 10,
         "Ready For It?": 5,
@@ -99,13 +100,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Love Story",
-    "last_match": {
-        "a": "willow",
-        "b": "champagne problems",
-        "message_id": 1448381294433271808,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "champagne problems",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -132,6 +128,13 @@
             "a": "Love Story",
             "b": "Lover",
             "winner": "Love Story",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "willow",
+            "b": "champagne problems",
+            "winner": "champagne problems",
             "a_votes": 0,
             "b_votes": 0
         }
