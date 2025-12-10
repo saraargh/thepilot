@@ -56,7 +56,8 @@
         "right where you left me",
         "Call It What You Want",
         "Long Live",
-        "Sparks Fly"
+        "Sparks Fly",
+        "The 1"
     ],
     "scores": {
         "Long Live": 1,
@@ -76,7 +77,7 @@
         "Death By a Thousand Cuts": 1,
         "Cornelia Street": 0,
         "The Man": 0,
-        "The 1": 0,
+        "The 1": 1,
         "the last great american dynasty": 0,
         "exile": 0,
         "my tears ricochet": 0,
@@ -94,13 +95,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Sparks Fly",
-    "last_match": {
-        "a": "bigger than the whole sky",
-        "b": "The 1",
-        "message_id": 1448406898612371620,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "The 1",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -162,6 +158,13 @@
             "a": "Treacherous",
             "b": "Sparks Fly",
             "winner": "Sparks Fly",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "bigger than the whole sky",
+            "b": "The 1",
+            "winner": "The 1",
             "a_votes": 0,
             "b_votes": 1
         }
