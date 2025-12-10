@@ -52,7 +52,8 @@
         "Midnight Rain",
         "Delicate",
         "New Romantics",
-        "Getaway Car"
+        "Getaway Car",
+        "cardigan"
     ],
     "scores": {
         "Love Story": 0,
@@ -68,7 +69,7 @@
         "Wildest Dreams": 0,
         "Enchanted": 0,
         "Look What You Made Me Do": 5,
-        "cardigan": 2,
+        "cardigan": 3,
         "august": 5,
         "willow": 3,
         "marjorie": 0,
@@ -90,13 +91,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Getaway Car",
-    "last_match": {
-        "a": "Blank Space",
-        "b": "cardigan",
-        "message_id": 1448364431464599703,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "cardigan",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cruel Summer",
@@ -188,6 +184,13 @@
             "winner": "Getaway Car",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Blank Space",
+            "b": "cardigan",
+            "winner": "cardigan",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
