@@ -101,7 +101,12 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": "Ready For It?",
-    "last_match": null,
+    "last_match": {
+        "a": "Love Story",
+        "b": "Lover",
+        "message_id": 1448381258060136569,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Blank Space",
