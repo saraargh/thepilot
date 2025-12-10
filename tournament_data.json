@@ -56,7 +56,8 @@
         "Fifteen",
         "Don\u2019t Blame Me",
         "Anti-Hero",
-        "All Too Well"
+        "All Too Well",
+        "willow"
     ],
     "scores": {
         "Love Story": 0,
@@ -74,7 +75,7 @@
         "Look What You Made Me Do": 6,
         "cardigan": 3,
         "august": 6,
-        "willow": 3,
+        "willow": 4,
         "marjorie": 0,
         "champagne problems": 7,
         "The Archer": 2,
@@ -94,13 +95,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "All Too Well",
-    "last_match": {
-        "a": "willow",
-        "b": "You Belong With Me",
-        "message_id": 1448369233754063040,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "willow",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cornelia Street",
@@ -164,6 +160,13 @@
             "winner": "All Too Well",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "willow",
+            "b": "You Belong With Me",
+            "winner": "willow",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
