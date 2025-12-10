@@ -91,7 +91,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Getaway Car",
-    "last_match": null,
+    "last_match": {
+        "a": "Blank Space",
+        "b": "cardigan",
+        "message_id": 1448364431464599703,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Cruel Summer",
