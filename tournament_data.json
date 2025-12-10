@@ -65,7 +65,9 @@
         "Lavender Haze",
         "marjorie"
     ],
-    "next_round": [],
+    "next_round": [
+        "Lover"
+    ],
     "scores": {
         "Love Story": 4,
         "You Belong With Me": 3,
@@ -73,7 +75,7 @@
         "Shake It Off": 1,
         "Cruel Summer": 8,
         "Delicate": 9,
-        "Lover": 0,
+        "Lover": 1,
         "All Too Well": 1,
         "Style": 3,
         "Anti-Hero": 7,
@@ -102,13 +104,16 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": null,
-    "last_match": {
-        "a": "Lover",
-        "b": "Enchanted",
-        "message_id": 1448391935982047252,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [],
+    "last_winner": "Lover",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "Lover",
+            "b": "Enchanted",
+            "winner": "Lover",
+            "a_votes": 1,
+            "b_votes": 0
+        }
+    ],
     "round_stage": "Round of 32"
 }
