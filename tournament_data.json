@@ -98,7 +98,12 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": "Cruel Summer",
-    "last_match": null,
+    "last_match": {
+        "a": "Red",
+        "b": "Bejeweled",
+        "message_id": 1448392438384168980,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lover",
