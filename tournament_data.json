@@ -60,7 +60,8 @@
         "Ready For It?",
         "Look What You Made Me Do",
         "Style",
-        "Fearless"
+        "Fearless",
+        "Fifteen"
     ],
     "scores": {
         "Love Story": 0,
@@ -94,17 +95,12 @@
         "Karma": 2,
         "Lavender Haze": 1,
         "Fearless": 2,
-        "Fifteen": 0
+        "Fifteen": 1
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Fearless",
-    "last_match": {
-        "a": "Fifteen",
-        "b": "Blank Space",
-        "message_id": 1448369055198216404,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Fifteen",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cornelia Street",
@@ -138,6 +134,13 @@
             "a": "Fearless",
             "b": "Lavender Haze",
             "winner": "Fearless",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Fifteen",
+            "b": "Blank Space",
+            "winner": "Fifteen",
             "a_votes": 1,
             "b_votes": 0
         }
