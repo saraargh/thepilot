@@ -54,7 +54,8 @@
         "Wildest Dreams",
         "Getaway Car",
         "Lavender Haze",
-        "cardigan"
+        "cardigan",
+        "Karma"
     ],
     "scores": {
         "Love Story": 1,
@@ -85,20 +86,15 @@
         "Don\u2019t Blame Me": 6,
         "Bejeweled": 1,
         "Midnight Rain": 3,
-        "Karma": 2,
+        "Karma": 3,
         "Lavender Haze": 2,
         "Fearless": 2,
         "Fifteen": 2
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "cardigan",
-    "last_match": {
-        "a": "Karma",
-        "b": "Shake It Off",
-        "message_id": 1448381823582343213,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Karma",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -174,6 +170,13 @@
             "a": "cardigan",
             "b": "All Too Well",
             "winner": "cardigan",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "Karma",
+            "b": "Shake It Off",
+            "winner": "Karma",
             "a_votes": 0,
             "b_votes": 0
         }
