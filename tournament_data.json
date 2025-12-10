@@ -33,13 +33,13 @@
         "Fearless",
         "Fifteen"
     ],
-    "current_round": [],
-    "next_round": [
+    "current_round": [
         "Love Story",
         "champagne problems",
         "Lavender Haze",
         "august"
     ],
+    "next_round": [],
     "scores": {
         "Love Story": 3,
         "You Belong With Me": 3,
@@ -276,5 +276,5 @@
             "b_votes": 0
         }
     ],
-    "round_stage": "Quarter Finals"
+    "round_stage": "Semi Finals"
 }
