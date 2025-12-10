@@ -49,7 +49,9 @@
         "tolerate it",
         "mirrorball"
     ],
-    "next_round": [],
+    "next_round": [
+        "So It Goes\u2026"
+    ],
     "scores": {
         "Long Live": 1,
         "The Story of Us": 0,
@@ -63,7 +65,7 @@
         "Out of the Woods": 0,
         "Call It What You Want": 1,
         "King of My Heart": 1,
-        "So It Goes\u2026": 1,
+        "So It Goes\u2026": 2,
         "Miss Americana & The Heartbreak Prince": 0,
         "Death By a Thousand Cuts": 1,
         "Cornelia Street": 0,
@@ -86,13 +88,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "mirrorball",
-    "last_match": {
-        "a": "Holy Ground",
-        "b": "So It Goes\u2026",
-        "message_id": 1448407428222812302,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "So It Goes\u2026",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -205,6 +202,13 @@
             "winner": "mirrorball",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Holy Ground",
+            "b": "So It Goes\u2026",
+            "winner": "So It Goes\u2026",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 16"
