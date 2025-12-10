@@ -48,7 +48,8 @@
         "Lavender Haze"
     ],
     "next_round": [
-        "Delicate"
+        "Delicate",
+        "Cornelia Street"
     ],
     "scores": {
         "Love Story": 4,
@@ -74,7 +75,7 @@
         "Ready For It?": 6,
         "I Knew You Were Trouble": 2,
         "Red": 1,
-        "Cornelia Street": 4,
+        "Cornelia Street": 5,
         "New Romantics": 4,
         "Don\u2019t Blame Me": 6,
         "Bejeweled": 1,
@@ -86,13 +87,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Delicate",
-    "last_match": {
-        "a": "Cornelia Street",
-        "b": "Ready For It?",
-        "message_id": 1448392908381093908,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Cornelia Street",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -212,6 +208,13 @@
             "winner": "Delicate",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Cornelia Street",
+            "b": "Ready For It?",
+            "winner": "Cornelia Street",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 16"
