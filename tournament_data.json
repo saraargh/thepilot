@@ -62,7 +62,8 @@
     "next_round": [
         "Lover",
         "Delicate",
-        "Cornelia Street"
+        "Cornelia Street",
+        "Ready For It?"
     ],
     "scores": {
         "Love Story": 4,
@@ -85,7 +86,7 @@
         "champagne problems": 11,
         "The Archer": 3,
         "Getaway Car": 11,
-        "Ready For It?": 5,
+        "Ready For It?": 6,
         "I Knew You Were Trouble": 2,
         "Red": 0,
         "Cornelia Street": 4,
@@ -100,13 +101,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Cornelia Street",
-    "last_match": {
-        "a": "Ready For It?",
-        "b": "Love Story",
-        "message_id": 1448392293609504860,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Ready For It?",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -128,6 +124,13 @@
             "winner": "Cornelia Street",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Ready For It?",
+            "b": "Love Story",
+            "winner": "Ready For It?",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
