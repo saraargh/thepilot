@@ -48,10 +48,11 @@
         "The Archer"
     ],
     "next_round": [
-        "Cruel Summer"
+        "Cruel Summer",
+        "Love Story"
     ],
     "scores": {
-        "Love Story": 1,
+        "Love Story": 2,
         "You Belong With Me": 3,
         "Blank Space": 3,
         "Shake It Off": 1,
@@ -86,13 +87,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Cruel Summer",
-    "last_match": {
-        "a": "Ready For It?",
-        "b": "Love Story",
-        "message_id": 1448382067208356071,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Love Story",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -210,6 +206,13 @@
             "a": "Cruel Summer",
             "b": "Fifteen",
             "winner": "Cruel Summer",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "Ready For It?",
+            "b": "Love Story",
+            "winner": "Love Story",
             "a_votes": 0,
             "b_votes": 0
         }
