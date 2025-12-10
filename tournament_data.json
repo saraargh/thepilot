@@ -59,7 +59,8 @@
         "Death By a Thousand Cuts",
         "King of My Heart",
         "Clean",
-        "right where you left me"
+        "right where you left me",
+        "Call It What You Want"
     ],
     "scores": {
         "Long Live": 0,
@@ -72,7 +73,7 @@
         "The Last Time": 0,
         "Clean": 1,
         "Out of the Woods": 0,
-        "Call It What You Want": 0,
+        "Call It What You Want": 1,
         "King of My Heart": 1,
         "So It Goes\u2026": 1,
         "Miss Americana & The Heartbreak Prince": 0,
@@ -97,13 +98,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "right where you left me",
-    "last_match": {
-        "a": "would\u2019ve could\u2019ve should\u2019ve",
-        "b": "Call It What You Want",
-        "message_id": 1448406684446888087,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Call It What You Want",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -146,6 +142,13 @@
             "winner": "right where you left me",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "would\u2019ve could\u2019ve should\u2019ve",
+            "b": "Call It What You Want",
+            "winner": "Call It What You Want",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
