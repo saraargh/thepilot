@@ -65,13 +65,15 @@
         "Delicate",
         "The Archer"
     ],
-    "next_round": [],
+    "next_round": [
+        "Cruel Summer"
+    ],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 3,
         "Blank Space": 3,
         "Shake It Off": 1,
-        "Cruel Summer": 6,
+        "Cruel Summer": 7,
         "Delicate": 9,
         "Lover": 0,
         "All Too Well": 1,
@@ -102,13 +104,16 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": null,
-    "last_match": {
-        "a": "Blank Space",
-        "b": "Cruel Summer",
-        "message_id": 1448381032645787679,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [],
+    "last_winner": "Cruel Summer",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "Blank Space",
+            "b": "Cruel Summer",
+            "winner": "Cruel Summer",
+            "a_votes": 0,
+            "b_votes": 1
+        }
+    ],
     "round_stage": "Round of 32"
 }
