@@ -80,7 +80,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "exile",
-    "last_match": null,
+    "last_match": {
+        "a": "tolerate it",
+        "b": "mirrorball",
+        "message_id": 1448407709039853578,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "seven",
