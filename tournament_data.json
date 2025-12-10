@@ -93,7 +93,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "loml",
-    "last_match": null,
+    "last_match": {
+        "a": "The Last Time",
+        "b": "illicit affairs",
+        "message_id": 1448406991503495351,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "seven",
