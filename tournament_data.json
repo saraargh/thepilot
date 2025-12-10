@@ -62,7 +62,8 @@
     "next_round": [
         "Cruel Summer",
         "Anti-Hero",
-        "Look What You Made Me Do"
+        "Look What You Made Me Do",
+        "Don\u2019t Blame Me"
     ],
     "scores": {
         "Love Story": 0,
@@ -90,7 +91,7 @@
         "Red": 0,
         "Cornelia Street": 2,
         "New Romantics": 3,
-        "Don\u2019t Blame Me": 3,
+        "Don\u2019t Blame Me": 4,
         "Bejeweled": 1,
         "Midnight Rain": 1,
         "Karma": 1,
@@ -100,13 +101,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Look What You Made Me Do",
-    "last_match": {
-        "a": "Don\u2019t Blame Me",
-        "b": "marjorie",
-        "message_id": 1448363864038314025,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Don\u2019t Blame Me",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cruel Summer",
@@ -126,6 +122,13 @@
             "a": "Look What You Made Me Do",
             "b": "Shake It Off",
             "winner": "Look What You Made Me Do",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Don\u2019t Blame Me",
+            "b": "marjorie",
+            "winner": "Don\u2019t Blame Me",
             "a_votes": 1,
             "b_votes": 0
         }
