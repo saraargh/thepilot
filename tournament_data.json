@@ -41,7 +41,8 @@
         "Anti-Hero",
         "Fifteen",
         "Getaway Car",
-        "Karma"
+        "Karma",
+        "august"
     ],
     "scores": {
         "Love Story": 4,
@@ -58,7 +59,7 @@
         "Enchanted": 1,
         "Look What You Made Me Do": 8,
         "cardigan": 5,
-        "august": 13,
+        "august": 14,
         "willow": 5,
         "marjorie": 1,
         "champagne problems": 13,
@@ -79,13 +80,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Karma",
-    "last_match": {
-        "a": "august",
-        "b": "Lavender Haze",
-        "message_id": 1448393131765796975,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "august",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -247,6 +243,13 @@
             "winner": "Karma",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "august",
+            "b": "Lavender Haze",
+            "winner": "august",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 16"
