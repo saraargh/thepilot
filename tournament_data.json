@@ -40,7 +40,8 @@
         "august"
     ],
     "next_round": [
-        "Love Story"
+        "Love Story",
+        "champagne problems"
     ],
     "scores": {
         "Love Story": 3,
@@ -60,7 +61,7 @@
         "august": 9,
         "willow": 4,
         "marjorie": 1,
-        "champagne problems": 9,
+        "champagne problems": 10,
         "The Archer": 3,
         "Getaway Car": 11,
         "Ready For It?": 5,
@@ -78,13 +79,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Love Story",
-    "last_match": {
-        "a": "champagne problems",
-        "b": "Wildest Dreams",
-        "message_id": 1448382376228159552,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "champagne problems",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -258,6 +254,13 @@
             "a": "Cruel Summer",
             "b": "Love Story",
             "winner": "Love Story",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "champagne problems",
+            "b": "Wildest Dreams",
+            "winner": "champagne problems",
             "a_votes": 0,
             "b_votes": 0
         }
