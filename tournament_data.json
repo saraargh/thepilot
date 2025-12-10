@@ -54,7 +54,8 @@
         "Anti-Hero",
         "All Too Well",
         "willow",
-        "Wildest Dreams"
+        "Wildest Dreams",
+        "august"
     ],
     "scores": {
         "Love Story": 0,
@@ -71,7 +72,7 @@
         "Enchanted": 0,
         "Look What You Made Me Do": 6,
         "cardigan": 3,
-        "august": 6,
+        "august": 7,
         "willow": 4,
         "marjorie": 0,
         "champagne problems": 7,
@@ -92,13 +93,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Wildest Dreams",
-    "last_match": {
-        "a": "New Romantics",
-        "b": "august",
-        "message_id": 1448369334387998750,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "august",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cornelia Street",
@@ -176,6 +172,13 @@
             "winner": "Wildest Dreams",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "New Romantics",
+            "b": "august",
+            "winner": "august",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
