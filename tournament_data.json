@@ -85,7 +85,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "Clean",
-    "last_match": null,
+    "last_match": {
+        "a": "Call It What You Want",
+        "b": "Long Live",
+        "message_id": 1448407548729233501,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "seven",
