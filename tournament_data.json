@@ -94,7 +94,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "willow",
-    "last_match": null,
+    "last_match": {
+        "a": "Wildest Dreams",
+        "b": "marjorie",
+        "message_id": 1448369268528775422,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Cornelia Street",
