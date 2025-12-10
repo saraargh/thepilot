@@ -79,7 +79,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "tolerate it",
-    "last_match": null,
+    "last_match": {
+        "a": "So It Goes\u2026",
+        "b": "King of My Heart",
+        "message_id": 1448407793391505544,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "seven",
