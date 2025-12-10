@@ -79,7 +79,12 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": "Love Story",
-    "last_match": null,
+    "last_match": {
+        "a": "champagne problems",
+        "b": "Wildest Dreams",
+        "message_id": 1448382376228159552,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Blank Space",
