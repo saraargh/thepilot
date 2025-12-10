@@ -103,7 +103,12 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": "Lover",
-    "last_match": null,
+    "last_match": {
+        "a": "All Too Well",
+        "b": "Delicate",
+        "message_id": 1448392007440400565,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lover",
