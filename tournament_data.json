@@ -62,7 +62,8 @@
     "next_round": [
         "Love Story",
         "Look What You Made Me Do",
-        "Wildest Dreams"
+        "Wildest Dreams",
+        "Anti-Hero"
     ],
     "scores": {
         "Love Story": 4,
@@ -74,7 +75,7 @@
         "Lover": 0,
         "All Too Well": 1,
         "Style": 3,
-        "Anti-Hero": 6,
+        "Anti-Hero": 7,
         "Wildest Dreams": 4,
         "Enchanted": 1,
         "Look What You Made Me Do": 8,
@@ -100,13 +101,8 @@
     },
     "running": true,
     "title": "taylor swift sonfs",
-    "last_winner": "Wildest Dreams",
-    "last_match": {
-        "a": "Anti-Hero",
-        "b": "Cruel Summer",
-        "message_id": 1448383134751133797,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Anti-Hero",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "cardigan",
@@ -126,6 +122,13 @@
             "a": "Wildest Dreams",
             "b": "You Belong With Me",
             "winner": "Wildest Dreams",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Anti-Hero",
+            "b": "Cruel Summer",
+            "winner": "Anti-Hero",
             "a_votes": 1,
             "b_votes": 0
         }
