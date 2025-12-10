@@ -61,7 +61,8 @@
         "Cruel Summer",
         "Anti-Hero",
         "Look What You Made Me Do",
-        "Don\u2019t Blame Me"
+        "Don\u2019t Blame Me",
+        "The Archer"
     ],
     "scores": {
         "Love Story": 0,
@@ -82,7 +83,7 @@
         "willow": 3,
         "marjorie": 0,
         "champagne problems": 5,
-        "The Archer": 0,
+        "The Archer": 1,
         "Getaway Car": 7,
         "Ready For It?": 2,
         "I Knew You Were Trouble": 0,
@@ -99,13 +100,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Don\u2019t Blame Me",
-    "last_match": {
-        "a": "The Archer",
-        "b": "Lover",
-        "message_id": 1448363994338431129,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "The Archer",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cruel Summer",
@@ -132,6 +128,13 @@
             "a": "Don\u2019t Blame Me",
             "b": "marjorie",
             "winner": "Don\u2019t Blame Me",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "The Archer",
+            "b": "Lover",
+            "winner": "The Archer",
             "a_votes": 1,
             "b_votes": 0
         }
