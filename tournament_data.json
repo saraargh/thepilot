@@ -35,7 +35,8 @@
     ],
     "current_round": [],
     "next_round": [
-        "champagne problems"
+        "champagne problems",
+        "august"
     ],
     "scores": {
         "Love Story": 3,
@@ -52,7 +53,7 @@
         "Enchanted": 1,
         "Look What You Made Me Do": 7,
         "cardigan": 4,
-        "august": 10,
+        "august": 11,
         "willow": 4,
         "marjorie": 1,
         "champagne problems": 11,
@@ -73,13 +74,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "champagne problems",
-    "last_match": {
-        "a": "Lavender Haze",
-        "b": "august",
-        "message_id": 1448382567840481342,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "august",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -283,6 +279,13 @@
             "winner": "champagne problems",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Lavender Haze",
+            "b": "august",
+            "winner": "august",
+            "a_votes": 0,
+            "b_votes": 0
         }
     ],
     "round_stage": "Semi Finals"
