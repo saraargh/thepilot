@@ -100,7 +100,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "King of My Heart",
-    "last_match": null,
+    "last_match": {
+        "a": "Begin Again",
+        "b": "Clean",
+        "message_id": 1448406568683962419,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "seven",
