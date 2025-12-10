@@ -49,7 +49,8 @@
         "Getaway Car",
         "You Belong With Me",
         "Karma",
-        "august"
+        "august",
+        "Lavender Haze"
     ],
     "scores": {
         "Love Story": 4,
@@ -81,19 +82,14 @@
         "Bejeweled": 1,
         "Midnight Rain": 3,
         "Karma": 5,
-        "Lavender Haze": 4,
+        "Lavender Haze": 5,
         "Fearless": 2,
         "Fifteen": 3
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "august",
-    "last_match": {
-        "a": "Lavender Haze",
-        "b": "marjorie",
-        "message_id": 1448392740420194394,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Lavender Haze",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -197,6 +193,13 @@
             "a": "august",
             "b": "New Romantics",
             "winner": "august",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Lavender Haze",
+            "b": "marjorie",
+            "winner": "Lavender Haze",
             "a_votes": 1,
             "b_votes": 0
         }
