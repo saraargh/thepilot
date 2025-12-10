@@ -33,13 +33,13 @@
         "glitch",
         "loml"
     ],
-    "current_round": [],
-    "next_round": [
+    "current_round": [
         "So It Goes\u2026",
         "Clean",
         "loml",
         "exile"
     ],
+    "next_round": [],
     "scores": {
         "Long Live": 1,
         "The Story of Us": 0,
@@ -276,5 +276,5 @@
             "b_votes": 0
         }
     ],
-    "round_stage": "Quarter Finals"
+    "round_stage": "Semi Finals"
 }
