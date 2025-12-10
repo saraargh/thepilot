@@ -46,7 +46,8 @@
     "next_round": [
         "Delicate",
         "Cornelia Street",
-        "champagne problems"
+        "champagne problems",
+        "Anti-Hero"
     ],
     "scores": {
         "Love Story": 4,
@@ -58,7 +59,7 @@
         "Lover": 1,
         "All Too Well": 1,
         "Style": 3,
-        "Anti-Hero": 8,
+        "Anti-Hero": 9,
         "Wildest Dreams": 4,
         "Enchanted": 1,
         "Look What You Made Me Do": 8,
@@ -84,13 +85,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "champagne problems",
-    "last_match": {
-        "a": "Red",
-        "b": "Anti-Hero",
-        "message_id": 1448392997233229936,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Anti-Hero",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -224,6 +220,13 @@
             "winner": "champagne problems",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Red",
+            "b": "Anti-Hero",
+            "winner": "Anti-Hero",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 16"
