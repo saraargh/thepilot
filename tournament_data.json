@@ -44,7 +44,8 @@
         "Cornelia Street",
         "champagne problems",
         "Anti-Hero",
-        "Fifteen"
+        "Fifteen",
+        "Getaway Car"
     ],
     "scores": {
         "Love Story": 4,
@@ -66,7 +67,7 @@
         "marjorie": 1,
         "champagne problems": 13,
         "The Archer": 3,
-        "Getaway Car": 12,
+        "Getaway Car": 13,
         "Ready For It?": 6,
         "I Knew You Were Trouble": 2,
         "Red": 1,
@@ -82,13 +83,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Fifteen",
-    "last_match": {
-        "a": "willow",
-        "b": "Getaway Car",
-        "message_id": 1448393068838653985,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Getaway Car",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -236,6 +232,13 @@
             "winner": "Fifteen",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "willow",
+            "b": "Getaway Car",
+            "winner": "Getaway Car",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 16"
