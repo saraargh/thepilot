@@ -82,7 +82,12 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": "Karma",
-    "last_match": null,
+    "last_match": {
+        "a": "Enchanted",
+        "b": "Anti-Hero",
+        "message_id": 1448382208866914336,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Blank Space",
