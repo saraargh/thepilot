@@ -61,7 +61,8 @@
         "Holy Ground",
         "So It Goes\u2026",
         "Death By a Thousand Cuts",
-        "King of My Heart"
+        "King of My Heart",
+        "Clean"
     ],
     "scores": {
         "Long Live": 0,
@@ -72,7 +73,7 @@
         "Holy Ground": 1,
         "Begin Again": 0,
         "The Last Time": 0,
-        "Clean": 0,
+        "Clean": 1,
         "Out of the Woods": 0,
         "Call It What You Want": 0,
         "King of My Heart": 1,
@@ -99,13 +100,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "King of My Heart",
-    "last_match": {
-        "a": "Begin Again",
-        "b": "Clean",
-        "message_id": 1448406568683962419,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Clean",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -132,6 +128,13 @@
             "a": "The Man",
             "b": "King of My Heart",
             "winner": "King of My Heart",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Begin Again",
+            "b": "Clean",
+            "winner": "Clean",
             "a_votes": 0,
             "b_votes": 1
         }
