@@ -52,7 +52,8 @@
         "cardigan",
         "willow",
         "Getaway Car",
-        "You Belong With Me"
+        "You Belong With Me",
+        "Karma"
     ],
     "scores": {
         "Love Story": 4,
@@ -83,20 +84,15 @@
         "Don\u2019t Blame Me": 6,
         "Bejeweled": 1,
         "Midnight Rain": 3,
-        "Karma": 4,
+        "Karma": 5,
         "Lavender Haze": 4,
         "Fearless": 2,
         "Fifteen": 3
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "You Belong With Me",
-    "last_match": {
-        "a": "Wildest Dreams",
-        "b": "Karma",
-        "message_id": 1448392667334447207,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Karma",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -186,6 +182,13 @@
             "a": "Shake It Off",
             "b": "You Belong With Me",
             "winner": "You Belong With Me",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Wildest Dreams",
+            "b": "Karma",
+            "winner": "Karma",
             "a_votes": 0,
             "b_votes": 1
         }
