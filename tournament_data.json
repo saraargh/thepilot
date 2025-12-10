@@ -99,7 +99,12 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": "champagne problems",
-    "last_match": null,
+    "last_match": {
+        "a": "Look What You Made Me Do",
+        "b": "Cruel Summer",
+        "message_id": 1448392375608148122,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Lover",
