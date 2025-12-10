@@ -41,7 +41,8 @@
         "Call It What You Want",
         "The 1",
         "loml",
-        "exile"
+        "exile",
+        "tolerate it"
     ],
     "scores": {
         "Long Live": 1,
@@ -69,7 +70,7 @@
         "seven": 0,
         "illicit affairs": 1,
         "gold rush": 1,
-        "tolerate it": 1,
+        "tolerate it": 2,
         "cowboy like me": 0,
         "right where you left me": 1,
         "would\u2019ve could\u2019ve should\u2019ve": 0,
@@ -79,13 +80,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "exile",
-    "last_match": {
-        "a": "tolerate it",
-        "b": "mirrorball",
-        "message_id": 1448407709039853578,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "tolerate it",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -247,6 +243,13 @@
             "winner": "exile",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "tolerate it",
+            "b": "mirrorball",
+            "winner": "tolerate it",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 16"
