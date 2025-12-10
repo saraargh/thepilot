@@ -59,7 +59,8 @@
         "Look What You Made Me Do",
         "Style",
         "Fearless",
-        "Fifteen"
+        "Fifteen",
+        "Don\u2019t Blame Me"
     ],
     "scores": {
         "Love Story": 0,
@@ -87,7 +88,7 @@
         "Red": 0,
         "Cornelia Street": 3,
         "New Romantics": 4,
-        "Don\u2019t Blame Me": 5,
+        "Don\u2019t Blame Me": 6,
         "Bejeweled": 1,
         "Midnight Rain": 3,
         "Karma": 2,
@@ -97,13 +98,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Fifteen",
-    "last_match": {
-        "a": "Don\u2019t Blame Me",
-        "b": "Enchanted",
-        "message_id": 1448369095996215409,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Don\u2019t Blame Me",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cornelia Street",
@@ -144,6 +140,13 @@
             "a": "Fifteen",
             "b": "Blank Space",
             "winner": "Fifteen",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Don\u2019t Blame Me",
+            "b": "Enchanted",
+            "winner": "Don\u2019t Blame Me",
             "a_votes": 1,
             "b_votes": 0
         }
