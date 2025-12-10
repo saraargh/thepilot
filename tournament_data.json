@@ -53,7 +53,8 @@
         "Getaway Car",
         "Lavender Haze",
         "cardigan",
-        "Karma"
+        "Karma",
+        "Enchanted"
     ],
     "scores": {
         "Love Story": 1,
@@ -67,7 +68,7 @@
         "Style": 3,
         "Anti-Hero": 4,
         "Wildest Dreams": 2,
-        "Enchanted": 0,
+        "Enchanted": 1,
         "Look What You Made Me Do": 7,
         "cardigan": 4,
         "august": 7,
@@ -91,13 +92,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Karma",
-    "last_match": {
-        "a": "Enchanted",
-        "b": "Fearless",
-        "message_id": 1448381851172470878,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Enchanted",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -180,6 +176,13 @@
             "a": "Karma",
             "b": "Shake It Off",
             "winner": "Karma",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "Enchanted",
+            "b": "Fearless",
+            "winner": "Enchanted",
             "a_votes": 0,
             "b_votes": 0
         }
