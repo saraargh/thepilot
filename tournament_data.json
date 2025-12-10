@@ -95,7 +95,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "You Belong With Me",
-    "last_match": null,
+    "last_match": {
+        "a": "Midnight Rain",
+        "b": "Fearless",
+        "message_id": 1448364254045540527,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Cruel Summer",
