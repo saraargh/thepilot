@@ -63,7 +63,8 @@
     ],
     "next_round": [
         "Holy Ground",
-        "So It Goes\u2026"
+        "So It Goes\u2026",
+        "Death By a Thousand Cuts"
     ],
     "scores": {
         "Long Live": 0,
@@ -80,7 +81,7 @@
         "King of My Heart": 0,
         "So It Goes\u2026": 1,
         "Miss Americana & The Heartbreak Prince": 0,
-        "Death By a Thousand Cuts": 0,
+        "Death By a Thousand Cuts": 1,
         "Cornelia Street": 0,
         "The Man": 0,
         "The 1": 0,
@@ -101,13 +102,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "So It Goes\u2026",
-    "last_match": {
-        "a": "Death By a Thousand Cuts",
-        "b": "the last great american dynasty",
-        "message_id": 1448406419526258708,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Death By a Thousand Cuts",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -122,6 +118,13 @@
             "winner": "So It Goes\u2026",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Death By a Thousand Cuts",
+            "b": "the last great american dynasty",
+            "winner": "Death By a Thousand Cuts",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
