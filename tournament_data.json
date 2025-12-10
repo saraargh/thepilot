@@ -65,13 +65,15 @@
         "august",
         "Wildest Dreams"
     ],
-    "next_round": [],
+    "next_round": [
+        "Cruel Summer"
+    ],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 2,
         "Blank Space": 3,
         "Shake It Off": 1,
-        "Cruel Summer": 4,
+        "Cruel Summer": 5,
         "Delicate": 6,
         "Lover": 0,
         "All Too Well": 0,
@@ -102,13 +104,16 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": null,
-    "last_match": {
-        "a": "Cruel Summer",
-        "b": "Bejeweled",
-        "message_id": 1448363658114764952,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [],
+    "last_winner": "Cruel Summer",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "Cruel Summer",
+            "b": "Bejeweled",
+            "winner": "Cruel Summer",
+            "a_votes": 1,
+            "b_votes": 0
+        }
+    ],
     "round_stage": "Round of 32"
 }
