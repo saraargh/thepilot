@@ -43,7 +43,8 @@
         "champagne problems",
         "Anti-Hero",
         "Fifteen",
-        "Getaway Car"
+        "Getaway Car",
+        "Karma"
     ],
     "scores": {
         "Love Story": 4,
@@ -74,20 +75,15 @@
         "Don\u2019t Blame Me": 6,
         "Bejeweled": 1,
         "Midnight Rain": 3,
-        "Karma": 5,
+        "Karma": 6,
         "Lavender Haze": 5,
         "Fearless": 2,
         "Fifteen": 4
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Getaway Car",
-    "last_match": {
-        "a": "You Belong With Me",
-        "b": "Karma",
-        "message_id": 1448393097632546918,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Karma",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -240,6 +236,13 @@
             "a": "willow",
             "b": "Getaway Car",
             "winner": "Getaway Car",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "You Belong With Me",
+            "b": "Karma",
+            "winner": "Karma",
             "a_votes": 0,
             "b_votes": 1
         }
