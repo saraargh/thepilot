@@ -64,7 +64,8 @@
         "my tears ricochet"
     ],
     "next_round": [
-        "Holy Ground"
+        "Holy Ground",
+        "So It Goes\u2026"
     ],
     "scores": {
         "Long Live": 0,
@@ -79,7 +80,7 @@
         "Out of the Woods": 0,
         "Call It What You Want": 0,
         "King of My Heart": 0,
-        "So It Goes\u2026": 0,
+        "So It Goes\u2026": 1,
         "Miss Americana & The Heartbreak Prince": 0,
         "Death By a Thousand Cuts": 0,
         "Cornelia Street": 0,
@@ -102,18 +103,20 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Holy Ground",
-    "last_match": {
-        "a": "State of Grace",
-        "b": "So It Goes\u2026",
-        "message_id": 1448406367131013140,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "So It Goes\u2026",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
             "b": "Holy Ground",
             "winner": "Holy Ground",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "State of Grace",
+            "b": "So It Goes\u2026",
+            "winner": "So It Goes\u2026",
             "a_votes": 0,
             "b_votes": 1
         }
