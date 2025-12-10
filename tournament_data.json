@@ -49,7 +49,8 @@
         "New Romantics",
         "Getaway Car",
         "cardigan",
-        "Karma"
+        "Karma",
+        "august"
     ],
     "scores": {
         "Love Story": 0,
@@ -66,7 +67,7 @@
         "Enchanted": 0,
         "Look What You Made Me Do": 5,
         "cardigan": 3,
-        "august": 5,
+        "august": 6,
         "willow": 3,
         "marjorie": 0,
         "champagne problems": 6,
@@ -87,13 +88,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Karma",
-    "last_match": {
-        "a": "august",
-        "b": "Wildest Dreams",
-        "message_id": 1448364569834819699,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "august",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cruel Summer",
@@ -199,6 +195,13 @@
             "winner": "Karma",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "august",
+            "b": "Wildest Dreams",
+            "winner": "august",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
