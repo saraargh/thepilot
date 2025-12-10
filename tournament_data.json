@@ -100,7 +100,12 @@
     "running": true,
     "title": "taylor swift sonfs",
     "last_winner": "Anti-Hero",
-    "last_match": null,
+    "last_match": {
+        "a": "Style",
+        "b": "willow",
+        "message_id": 1448383165759754411,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "cardigan",
