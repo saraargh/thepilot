@@ -44,7 +44,8 @@
         "Love Story",
         "champagne problems",
         "Wildest Dreams",
-        "Lavender Haze"
+        "Lavender Haze",
+        "Karma"
     ],
     "scores": {
         "Love Story": 2,
@@ -75,20 +76,15 @@
         "Don\u2019t Blame Me": 6,
         "Bejeweled": 1,
         "Midnight Rain": 3,
-        "Karma": 3,
+        "Karma": 4,
         "Lavender Haze": 3,
         "Fearless": 2,
         "Fifteen": 2
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Lavender Haze",
-    "last_match": {
-        "a": "cardigan",
-        "b": "Karma",
-        "message_id": 1448382182782668871,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Karma",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -234,6 +230,13 @@
             "a": "Getaway Car",
             "b": "Lavender Haze",
             "winner": "Lavender Haze",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "cardigan",
+            "b": "Karma",
+            "winner": "Karma",
             "a_votes": 0,
             "b_votes": 0
         }
