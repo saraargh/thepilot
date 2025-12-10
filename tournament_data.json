@@ -71,7 +71,7 @@
         "Fearless": 2,
         "Fifteen": 4
     },
-    "running": true,
+    "running": false,
     "title": "Taylor Swift Songs",
     "last_winner": "Getaway Car",
     "last_match": null,
