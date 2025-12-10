@@ -60,7 +60,8 @@
         "Fifteen",
         "Ready For It?",
         "Love Story",
-        "champagne problems"
+        "champagne problems",
+        "Look What You Made Me Do"
     ],
     "scores": {
         "Love Story": 1,
@@ -75,7 +76,7 @@
         "Anti-Hero": 4,
         "Wildest Dreams": 1,
         "Enchanted": 0,
-        "Look What You Made Me Do": 6,
+        "Look What You Made Me Do": 7,
         "cardigan": 3,
         "august": 7,
         "willow": 4,
@@ -98,13 +99,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "champagne problems",
-    "last_match": {
-        "a": "Style",
-        "b": "Look What You Made Me Do",
-        "message_id": 1448381359029485690,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Look What You Made Me Do",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -138,6 +134,13 @@
             "a": "willow",
             "b": "champagne problems",
             "winner": "champagne problems",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "Style",
+            "b": "Look What You Made Me Do",
+            "winner": "Look What You Made Me Do",
             "a_votes": 0,
             "b_votes": 0
         }
