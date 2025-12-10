@@ -61,7 +61,8 @@
         "Lover",
         "Delicate",
         "Cornelia Street",
-        "Ready For It?"
+        "Ready For It?",
+        "champagne problems"
     ],
     "scores": {
         "Love Story": 4,
@@ -81,7 +82,7 @@
         "august": 12,
         "willow": 4,
         "marjorie": 1,
-        "champagne problems": 11,
+        "champagne problems": 12,
         "The Archer": 3,
         "Getaway Car": 11,
         "Ready For It?": 6,
@@ -99,13 +100,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Ready For It?",
-    "last_match": {
-        "a": "Fearless",
-        "b": "champagne problems",
-        "message_id": 1448392324798349313,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "champagne problems",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -134,6 +130,13 @@
             "winner": "Ready For It?",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Fearless",
+            "b": "champagne problems",
+            "winner": "champagne problems",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
