@@ -96,7 +96,12 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": "Wildest Dreams",
-    "last_match": null,
+    "last_match": {
+        "a": "Bejeweled",
+        "b": "Getaway Car",
+        "message_id": 1448381695974965360,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Blank Space",
