@@ -58,7 +58,8 @@
         "Style",
         "Fearless",
         "Fifteen",
-        "Don\u2019t Blame Me"
+        "Don\u2019t Blame Me",
+        "Anti-Hero"
     ],
     "scores": {
         "Love Story": 0,
@@ -70,7 +71,7 @@
         "Lover": 0,
         "All Too Well": 0,
         "Style": 3,
-        "Anti-Hero": 3,
+        "Anti-Hero": 4,
         "Wildest Dreams": 0,
         "Enchanted": 0,
         "Look What You Made Me Do": 6,
@@ -96,13 +97,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "Don\u2019t Blame Me",
-    "last_match": {
-        "a": "Midnight Rain",
-        "b": "Anti-Hero",
-        "message_id": 1448369159506493471,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Anti-Hero",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cornelia Street",
@@ -152,6 +148,13 @@
             "winner": "Don\u2019t Blame Me",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Midnight Rain",
+            "b": "Anti-Hero",
+            "winner": "Anti-Hero",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
