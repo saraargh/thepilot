@@ -95,7 +95,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "All Too Well",
-    "last_match": null,
+    "last_match": {
+        "a": "willow",
+        "b": "You Belong With Me",
+        "message_id": 1448369233754063040,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Cornelia Street",
