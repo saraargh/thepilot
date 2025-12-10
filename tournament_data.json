@@ -60,14 +60,15 @@
         "Delicate",
         "Cornelia Street",
         "Ready For It?",
-        "champagne problems"
+        "champagne problems",
+        "Cruel Summer"
     ],
     "scores": {
         "Love Story": 4,
         "You Belong With Me": 3,
         "Blank Space": 3,
         "Shake It Off": 1,
-        "Cruel Summer": 8,
+        "Cruel Summer": 9,
         "Delicate": 10,
         "Lover": 1,
         "All Too Well": 1,
@@ -98,13 +99,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "champagne problems",
-    "last_match": {
-        "a": "Look What You Made Me Do",
-        "b": "Cruel Summer",
-        "message_id": 1448392375608148122,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Cruel Summer",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -138,6 +134,13 @@
             "a": "Fearless",
             "b": "champagne problems",
             "winner": "champagne problems",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Look What You Made Me Do",
+            "b": "Cruel Summer",
+            "winner": "Cruel Summer",
             "a_votes": 0,
             "b_votes": 1
         }
