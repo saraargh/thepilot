@@ -43,7 +43,8 @@
         "champagne problems",
         "Wildest Dreams",
         "Lavender Haze",
-        "Karma"
+        "Karma",
+        "Anti-Hero"
     ],
     "scores": {
         "Love Story": 2,
@@ -55,7 +56,7 @@
         "Lover": 0,
         "All Too Well": 1,
         "Style": 3,
-        "Anti-Hero": 5,
+        "Anti-Hero": 6,
         "Wildest Dreams": 3,
         "Enchanted": 1,
         "Look What You Made Me Do": 7,
@@ -81,13 +82,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Karma",
-    "last_match": {
-        "a": "Enchanted",
-        "b": "Anti-Hero",
-        "message_id": 1448382208866914336,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Anti-Hero",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Blank Space",
@@ -240,6 +236,13 @@
             "a": "cardigan",
             "b": "Karma",
             "winner": "Karma",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "Enchanted",
+            "b": "Anti-Hero",
+            "winner": "Anti-Hero",
             "a_votes": 0,
             "b_votes": 0
         }
