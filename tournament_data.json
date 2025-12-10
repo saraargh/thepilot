@@ -103,7 +103,12 @@
     "running": true,
     "title": "taylor swift songs",
     "last_winner": "Cornelia Street",
-    "last_match": null,
+    "last_match": {
+        "a": "Ready For It?",
+        "b": "Love Story",
+        "message_id": 1448368890282250393,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Cornelia Street",
