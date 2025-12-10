@@ -57,11 +57,12 @@
         "The Archer",
         "I Knew You Were Trouble",
         "Ready For It?",
-        "champagne problems"
+        "champagne problems",
+        "You Belong With Me"
     ],
     "scores": {
         "Love Story": 0,
-        "You Belong With Me": 2,
+        "You Belong With Me": 3,
         "Blank Space": 3,
         "Shake It Off": 1,
         "Cruel Summer": 5,
@@ -95,13 +96,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "champagne problems",
-    "last_match": {
-        "a": "You Belong With Me",
-        "b": "Fifteen",
-        "message_id": 1448364163301638185,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "You Belong With Me",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cruel Summer",
@@ -158,6 +154,13 @@
             "winner": "champagne problems",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "You Belong With Me",
+            "b": "Fifteen",
+            "winner": "You Belong With Me",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
