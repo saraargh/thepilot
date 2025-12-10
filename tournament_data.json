@@ -44,7 +44,8 @@
         "King of My Heart",
         "Clean",
         "Call It What You Want",
-        "The 1"
+        "The 1",
+        "loml"
     ],
     "scores": {
         "Long Live": 1,
@@ -78,17 +79,12 @@
         "would\u2019ve could\u2019ve should\u2019ve": 0,
         "bigger than the whole sky": 0,
         "glitch": 0,
-        "loml": 1
+        "loml": 2
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "The 1",
-    "last_match": {
-        "a": "loml",
-        "b": "illicit affairs",
-        "message_id": 1448407628035260561,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "loml",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -236,6 +232,13 @@
             "winner": "The 1",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "loml",
+            "b": "illicit affairs",
+            "winner": "loml",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 16"
