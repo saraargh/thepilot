@@ -40,7 +40,8 @@
         "august"
     ],
     "next_round": [
-        "Delicate"
+        "Delicate",
+        "Anti-Hero"
     ],
     "scores": {
         "Love Story": 4,
@@ -52,7 +53,7 @@
         "Lover": 1,
         "All Too Well": 1,
         "Style": 3,
-        "Anti-Hero": 9,
+        "Anti-Hero": 10,
         "Wildest Dreams": 4,
         "Enchanted": 1,
         "Look What You Made Me Do": 8,
@@ -78,13 +79,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "Delicate",
-    "last_match": {
-        "a": "champagne problems",
-        "b": "Anti-Hero",
-        "message_id": 1448393253463523471,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Anti-Hero",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -260,6 +256,13 @@
             "winner": "Delicate",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "champagne problems",
+            "b": "Anti-Hero",
+            "winner": "Anti-Hero",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Quarter Finals"
