@@ -65,14 +65,16 @@
         "mirrorball",
         "my tears ricochet"
     ],
-    "next_round": [],
+    "next_round": [
+        "Holy Ground"
+    ],
     "scores": {
         "Long Live": 0,
         "The Story of Us": 0,
         "Sparks Fly": 0,
         "State of Grace": 0,
         "Treacherous": 0,
-        "Holy Ground": 0,
+        "Holy Ground": 1,
         "Begin Again": 0,
         "The Last Time": 0,
         "Clean": 0,
@@ -102,13 +104,16 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": null,
-    "last_match": {
-        "a": "seven",
-        "b": "Holy Ground",
-        "message_id": 1448406283375087648,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [],
+    "last_winner": "Holy Ground",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "seven",
+            "b": "Holy Ground",
+            "winner": "Holy Ground",
+            "a_votes": 0,
+            "b_votes": 1
+        }
+    ],
     "round_stage": "Round of 32"
 }
