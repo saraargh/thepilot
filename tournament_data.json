@@ -39,7 +39,8 @@
     ],
     "next_round": [
         "So It Goes\u2026",
-        "Clean"
+        "Clean",
+        "loml"
     ],
     "scores": {
         "Long Live": 1,
@@ -73,17 +74,12 @@
         "would\u2019ve could\u2019ve should\u2019ve": 0,
         "bigger than the whole sky": 0,
         "glitch": 0,
-        "loml": 2
+        "loml": 3
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Clean",
-    "last_match": {
-        "a": "The 1",
-        "b": "loml",
-        "message_id": 1448407969279639746,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "loml",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "seven",
@@ -266,6 +262,13 @@
             "winner": "Clean",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "The 1",
+            "b": "loml",
+            "winner": "loml",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Quarter Finals"
