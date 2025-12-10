@@ -80,7 +80,12 @@
     "running": true,
     "title": "Taylor Swift Songs",
     "last_winner": "Anti-Hero",
-    "last_match": null,
+    "last_match": {
+        "a": "august",
+        "b": "The Archer",
+        "message_id": 1448382275476656159,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Blank Space",
