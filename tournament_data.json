@@ -55,7 +55,8 @@
         "Red",
         "Anti-Hero",
         "Fifteen",
-        "cardigan"
+        "cardigan",
+        "willow"
     ],
     "scores": {
         "Love Story": 4,
@@ -73,7 +74,7 @@
         "Look What You Made Me Do": 8,
         "cardigan": 5,
         "august": 12,
-        "willow": 4,
+        "willow": 5,
         "marjorie": 1,
         "champagne problems": 12,
         "The Archer": 3,
@@ -93,13 +94,8 @@
     },
     "running": true,
     "title": "Taylor Swift Songs",
-    "last_winner": "cardigan",
-    "last_match": {
-        "a": "willow",
-        "b": "Blank Space",
-        "message_id": 1448392575294902380,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "willow",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Lover",
@@ -168,6 +164,13 @@
             "a": "cardigan",
             "b": "I Knew You Were Trouble",
             "winner": "cardigan",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "willow",
+            "b": "Blank Space",
+            "winner": "willow",
             "a_votes": 1,
             "b_votes": 0
         }
