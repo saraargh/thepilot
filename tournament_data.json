@@ -49,13 +49,15 @@
         "Karma",
         "august"
     ],
-    "next_round": [],
+    "next_round": [
+        "Cruel Summer"
+    ],
     "scores": {
         "Love Story": 0,
         "You Belong With Me": 3,
         "Blank Space": 3,
         "Shake It Off": 1,
-        "Cruel Summer": 5,
+        "Cruel Summer": 6,
         "Delicate": 7,
         "Lover": 0,
         "All Too Well": 0,
@@ -86,13 +88,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "august",
-    "last_match": {
-        "a": "Cruel Summer",
-        "b": "Anti-Hero",
-        "message_id": 1448364646619807955,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Cruel Summer",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cruel Summer",
@@ -204,6 +201,13 @@
             "b": "Wildest Dreams",
             "winner": "august",
             "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Cruel Summer",
+            "b": "Anti-Hero",
+            "winner": "Cruel Summer",
+            "a_votes": 0,
             "b_votes": 0
         }
     ],
