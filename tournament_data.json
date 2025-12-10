@@ -55,7 +55,8 @@
         "Don\u2019t Blame Me",
         "Anti-Hero",
         "All Too Well",
-        "willow"
+        "willow",
+        "Wildest Dreams"
     ],
     "scores": {
         "Love Story": 0,
@@ -68,7 +69,7 @@
         "All Too Well": 1,
         "Style": 3,
         "Anti-Hero": 4,
-        "Wildest Dreams": 0,
+        "Wildest Dreams": 1,
         "Enchanted": 0,
         "Look What You Made Me Do": 6,
         "cardigan": 3,
@@ -93,13 +94,8 @@
     },
     "running": true,
     "title": "taylor swift songs",
-    "last_winner": "willow",
-    "last_match": {
-        "a": "Wildest Dreams",
-        "b": "marjorie",
-        "message_id": 1448369268528775422,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Wildest Dreams",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Cornelia Street",
@@ -168,6 +164,13 @@
             "a": "willow",
             "b": "You Belong With Me",
             "winner": "willow",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Wildest Dreams",
+            "b": "marjorie",
+            "winner": "Wildest Dreams",
             "a_votes": 1,
             "b_votes": 0
         }
