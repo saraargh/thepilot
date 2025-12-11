@@ -46,7 +46,8 @@
     "next_round": [
         "Is It Over Now?",
         "The Lakes",
-        "Never Grow Up"
+        "Never Grow Up",
+        "Forever & Always"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -54,7 +55,7 @@
         "Our Song": 1,
         "Teardrops on My Guitar": 0,
         "White Horse": 2,
-        "Forever & Always": 1,
+        "Forever & Always": 2,
         "Breathe": 1,
         "Better Than Revenge": 1,
         "Innocent": 0,
@@ -84,13 +85,8 @@
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "Never Grow Up",
-    "last_match": {
-        "a": "Haunted",
-        "b": "Forever & Always",
-        "message_id": 1448729541475434538,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Forever & Always",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
@@ -222,6 +218,13 @@
             "a": "Sad Beautiful Tragic",
             "b": "Never Grow Up",
             "winner": "Never Grow Up",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Haunted",
+            "b": "Forever & Always",
+            "winner": "Forever & Always",
             "a_votes": 0,
             "b_votes": 1
         }
