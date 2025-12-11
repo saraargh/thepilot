@@ -44,7 +44,8 @@
         "The Lakes",
         "Never Grow Up",
         "Forever & Always",
-        "Chloe or Sam or Sophia or Marcus"
+        "Chloe or Sam or Sophia or Marcus",
+        "Peter"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -77,18 +78,13 @@
         "Is It Over Now?": 2,
         "Slut!": 0,
         "The Bolter": 0,
-        "Peter": 2,
+        "Peter": 3,
         "Chloe or Sam or Sophia or Marcus": 2
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "Chloe or Sam or Sophia or Marcus",
-    "last_match": {
-        "a": "Peter",
-        "b": "Breathe",
-        "message_id": 1448729748263141612,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Peter",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
@@ -234,6 +230,13 @@
             "a": "Chloe or Sam or Sophia or Marcus",
             "b": "Picture to Burn",
             "winner": "Chloe or Sam or Sophia or Marcus",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Peter",
+            "b": "Breathe",
+            "winner": "Peter",
             "a_votes": 1,
             "b_votes": 0
         }
