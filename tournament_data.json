@@ -51,7 +51,8 @@
         "Peter",
         "Breathe",
         "Last Kiss",
-        "White Horse"
+        "White Horse",
+        "Welcome to New York"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -71,7 +72,7 @@
         "Starlight": 0,
         "Come Back\u2026 Be Here": 0,
         "The Moment I Knew": 0,
-        "Welcome to New York": 0,
+        "Welcome to New York": 1,
         "I Wish You Would": 0,
         "This Love": 0,
         "Dancing With Our Hands Tied": 1,
@@ -89,13 +90,8 @@
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "White Horse",
-    "last_match": {
-        "a": "Welcome to New York",
-        "b": "Paris",
-        "message_id": 1448729125157081109,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Welcome to New York",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
@@ -194,6 +190,13 @@
             "winner": "White Horse",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Welcome to New York",
+            "b": "Paris",
+            "winner": "Welcome to New York",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
