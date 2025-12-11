@@ -33,13 +33,13 @@
         "Peter",
         "Chloe or Sam or Sophia or Marcus"
     ],
-    "current_round": [],
-    "next_round": [
+    "current_round": [
         "The Lakes",
         "Forever & Always",
         "Peter",
         "Last Kiss"
     ],
+    "next_round": [],
     "scores": {
         "Tim McGraw": 0,
         "Picture to Burn": 1,
@@ -276,5 +276,5 @@
             "b_votes": 0
         }
     ],
-    "round_stage": "Quarter Finals"
+    "round_stage": "Semi Finals"
 }
