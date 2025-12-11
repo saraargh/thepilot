@@ -33,10 +33,41 @@
         "Peter",
         "Chloe or Sam or Sophia or Marcus"
     ],
-    "current_round": [],
-    "next_round": [
-        "The Lakes"
+    "current_round": [
+        "White Horse",
+        "Dress",
+        "The Moment I Knew",
+        "Innocent",
+        "Last Kiss",
+        "Is It Over Now?",
+        "Slut!",
+        "Tim McGraw",
+        "It\u2019s Nice to Have a Friend",
+        "I Wish You Would",
+        "This Love",
+        "Ours",
+        "Never Grow Up",
+        "Dancing With Our Hands Tied",
+        "Come Back\u2026 Be Here",
+        "Chloe or Sam or Sophia or Marcus",
+        "Daylight",
+        "Welcome to New York",
+        "The Bolter",
+        "Teardrops on My Guitar",
+        "Breathe",
+        "Our Song",
+        "Forever & Always",
+        "Paris",
+        "Starlight",
+        "Now That We Don\u2019t Talk",
+        "The Lakes",
+        "Haunted",
+        "Better Than Revenge",
+        "Sad Beautiful Tragic",
+        "Picture to Burn",
+        "Peter"
     ],
+    "next_round": [],
     "scores": {
         "Tim McGraw": 0,
         "Picture to Burn": 1,
@@ -71,228 +102,10 @@
         "Peter": 5,
         "Chloe or Sam or Sophia or Marcus": 2
     },
-    "running": false,
-    "title": "ts songs",
-    "last_winner": "The Lakes",
+    "running": true,
+    "title": "TS SONGS",
+    "last_winner": null,
     "last_match": null,
-    "finished_matches": [
-        {
-            "a": "Is It Over Now?",
-            "b": "Now That We Don\u2019t Talk",
-            "winner": "Is It Over Now?",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Dancing With Our Hands Tied",
-            "b": "Slut!",
-            "winner": "Dancing With Our Hands Tied",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Daylight",
-            "b": "Better Than Revenge",
-            "winner": "Better Than Revenge",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Innocent",
-            "b": "The Lakes",
-            "winner": "The Lakes",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Sad Beautiful Tragic",
-            "b": "It\u2019s Nice to Have a Friend",
-            "winner": "Sad Beautiful Tragic",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Never Grow Up",
-            "b": "Ours",
-            "winner": "Never Grow Up",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Haunted",
-            "b": "Dress",
-            "winner": "Haunted",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Forever & Always",
-            "b": "Come Back\u2026 Be Here",
-            "winner": "Forever & Always",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "The Moment I Knew",
-            "b": "Chloe or Sam or Sophia or Marcus",
-            "winner": "Chloe or Sam or Sophia or Marcus",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Picture to Burn",
-            "b": "I Wish You Would",
-            "winner": "Picture to Burn",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Peter",
-            "b": "Tim McGraw",
-            "winner": "Peter",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Breathe",
-            "b": "Teardrops on My Guitar",
-            "winner": "Breathe",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "This Love",
-            "b": "Last Kiss",
-            "winner": "Last Kiss",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Starlight",
-            "b": "White Horse",
-            "winner": "White Horse",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Welcome to New York",
-            "b": "Paris",
-            "winner": "Welcome to New York",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Our Song",
-            "b": "The Bolter",
-            "winner": "Our Song",
-            "a_votes": 0,
-            "b_votes": 0
-        },
-        {
-            "a": "Is It Over Now?",
-            "b": "Dancing With Our Hands Tied",
-            "winner": "Is It Over Now?",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Better Than Revenge",
-            "b": "The Lakes",
-            "winner": "The Lakes",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Sad Beautiful Tragic",
-            "b": "Never Grow Up",
-            "winner": "Never Grow Up",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Haunted",
-            "b": "Forever & Always",
-            "winner": "Forever & Always",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Chloe or Sam or Sophia or Marcus",
-            "b": "Picture to Burn",
-            "winner": "Chloe or Sam or Sophia or Marcus",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Peter",
-            "b": "Breathe",
-            "winner": "Peter",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Last Kiss",
-            "b": "White Horse",
-            "winner": "Last Kiss",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Welcome to New York",
-            "b": "Our Song",
-            "winner": "Welcome to New York",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Is It Over Now?",
-            "b": "The Lakes",
-            "winner": "The Lakes",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Never Grow Up",
-            "b": "Forever & Always",
-            "winner": "Forever & Always",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Chloe or Sam or Sophia or Marcus",
-            "b": "Peter",
-            "winner": "Peter",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Last Kiss",
-            "b": "Welcome to New York",
-            "winner": "Last Kiss",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "The Lakes",
-            "b": "Forever & Always",
-            "winner": "The Lakes",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Peter",
-            "b": "Last Kiss",
-            "winner": "Peter",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "The Lakes",
-            "b": "Peter",
-            "winner": "The Lakes",
-            "a_votes": 1,
-            "b_votes": 0
-        }
-    ],
-    "round_stage": "Finals"
+    "finished_matches": [],
+    "round_stage": "Round of 32"
 }
