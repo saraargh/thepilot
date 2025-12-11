@@ -65,7 +65,9 @@
         "Our Song",
         "The Bolter"
     ],
-    "next_round": [],
+    "next_round": [
+        "Is It Over Now?"
+    ],
     "scores": {
         "Tim McGraw": 0,
         "Picture to Burn": 0,
@@ -94,7 +96,7 @@
         "Paris": 0,
         "The Lakes": 0,
         "Now That We Don\u2019t Talk": 0,
-        "Is It Over Now?": 0,
+        "Is It Over Now?": 1,
         "Slut!": 0,
         "The Bolter": 0,
         "Peter": 1,
@@ -102,13 +104,16 @@
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": null,
-    "last_match": {
-        "a": "Is It Over Now?",
-        "b": "Now That We Don\u2019t Talk",
-        "message_id": 1448675940145041522,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [],
+    "last_winner": "Is It Over Now?",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "Is It Over Now?",
+            "b": "Now That We Don\u2019t Talk",
+            "winner": "Is It Over Now?",
+            "a_votes": 1,
+            "b_votes": 0
+        }
+    ],
     "round_stage": "Round of 32"
 }
