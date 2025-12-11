@@ -52,14 +52,15 @@
         "Picture to Burn",
         "Peter",
         "Breathe",
-        "Last Kiss"
+        "Last Kiss",
+        "White Horse"
     ],
     "scores": {
         "Tim McGraw": 0,
         "Picture to Burn": 1,
         "Our Song": 0,
         "Teardrops on My Guitar": 0,
-        "White Horse": 1,
+        "White Horse": 2,
         "Forever & Always": 1,
         "Breathe": 1,
         "Better Than Revenge": 1,
@@ -90,13 +91,8 @@
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "Last Kiss",
-    "last_match": {
-        "a": "Starlight",
-        "b": "White Horse",
-        "message_id": 1448729095012745448,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "White Horse",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
@@ -186,6 +182,13 @@
             "a": "This Love",
             "b": "Last Kiss",
             "winner": "Last Kiss",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Starlight",
+            "b": "White Horse",
+            "winner": "White Horse",
             "a_votes": 0,
             "b_votes": 1
         }
