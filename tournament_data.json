@@ -49,7 +49,9 @@
         "Welcome to New York",
         "Our Song"
     ],
-    "next_round": [],
+    "next_round": [
+        "Is It Over Now?"
+    ],
     "scores": {
         "Tim McGraw": 0,
         "Picture to Burn": 1,
@@ -78,7 +80,7 @@
         "Paris": 0,
         "The Lakes": 1,
         "Now That We Don\u2019t Talk": 0,
-        "Is It Over Now?": 1,
+        "Is It Over Now?": 2,
         "Slut!": 0,
         "The Bolter": 0,
         "Peter": 2,
@@ -86,13 +88,8 @@
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "Our Song",
-    "last_match": {
-        "a": "Is It Over Now?",
-        "b": "Dancing With Our Hands Tied",
-        "message_id": 1448729361091137757,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Is It Over Now?",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
@@ -204,6 +201,13 @@
             "b": "The Bolter",
             "winner": "Our Song",
             "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "Is It Over Now?",
+            "b": "Dancing With Our Hands Tied",
+            "winner": "Is It Over Now?",
+            "a_votes": 1,
             "b_votes": 0
         }
     ],
