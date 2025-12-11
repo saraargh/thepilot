@@ -35,7 +35,8 @@
     ],
     "current_round": [],
     "next_round": [
-        "The Lakes"
+        "The Lakes",
+        "Peter"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -68,18 +69,13 @@
         "Is It Over Now?": 2,
         "Slut!": 0,
         "The Bolter": 0,
-        "Peter": 4,
+        "Peter": 5,
         "Chloe or Sam or Sophia or Marcus": 2
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "The Lakes",
-    "last_match": {
-        "a": "Peter",
-        "b": "Last Kiss",
-        "message_id": 1448730220168351906,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Peter",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
@@ -281,6 +277,13 @@
             "a": "The Lakes",
             "b": "Forever & Always",
             "winner": "The Lakes",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Peter",
+            "b": "Last Kiss",
+            "winner": "Peter",
             "a_votes": 1,
             "b_votes": 0
         }
