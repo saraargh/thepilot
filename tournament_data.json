@@ -87,7 +87,12 @@
     "running": true,
     "title": "ts songs",
     "last_winner": "Our Song",
-    "last_match": null,
+    "last_match": {
+        "a": "Is It Over Now?",
+        "b": "Dancing With Our Hands Tied",
+        "message_id": 1448729361091137757,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Is It Over Now?",
