@@ -43,7 +43,8 @@
         "Never Grow Up",
         "Forever & Always",
         "Chloe or Sam or Sophia or Marcus",
-        "Peter"
+        "Peter",
+        "Last Kiss"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -55,7 +56,7 @@
         "Breathe": 1,
         "Better Than Revenge": 1,
         "Innocent": 0,
-        "Last Kiss": 1,
+        "Last Kiss": 2,
         "Haunted": 1,
         "Ours": 0,
         "Never Grow Up": 2,
@@ -81,13 +82,8 @@
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "Peter",
-    "last_match": {
-        "a": "Last Kiss",
-        "b": "White Horse",
-        "message_id": 1448729798372491356,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Last Kiss",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
@@ -240,6 +236,13 @@
             "a": "Peter",
             "b": "Breathe",
             "winner": "Peter",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Last Kiss",
+            "b": "White Horse",
+            "winner": "Last Kiss",
             "a_votes": 1,
             "b_votes": 0
         }
