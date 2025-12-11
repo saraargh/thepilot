@@ -103,7 +103,12 @@
     "running": true,
     "title": "TS songs",
     "last_winner": null,
-    "last_match": null,
+    "last_match": {
+        "a": "White Horse",
+        "b": "This Love",
+        "message_id": 1448661781152268330,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [],
     "round_stage": "Round of 32"
 }
