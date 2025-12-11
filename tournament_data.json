@@ -92,7 +92,12 @@
     "running": true,
     "title": "ts songs",
     "last_winner": "Breathe",
-    "last_match": null,
+    "last_match": {
+        "a": "This Love",
+        "b": "Last Kiss",
+        "message_id": 1448728943434924152,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Is It Over Now?",
