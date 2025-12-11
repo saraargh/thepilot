@@ -58,7 +58,8 @@
         "The Lakes",
         "Sad Beautiful Tragic",
         "Never Grow Up",
-        "Haunted"
+        "Haunted",
+        "Forever & Always"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -66,7 +67,7 @@
         "Our Song": 0,
         "Teardrops on My Guitar": 0,
         "White Horse": 1,
-        "Forever & Always": 0,
+        "Forever & Always": 1,
         "Breathe": 0,
         "Better Than Revenge": 1,
         "Innocent": 0,
@@ -96,13 +97,8 @@
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "Haunted",
-    "last_match": {
-        "a": "Forever & Always",
-        "b": "Come Back\u2026 Be Here",
-        "message_id": 1448676868008972369,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Forever & Always",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
@@ -150,6 +146,13 @@
             "a": "Haunted",
             "b": "Dress",
             "winner": "Haunted",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Forever & Always",
+            "b": "Come Back\u2026 Be Here",
+            "winner": "Forever & Always",
             "a_votes": 1,
             "b_votes": 0
         }
