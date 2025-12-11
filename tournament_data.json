@@ -65,7 +65,9 @@
         "Starlight",
         "It\u2019s Nice to Have a Friend"
     ],
-    "next_round": [],
+    "next_round": [
+        "Peter"
+    ],
     "scores": {
         "Tim McGraw": 0,
         "Picture to Burn": 0,
@@ -97,18 +99,21 @@
         "Is It Over Now?": 0,
         "Slut!": 0,
         "The Bolter": 0,
-        "Peter": 0,
+        "Peter": 1,
         "Chloe or Sam or Sophia or Marcus": 0
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": null,
-    "last_match": {
-        "a": "White Horse",
-        "b": "Peter",
-        "message_id": 1448664529331290124,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [],
+    "last_winner": "Peter",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "White Horse",
+            "b": "Peter",
+            "winner": "Peter",
+            "a_votes": 0,
+            "b_votes": 1
+        }
+    ],
     "round_stage": "Round of 32"
 }
