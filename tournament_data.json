@@ -91,7 +91,12 @@
     "running": true,
     "title": "ts songs",
     "last_winner": "Last Kiss",
-    "last_match": null,
+    "last_match": {
+        "a": "Starlight",
+        "b": "White Horse",
+        "message_id": 1448729095012745448,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Is It Over Now?",
