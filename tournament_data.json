@@ -103,7 +103,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": null,
-    "last_match": null,
+    "last_match": {
+        "a": "White Horse",
+        "b": "Peter",
+        "message_id": 1448664529331290124,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [],
     "round_stage": "Round of 32"
 }
