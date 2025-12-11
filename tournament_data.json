@@ -40,7 +40,8 @@
         "Welcome to New York"
     ],
     "next_round": [
-        "The Lakes"
+        "The Lakes",
+        "Forever & Always"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -48,7 +49,7 @@
         "Our Song": 1,
         "Teardrops on My Guitar": 0,
         "White Horse": 2,
-        "Forever & Always": 2,
+        "Forever & Always": 3,
         "Breathe": 1,
         "Better Than Revenge": 1,
         "Innocent": 0,
@@ -78,13 +79,8 @@
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "The Lakes",
-    "last_match": {
-        "a": "Never Grow Up",
-        "b": "Forever & Always",
-        "message_id": 1448730052152918057,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Forever & Always",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
@@ -258,6 +254,13 @@
             "a": "Is It Over Now?",
             "b": "The Lakes",
             "winner": "The Lakes",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Never Grow Up",
+            "b": "Forever & Always",
+            "winner": "Forever & Always",
             "a_votes": 0,
             "b_votes": 1
         }
