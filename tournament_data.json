@@ -102,7 +102,12 @@
     "running": true,
     "title": "ts songs",
     "last_winner": "Dancing With Our Hands Tied",
-    "last_match": null,
+    "last_match": {
+        "a": "Daylight",
+        "b": "Better Than Revenge",
+        "message_id": 1448676183498686611,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Is It Over Now?",
