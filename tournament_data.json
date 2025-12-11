@@ -100,7 +100,12 @@
     "running": true,
     "title": "ts songs",
     "last_winner": "The Lakes",
-    "last_match": null,
+    "last_match": {
+        "a": "Sad Beautiful Tragic",
+        "b": "It\u2019s Nice to Have a Friend",
+        "message_id": 1448676267439427798,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Is It Over Now?",
