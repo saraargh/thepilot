@@ -97,7 +97,12 @@
     "running": true,
     "title": "ts songs",
     "last_winner": "Haunted",
-    "last_match": null,
+    "last_match": {
+        "a": "Forever & Always",
+        "b": "Come Back\u2026 Be Here",
+        "message_id": 1448676868008972369,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Is It Over Now?",
