@@ -33,10 +33,41 @@
         "glitch",
         "loml"
     ],
-    "current_round": [],
-    "next_round": [
-        "exile"
+    "current_round": [
+        "Holy Ground",
+        "Cornelia Street",
+        "illicit affairs",
+        "The Story of Us",
+        "would\u2019ve could\u2019ve should\u2019ve",
+        "right where you left me",
+        "King of My Heart",
+        "State of Grace",
+        "Miss Americana & The Heartbreak Prince",
+        "exile",
+        "the last great american dynasty",
+        "Out of the Woods",
+        "The Last Time",
+        "Death By a Thousand Cuts",
+        "gold rush",
+        "Long Live",
+        "seven",
+        "bigger than the whole sky",
+        "my tears ricochet",
+        "So It Goes\u2026",
+        "cowboy like me",
+        "Call It What You Want",
+        "glitch",
+        "Treacherous",
+        "mirrorball",
+        "tolerate it",
+        "Clean",
+        "Sparks Fly",
+        "Begin Again",
+        "loml",
+        "The Man",
+        "The 1"
     ],
+    "next_round": [],
     "scores": {
         "Long Live": 1,
         "The Story of Us": 0,
@@ -71,228 +102,10 @@
         "glitch": 0,
         "loml": 3
     },
-    "running": false,
+    "running": true,
     "title": "TS SONGS",
-    "last_winner": "exile",
+    "last_winner": null,
     "last_match": null,
-    "finished_matches": [
-        {
-            "a": "seven",
-            "b": "Holy Ground",
-            "winner": "Holy Ground",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "State of Grace",
-            "b": "So It Goes\u2026",
-            "winner": "So It Goes\u2026",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Death By a Thousand Cuts",
-            "b": "the last great american dynasty",
-            "winner": "Death By a Thousand Cuts",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "The Man",
-            "b": "King of My Heart",
-            "winner": "King of My Heart",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Begin Again",
-            "b": "Clean",
-            "winner": "Clean",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "right where you left me",
-            "b": "Cornelia Street",
-            "winner": "right where you left me",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "would\u2019ve could\u2019ve should\u2019ve",
-            "b": "Call It What You Want",
-            "winner": "Call It What You Want",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Miss Americana & The Heartbreak Prince",
-            "b": "Long Live",
-            "winner": "Long Live",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Treacherous",
-            "b": "Sparks Fly",
-            "winner": "Sparks Fly",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "bigger than the whole sky",
-            "b": "The 1",
-            "winner": "The 1",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "The Story of Us",
-            "b": "loml",
-            "winner": "loml",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "The Last Time",
-            "b": "illicit affairs",
-            "winner": "illicit affairs",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "gold rush",
-            "b": "Out of the Woods",
-            "winner": "gold rush",
-            "a_votes": 0,
-            "b_votes": 0
-        },
-        {
-            "a": "exile",
-            "b": "glitch",
-            "winner": "exile",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "cowboy like me",
-            "b": "tolerate it",
-            "winner": "tolerate it",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "mirrorball",
-            "b": "my tears ricochet",
-            "winner": "mirrorball",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Holy Ground",
-            "b": "So It Goes\u2026",
-            "winner": "So It Goes\u2026",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Death By a Thousand Cuts",
-            "b": "King of My Heart",
-            "winner": "King of My Heart",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Clean",
-            "b": "right where you left me",
-            "winner": "Clean",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Call It What You Want",
-            "b": "Long Live",
-            "winner": "Call It What You Want",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Sparks Fly",
-            "b": "The 1",
-            "winner": "The 1",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "loml",
-            "b": "illicit affairs",
-            "winner": "loml",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "gold rush",
-            "b": "exile",
-            "winner": "exile",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "tolerate it",
-            "b": "mirrorball",
-            "winner": "tolerate it",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "So It Goes\u2026",
-            "b": "King of My Heart",
-            "winner": "So It Goes\u2026",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Clean",
-            "b": "Call It What You Want",
-            "winner": "Clean",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "The 1",
-            "b": "loml",
-            "winner": "loml",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "exile",
-            "b": "tolerate it",
-            "winner": "exile",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "So It Goes\u2026",
-            "b": "Clean",
-            "winner": "Clean",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "loml",
-            "b": "exile",
-            "winner": "exile",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Clean",
-            "b": "exile",
-            "winner": "exile",
-            "a_votes": 0,
-            "b_votes": 1
-        }
-    ],
-    "round_stage": "Finals"
+    "finished_matches": [],
+    "round_stage": "Round of 32"
 }
