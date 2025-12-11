@@ -65,13 +65,15 @@
         "Forever & Always",
         "Starlight"
     ],
-    "next_round": [],
+    "next_round": [
+        "White Horse"
+    ],
     "scores": {
         "Tim McGraw": 0,
         "Picture to Burn": 0,
         "Our Song": 0,
         "Teardrops on My Guitar": 0,
-        "White Horse": 0,
+        "White Horse": 1,
         "Forever & Always": 0,
         "Breathe": 0,
         "Better Than Revenge": 0,
@@ -102,13 +104,16 @@
     },
     "running": true,
     "title": "TS songs",
-    "last_winner": null,
-    "last_match": {
-        "a": "White Horse",
-        "b": "This Love",
-        "message_id": 1448661781152268330,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [],
+    "last_winner": "White Horse",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "White Horse",
+            "b": "This Love",
+            "winner": "White Horse",
+            "a_votes": 1,
+            "b_votes": 0
+        }
+    ],
     "round_stage": "Round of 32"
 }
