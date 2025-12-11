@@ -53,7 +53,8 @@
         "Chloe or Sam or Sophia or Marcus",
         "Picture to Burn",
         "Peter",
-        "Breathe"
+        "Breathe",
+        "Last Kiss"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -65,7 +66,7 @@
         "Breathe": 1,
         "Better Than Revenge": 1,
         "Innocent": 0,
-        "Last Kiss": 0,
+        "Last Kiss": 1,
         "Haunted": 1,
         "Ours": 0,
         "Never Grow Up": 1,
@@ -91,13 +92,8 @@
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "Breathe",
-    "last_match": {
-        "a": "This Love",
-        "b": "Last Kiss",
-        "message_id": 1448728943434924152,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Last Kiss",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
@@ -182,6 +178,13 @@
             "winner": "Breathe",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "This Love",
+            "b": "Last Kiss",
+            "winner": "Last Kiss",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
