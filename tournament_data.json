@@ -87,7 +87,12 @@
     "running": true,
     "title": "ts songs",
     "last_winner": "Is It Over Now?",
-    "last_match": null,
+    "last_match": {
+        "a": "Better Than Revenge",
+        "b": "The Lakes",
+        "message_id": 1448729424450289786,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Is It Over Now?",
