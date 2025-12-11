@@ -55,7 +55,8 @@
         "Haunted",
         "Forever & Always",
         "Chloe or Sam or Sophia or Marcus",
-        "Picture to Burn"
+        "Picture to Burn",
+        "Peter"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -88,18 +89,13 @@
         "Is It Over Now?": 1,
         "Slut!": 0,
         "The Bolter": 0,
-        "Peter": 1,
+        "Peter": 2,
         "Chloe or Sam or Sophia or Marcus": 1
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "Picture to Burn",
-    "last_match": {
-        "a": "Peter",
-        "b": "Tim McGraw",
-        "message_id": 1448728874211868863,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Peter",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
@@ -168,6 +164,13 @@
             "a": "Picture to Burn",
             "b": "I Wish You Would",
             "winner": "Picture to Burn",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Peter",
+            "b": "Tim McGraw",
+            "winner": "Peter",
             "a_votes": 1,
             "b_votes": 0
         }
