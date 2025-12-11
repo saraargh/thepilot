@@ -42,7 +42,10 @@ class ThePilot(discord.Client):
         # Setup commands
         setup_plane_commands(self.tree)
         setup_tournament_commands(self.tree, allowed_role_ids=ALLOWED_ROLE_IDS)
-        setup_poo_commands(self.tree, self, allowed_role_ids=ALLOWED_ROLE_IDS)
+
+        # ==== FIXED DAILY POO ====
+        poo_task = setup_poo_commands(self.tree, self, allowed_role_ids=ALLOWED_ROLE_IDS)
+        poo_task.start()   # <-- START THE TASK PROPERLY
 
         # Warnings
         ALLOWED_WARNROLE_IDS = [
