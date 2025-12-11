@@ -49,12 +49,13 @@
         "Breathe",
         "Last Kiss",
         "White Horse",
-        "Welcome to New York"
+        "Welcome to New York",
+        "Our Song"
     ],
     "scores": {
         "Tim McGraw": 0,
         "Picture to Burn": 1,
-        "Our Song": 0,
+        "Our Song": 1,
         "Teardrops on My Guitar": 0,
         "White Horse": 2,
         "Forever & Always": 1,
@@ -87,13 +88,8 @@
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "Welcome to New York",
-    "last_match": {
-        "a": "Our Song",
-        "b": "The Bolter",
-        "message_id": 1448729177347067987,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Our Song",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
@@ -198,6 +194,13 @@
             "b": "Paris",
             "winner": "Welcome to New York",
             "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Our Song",
+            "b": "The Bolter",
+            "winner": "Our Song",
+            "a_votes": 0,
             "b_votes": 0
         }
     ],
