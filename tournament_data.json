@@ -65,13 +65,15 @@
         "Picture to Burn",
         "Peter"
     ],
-    "next_round": [],
+    "next_round": [
+        "White Horse"
+    ],
     "scores": {
         "Tim McGraw": 0,
         "Picture to Burn": 1,
         "Our Song": 1,
         "Teardrops on My Guitar": 0,
-        "White Horse": 2,
+        "White Horse": 3,
         "Forever & Always": 3,
         "Breathe": 1,
         "Better Than Revenge": 1,
@@ -102,13 +104,16 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": null,
-    "last_match": {
-        "a": "White Horse",
-        "b": "Dress",
-        "message_id": 1448798399527649382,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [],
+    "last_winner": "White Horse",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "White Horse",
+            "b": "Dress",
+            "winner": "White Horse",
+            "a_votes": 1,
+            "b_votes": 0
+        }
+    ],
     "round_stage": "Round of 32"
 }
