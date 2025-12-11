@@ -94,7 +94,12 @@
     "running": true,
     "title": "ts songs",
     "last_winner": "Picture to Burn",
-    "last_match": null,
+    "last_match": {
+        "a": "Peter",
+        "b": "Tim McGraw",
+        "message_id": 1448728874211868863,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Is It Over Now?",
