@@ -64,7 +64,8 @@
         "The Bolter"
     ],
     "next_round": [
-        "Is It Over Now?"
+        "Is It Over Now?",
+        "Dancing With Our Hands Tied"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -87,7 +88,7 @@
         "Welcome to New York": 0,
         "I Wish You Would": 0,
         "This Love": 0,
-        "Dancing With Our Hands Tied": 0,
+        "Dancing With Our Hands Tied": 1,
         "Dress": 0,
         "It\u2019s Nice to Have a Friend": 0,
         "Daylight": 0,
@@ -102,18 +103,20 @@
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "Is It Over Now?",
-    "last_match": {
-        "a": "Dancing With Our Hands Tied",
-        "b": "Slut!",
-        "message_id": 1448676021950877820,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Dancing With Our Hands Tied",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
             "b": "Now That We Don\u2019t Talk",
             "winner": "Is It Over Now?",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Dancing With Our Hands Tied",
+            "b": "Slut!",
+            "winner": "Dancing With Our Hands Tied",
             "a_votes": 1,
             "b_votes": 0
         }
