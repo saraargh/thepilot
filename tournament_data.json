@@ -99,7 +99,12 @@
     "running": true,
     "title": "ts songs",
     "last_winner": "Sad Beautiful Tragic",
-    "last_match": null,
+    "last_match": {
+        "a": "Never Grow Up",
+        "b": "Ours",
+        "message_id": 1448676793857998920,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Is It Over Now?",
