@@ -47,7 +47,8 @@
     ],
     "next_round": [
         "Is It Over Now?",
-        "The Lakes"
+        "The Lakes",
+        "Never Grow Up"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -62,7 +63,7 @@
         "Last Kiss": 1,
         "Haunted": 1,
         "Ours": 0,
-        "Never Grow Up": 1,
+        "Never Grow Up": 2,
         "Sad Beautiful Tragic": 1,
         "Starlight": 0,
         "Come Back\u2026 Be Here": 0,
@@ -85,13 +86,8 @@
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "The Lakes",
-    "last_match": {
-        "a": "Sad Beautiful Tragic",
-        "b": "Never Grow Up",
-        "message_id": 1448729488572813395,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Never Grow Up",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
@@ -216,6 +212,13 @@
             "a": "Better Than Revenge",
             "b": "The Lakes",
             "winner": "The Lakes",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Sad Beautiful Tragic",
+            "b": "Never Grow Up",
+            "winner": "Never Grow Up",
             "a_votes": 0,
             "b_votes": 1
         }
