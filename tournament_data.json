@@ -62,7 +62,8 @@
     "next_round": [
         "Is It Over Now?",
         "Dancing With Our Hands Tied",
-        "Better Than Revenge"
+        "Better Than Revenge",
+        "The Lakes"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -90,7 +91,7 @@
         "It\u2019s Nice to Have a Friend": 0,
         "Daylight": 0,
         "Paris": 0,
-        "The Lakes": 0,
+        "The Lakes": 1,
         "Now That We Don\u2019t Talk": 0,
         "Is It Over Now?": 1,
         "Slut!": 0,
@@ -100,13 +101,8 @@
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "Better Than Revenge",
-    "last_match": {
-        "a": "Innocent",
-        "b": "The Lakes",
-        "message_id": 1448676231888502937,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "The Lakes",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
@@ -126,6 +122,13 @@
             "a": "Daylight",
             "b": "Better Than Revenge",
             "winner": "Better Than Revenge",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Innocent",
+            "b": "The Lakes",
+            "winner": "The Lakes",
             "a_votes": 0,
             "b_votes": 1
         }
