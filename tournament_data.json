@@ -93,7 +93,12 @@
     "running": true,
     "title": "ts songs",
     "last_winner": "Peter",
-    "last_match": null,
+    "last_match": {
+        "a": "Breathe",
+        "b": "Teardrops on My Guitar",
+        "message_id": 1448728906088710145,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Is It Over Now?",
