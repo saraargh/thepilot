@@ -80,7 +80,12 @@
     "running": true,
     "title": "ts songs",
     "last_winner": "Last Kiss",
-    "last_match": null,
+    "last_match": {
+        "a": "Welcome to New York",
+        "b": "Our Song",
+        "message_id": 1448729917624684544,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Is It Over Now?",
