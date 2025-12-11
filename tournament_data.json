@@ -103,7 +103,12 @@
     "running": true,
     "title": "ts songs",
     "last_winner": null,
-    "last_match": null,
+    "last_match": {
+        "a": "Is It Over Now?",
+        "b": "Now That We Don\u2019t Talk",
+        "message_id": 1448675940145041522,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [],
     "round_stage": "Round of 32"
 }
