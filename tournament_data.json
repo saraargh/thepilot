@@ -101,7 +101,12 @@
     "running": true,
     "title": "ts songs",
     "last_winner": "Better Than Revenge",
-    "last_match": null,
+    "last_match": {
+        "a": "Innocent",
+        "b": "The Lakes",
+        "message_id": 1448676231888502937,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Is It Over Now?",
