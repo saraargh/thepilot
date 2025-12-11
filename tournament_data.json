@@ -41,7 +41,9 @@
         "Last Kiss",
         "Welcome to New York"
     ],
-    "next_round": [],
+    "next_round": [
+        "The Lakes"
+    ],
     "scores": {
         "Tim McGraw": 0,
         "Picture to Burn": 1,
@@ -68,7 +70,7 @@
         "It\u2019s Nice to Have a Friend": 0,
         "Daylight": 0,
         "Paris": 0,
-        "The Lakes": 2,
+        "The Lakes": 3,
         "Now That We Don\u2019t Talk": 0,
         "Is It Over Now?": 2,
         "Slut!": 0,
@@ -78,13 +80,8 @@
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "Welcome to New York",
-    "last_match": {
-        "a": "Is It Over Now?",
-        "b": "The Lakes",
-        "message_id": 1448730006523084934,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "The Lakes",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
@@ -253,6 +250,13 @@
             "winner": "Welcome to New York",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Is It Over Now?",
+            "b": "The Lakes",
+            "winner": "The Lakes",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Quarter Finals"
