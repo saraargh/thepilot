@@ -48,7 +48,8 @@
         "Our Song"
     ],
     "next_round": [
-        "Is It Over Now?"
+        "Is It Over Now?",
+        "The Lakes"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -76,7 +77,7 @@
         "It\u2019s Nice to Have a Friend": 0,
         "Daylight": 0,
         "Paris": 0,
-        "The Lakes": 1,
+        "The Lakes": 2,
         "Now That We Don\u2019t Talk": 0,
         "Is It Over Now?": 2,
         "Slut!": 0,
@@ -86,13 +87,8 @@
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "Is It Over Now?",
-    "last_match": {
-        "a": "Better Than Revenge",
-        "b": "The Lakes",
-        "message_id": 1448729424450289786,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "The Lakes",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
@@ -212,6 +208,13 @@
             "winner": "Is It Over Now?",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Better Than Revenge",
+            "b": "The Lakes",
+            "winner": "The Lakes",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 16"
