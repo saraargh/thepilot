@@ -34,38 +34,40 @@
         "Chloe or Sam or Sophia or Marcus"
     ],
     "current_round": [
-        "The Moment I Knew",
-        "The Lakes",
-        "Innocent",
-        "Tim McGraw",
-        "Welcome to New York",
-        "Chloe or Sam or Sophia or Marcus",
-        "Better Than Revenge",
-        "Breathe",
-        "It\u2019s Nice to Have a Friend",
-        "Come Back\u2026 Be Here",
+        "White Horse",
         "Peter",
-        "The Bolter",
-        "Dress",
-        "Teardrops on My Guitar",
+        "Breathe",
         "Last Kiss",
-        "Haunted",
+        "This Love",
+        "The Bolter",
+        "Teardrops on My Guitar",
+        "Dress",
         "Slut!",
-        "Paris",
+        "Innocent",
         "Dancing With Our Hands Tied",
-        "Never Grow Up",
+        "Paris",
+        "Tim McGraw",
         "Picture to Burn",
-        "Is It Over Now?",
-        "Daylight",
-        "Now That We Don\u2019t Talk",
+        "Better Than Revenge",
+        "Haunted",
+        "Our Song",
         "Sad Beautiful Tragic",
+        "Welcome to New York",
+        "Daylight",
         "I Wish You Would",
+        "The Moment I Knew",
         "Forever & Always",
-        "Starlight"
+        "Ours",
+        "Chloe or Sam or Sophia or Marcus",
+        "The Lakes",
+        "Is It Over Now?",
+        "Come Back\u2026 Be Here",
+        "Never Grow Up",
+        "Now That We Don\u2019t Talk",
+        "Starlight",
+        "It\u2019s Nice to Have a Friend"
     ],
-    "next_round": [
-        "White Horse"
-    ],
+    "next_round": [],
     "scores": {
         "Tim McGraw": 0,
         "Picture to Burn": 0,
@@ -100,23 +102,10 @@
         "Peter": 0,
         "Chloe or Sam or Sophia or Marcus": 0
     },
-    "running": false,
-    "title": "TS songs",
-    "last_winner": "White Horse",
-    "last_match": {
-        "a": "Our Song",
-        "b": "Ours",
-        "message_id": 1448663836424142910,
-        "channel_id": 1438277790179921971
-    },
-    "finished_matches": [
-        {
-            "a": "White Horse",
-            "b": "This Love",
-            "winner": "White Horse",
-            "a_votes": 1,
-            "b_votes": 0
-        }
-    ],
+    "running": true,
+    "title": "TS SONGS",
+    "last_winner": null,
+    "last_match": null,
+    "finished_matches": [],
     "round_stage": "Round of 32"
 }
