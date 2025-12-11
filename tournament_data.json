@@ -103,7 +103,12 @@
     "running": true,
     "title": "TS songs",
     "last_winner": "White Horse",
-    "last_match": null,
+    "last_match": {
+        "a": "Our Song",
+        "b": "Ours",
+        "message_id": 1448663836424142910,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "White Horse",
