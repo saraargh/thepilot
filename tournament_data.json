@@ -86,7 +86,12 @@
     "running": true,
     "title": "ts songs",
     "last_winner": "The Lakes",
-    "last_match": null,
+    "last_match": {
+        "a": "Sad Beautiful Tragic",
+        "b": "Never Grow Up",
+        "message_id": 1448729488572813395,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Is It Over Now?",
