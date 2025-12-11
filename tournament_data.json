@@ -59,7 +59,8 @@
         "Better Than Revenge",
         "The Lakes",
         "Sad Beautiful Tragic",
-        "Never Grow Up"
+        "Never Grow Up",
+        "Haunted"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -72,7 +73,7 @@
         "Better Than Revenge": 1,
         "Innocent": 0,
         "Last Kiss": 0,
-        "Haunted": 0,
+        "Haunted": 1,
         "Ours": 0,
         "Never Grow Up": 1,
         "Sad Beautiful Tragic": 1,
@@ -97,13 +98,8 @@
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "Never Grow Up",
-    "last_match": {
-        "a": "Haunted",
-        "b": "Dress",
-        "message_id": 1448676827165102224,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Haunted",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
@@ -144,6 +140,13 @@
             "a": "Never Grow Up",
             "b": "Ours",
             "winner": "Never Grow Up",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Haunted",
+            "b": "Dress",
+            "winner": "Haunted",
             "a_votes": 1,
             "b_votes": 0
         }
