@@ -60,7 +60,8 @@
         "Dancing With Our Hands Tied",
         "Better Than Revenge",
         "The Lakes",
-        "Sad Beautiful Tragic"
+        "Sad Beautiful Tragic",
+        "Never Grow Up"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -75,7 +76,7 @@
         "Last Kiss": 0,
         "Haunted": 0,
         "Ours": 0,
-        "Never Grow Up": 0,
+        "Never Grow Up": 1,
         "Sad Beautiful Tragic": 1,
         "Starlight": 0,
         "Come Back\u2026 Be Here": 0,
@@ -98,13 +99,8 @@
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "Sad Beautiful Tragic",
-    "last_match": {
-        "a": "Never Grow Up",
-        "b": "Ours",
-        "message_id": 1448676793857998920,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Never Grow Up",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
@@ -138,6 +134,13 @@
             "a": "Sad Beautiful Tragic",
             "b": "It\u2019s Nice to Have a Friend",
             "winner": "Sad Beautiful Tragic",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Never Grow Up",
+            "b": "Ours",
+            "winner": "Never Grow Up",
             "a_votes": 1,
             "b_votes": 0
         }
