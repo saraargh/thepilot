@@ -61,7 +61,8 @@
         "Is It Over Now?",
         "Dancing With Our Hands Tied",
         "Better Than Revenge",
-        "The Lakes"
+        "The Lakes",
+        "Sad Beautiful Tragic"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -77,7 +78,7 @@
         "Haunted": 0,
         "Ours": 0,
         "Never Grow Up": 0,
-        "Sad Beautiful Tragic": 0,
+        "Sad Beautiful Tragic": 1,
         "Starlight": 0,
         "Come Back\u2026 Be Here": 0,
         "The Moment I Knew": 0,
@@ -99,13 +100,8 @@
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "The Lakes",
-    "last_match": {
-        "a": "Sad Beautiful Tragic",
-        "b": "It\u2019s Nice to Have a Friend",
-        "message_id": 1448676267439427798,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Sad Beautiful Tragic",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
@@ -134,6 +130,13 @@
             "winner": "The Lakes",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Sad Beautiful Tragic",
+            "b": "It\u2019s Nice to Have a Friend",
+            "winner": "Sad Beautiful Tragic",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
