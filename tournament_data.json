@@ -84,7 +84,12 @@
     "running": true,
     "title": "ts songs",
     "last_winner": "Forever & Always",
-    "last_match": null,
+    "last_match": {
+        "a": "Chloe or Sam or Sophia or Marcus",
+        "b": "Picture to Burn",
+        "message_id": 1448729578985099367,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Is It Over Now?",
