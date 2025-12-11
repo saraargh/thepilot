@@ -3,9 +3,9 @@ from discord import app_commands
 import random
 import datetime
 import pytz
-import asyncio
 from discord.ext import tasks
 
+# ===== CONFIG =====
 UK_TZ = pytz.timezone("Europe/London")
 
 POO_ROLE_ID = 1429934009550373059
@@ -19,7 +19,7 @@ ALLOWED_ROLE_IDS = [
     1406242523952713820
 ]
 
-# ===== Helper Functions =====
+# ===== Helpers =====
 def user_allowed(member: discord.Member, allowed_roles=None):
     allowed_roles = allowed_roles or ALLOWED_ROLE_IDS
     return any(role.id in allowed_roles for role in member.roles)
@@ -45,6 +45,7 @@ async def assign_random_poo(guild: discord.Guild):
 async def test_poo(guild: discord.Guild):
     passengers_role = guild.get_role(PASSENGERS_ROLE_ID)
     general_channel = guild.get_channel(GENERAL_CHANNEL_ID)
+
     if passengers_role.members:
         chosen = random.choice(passengers_role.members)
         poo_role = guild.get_role(POO_ROLE_ID)
@@ -53,31 +54,30 @@ async def test_poo(guild: discord.Guild):
     else:
         await general_channel.send("No passengers available for test.")
 
-# ===== Setup Commands & Scheduled Task =====
+# ============================================================
+#  SETUP COMMANDS + RETURN DAILY TASK (NO setup_hook changes)
+# ============================================================
 def setup_poo_commands(tree: app_commands.CommandTree, client: discord.Client, allowed_role_ids=None):
     allowed_role_ids = allowed_role_ids or ALLOWED_ROLE_IDS
 
-    # Scheduled task
+    # ===== Daily Task =====
     @tasks.loop(minutes=1)
     async def daily_poo_task():
         now = datetime.datetime.now(UK_TZ)
+
         if client.guilds:
             guild = client.guilds[0]
+
+            # 11am — clear poo
             if now.hour == 11 and now.minute == 0:
                 await clear_poo_role(guild)
                 print("11AM: Cleared poo role")
+
+            # 1pm — clear + assign new
             if now.hour == 13 and now.minute == 0:
                 await clear_poo_role(guild)
                 await assign_random_poo(guild)
                 print("1PM: Assigned random poo")
-
-    # Start the task inside setup_hook
-    original_setup_hook = getattr(client, "setup_hook", None)
-    async def new_setup_hook():
-        if original_setup_hook:
-            await original_setup_hook()
-        daily_poo_task.start()
-    client.setup_hook = new_setup_hook
 
     # ===== Slash Commands =====
     @tree.command(name="clearpoo", description="Clear the poo role from everyone")
@@ -115,3 +115,6 @@ def setup_poo_commands(tree: app_commands.CommandTree, client: discord.Client, a
             return
         await test_poo(interaction.guild)
         await interaction.response.send_message("🧪 Test poo completed!")
+
+    # RETURN THE TASK FOR botslash.py TO START
+    return daily_poo_task
