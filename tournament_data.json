@@ -82,7 +82,12 @@
     "running": true,
     "title": "ts songs",
     "last_winner": "Peter",
-    "last_match": null,
+    "last_match": {
+        "a": "Last Kiss",
+        "b": "White Horse",
+        "message_id": 1448729798372491356,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "Is It Over Now?",
