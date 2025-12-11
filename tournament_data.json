@@ -63,7 +63,8 @@
     ],
     "next_round": [
         "Is It Over Now?",
-        "Dancing With Our Hands Tied"
+        "Dancing With Our Hands Tied",
+        "Better Than Revenge"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -73,7 +74,7 @@
         "White Horse": 1,
         "Forever & Always": 0,
         "Breathe": 0,
-        "Better Than Revenge": 0,
+        "Better Than Revenge": 1,
         "Innocent": 0,
         "Last Kiss": 0,
         "Haunted": 0,
@@ -101,13 +102,8 @@
     },
     "running": true,
     "title": "ts songs",
-    "last_winner": "Dancing With Our Hands Tied",
-    "last_match": {
-        "a": "Daylight",
-        "b": "Better Than Revenge",
-        "message_id": 1448676183498686611,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Better Than Revenge",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Is It Over Now?",
@@ -122,6 +118,13 @@
             "winner": "Dancing With Our Hands Tied",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Daylight",
+            "b": "Better Than Revenge",
+            "winner": "Better Than Revenge",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
