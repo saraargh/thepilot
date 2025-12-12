@@ -98,7 +98,16 @@
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
     "last_winner": "Chloe or Sam or Sophia or Marcus",
-    "last_match": null,
+    "last_match": {
+        "a": "White Horse",
+        "b": "Welcome to New York",
+        "message_id": 1449086501874044959,
+        "channel_id": 1438277790179921971,
+        "locked": false,
+        "locked_at": null,
+        "locked_counts": null,
+        "lock_reason": null
+    },
     "finished_matches": [
         {
             "a": "Tim McGraw",
