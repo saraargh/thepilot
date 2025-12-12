@@ -95,10 +95,13 @@
         "b": "I Wish You Would",
         "message_id": 1449089863038144584,
         "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
+        "locked": true,
+        "locked_at": 1765560409,
+        "locked_counts": {
+            "a": 0,
+            "b": 0
+        },
+        "lock_reason": "Auto-locked after 24h"
     },
     "finished_matches": [
         {
