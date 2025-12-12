@@ -45,7 +45,8 @@
         "Forever & Always",
         "Peter",
         "The Moment I Knew",
-        "The Lakes"
+        "The Lakes",
+        "Now That We Don\u2019t Talk"
     ],
     "scores": {
         "Tim McGraw": 1,
@@ -74,7 +75,7 @@
         "Daylight": 1,
         "Paris": 1,
         "The Lakes": 12,
-        "Now That We Don\u2019t Talk": 2,
+        "Now That We Don\u2019t Talk": 3,
         "Is It Over Now?": 7,
         "Slut!": 1,
         "The Bolter": 5,
@@ -83,17 +84,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "The Lakes",
-    "last_match": {
-        "a": "Come Back\u2026 Be Here",
-        "b": "Now That We Don\u2019t Talk",
-        "message_id": 1449090703412953252,
-        "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
-    },
+    "last_winner": "Now That We Don\u2019t Talk",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Forever & Always",
@@ -232,6 +224,13 @@
             "a": "Tim McGraw",
             "b": "The Lakes",
             "winner": "The Lakes",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Come Back\u2026 Be Here",
+            "b": "Now That We Don\u2019t Talk",
+            "winner": "Now That We Don\u2019t Talk",
             "a_votes": 0,
             "b_votes": 1
         }
