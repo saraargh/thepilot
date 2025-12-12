@@ -65,7 +65,9 @@
         "The Lakes",
         "Better Than Revenge"
     ],
-    "next_round": [],
+    "next_round": [
+        "This Love"
+    ],
     "scores": {
         "Tim McGraw": 0,
         "Picture to Burn": 1,
@@ -86,7 +88,7 @@
         "The Moment I Knew": 0,
         "Welcome to New York": 2,
         "I Wish You Would": 1,
-        "This Love": 3,
+        "This Love": 4,
         "Dancing With Our Hands Tied": 3,
         "Dress": 0,
         "It\u2019s Nice to Have a Friend": 0,
@@ -102,21 +104,17 @@
     },
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
-    "last_winner": null,
-    "last_match": {
-        "a": "Tim McGraw",
-        "b": "This Love",
-        "message_id": 1449078053987684373,
-        "channel_id": 1438277790179921971,
-        "guild_id": 1398508733709029428,
-        "closed": true,
-        "closed_at": 1765557565,
-        "locked_votes": {
-            "a": 0,
-            "b": 1
+    "last_winner": "This Love",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "Tim McGraw",
+            "b": "This Love",
+            "winner": "This Love",
+            "a_votes": 0,
+            "b_votes": 1
         }
-    },
-    "finished_matches": [],
+    ],
     "round_stage": "Round of 32",
     "item_authors": {},
     "user_added": {}
