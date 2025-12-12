@@ -97,7 +97,16 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "Tim McGraw",
-    "last_match": null,
+    "last_match": {
+        "a": "Starlight",
+        "b": "The Lakes",
+        "message_id": 1449089619391021077,
+        "channel_id": 1438277790179921971,
+        "locked": false,
+        "locked_at": null,
+        "locked_counts": null,
+        "lock_reason": null
+    },
     "finished_matches": [
         {
             "a": "Forever & Always",
