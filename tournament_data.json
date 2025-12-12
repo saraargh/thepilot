@@ -60,7 +60,8 @@
         "Is It Over Now?",
         "Last Kiss",
         "I Wish You Would",
-        "It\u2019s Nice to Have a Friend"
+        "It\u2019s Nice to Have a Friend",
+        "Chloe or Sam or Sophia or Marcus"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -94,24 +95,12 @@
         "Slut!": 1,
         "The Bolter": 3,
         "Peter": 7,
-        "Chloe or Sam or Sophia or Marcus": 3
+        "Chloe or Sam or Sophia or Marcus": 4
     },
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
-    "last_winner": "It\u2019s Nice to Have a Friend",
-    "last_match": {
-        "a": "Come Back\u2026 Be Here",
-        "b": "Chloe or Sam or Sophia or Marcus",
-        "message_id": 1449084307514720511,
-        "channel_id": 1438277790179921971,
-        "locked": true,
-        "locked_at": 1765559085,
-        "locked_counts": {
-            "a": 0,
-            "b": 1
-        },
-        "lock_reason": "Auto-locked after 24h"
-    },
+    "last_winner": "Chloe or Sam or Sophia or Marcus",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Tim McGraw",
@@ -147,6 +136,13 @@
             "winner": "It\u2019s Nice to Have a Friend",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Come Back\u2026 Be Here",
+            "b": "Chloe or Sam or Sophia or Marcus",
+            "winner": "Chloe or Sam or Sophia or Marcus",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32",
