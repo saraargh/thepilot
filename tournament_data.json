@@ -53,7 +53,8 @@
         "Ours",
         "Forever & Always",
         "Dress",
-        "Never Grow Up"
+        "Never Grow Up",
+        "Breathe"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -62,7 +63,7 @@
         "Teardrops on My Guitar": 0,
         "White Horse": 4,
         "Forever & Always": 6,
-        "Breathe": 2,
+        "Breathe": 3,
         "Better Than Revenge": 1,
         "Innocent": 2,
         "Last Kiss": 4,
@@ -91,17 +92,8 @@
     },
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
-    "last_winner": "Never Grow Up",
-    "last_match": {
-        "a": "Breathe",
-        "b": "Sad Beautiful Tragic",
-        "message_id": 1449088252978921634,
-        "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
-    },
+    "last_winner": "Breathe",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Tim McGraw",
@@ -184,6 +176,13 @@
             "a": "Now That We Don\u2019t Talk",
             "b": "Never Grow Up",
             "winner": "Never Grow Up",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "Breathe",
+            "b": "Sad Beautiful Tragic",
+            "winner": "Breathe",
             "a_votes": 0,
             "b_votes": 0
         }
