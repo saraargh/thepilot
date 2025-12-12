@@ -49,7 +49,8 @@
         "Forever & Always",
         "Now That We Don\u2019t Talk",
         "The Lakes",
-        "Sad Beautiful Tragic"
+        "Sad Beautiful Tragic",
+        "Peter"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -82,18 +83,13 @@
         "Is It Over Now?": 3,
         "Slut!": 1,
         "The Bolter": 1,
-        "Peter": 5,
+        "Peter": 6,
         "Chloe or Sam or Sophia or Marcus": 3
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Sad Beautiful Tragic",
-    "last_match": {
-        "a": "Picture to Burn",
-        "b": "Peter",
-        "message_id": 1449045886041722951,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Peter",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -197,6 +193,13 @@
             "a": "Better Than Revenge",
             "b": "Sad Beautiful Tragic",
             "winner": "Sad Beautiful Tragic",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Picture to Burn",
+            "b": "Peter",
+            "winner": "Peter",
             "a_votes": 0,
             "b_votes": 1
         }
