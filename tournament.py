@@ -643,7 +643,7 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
                 ephemeral=True
             )
 
-        await interaction.channel.send("@everyone We have a Workd Cup Winner‼️🎉🏆")
+        await interaction.channel.send("@everyone We have a World Cup Winner‼️🎉🏆")
 
         embed = discord.Embed(
             title="🎉 World Cup Winner!",
