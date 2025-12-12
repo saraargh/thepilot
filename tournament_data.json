@@ -92,7 +92,16 @@
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
     "last_winner": "Never Grow Up",
-    "last_match": null,
+    "last_match": {
+        "a": "Breathe",
+        "b": "Sad Beautiful Tragic",
+        "message_id": 1449088252978921634,
+        "channel_id": 1438277790179921971,
+        "locked": false,
+        "locked_at": null,
+        "locked_counts": null,
+        "lock_reason": null
+    },
     "finished_matches": [
         {
             "a": "Tim McGraw",
