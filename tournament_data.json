@@ -65,14 +65,16 @@
         "It\u2019s Nice to Have a Friend",
         "Breathe"
     ],
-    "next_round": [],
+    "next_round": [
+        "Forever & Always"
+    ],
     "scores": {
         "Tim McGraw": 0,
         "Picture to Burn": 1,
         "Our Song": 1,
         "Teardrops on My Guitar": 0,
         "White Horse": 4,
-        "Forever & Always": 6,
+        "Forever & Always": 7,
         "Breathe": 3,
         "Better Than Revenge": 1,
         "Innocent": 3,
@@ -102,18 +104,17 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": null,
-    "last_match": {
-        "a": "Forever & Always",
-        "b": "Sad Beautiful Tragic",
-        "message_id": 1449089383843237938,
-        "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
-    },
-    "finished_matches": [],
+    "last_winner": "Forever & Always",
+    "last_match": null,
+    "finished_matches": [
+        {
+            "a": "Forever & Always",
+            "b": "Sad Beautiful Tragic",
+            "winner": "Forever & Always",
+            "a_votes": 1,
+            "b_votes": 0
+        }
+    ],
     "round_stage": "Round of 32",
     "item_authors": {},
     "user_added": {},
