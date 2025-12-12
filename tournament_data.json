@@ -100,7 +100,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "Slut!",
-    "last_match": null,
+    "last_match": {
+        "a": "It\u2019s Nice to Have a Friend",
+        "b": "I Wish You Would",
+        "message_id": 1449045412035166343,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "White Horse",
