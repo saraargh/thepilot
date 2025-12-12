@@ -109,9 +109,12 @@
         "message_id": 1449078274968780841,
         "channel_id": 1438277790179921971,
         "guild_id": 1398508733709029428,
-        "closed": false,
-        "closed_at": null,
-        "locked_votes": null
+        "closed": true,
+        "closed_at": 1765557872,
+        "locked_votes": {
+            "a": 0,
+            "b": 1
+        }
     },
     "finished_matches": [
         {
