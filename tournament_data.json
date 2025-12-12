@@ -52,7 +52,8 @@
         "Forever & Always",
         "Dress",
         "Never Grow Up",
-        "Breathe"
+        "Breathe",
+        "Innocent"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -63,7 +64,7 @@
         "Forever & Always": 6,
         "Breathe": 3,
         "Better Than Revenge": 1,
-        "Innocent": 2,
+        "Innocent": 3,
         "Last Kiss": 4,
         "Haunted": 1,
         "Ours": 1,
@@ -90,20 +91,8 @@
     },
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
-    "last_winner": "Breathe",
-    "last_match": {
-        "a": "Peter",
-        "b": "Innocent",
-        "message_id": 1449088270951776478,
-        "channel_id": 1438277790179921971,
-        "locked": true,
-        "locked_at": 1765560030,
-        "locked_counts": {
-            "a": 0,
-            "b": 0
-        },
-        "lock_reason": "Auto-locked after 24h"
-    },
+    "last_winner": "Innocent",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Tim McGraw",
@@ -193,6 +182,13 @@
             "a": "Breathe",
             "b": "Sad Beautiful Tragic",
             "winner": "Breathe",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "Peter",
+            "b": "Innocent",
+            "winner": "Innocent",
             "a_votes": 0,
             "b_votes": 0
         }
