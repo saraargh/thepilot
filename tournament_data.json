@@ -63,7 +63,8 @@
     ],
     "next_round": [
         "White Horse",
-        "Innocent"
+        "Innocent",
+        "Is It Over Now?"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -93,7 +94,7 @@
         "Paris": 0,
         "The Lakes": 5,
         "Now That We Don\u2019t Talk": 0,
-        "Is It Over Now?": 2,
+        "Is It Over Now?": 3,
         "Slut!": 0,
         "The Bolter": 0,
         "Peter": 5,
@@ -101,13 +102,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Innocent",
-    "last_match": {
-        "a": "Last Kiss",
-        "b": "Is It Over Now?",
-        "message_id": 1449045220418392135,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Is It Over Now?",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -122,6 +118,13 @@
             "winner": "Innocent",
             "a_votes": 0,
             "b_votes": 0
+        },
+        {
+            "a": "Last Kiss",
+            "b": "Is It Over Now?",
+            "winner": "Is It Over Now?",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
