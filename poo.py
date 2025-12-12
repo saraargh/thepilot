@@ -69,7 +69,7 @@ def setup_poo_commands(tree: app_commands.CommandTree, client: discord.Client, a
             guild = client.guilds[0]
 
             # 11am — clear poo
-            if now.hour == 11 and now.minute == 0:
+            if now.hour == 11 and now.minute == 5:
                 await clear_poo_role(guild)
                 print("11AM: Cleared poo role")
 
