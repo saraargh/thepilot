@@ -36,6 +36,7 @@ class ThePilot(discord.Client):
         from plane import setup_plane_commands
         from tournament import setup_tournament_commands
         from poo import setup_poo_commands
+        from goat import setup_goat_commands
         from bot_warnings import setup_warnings_commands
         from mute import setup_mute_commands  # Hard-mute commands
 
@@ -46,6 +47,10 @@ class ThePilot(discord.Client):
         # ==== FIXED DAILY POO ====
         poo_task = setup_poo_commands(self.tree, self, allowed_role_ids=ALLOWED_ROLE_IDS)
         poo_task.start()   # <-- START THE TASK PROPERLY
+
+        # ==== DAILY GOAT ====
+        goat_task = setup_goat_commands(self.tree, self, allowed_role_ids=ALLOWED_ROLE_IDS)
+        goat_task.start()  # <-- START GOAT TASK
 
         # Warnings
         ALLOWED_WARNROLE_IDS = [
