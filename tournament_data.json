@@ -98,7 +98,16 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "Dress",
-    "last_match": null,
+    "last_match": {
+        "a": "Tim McGraw",
+        "b": "Innocent",
+        "message_id": 1449089584804925693,
+        "channel_id": 1438277790179921971,
+        "locked": false,
+        "locked_at": null,
+        "locked_counts": null,
+        "lock_reason": null
+    },
     "finished_matches": [
         {
             "a": "Forever & Always",
