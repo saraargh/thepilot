@@ -99,7 +99,16 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "The Moment I Knew",
-    "last_match": null,
+    "last_match": {
+        "a": "Dress",
+        "b": "Our Song",
+        "message_id": 1449089553473343612,
+        "channel_id": 1438277790179921971,
+        "locked": false,
+        "locked_at": null,
+        "locked_counts": null,
+        "lock_reason": null
+    },
     "finished_matches": [
         {
             "a": "Forever & Always",
