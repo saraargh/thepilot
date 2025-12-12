@@ -102,7 +102,16 @@
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
     "last_winner": "Is It Over Now?",
-    "last_match": null,
+    "last_match": {
+        "a": "Dancing With Our Hands Tied",
+        "b": "Last Kiss",
+        "message_id": 1449083737282187334,
+        "channel_id": 1438277790179921971,
+        "locked": false,
+        "locked_at": null,
+        "locked_counts": null,
+        "lock_reason": null
+    },
     "finished_matches": [
         {
             "a": "Tim McGraw",
