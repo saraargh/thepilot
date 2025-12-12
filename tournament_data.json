@@ -92,7 +92,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "Forever & Always",
-    "last_match": null,
+    "last_match": {
+        "a": "Starlight",
+        "b": "Now That We Don\u2019t Talk",
+        "message_id": 1449045741413597225,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "White Horse",
