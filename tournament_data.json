@@ -95,7 +95,16 @@
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
     "last_winner": "Ours",
-    "last_match": null,
+    "last_match": {
+        "a": "Forever & Always",
+        "b": "Our Song",
+        "message_id": 1449088151313449010,
+        "channel_id": 1438277790179921971,
+        "locked": false,
+        "locked_at": null,
+        "locked_counts": null,
+        "lock_reason": null
+    },
     "finished_matches": [
         {
             "a": "Tim McGraw",
