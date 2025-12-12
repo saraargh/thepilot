@@ -84,7 +84,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "Dancing With Our Hands Tied",
-    "last_match": null,
+    "last_match": {
+        "a": "Daylight",
+        "b": "The Bolter",
+        "message_id": 1449047501591281736,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "White Horse",
