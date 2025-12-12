@@ -40,7 +40,8 @@
         "Peter"
     ],
     "next_round": [
-        "Is It Over Now?"
+        "Is It Over Now?",
+        "This Love"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -62,7 +63,7 @@
         "The Moment I Knew": 0,
         "Welcome to New York": 2,
         "I Wish You Would": 1,
-        "This Love": 2,
+        "This Love": 3,
         "Dancing With Our Hands Tied": 3,
         "Dress": 0,
         "It\u2019s Nice to Have a Friend": 0,
@@ -78,13 +79,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Is It Over Now?",
-    "last_match": {
-        "a": "This Love",
-        "b": "Dancing With Our Hands Tied",
-        "message_id": 1449047759301640243,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "This Love",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -260,6 +256,13 @@
             "winner": "Is It Over Now?",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "This Love",
+            "b": "Dancing With Our Hands Tied",
+            "winner": "This Love",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Quarter Finals"
