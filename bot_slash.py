@@ -6,6 +6,9 @@ import os
 from flask import Flask
 from threading import Thread
 
+# ✅ ADD
+from joinleave import WelcomeSystem
+
 # ===== CONFIG =====
 TOKEN = os.getenv("TOKEN")  # Render environment variable
 UK_TZ = pytz.timezone("Europe/London")
@@ -27,6 +30,17 @@ class ThePilot(discord.Client):
     def __init__(self):
         super().__init__(intents=intents)
         self.tree = app_commands.CommandTree(self)
+
+        # ✅ ADD
+        self.joinleave = WelcomeSystem(self)
+
+    # ✅ ADD
+    async def on_member_join(self, member: discord.Member):
+        await self.joinleave.on_member_join(member)
+
+    # ✅ ADD
+    async def on_member_remove(self, member: discord.Member):
+        await self.joinleave.on_member_remove(member)
 
     async def setup_hook(self):
         # Start scheduled tasks
