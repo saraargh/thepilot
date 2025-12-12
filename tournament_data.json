@@ -59,10 +59,11 @@
         "The Bolter",
         "Peter",
         "The Moment I Knew",
-        "Dress"
+        "Dress",
+        "Tim McGraw"
     ],
     "scores": {
-        "Tim McGraw": 0,
+        "Tim McGraw": 1,
         "Picture to Burn": 1,
         "Our Song": 1,
         "Teardrops on My Guitar": 0,
@@ -97,17 +98,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Dress",
-    "last_match": {
-        "a": "Tim McGraw",
-        "b": "Innocent",
-        "message_id": 1449089584804925693,
-        "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
-    },
+    "last_winner": "Tim McGraw",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Forever & Always",
@@ -148,6 +140,13 @@
             "a": "Dress",
             "b": "Our Song",
             "winner": "Dress",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Tim McGraw",
+            "b": "Innocent",
+            "winner": "Tim McGraw",
             "a_votes": 1,
             "b_votes": 0
         }
