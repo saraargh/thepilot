@@ -51,7 +51,8 @@
         "Dress",
         "Never Grow Up",
         "Breathe",
-        "Innocent"
+        "Innocent",
+        "Haunted"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -64,7 +65,7 @@
         "Better Than Revenge": 1,
         "Innocent": 3,
         "Last Kiss": 4,
-        "Haunted": 1,
+        "Haunted": 2,
         "Ours": 1,
         "Never Grow Up": 3,
         "Sad Beautiful Tragic": 2,
@@ -89,17 +90,8 @@
     },
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
-    "last_winner": "Innocent",
-    "last_match": {
-        "a": "Haunted",
-        "b": "Paris",
-        "message_id": 1449089211973238847,
-        "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
-    },
+    "last_winner": "Haunted",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Tim McGraw",
@@ -196,6 +188,13 @@
             "a": "Peter",
             "b": "Innocent",
             "winner": "Innocent",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "Haunted",
+            "b": "Paris",
+            "winner": "Haunted",
             "a_votes": 0,
             "b_votes": 0
         }
