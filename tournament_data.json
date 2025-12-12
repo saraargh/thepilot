@@ -103,7 +103,16 @@
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
     "last_winner": null,
-    "last_match": null,
+    "last_match": {
+        "a": "Tim McGraw",
+        "b": "This Love",
+        "message_id": 1449078053987684373,
+        "channel_id": 1438277790179921971,
+        "guild_id": 1398508733709029428,
+        "closed": false,
+        "closed_at": null,
+        "locked_votes": null
+    },
     "finished_matches": [],
     "round_stage": "Round of 32",
     "item_authors": {},
