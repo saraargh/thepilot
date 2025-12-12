@@ -35,7 +35,8 @@
     ],
     "current_round": [],
     "next_round": [
-        "Is It Over Now?"
+        "Is It Over Now?",
+        "The Lakes"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -63,7 +64,7 @@
         "It\u2019s Nice to Have a Friend": 0,
         "Daylight": 1,
         "Paris": 0,
-        "The Lakes": 8,
+        "The Lakes": 9,
         "Now That We Don\u2019t Talk": 1,
         "Is It Over Now?": 6,
         "Slut!": 1,
@@ -73,13 +74,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Is It Over Now?",
-    "last_match": {
-        "a": "The Bolter",
-        "b": "The Lakes",
-        "message_id": 1449047919251689572,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "The Lakes",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -283,6 +279,13 @@
             "winner": "Is It Over Now?",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "The Bolter",
+            "b": "The Lakes",
+            "winner": "The Lakes",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Semi Finals"
