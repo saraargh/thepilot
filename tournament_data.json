@@ -51,7 +51,8 @@
         "Paris",
         "Picture to Burn",
         "Never Grow Up",
-        "Ours"
+        "Ours",
+        "I Wish You Would"
     ],
     "scores": {
         "Tim McGraw": 1,
@@ -72,7 +73,7 @@
         "Come Back\u2026 Be Here": 1,
         "The Moment I Knew": 1,
         "Welcome to New York": 2,
-        "I Wish You Would": 2,
+        "I Wish You Would": 3,
         "This Love": 5,
         "Dancing With Our Hands Tied": 3,
         "Dress": 2,
@@ -89,20 +90,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Ours",
-    "last_match": {
-        "a": "Last Kiss",
-        "b": "I Wish You Would",
-        "message_id": 1449089863038144584,
-        "channel_id": 1438277790179921971,
-        "locked": true,
-        "locked_at": 1765560409,
-        "locked_counts": {
-            "a": 0,
-            "b": 0
-        },
-        "lock_reason": "Auto-locked after 24h"
-    },
+    "last_winner": "I Wish You Would",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Forever & Always",
@@ -201,6 +190,13 @@
             "winner": "Ours",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Last Kiss",
+            "b": "I Wish You Would",
+            "winner": "I Wish You Would",
+            "a_votes": 0,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32",
