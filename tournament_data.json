@@ -83,7 +83,16 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "Now That We Don\u2019t Talk",
-    "last_match": null,
+    "last_match": {
+        "a": "Paris",
+        "b": "Picture to Burn",
+        "message_id": 1449090737173041243,
+        "channel_id": 1438277790179921971,
+        "locked": false,
+        "locked_at": null,
+        "locked_counts": null,
+        "lock_reason": null
+    },
     "finished_matches": [
         {
             "a": "Forever & Always",
