@@ -59,7 +59,8 @@
         "Is It Over Now?",
         "Slut!",
         "I Wish You Would",
-        "This Love"
+        "This Love",
+        "Dancing With Our Hands Tied"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -82,7 +83,7 @@
         "Welcome to New York": 2,
         "I Wish You Would": 1,
         "This Love": 1,
-        "Dancing With Our Hands Tied": 1,
+        "Dancing With Our Hands Tied": 2,
         "Dress": 0,
         "It\u2019s Nice to Have a Friend": 0,
         "Daylight": 0,
@@ -97,13 +98,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "This Love",
-    "last_match": {
-        "a": "Never Grow Up",
-        "b": "Dancing With Our Hands Tied",
-        "message_id": 1449045514954998003,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Dancing With Our Hands Tied",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -146,6 +142,13 @@
             "winner": "This Love",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Never Grow Up",
+            "b": "Dancing With Our Hands Tied",
+            "winner": "Dancing With Our Hands Tied",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
