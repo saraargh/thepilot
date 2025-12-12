@@ -51,7 +51,8 @@
         "Breathe",
         "Forever & Always",
         "Now That We Don\u2019t Talk",
-        "The Lakes"
+        "The Lakes",
+        "Sad Beautiful Tragic"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -67,7 +68,7 @@
         "Haunted": 1,
         "Ours": 0,
         "Never Grow Up": 2,
-        "Sad Beautiful Tragic": 1,
+        "Sad Beautiful Tragic": 2,
         "Starlight": 0,
         "Come Back\u2026 Be Here": 0,
         "The Moment I Knew": 0,
@@ -89,13 +90,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "The Lakes",
-    "last_match": {
-        "a": "Better Than Revenge",
-        "b": "Sad Beautiful Tragic",
-        "message_id": 1449045852403273760,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Sad Beautiful Tragic",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -194,6 +190,13 @@
             "winner": "The Lakes",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Better Than Revenge",
+            "b": "Sad Beautiful Tragic",
+            "winner": "Sad Beautiful Tragic",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
