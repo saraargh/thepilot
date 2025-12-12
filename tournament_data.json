@@ -57,7 +57,8 @@
         "It\u2019s Nice to Have a Friend",
         "Chloe or Sam or Sophia or Marcus",
         "White Horse",
-        "The Bolter"
+        "The Bolter",
+        "Ours"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -71,7 +72,7 @@
         "Innocent": 2,
         "Last Kiss": 4,
         "Haunted": 1,
-        "Ours": 0,
+        "Ours": 1,
         "Never Grow Up": 2,
         "Sad Beautiful Tragic": 2,
         "Starlight": 0,
@@ -95,17 +96,8 @@
     },
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
-    "last_winner": "The Bolter",
-    "last_match": {
-        "a": "Teardrops on My Guitar",
-        "b": "Ours",
-        "message_id": 1449088111303852036,
-        "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
-    },
+    "last_winner": "Ours",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Tim McGraw",
@@ -160,6 +152,13 @@
             "a": "The Moment I Knew",
             "b": "The Bolter",
             "winner": "The Bolter",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Teardrops on My Guitar",
+            "b": "Ours",
+            "winner": "Ours",
             "a_votes": 0,
             "b_votes": 1
         }
