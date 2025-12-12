@@ -34,19 +34,38 @@
         "Chloe or Sam or Sophia or Marcus"
     ],
     "current_round": [
+        "Forever & Always",
+        "Sad Beautiful Tragic",
+        "Welcome to New York",
+        "This Love",
+        "The Bolter",
+        "Slut!",
+        "Peter",
+        "Daylight",
+        "White Horse",
+        "The Moment I Knew",
+        "Dress",
+        "Our Song",
+        "Tim McGraw",
+        "Innocent",
+        "Starlight",
+        "The Lakes",
+        "Better Than Revenge",
+        "Come Back\u2026 Be Here",
+        "Now That We Don\u2019t Talk",
+        "Chloe or Sam or Sophia or Marcus",
+        "Paris",
+        "Haunted",
+        "Is It Over Now?",
+        "Picture to Burn",
+        "Never Grow Up",
+        "Teardrops on My Guitar",
+        "Dancing With Our Hands Tied",
+        "Ours",
         "Last Kiss",
         "I Wish You Would",
         "It\u2019s Nice to Have a Friend",
-        "Chloe or Sam or Sophia or Marcus",
-        "White Horse",
-        "The Bolter",
-        "Ours",
-        "Forever & Always",
-        "Dress",
-        "Never Grow Up",
-        "Breathe",
-        "Innocent",
-        "Haunted"
+        "Breathe"
     ],
     "next_round": [],
     "scores": {
@@ -83,127 +102,12 @@
         "Peter": 7,
         "Chloe or Sam or Sophia or Marcus": 4
     },
-    "running": false,
-    "title": "TAYLOR SWIFT SONGS",
-    "last_winner": "Haunted",
-    "last_match": {
-        "a": "This Love",
-        "b": "Is It Over Now?",
-        "message_id": 1449089244340420750,
-        "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
-    },
-    "finished_matches": [
-        {
-            "a": "Tim McGraw",
-            "b": "This Love",
-            "winner": "This Love",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Daylight",
-            "b": "Is It Over Now?",
-            "winner": "Is It Over Now?",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Dancing With Our Hands Tied",
-            "b": "Last Kiss",
-            "winner": "Last Kiss",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "I Wish You Would",
-            "b": "Slut!",
-            "winner": "I Wish You Would",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "It\u2019s Nice to Have a Friend",
-            "b": "Starlight",
-            "winner": "It\u2019s Nice to Have a Friend",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "Come Back\u2026 Be Here",
-            "b": "Chloe or Sam or Sophia or Marcus",
-            "winner": "Chloe or Sam or Sophia or Marcus",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "White Horse",
-            "b": "Welcome to New York",
-            "winner": "White Horse",
-            "a_votes": 1,
-            "b_votes": 0
-        },
-        {
-            "a": "The Moment I Knew",
-            "b": "The Bolter",
-            "winner": "The Bolter",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Teardrops on My Guitar",
-            "b": "Ours",
-            "winner": "Ours",
-            "a_votes": 0,
-            "b_votes": 1
-        },
-        {
-            "a": "Forever & Always",
-            "b": "Our Song",
-            "winner": "Forever & Always",
-            "a_votes": 0,
-            "b_votes": 0
-        },
-        {
-            "a": "Picture to Burn",
-            "b": "Dress",
-            "winner": "Dress",
-            "a_votes": 0,
-            "b_votes": 0
-        },
-        {
-            "a": "Now That We Don\u2019t Talk",
-            "b": "Never Grow Up",
-            "winner": "Never Grow Up",
-            "a_votes": 0,
-            "b_votes": 0
-        },
-        {
-            "a": "Breathe",
-            "b": "Sad Beautiful Tragic",
-            "winner": "Breathe",
-            "a_votes": 0,
-            "b_votes": 0
-        },
-        {
-            "a": "Peter",
-            "b": "Innocent",
-            "winner": "Innocent",
-            "a_votes": 0,
-            "b_votes": 0
-        },
-        {
-            "a": "Haunted",
-            "b": "Paris",
-            "winner": "Haunted",
-            "a_votes": 0,
-            "b_votes": 0
-        }
-    ],
-    "round_stage": "15-items round",
+    "running": true,
+    "title": "TS SONGS",
+    "last_winner": null,
+    "last_match": null,
+    "finished_matches": [],
+    "round_stage": "Round of 32",
     "item_authors": {},
     "user_added": {},
     "user_items": {}
