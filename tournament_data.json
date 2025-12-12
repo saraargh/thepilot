@@ -52,7 +52,8 @@
         "The Bolter",
         "Breathe",
         "Forever & Always",
-        "Now That We Don\u2019t Talk"
+        "Now That We Don\u2019t Talk",
+        "The Lakes"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -80,7 +81,7 @@
         "It\u2019s Nice to Have a Friend": 0,
         "Daylight": 1,
         "Paris": 0,
-        "The Lakes": 5,
+        "The Lakes": 6,
         "Now That We Don\u2019t Talk": 1,
         "Is It Over Now?": 3,
         "Slut!": 1,
@@ -90,13 +91,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Now That We Don\u2019t Talk",
-    "last_match": {
-        "a": "The Lakes",
-        "b": "Haunted",
-        "message_id": 1449045776058810548,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "The Lakes",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -188,6 +184,13 @@
             "winner": "Now That We Don\u2019t Talk",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "The Lakes",
+            "b": "Haunted",
+            "winner": "The Lakes",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
