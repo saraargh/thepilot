@@ -61,7 +61,8 @@
         "Forever & Always",
         "This Love",
         "The Bolter",
-        "Peter"
+        "Peter",
+        "The Moment I Knew"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -80,7 +81,7 @@
         "Sad Beautiful Tragic": 2,
         "Starlight": 0,
         "Come Back\u2026 Be Here": 0,
-        "The Moment I Knew": 0,
+        "The Moment I Knew": 1,
         "Welcome to New York": 2,
         "I Wish You Would": 2,
         "This Love": 5,
@@ -99,17 +100,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Peter",
-    "last_match": {
-        "a": "White Horse",
-        "b": "The Moment I Knew",
-        "message_id": 1449089518199111742,
-        "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
-    },
+    "last_winner": "The Moment I Knew",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Forever & Always",
@@ -138,6 +130,13 @@
             "winner": "Peter",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "White Horse",
+            "b": "The Moment I Knew",
+            "winner": "The Moment I Knew",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32",
