@@ -53,7 +53,8 @@
         "Daylight",
         "The Bolter",
         "Breathe",
-        "Forever & Always"
+        "Forever & Always",
+        "Now That We Don\u2019t Talk"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -82,7 +83,7 @@
         "Daylight": 1,
         "Paris": 0,
         "The Lakes": 5,
-        "Now That We Don\u2019t Talk": 0,
+        "Now That We Don\u2019t Talk": 1,
         "Is It Over Now?": 3,
         "Slut!": 1,
         "The Bolter": 1,
@@ -91,13 +92,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Forever & Always",
-    "last_match": {
-        "a": "Starlight",
-        "b": "Now That We Don\u2019t Talk",
-        "message_id": 1449045741413597225,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Now That We Don\u2019t Talk",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -182,6 +178,13 @@
             "winner": "Forever & Always",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Starlight",
+            "b": "Now That We Don\u2019t Talk",
+            "winner": "Now That We Don\u2019t Talk",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32"
