@@ -33,13 +33,13 @@
         "Peter",
         "Chloe or Sam or Sophia or Marcus"
     ],
-    "current_round": [],
-    "next_round": [
+    "current_round": [
         "Peter",
         "The Moment I Knew",
         "Paris",
         "Never Grow Up"
     ],
+    "next_round": [],
     "scores": {
         "Tim McGraw": 1,
         "Picture to Burn": 2,
@@ -276,7 +276,7 @@
             "b_votes": 0
         }
     ],
-    "round_stage": "Quarter Finals",
+    "round_stage": "Semi Finals",
     "item_authors": {},
     "user_added": {},
     "user_items": {}
