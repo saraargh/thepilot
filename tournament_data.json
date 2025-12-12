@@ -56,7 +56,8 @@
         "This Love",
         "Dancing With Our Hands Tied",
         "Chloe or Sam or Sophia or Marcus",
-        "Daylight"
+        "Daylight",
+        "The Bolter"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -88,19 +89,14 @@
         "Now That We Don\u2019t Talk": 0,
         "Is It Over Now?": 3,
         "Slut!": 1,
-        "The Bolter": 0,
+        "The Bolter": 1,
         "Peter": 5,
         "Chloe or Sam or Sophia or Marcus": 3
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Daylight",
-    "last_match": {
-        "a": "The Bolter",
-        "b": "Teardrops on My Guitar",
-        "message_id": 1449045641526247436,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "The Bolter",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -162,6 +158,13 @@
             "a": "Daylight",
             "b": "Welcome to New York",
             "winner": "Daylight",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "The Bolter",
+            "b": "Teardrops on My Guitar",
+            "winner": "The Bolter",
             "a_votes": 1,
             "b_votes": 0
         }
