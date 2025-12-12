@@ -45,7 +45,8 @@
         "Innocent",
         "Is It Over Now?",
         "This Love",
-        "Dancing With Our Hands Tied"
+        "Dancing With Our Hands Tied",
+        "The Bolter"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -77,19 +78,14 @@
         "Now That We Don\u2019t Talk": 1,
         "Is It Over Now?": 4,
         "Slut!": 1,
-        "The Bolter": 1,
+        "The Bolter": 2,
         "Peter": 6,
         "Chloe or Sam or Sophia or Marcus": 3
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Dancing With Our Hands Tied",
-    "last_match": {
-        "a": "Daylight",
-        "b": "The Bolter",
-        "message_id": 1449047501591281736,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "The Bolter",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -230,6 +226,13 @@
             "winner": "Dancing With Our Hands Tied",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Daylight",
+            "b": "The Bolter",
+            "winner": "The Bolter",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 16"
