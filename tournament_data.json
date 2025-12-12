@@ -49,7 +49,9 @@
         "Sad Beautiful Tragic",
         "Peter"
     ],
-    "next_round": [],
+    "next_round": [
+        "Innocent"
+    ],
     "scores": {
         "Tim McGraw": 0,
         "Picture to Burn": 1,
@@ -59,7 +61,7 @@
         "Forever & Always": 4,
         "Breathe": 2,
         "Better Than Revenge": 1,
-        "Innocent": 1,
+        "Innocent": 2,
         "Last Kiss": 3,
         "Haunted": 1,
         "Ours": 0,
@@ -86,13 +88,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Peter",
-    "last_match": {
-        "a": "White Horse",
-        "b": "Innocent",
-        "message_id": 1449046004996505753,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Innocent",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -203,6 +200,13 @@
             "a": "Picture to Burn",
             "b": "Peter",
             "winner": "Peter",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "White Horse",
+            "b": "Innocent",
+            "winner": "Innocent",
             "a_votes": 0,
             "b_votes": 1
         }
