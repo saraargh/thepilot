@@ -15,11 +15,11 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
 
 # ------------------- Auto-close config -------------------
-AUTO_CLOSE_WARNING_SECONDS = 23 * 3600   # 23 hours
-AUTO_CLOSE_LOCK_SECONDS = 24 * 3600      # 24 hours
+AUTO_CLOSE_WARNING_SECONDS = 2 * 60   # 23 hours
+AUTO_CLOSE_LOCK_SECONDS = 3 * 60      # 24 hours
 
 # Optional pings for the 23h warning (defaults: NO ping)
-CLOSE_WARN_PING_EVERYONE = False         # set True if you want @everyone
+CLOSE_WARN_PING_EVERYONE = True         # set True if you want @everyone
 CLOSE_WARN_ROLE_ID = None                # set a role ID (int) if you want to ping a role
 
 # ------------------- Default JSON structure -------------------
