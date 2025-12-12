@@ -41,7 +41,8 @@
         "Dancing With Our Hands Tied",
         "The Bolter",
         "Forever & Always",
-        "The Lakes"
+        "The Lakes",
+        "Peter"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -74,18 +75,13 @@
         "Is It Over Now?": 4,
         "Slut!": 1,
         "The Bolter": 2,
-        "Peter": 6,
+        "Peter": 7,
         "Chloe or Sam or Sophia or Marcus": 3
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "The Lakes",
-    "last_match": {
-        "a": "Sad Beautiful Tragic",
-        "b": "Peter",
-        "message_id": 1449047669564506193,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Peter",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -245,6 +241,13 @@
             "a": "Now That We Don\u2019t Talk",
             "b": "The Lakes",
             "winner": "The Lakes",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Sad Beautiful Tragic",
+            "b": "Peter",
+            "winner": "Peter",
             "a_votes": 0,
             "b_votes": 1
         }
