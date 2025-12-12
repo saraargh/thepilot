@@ -44,7 +44,8 @@
         "Is It Over Now?",
         "This Love",
         "Dancing With Our Hands Tied",
-        "The Bolter"
+        "The Bolter",
+        "Forever & Always"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -52,7 +53,7 @@
         "Our Song": 1,
         "Teardrops on My Guitar": 0,
         "White Horse": 3,
-        "Forever & Always": 4,
+        "Forever & Always": 5,
         "Breathe": 2,
         "Better Than Revenge": 1,
         "Innocent": 2,
@@ -82,13 +83,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "The Bolter",
-    "last_match": {
-        "a": "Breathe",
-        "b": "Forever & Always",
-        "message_id": 1449047601365385227,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Forever & Always",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -234,6 +230,13 @@
             "a": "Daylight",
             "b": "The Bolter",
             "winner": "The Bolter",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Breathe",
+            "b": "Forever & Always",
+            "winner": "Forever & Always",
             "a_votes": 0,
             "b_votes": 1
         }
