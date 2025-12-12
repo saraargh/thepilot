@@ -37,7 +37,9 @@
         "Paris",
         "Never Grow Up"
     ],
-    "next_round": [],
+    "next_round": [
+        "The Moment I Knew"
+    ],
     "scores": {
         "Tim McGraw": 1,
         "Picture to Burn": 2,
@@ -55,7 +57,7 @@
         "Sad Beautiful Tragic": 2,
         "Starlight": 0,
         "Come Back\u2026 Be Here": 1,
-        "The Moment I Knew": 3,
+        "The Moment I Knew": 4,
         "Welcome to New York": 2,
         "I Wish You Would": 3,
         "This Love": 5,
@@ -74,17 +76,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Never Grow Up",
-    "last_match": {
-        "a": "Peter",
-        "b": "The Moment I Knew",
-        "message_id": 1449091139364851804,
-        "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
-    },
+    "last_winner": "The Moment I Knew",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Forever & Always",
@@ -281,6 +274,13 @@
             "winner": "Never Grow Up",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Peter",
+            "b": "The Moment I Knew",
+            "winner": "The Moment I Knew",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Semi Finals",
