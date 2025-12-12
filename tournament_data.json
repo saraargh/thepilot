@@ -94,7 +94,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "The Bolter",
-    "last_match": null,
+    "last_match": {
+        "a": "Breathe",
+        "b": "Our Song",
+        "message_id": 1449045675009380424,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "White Horse",
