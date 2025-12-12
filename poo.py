@@ -9,6 +9,7 @@ from discord.ext import tasks
 UK_TZ = pytz.timezone("Europe/London")
 
 POO_ROLE_ID = 1429934009550373059
+GOAT_ROLE_ID = 1448995127636000788
 PASSENGERS_ROLE_ID = 1404100554807971971
 GENERAL_CHANNEL_ID = 1398508734506078240
 
@@ -32,11 +33,17 @@ async def clear_poo_role(guild: discord.Guild):
 
 async def assign_random_poo(guild: discord.Guild):
     poo_role = guild.get_role(POO_ROLE_ID)
+    goat_role = guild.get_role(GOAT_ROLE_ID)
     passengers_role = guild.get_role(PASSENGERS_ROLE_ID)
     general_channel = guild.get_channel(GENERAL_CHANNEL_ID)
 
-    if passengers_role.members:
-        chosen = random.choice(passengers_role.members)
+    eligible = [
+        m for m in passengers_role.members
+        if goat_role not in m.roles
+    ]
+
+    if eligible:
+        chosen = random.choice(eligible)
         await chosen.add_roles(poo_role)
         await general_channel.send(f"🎉 {chosen.mention} is today’s poo!")
     else:
@@ -44,11 +51,17 @@ async def assign_random_poo(guild: discord.Guild):
 
 async def test_poo(guild: discord.Guild):
     passengers_role = guild.get_role(PASSENGERS_ROLE_ID)
+    goat_role = guild.get_role(GOAT_ROLE_ID)
+    poo_role = guild.get_role(POO_ROLE_ID)
     general_channel = guild.get_channel(GENERAL_CHANNEL_ID)
 
-    if passengers_role.members:
-        chosen = random.choice(passengers_role.members)
-        poo_role = guild.get_role(POO_ROLE_ID)
+    eligible = [
+        m for m in passengers_role.members
+        if goat_role not in m.roles
+    ]
+
+    if eligible:
+        chosen = random.choice(eligible)
         await chosen.add_roles(poo_role)
         await general_channel.send(f"🧪 Test poo assigned to {chosen.mention}!")
     else:
@@ -73,11 +86,11 @@ def setup_poo_commands(tree: app_commands.CommandTree, client: discord.Client, a
                 await clear_poo_role(guild)
                 print("11AM: Cleared poo role")
 
-            # 1pm — clear + assign new
+            # 12pm — clear + assign new poo
             if now.hour == 12 and now.minute == 0:
                 await clear_poo_role(guild)
                 await assign_random_poo(guild)
-                print("1PM: Assigned random poo")
+                print("12PM: Assigned random poo")
 
     # ===== Slash Commands =====
     @tree.command(name="clearpoo", description="Clear the poo role from everyone")
