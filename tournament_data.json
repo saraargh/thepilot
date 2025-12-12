@@ -86,7 +86,16 @@
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
     "last_winner": "Haunted",
-    "last_match": null,
+    "last_match": {
+        "a": "This Love",
+        "b": "Is It Over Now?",
+        "message_id": 1449089244340420750,
+        "channel_id": 1438277790179921971,
+        "locked": false,
+        "locked_at": null,
+        "locked_counts": null,
+        "lock_reason": null
+    },
     "finished_matches": [
         {
             "a": "Tim McGraw",
