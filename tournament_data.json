@@ -78,7 +78,16 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "The Moment I Knew",
-    "last_match": null,
+    "last_match": {
+        "a": "Now That We Don\u2019t Talk",
+        "b": "Paris",
+        "message_id": 1449091055956922591,
+        "channel_id": 1438277790179921971,
+        "locked": false,
+        "locked_at": null,
+        "locked_counts": null,
+        "lock_reason": null
+    },
     "finished_matches": [
         {
             "a": "Forever & Always",
