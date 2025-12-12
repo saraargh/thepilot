@@ -104,10 +104,13 @@
         "b": "Chloe or Sam or Sophia or Marcus",
         "message_id": 1449084307514720511,
         "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
+        "locked": true,
+        "locked_at": 1765559085,
+        "locked_counts": {
+            "a": 0,
+            "b": 1
+        },
+        "lock_reason": "Auto-locked after 24h"
     },
     "finished_matches": [
         {
