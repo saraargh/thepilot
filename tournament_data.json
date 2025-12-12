@@ -54,7 +54,8 @@
         "Chloe or Sam or Sophia or Marcus",
         "Daylight",
         "The Bolter",
-        "Breathe"
+        "Breathe",
+        "Forever & Always"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -62,7 +63,7 @@
         "Our Song": 1,
         "Teardrops on My Guitar": 0,
         "White Horse": 3,
-        "Forever & Always": 3,
+        "Forever & Always": 4,
         "Breathe": 2,
         "Better Than Revenge": 1,
         "Innocent": 1,
@@ -92,13 +93,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Breathe",
-    "last_match": {
-        "a": "Forever & Always",
-        "b": "Paris",
-        "message_id": 1449045707448254616,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Forever & Always",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -174,6 +170,13 @@
             "a": "Breathe",
             "b": "Our Song",
             "winner": "Breathe",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Forever & Always",
+            "b": "Paris",
+            "winner": "Forever & Always",
             "a_votes": 1,
             "b_votes": 0
         }
