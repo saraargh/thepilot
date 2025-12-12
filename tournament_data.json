@@ -40,7 +40,8 @@
         "Breathe"
     ],
     "next_round": [
-        "Peter"
+        "Peter",
+        "The Moment I Knew"
     ],
     "scores": {
         "Tim McGraw": 1,
@@ -59,7 +60,7 @@
         "Sad Beautiful Tragic": 2,
         "Starlight": 0,
         "Come Back\u2026 Be Here": 1,
-        "The Moment I Knew": 2,
+        "The Moment I Knew": 3,
         "Welcome to New York": 2,
         "I Wish You Would": 3,
         "This Love": 5,
@@ -78,17 +79,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Peter",
-    "last_match": {
-        "a": "The Moment I Knew",
-        "b": "The Lakes",
-        "message_id": 1449090938684182698,
-        "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
-    },
+    "last_winner": "The Moment I Knew",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Forever & Always",
@@ -264,6 +256,13 @@
             "winner": "Peter",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "The Moment I Knew",
+            "b": "The Lakes",
+            "winner": "The Moment I Knew",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Quarter Finals",
