@@ -37,7 +37,8 @@
     "next_round": [
         "Is It Over Now?",
         "This Love",
-        "The Bolter"
+        "The Bolter",
+        "The Lakes"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -65,7 +66,7 @@
         "It\u2019s Nice to Have a Friend": 0,
         "Daylight": 1,
         "Paris": 0,
-        "The Lakes": 7,
+        "The Lakes": 8,
         "Now That We Don\u2019t Talk": 1,
         "Is It Over Now?": 5,
         "Slut!": 1,
@@ -75,13 +76,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "The Bolter",
-    "last_match": {
-        "a": "The Lakes",
-        "b": "Peter",
-        "message_id": 1449047820643467366,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "The Lakes",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -269,6 +265,13 @@
             "a": "The Bolter",
             "b": "Forever & Always",
             "winner": "The Bolter",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "The Lakes",
+            "b": "Peter",
+            "winner": "The Lakes",
             "a_votes": 1,
             "b_votes": 0
         }
