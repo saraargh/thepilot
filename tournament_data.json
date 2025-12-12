@@ -39,7 +39,8 @@
     ],
     "next_round": [
         "Is It Over Now?",
-        "This Love"
+        "This Love",
+        "The Bolter"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -71,19 +72,14 @@
         "Now That We Don\u2019t Talk": 1,
         "Is It Over Now?": 5,
         "Slut!": 1,
-        "The Bolter": 2,
+        "The Bolter": 3,
         "Peter": 7,
         "Chloe or Sam or Sophia or Marcus": 3
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "This Love",
-    "last_match": {
-        "a": "The Bolter",
-        "b": "Forever & Always",
-        "message_id": 1449047789366677544,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "The Bolter",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -264,6 +260,13 @@
             "a": "This Love",
             "b": "Dancing With Our Hands Tied",
             "winner": "This Love",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "The Bolter",
+            "b": "Forever & Always",
+            "winner": "The Bolter",
             "a_votes": 1,
             "b_votes": 0
         }
