@@ -665,11 +665,11 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
     async def wchelp(interaction: discord.Interaction):
 
         embed = discord.Embed(title="📝 World Cup Help", color=discord.Color.blue())
-        embed.add_field(name="/addwcitem", value="Add items (admin only)", inline=False)
+        embed.add_field(name="/addwcitem", value="Add items", inline=False)
         embed.add_field(name="/removewcitem", value="Remove items (admin only)", inline=False)
         embed.add_field(name="/listwcitems", value="List items", inline=False)
         embed.add_field(name="/startwc", value="Start tournament (admin only)", inline=False)
-        embed.add_field(name="/nextwcround", value="Process matches (adnin only)*Required to run twice at the end of rounds( 32/16/qaurter/semi/final.*", inline=False)
+        embed.add_field(name="/nextwcround", value="Announce previous winner and post next match (admin only)**Required to run twice at the end of rounds(32/16/qaurter/semi/final)**", inline=False)
         embed.add_field(name="/scoreboard", value="View progress", inline=False)
         embed.add_field(name="/resetwc", value="Reset tournament (admin only)", inline=False)
         embed.add_field(name="/endwc", value="Announce final winner (admin only)", inline=False)
