@@ -71,7 +71,7 @@
         "Peter": 7,
         "Chloe or Sam or Sophia or Marcus": 3
     },
-    "running": true,
+    "running": false,
     "title": "TS SONGS",
     "last_winner": "The Lakes",
     "last_match": null,
