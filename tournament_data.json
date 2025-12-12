@@ -43,7 +43,8 @@
         "This Love",
         "Dancing With Our Hands Tied",
         "The Bolter",
-        "Forever & Always"
+        "Forever & Always",
+        "The Lakes"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -71,7 +72,7 @@
         "It\u2019s Nice to Have a Friend": 0,
         "Daylight": 1,
         "Paris": 0,
-        "The Lakes": 6,
+        "The Lakes": 7,
         "Now That We Don\u2019t Talk": 1,
         "Is It Over Now?": 4,
         "Slut!": 1,
@@ -81,13 +82,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Forever & Always",
-    "last_match": {
-        "a": "Now That We Don\u2019t Talk",
-        "b": "The Lakes",
-        "message_id": 1449047636928630914,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "The Lakes",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -240,6 +236,13 @@
             "a": "Breathe",
             "b": "Forever & Always",
             "winner": "Forever & Always",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Now That We Don\u2019t Talk",
+            "b": "The Lakes",
+            "winner": "The Lakes",
             "a_votes": 0,
             "b_votes": 1
         }
