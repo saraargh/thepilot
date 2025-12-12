@@ -64,7 +64,8 @@
         "Peter"
     ],
     "next_round": [
-        "White Horse"
+        "White Horse",
+        "Innocent"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -75,7 +76,7 @@
         "Forever & Always": 3,
         "Breathe": 1,
         "Better Than Revenge": 1,
-        "Innocent": 0,
+        "Innocent": 1,
         "Last Kiss": 3,
         "Haunted": 1,
         "Ours": 0,
@@ -102,19 +103,21 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "White Horse",
-    "last_match": {
-        "a": "The Moment I Knew",
-        "b": "Innocent",
-        "message_id": 1448798512698626108,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Innocent",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
             "b": "Dress",
             "winner": "White Horse",
             "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "The Moment I Knew",
+            "b": "Innocent",
+            "winner": "Innocent",
+            "a_votes": 0,
             "b_votes": 0
         }
     ],
