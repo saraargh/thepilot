@@ -95,7 +95,16 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "Come Back\u2026 Be Here",
-    "last_match": null,
+    "last_match": {
+        "a": "Now That We Don\u2019t Talk",
+        "b": "Chloe or Sam or Sophia or Marcus",
+        "message_id": 1449089687103737886,
+        "channel_id": 1438277790179921971,
+        "locked": false,
+        "locked_at": null,
+        "locked_counts": null,
+        "lock_reason": null
+    },
     "finished_matches": [
         {
             "a": "Forever & Always",
