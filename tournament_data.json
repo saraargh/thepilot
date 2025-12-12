@@ -44,7 +44,8 @@
         "Peter",
         "The Moment I Knew",
         "The Lakes",
-        "Now That We Don\u2019t Talk"
+        "Now That We Don\u2019t Talk",
+        "Paris"
     ],
     "scores": {
         "Tim McGraw": 1,
@@ -71,7 +72,7 @@
         "Dress": 2,
         "It\u2019s Nice to Have a Friend": 1,
         "Daylight": 1,
-        "Paris": 1,
+        "Paris": 2,
         "The Lakes": 12,
         "Now That We Don\u2019t Talk": 3,
         "Is It Over Now?": 7,
@@ -82,17 +83,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Now That We Don\u2019t Talk",
-    "last_match": {
-        "a": "Paris",
-        "b": "Picture to Burn",
-        "message_id": 1449090737173041243,
-        "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
-    },
+    "last_winner": "Paris",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Forever & Always",
@@ -240,6 +232,13 @@
             "winner": "Now That We Don\u2019t Talk",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Paris",
+            "b": "Picture to Burn",
+            "winner": "Paris",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 16",
