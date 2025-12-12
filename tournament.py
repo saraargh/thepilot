@@ -473,31 +473,148 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
         return await interaction.followup.send("⚠ Nothing to process.", ephemeral=True)
 
 
-    # ------------------- /scoreboard -------------------
-    @tree.command(name="scoreboard", description="Show finished matches & current status")
+
+
+        # ------------------- /scoreboard -------------------
+    @tree.command(name="scoreboard", description="Show finished matches, current match, and all upcoming matchups")
     async def scoreboard(interaction: discord.Interaction):
         data, _ = load_data()
 
         finished = data.get("finished_matches", [])
-        if not finished:
-            return await interaction.response.send_message("No matches played yet.", ephemeral=True)
+        current = data.get("last_match")
+        remaining = data.get("current_round", [])
 
-        lines = []
+        # -------- Build finished lines --------
+        finished_lines = []
         for i, f in enumerate(finished):
-            lines.append(
+            finished_lines.append(
                 f"{i+1}. {f['a']} vs {f['b']} → **{f['winner']}** "
                 f"({VOTE_A} {f['a_votes']} | {VOTE_B} {f['b_votes']})"
             )
 
-        text = "\n".join(lines[:50])  # prevent overflow
+        if not finished_lines:
+            finished_lines = ["No matches played yet."]
 
-        embed = discord.Embed(title="📊 World Cup Scoreboard", color=discord.Color.teal())
-        embed.add_field(name="Tournament", value=data.get("title") or "No title", inline=False)
-        embed.add_field(name="Stage", value=data.get("round_stage") or "N/A", inline=False)
-        embed.add_field(name="Finished Matches", value=text, inline=False)
+        # paginate finished matches (10 per page)
+        finished_pages = [
+            finished_lines[i:i+10]
+            for i in range(0, len(finished_lines), 10)
+        ]
 
-        await interaction.response.send_message(embed=embed, ephemeral=False)
+        # -------- Current match --------
+        if current:
+            current_line = f"{current['a']} vs {current['b']} (voting now)"
+        else:
+            current_line = "None"
 
+        # -------- Upcoming matchups (FULL LIST) --------
+        upcoming_lines = []
+        for i in range(0, len(remaining), 2):
+            if i + 1 < len(remaining):
+                upcoming_lines.append(f"• {remaining[i]} vs {remaining[i+1]}")
+            else:
+                upcoming_lines.append(f"• {remaining[i]} (auto-advance)")
+
+        if not upcoming_lines:
+            upcoming_lines = ["None"]
+
+        # split upcoming into chunks that fit embed limits
+        upcoming_chunks = []
+        chunk = []
+        length = 0
+
+        for line in upcoming_lines:
+            if length + len(line) > 900:
+                upcoming_chunks.append(chunk)
+                chunk = []
+                length = 0
+            chunk.append(line)
+            length += len(line)
+
+        if chunk:
+            upcoming_chunks.append(chunk)
+
+        # -------- Page state --------
+        page = 0
+        total_pages = max(len(finished_pages), len(upcoming_chunks))
+
+        def make_embed(page_index: int):
+            embed = discord.Embed(
+                title="🏆 World Cup Scoreboard",
+                color=discord.Color.teal()
+            )
+
+            embed.add_field(
+                name="Tournament",
+                value=data.get("title") or "No title",
+                inline=False
+            )
+
+            embed.add_field(
+                name="Stage",
+                value=data.get("round_stage") or "N/A",
+                inline=False
+            )
+
+            embed.add_field(
+                name="Current Match",
+                value=current_line,
+                inline=False
+            )
+
+            # finished matches
+            embed.add_field(
+                name="Finished Matches",
+                value="\n".join(finished_pages[min(page_index, len(finished_pages)-1)]),
+                inline=False
+            )
+
+            # upcoming matchups
+            embed.add_field(
+                name="Upcoming Matchups",
+                value="\n".join(upcoming_chunks[min(page_index, len(upcoming_chunks)-1)]),
+                inline=False
+            )
+
+            embed.set_footer(text=f"Page {page_index+1}/{total_pages}")
+            return embed
+
+        await interaction.response.send_message(embed=make_embed(0))
+        msg = await interaction.original_response()
+
+        if total_pages > 1:
+            await msg.add_reaction("⬅️")
+            await msg.add_reaction("➡️")
+
+        client = interaction.client
+
+        def check(reaction, user):
+            return (
+                user == interaction.user
+                and reaction.message.id == msg.id
+                and str(reaction.emoji) in ("⬅️", "➡️")
+            )
+
+        while total_pages > 1:
+            try:
+                reaction, user = await client.wait_for(
+                    "reaction_add", timeout=60.0, check=check
+                )
+
+                if str(reaction.emoji) == "➡️" and page < total_pages - 1:
+                    page += 1
+                elif str(reaction.emoji) == "⬅️" and page > 0:
+                    page -= 1
+
+                await msg.edit(embed=make_embed(page))
+
+                try:
+                    await msg.remove_reaction(reaction.emoji, user)
+                except Exception:
+                    pass
+
+            except asyncio.TimeoutError:
+                break
 
     # ------------------- /resetwc -------------------
     @tree.command(name="resetwc", description="Reset the tournament")
