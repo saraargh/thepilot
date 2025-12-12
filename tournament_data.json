@@ -62,7 +62,8 @@
     "next_round": [
         "Forever & Always",
         "This Love",
-        "The Bolter"
+        "The Bolter",
+        "Peter"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -95,22 +96,13 @@
         "Is It Over Now?": 7,
         "Slut!": 1,
         "The Bolter": 5,
-        "Peter": 7,
+        "Peter": 8,
         "Chloe or Sam or Sophia or Marcus": 4
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "The Bolter",
-    "last_match": {
-        "a": "Peter",
-        "b": "Daylight",
-        "message_id": 1449089479318180022,
-        "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
-    },
+    "last_winner": "Peter",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Forever & Always",
@@ -130,6 +122,13 @@
             "a": "The Bolter",
             "b": "Slut!",
             "winner": "The Bolter",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Peter",
+            "b": "Daylight",
+            "winner": "Peter",
             "a_votes": 1,
             "b_votes": 0
         }
