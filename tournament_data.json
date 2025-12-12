@@ -54,11 +54,12 @@
         "The Lakes",
         "Come Back\u2026 Be Here",
         "Now That We Don\u2019t Talk",
-        "Paris"
+        "Paris",
+        "Picture to Burn"
     ],
     "scores": {
         "Tim McGraw": 1,
-        "Picture to Burn": 1,
+        "Picture to Burn": 2,
         "Our Song": 1,
         "Teardrops on My Guitar": 0,
         "White Horse": 4,
@@ -92,17 +93,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Paris",
-    "last_match": {
-        "a": "Is It Over Now?",
-        "b": "Picture to Burn",
-        "message_id": 1449089752665161811,
-        "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
-    },
+    "last_winner": "Picture to Burn",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Forever & Always",
@@ -180,6 +172,13 @@
             "winner": "Paris",
             "a_votes": 1,
             "b_votes": 0
+        },
+        {
+            "a": "Is It Over Now?",
+            "b": "Picture to Burn",
+            "winner": "Picture to Burn",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32",
