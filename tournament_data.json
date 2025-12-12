@@ -71,7 +71,7 @@
         "Peter": 10,
         "Chloe or Sam or Sophia or Marcus": 4
     },
-    "running": true,
+    "running": false,
     "title": "TS SONGS",
     "last_winner": "The Moment I Knew",
     "last_match": null,
