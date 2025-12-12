@@ -56,7 +56,8 @@
         "Dress",
         "Tim McGraw",
         "The Lakes",
-        "Come Back\u2026 Be Here"
+        "Come Back\u2026 Be Here",
+        "Now That We Don\u2019t Talk"
     ],
     "scores": {
         "Tim McGraw": 1,
@@ -85,7 +86,7 @@
         "Daylight": 1,
         "Paris": 0,
         "The Lakes": 11,
-        "Now That We Don\u2019t Talk": 1,
+        "Now That We Don\u2019t Talk": 2,
         "Is It Over Now?": 7,
         "Slut!": 1,
         "The Bolter": 5,
@@ -94,17 +95,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Come Back\u2026 Be Here",
-    "last_match": {
-        "a": "Now That We Don\u2019t Talk",
-        "b": "Chloe or Sam or Sophia or Marcus",
-        "message_id": 1449089687103737886,
-        "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
-    },
+    "last_winner": "Now That We Don\u2019t Talk",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Forever & Always",
@@ -168,6 +160,13 @@
             "winner": "Come Back\u2026 Be Here",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Now That We Don\u2019t Talk",
+            "b": "Chloe or Sam or Sophia or Marcus",
+            "winner": "Now That We Don\u2019t Talk",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32",
