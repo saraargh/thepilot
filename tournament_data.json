@@ -103,7 +103,16 @@
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
     "last_winner": "This Love",
-    "last_match": null,
+    "last_match": {
+        "a": "Daylight",
+        "b": "Is It Over Now?",
+        "message_id": 1449078274968780841,
+        "channel_id": 1438277790179921971,
+        "guild_id": 1398508733709029428,
+        "closed": false,
+        "closed_at": null,
+        "locked_votes": null
+    },
     "finished_matches": [
         {
             "a": "Tim McGraw",
