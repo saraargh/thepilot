@@ -103,7 +103,16 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": null,
-    "last_match": null,
+    "last_match": {
+        "a": "Forever & Always",
+        "b": "Sad Beautiful Tragic",
+        "message_id": 1449089383843237938,
+        "channel_id": 1438277790179921971,
+        "locked": false,
+        "locked_at": null,
+        "locked_counts": null,
+        "lock_reason": null
+    },
     "finished_matches": [],
     "round_stage": "Round of 32",
     "item_authors": {},
