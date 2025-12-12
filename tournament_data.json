@@ -93,7 +93,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "Breathe",
-    "last_match": null,
+    "last_match": {
+        "a": "Forever & Always",
+        "b": "Paris",
+        "message_id": 1449045707448254616,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "White Horse",
