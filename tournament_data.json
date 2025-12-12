@@ -85,7 +85,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "This Love",
-    "last_match": null,
+    "last_match": {
+        "a": "Dancing With Our Hands Tied",
+        "b": "Chloe or Sam or Sophia or Marcus",
+        "message_id": 1449047468577656992,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "White Horse",
