@@ -86,7 +86,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "Is It Over Now?",
-    "last_match": null,
+    "last_match": {
+        "a": "I Wish You Would",
+        "b": "This Love",
+        "message_id": 1449047427943370752,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "White Horse",
