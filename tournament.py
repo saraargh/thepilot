@@ -650,7 +650,7 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
             description=f"🏆 **{winner}** wins the World Cup of **{data.get('title')}**!",
             color=discord.Color.green()
         )
-        embed.set_image(url="https://media1.tenor.com/m/XU8DIUrUZaoAAAAd/happy-dance.gif")
+        embed.set_image(url="https://cdn.discordapp.com/attachments/1444274467864838207/1449046416453271633/IMG_8499.gif?ex=693d7923&is=693c27a3&hm=ff458f5790ea6ba5c28db45b11ee2f53f41ef115c9bc7e536a409aadd8b8711a&")
 
         await interaction.channel.send(embed=embed)
 
