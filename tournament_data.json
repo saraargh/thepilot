@@ -97,7 +97,16 @@
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
     "last_winner": "White Horse",
-    "last_match": null,
+    "last_match": {
+        "a": "The Moment I Knew",
+        "b": "The Bolter",
+        "message_id": 1449088080647553228,
+        "channel_id": 1438277790179921971,
+        "locked": false,
+        "locked_at": null,
+        "locked_counts": null,
+        "lock_reason": null
+    },
     "finished_matches": [
         {
             "a": "Tim McGraw",
