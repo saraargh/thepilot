@@ -34,7 +34,9 @@
         "Chloe or Sam or Sophia or Marcus"
     ],
     "current_round": [],
-    "next_round": [],
+    "next_round": [
+        "The Lakes"
+    ],
     "scores": {
         "Tim McGraw": 0,
         "Picture to Burn": 1,
@@ -61,7 +63,7 @@
         "It\u2019s Nice to Have a Friend": 0,
         "Daylight": 1,
         "Paris": 0,
-        "The Lakes": 9,
+        "The Lakes": 10,
         "Now That We Don\u2019t Talk": 1,
         "Is It Over Now?": 6,
         "Slut!": 1,
@@ -72,12 +74,7 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "The Lakes",
-    "last_match": {
-        "a": "Is It Over Now?",
-        "b": "The Lakes",
-        "message_id": 1449048025556058112,
-        "channel_id": 1438277790179921971
-    },
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -284,6 +281,13 @@
         },
         {
             "a": "The Bolter",
+            "b": "The Lakes",
+            "winner": "The Lakes",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Is It Over Now?",
             "b": "The Lakes",
             "winner": "The Lakes",
             "a_votes": 0,
