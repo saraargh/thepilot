@@ -55,7 +55,8 @@
         "White Horse",
         "The Bolter",
         "Ours",
-        "Forever & Always"
+        "Forever & Always",
+        "Dress"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -79,7 +80,7 @@
         "I Wish You Would": 2,
         "This Love": 4,
         "Dancing With Our Hands Tied": 3,
-        "Dress": 0,
+        "Dress": 1,
         "It\u2019s Nice to Have a Friend": 1,
         "Daylight": 1,
         "Paris": 0,
@@ -93,17 +94,8 @@
     },
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
-    "last_winner": "Forever & Always",
-    "last_match": {
-        "a": "Picture to Burn",
-        "b": "Dress",
-        "message_id": 1449088185748426855,
-        "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
-    },
+    "last_winner": "Dress",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Tim McGraw",
@@ -172,6 +164,13 @@
             "a": "Forever & Always",
             "b": "Our Song",
             "winner": "Forever & Always",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "Picture to Burn",
+            "b": "Dress",
+            "winner": "Dress",
             "a_votes": 0,
             "b_votes": 0
         }
