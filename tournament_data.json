@@ -63,7 +63,8 @@
     ],
     "next_round": [
         "This Love",
-        "Is It Over Now?"
+        "Is It Over Now?",
+        "Last Kiss"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -75,7 +76,7 @@
         "Breathe": 2,
         "Better Than Revenge": 1,
         "Innocent": 2,
-        "Last Kiss": 3,
+        "Last Kiss": 4,
         "Haunted": 1,
         "Ours": 0,
         "Never Grow Up": 2,
@@ -101,20 +102,8 @@
     },
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
-    "last_winner": "Is It Over Now?",
-    "last_match": {
-        "a": "Dancing With Our Hands Tied",
-        "b": "Last Kiss",
-        "message_id": 1449083737282187334,
-        "channel_id": 1438277790179921971,
-        "locked": true,
-        "locked_at": 1765558948,
-        "locked_counts": {
-            "a": 0,
-            "b": 1
-        },
-        "lock_reason": "Auto-locked after 24h"
-    },
+    "last_winner": "Last Kiss",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Tim McGraw",
@@ -127,6 +116,13 @@
             "a": "Daylight",
             "b": "Is It Over Now?",
             "winner": "Is It Over Now?",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Dancing With Our Hands Tied",
+            "b": "Last Kiss",
+            "winner": "Last Kiss",
             "a_votes": 0,
             "b_votes": 1
         }
