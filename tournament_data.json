@@ -57,7 +57,8 @@
         "The Moment I Knew",
         "Dress",
         "Tim McGraw",
-        "The Lakes"
+        "The Lakes",
+        "Come Back\u2026 Be Here"
     ],
     "scores": {
         "Tim McGraw": 1,
@@ -75,7 +76,7 @@
         "Never Grow Up": 3,
         "Sad Beautiful Tragic": 2,
         "Starlight": 0,
-        "Come Back\u2026 Be Here": 0,
+        "Come Back\u2026 Be Here": 1,
         "The Moment I Knew": 1,
         "Welcome to New York": 2,
         "I Wish You Would": 2,
@@ -95,17 +96,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "The Lakes",
-    "last_match": {
-        "a": "Better Than Revenge",
-        "b": "Come Back\u2026 Be Here",
-        "message_id": 1449089652534411515,
-        "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
-    },
+    "last_winner": "Come Back\u2026 Be Here",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Forever & Always",
@@ -160,6 +152,13 @@
             "a": "Starlight",
             "b": "The Lakes",
             "winner": "The Lakes",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Better Than Revenge",
+            "b": "Come Back\u2026 Be Here",
+            "winner": "Come Back\u2026 Be Here",
             "a_votes": 0,
             "b_votes": 1
         }
