@@ -54,7 +54,8 @@
         "The Bolter",
         "Ours",
         "Forever & Always",
-        "Dress"
+        "Dress",
+        "Never Grow Up"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -69,7 +70,7 @@
         "Last Kiss": 4,
         "Haunted": 1,
         "Ours": 1,
-        "Never Grow Up": 2,
+        "Never Grow Up": 3,
         "Sad Beautiful Tragic": 2,
         "Starlight": 0,
         "Come Back\u2026 Be Here": 0,
@@ -92,17 +93,8 @@
     },
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
-    "last_winner": "Dress",
-    "last_match": {
-        "a": "Now That We Don\u2019t Talk",
-        "b": "Never Grow Up",
-        "message_id": 1449088226810920980,
-        "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
-    },
+    "last_winner": "Never Grow Up",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Tim McGraw",
@@ -178,6 +170,13 @@
             "a": "Picture to Burn",
             "b": "Dress",
             "winner": "Dress",
+            "a_votes": 0,
+            "b_votes": 0
+        },
+        {
+            "a": "Now That We Don\u2019t Talk",
+            "b": "Never Grow Up",
+            "winner": "Never Grow Up",
             "a_votes": 0,
             "b_votes": 0
         }
