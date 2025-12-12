@@ -43,7 +43,8 @@
         "The Moment I Knew",
         "The Lakes",
         "Now That We Don\u2019t Talk",
-        "Paris"
+        "Paris",
+        "Never Grow Up"
     ],
     "scores": {
         "Tim McGraw": 1,
@@ -58,7 +59,7 @@
         "Last Kiss": 4,
         "Haunted": 2,
         "Ours": 2,
-        "Never Grow Up": 4,
+        "Never Grow Up": 5,
         "Sad Beautiful Tragic": 2,
         "Starlight": 0,
         "Come Back\u2026 Be Here": 1,
@@ -81,17 +82,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Paris",
-    "last_match": {
-        "a": "Never Grow Up",
-        "b": "Ours",
-        "message_id": 1449090771444830268,
-        "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
-    },
+    "last_winner": "Never Grow Up",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Forever & Always",
@@ -244,6 +236,13 @@
             "a": "Paris",
             "b": "Picture to Burn",
             "winner": "Paris",
+            "a_votes": 1,
+            "b_votes": 0
+        },
+        {
+            "a": "Never Grow Up",
+            "b": "Ours",
+            "winner": "Never Grow Up",
             "a_votes": 1,
             "b_votes": 0
         }
