@@ -56,7 +56,8 @@
         "Chloe or Sam or Sophia or Marcus",
         "White Horse",
         "The Bolter",
-        "Ours"
+        "Ours",
+        "Forever & Always"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -64,7 +65,7 @@
         "Our Song": 1,
         "Teardrops on My Guitar": 0,
         "White Horse": 4,
-        "Forever & Always": 5,
+        "Forever & Always": 6,
         "Breathe": 2,
         "Better Than Revenge": 1,
         "Innocent": 2,
@@ -94,17 +95,8 @@
     },
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
-    "last_winner": "Ours",
-    "last_match": {
-        "a": "Forever & Always",
-        "b": "Our Song",
-        "message_id": 1449088151313449010,
-        "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
-    },
+    "last_winner": "Forever & Always",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Tim McGraw",
@@ -168,6 +160,13 @@
             "winner": "Ours",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Forever & Always",
+            "b": "Our Song",
+            "winner": "Forever & Always",
+            "a_votes": 0,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32",
