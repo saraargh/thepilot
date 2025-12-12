@@ -102,7 +102,16 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "This Love",
-    "last_match": null,
+    "last_match": {
+        "a": "The Bolter",
+        "b": "Slut!",
+        "message_id": 1449089448040988894,
+        "channel_id": 1438277790179921971,
+        "locked": false,
+        "locked_at": null,
+        "locked_counts": null,
+        "lock_reason": null
+    },
     "finished_matches": [
         {
             "a": "Forever & Always",
