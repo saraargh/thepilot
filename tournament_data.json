@@ -57,7 +57,8 @@
         "I Wish You Would",
         "This Love",
         "Dancing With Our Hands Tied",
-        "Chloe or Sam or Sophia or Marcus"
+        "Chloe or Sam or Sophia or Marcus",
+        "Daylight"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -83,7 +84,7 @@
         "Dancing With Our Hands Tied": 2,
         "Dress": 0,
         "It\u2019s Nice to Have a Friend": 0,
-        "Daylight": 0,
+        "Daylight": 1,
         "Paris": 0,
         "The Lakes": 5,
         "Now That We Don\u2019t Talk": 0,
@@ -95,13 +96,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Chloe or Sam or Sophia or Marcus",
-    "last_match": {
-        "a": "Daylight",
-        "b": "Welcome to New York",
-        "message_id": 1449045601751797932,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Daylight",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -158,6 +154,13 @@
             "winner": "Chloe or Sam or Sophia or Marcus",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Daylight",
+            "b": "Welcome to New York",
+            "winner": "Daylight",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
