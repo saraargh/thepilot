@@ -64,7 +64,8 @@
         "Better Than Revenge"
     ],
     "next_round": [
-        "This Love"
+        "This Love",
+        "Is It Over Now?"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -94,7 +95,7 @@
         "Paris": 0,
         "The Lakes": 10,
         "Now That We Don\u2019t Talk": 1,
-        "Is It Over Now?": 6,
+        "Is It Over Now?": 7,
         "Slut!": 1,
         "The Bolter": 3,
         "Peter": 7,
@@ -102,20 +103,8 @@
     },
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
-    "last_winner": "This Love",
-    "last_match": {
-        "a": "Daylight",
-        "b": "Is It Over Now?",
-        "message_id": 1449078274968780841,
-        "channel_id": 1438277790179921971,
-        "guild_id": 1398508733709029428,
-        "closed": true,
-        "closed_at": 1765557872,
-        "locked_votes": {
-            "a": 0,
-            "b": 1
-        }
-    },
+    "last_winner": "Is It Over Now?",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Tim McGraw",
@@ -123,9 +112,17 @@
             "winner": "This Love",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "Daylight",
+            "b": "Is It Over Now?",
+            "winner": "Is It Over Now?",
+            "a_votes": 0,
+            "b_votes": 1
         }
     ],
     "round_stage": "Round of 32",
     "item_authors": {},
-    "user_added": {}
+    "user_added": {},
+    "user_items": {}
 }
