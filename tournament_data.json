@@ -103,10 +103,13 @@
         "b": "Welcome to New York",
         "message_id": 1449086501874044959,
         "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
+        "locked": true,
+        "locked_at": 1765559607,
+        "locked_counts": {
+            "a": 1,
+            "b": 0
+        },
+        "lock_reason": "Auto-locked after 24h"
     },
     "finished_matches": [
         {
