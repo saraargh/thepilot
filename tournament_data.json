@@ -62,7 +62,8 @@
     "next_round": [
         "This Love",
         "Is It Over Now?",
-        "Last Kiss"
+        "Last Kiss",
+        "I Wish You Would"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -83,7 +84,7 @@
         "Come Back\u2026 Be Here": 0,
         "The Moment I Knew": 0,
         "Welcome to New York": 2,
-        "I Wish You Would": 1,
+        "I Wish You Would": 2,
         "This Love": 4,
         "Dancing With Our Hands Tied": 3,
         "Dress": 0,
@@ -100,17 +101,8 @@
     },
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
-    "last_winner": "Last Kiss",
-    "last_match": {
-        "a": "I Wish You Would",
-        "b": "Slut!",
-        "message_id": 1449084236681449693,
-        "channel_id": 1438277790179921971,
-        "locked": false,
-        "locked_at": null,
-        "locked_counts": null,
-        "lock_reason": null
-    },
+    "last_winner": "I Wish You Would",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "Tim McGraw",
@@ -132,6 +124,13 @@
             "winner": "Last Kiss",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "I Wish You Would",
+            "b": "Slut!",
+            "winner": "I Wish You Would",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32",
