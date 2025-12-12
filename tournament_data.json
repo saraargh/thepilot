@@ -41,7 +41,9 @@
         "The Lakes",
         "Peter"
     ],
-    "next_round": [],
+    "next_round": [
+        "Is It Over Now?"
+    ],
     "scores": {
         "Tim McGraw": 0,
         "Picture to Burn": 1,
@@ -70,7 +72,7 @@
         "Paris": 0,
         "The Lakes": 7,
         "Now That We Don\u2019t Talk": 1,
-        "Is It Over Now?": 4,
+        "Is It Over Now?": 5,
         "Slut!": 1,
         "The Bolter": 2,
         "Peter": 7,
@@ -78,13 +80,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "Peter",
-    "last_match": {
-        "a": "Innocent",
-        "b": "Is It Over Now?",
-        "message_id": 1449047728247017574,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "Is It Over Now?",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -251,6 +248,13 @@
             "a": "Sad Beautiful Tragic",
             "b": "Peter",
             "winner": "Peter",
+            "a_votes": 0,
+            "b_votes": 1
+        },
+        {
+            "a": "Innocent",
+            "b": "Is It Over Now?",
+            "winner": "Is It Over Now?",
             "a_votes": 0,
             "b_votes": 1
         }
