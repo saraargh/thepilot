@@ -99,7 +99,16 @@
     "running": true,
     "title": "TAYLOR SWIFT SONGS",
     "last_winner": "It\u2019s Nice to Have a Friend",
-    "last_match": null,
+    "last_match": {
+        "a": "Come Back\u2026 Be Here",
+        "b": "Chloe or Sam or Sophia or Marcus",
+        "message_id": 1449084307514720511,
+        "channel_id": 1438277790179921971,
+        "locked": false,
+        "locked_at": null,
+        "locked_counts": null,
+        "lock_reason": null
+    },
     "finished_matches": [
         {
             "a": "Tim McGraw",
