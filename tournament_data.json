@@ -102,7 +102,12 @@
     "running": true,
     "title": "TS SONGS",
     "last_winner": "Innocent",
-    "last_match": null,
+    "last_match": {
+        "a": "Last Kiss",
+        "b": "Is It Over Now?",
+        "message_id": 1449045220418392135,
+        "channel_id": 1438277790179921971
+    },
     "finished_matches": [
         {
             "a": "White Horse",
