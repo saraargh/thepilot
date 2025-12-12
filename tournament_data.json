@@ -60,7 +60,8 @@
         "Innocent",
         "Is It Over Now?",
         "Slut!",
-        "I Wish You Would"
+        "I Wish You Would",
+        "This Love"
     ],
     "scores": {
         "Tim McGraw": 0,
@@ -82,7 +83,7 @@
         "The Moment I Knew": 0,
         "Welcome to New York": 2,
         "I Wish You Would": 1,
-        "This Love": 0,
+        "This Love": 1,
         "Dancing With Our Hands Tied": 1,
         "Dress": 0,
         "It\u2019s Nice to Have a Friend": 0,
@@ -98,13 +99,8 @@
     },
     "running": true,
     "title": "TS SONGS",
-    "last_winner": "I Wish You Would",
-    "last_match": {
-        "a": "This Love",
-        "b": "Ours",
-        "message_id": 1449045450580819969,
-        "channel_id": 1438277790179921971
-    },
+    "last_winner": "This Love",
+    "last_match": null,
     "finished_matches": [
         {
             "a": "White Horse",
@@ -140,6 +136,13 @@
             "winner": "I Wish You Would",
             "a_votes": 0,
             "b_votes": 1
+        },
+        {
+            "a": "This Love",
+            "b": "Ours",
+            "winner": "This Love",
+            "a_votes": 1,
+            "b_votes": 0
         }
     ],
     "round_stage": "Round of 32"
