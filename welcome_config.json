@@ -15,7 +15,7 @@
       "https://cdn.discordapp.com/attachments/1444274467864838207/1449040298482073770/IMG_8498.jpg"
     ],
     "bot_add": {
-      "enabled": true,
+      "enabled": false,
       "channel_id": 1404500058375717056
     },
     "control_panel_message_id": 1449382367964958721
