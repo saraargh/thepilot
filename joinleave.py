@@ -152,8 +152,30 @@ class ChannelPickerView(View):
         super().__init__(timeout=60)
         self.slot = slot
 
-    @discord.ui.channel_select(channel_types=[discord.ChannelType.text])
-    async def pick(self, interaction, select):
+        self.select = discord.ui.ChannelSelect(
+            placeholder="Select a channel…",
+            channel_types=[discord.ChannelType.text],
+            min_values=1,
+            max_values=1
+        )
+        self.select.callback = self.pick
+        self.add_item(self.select)
+
+    async def pick(self, interaction: discord.Interaction):
+        if not has_permission(interaction):
+            await interaction.response.send_message("No permission.", ephemeral=True)
+            return
+
+        channel = self.select.values[0]
+
+        cfg = load_config()
+        cfg["welcome"]["channels"][self.slot] = channel.id
+        save_config(cfg)
+
+        await interaction.response.edit_message(
+            content=f"Saved `{self.slot}` → {channel.mention}",
+            view=None
+        )
         if not has_permission(interaction):
             return await interaction.response.send_message("No permission.", ephemeral=True)
 
