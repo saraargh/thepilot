@@ -12,14 +12,13 @@ from joinleave import WelcomeSystem, setup_welcome_commands
 TOKEN = os.getenv("TOKEN")  # Render environment variable
 UK_TZ = pytz.timezone("Europe/London")
 
-# Roles allowed to run restricted commands (tournament/poo & mute)
+# Roles allowed to run restricted commands (poo & mute etc)
 ALLOWED_ROLE_IDS = [
     1413545658006110401,  # William/Admin
-    1404098545006546954, #serversorter
-    1420817462290681936, #kd
-    1404105470204969000, #greg
-    1404104881098195015 #sazzles
-
+    1404098545006546954,  # serversorter
+    1420817462290681936,  # kd
+    1404105470204969000,  # greg
+    1404104881098195015   # sazzles
 ]
 
 # ===== Discord Client =====
@@ -31,7 +30,6 @@ class ThePilot(discord.Client):
     def __init__(self):
         super().__init__(intents=intents)
         self.tree = app_commands.CommandTree(self)
-
         self.joinleave = WelcomeSystem(self)
 
     async def on_member_join(self, member: discord.Member):
@@ -47,14 +45,12 @@ class ThePilot(discord.Client):
         scheduled_tasks.start(self)
 
         from plane import setup_plane_commands
-        from tournament import setup_tournament_commands
         from poo import setup_poo_commands
         from goat import setup_goat_commands
         from bot_warnings import setup_warnings_commands
         from mute import setup_mute_commands
 
         setup_plane_commands(self.tree)
-        setup_tournament_commands(self.tree, allowed_role_ids=ALLOWED_ROLE_IDS)
 
         poo_task = setup_poo_commands(self.tree, self, allowed_role_ids=ALLOWED_ROLE_IDS)
         poo_task.start()
@@ -86,6 +82,7 @@ async def scheduled_tasks(bot_client):
     if guild:
         pass
 
+# ===== Flask keep-alive =====
 app = Flask("")
 
 @app.route("/")
