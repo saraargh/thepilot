@@ -1,7 +1,6 @@
 import discord
 from discord import app_commands
-from discord.ui import View, Modal, TextInput, Select
-from datetime import datetime
+from discord.ui import View, Modal, TextInput
 import asyncio
 import random
 import os
@@ -60,25 +59,23 @@ def ensure_config(cfg):
     cfg.setdefault("welcome", {})
     cfg.setdefault("member_logs", {})
 
-    cfg["welcome"].setdefault("enabled", True)
-    cfg["welcome"].setdefault("welcome_channel_id", None)
-    cfg["welcome"].setdefault("title", DEFAULT_CONFIG["welcome"]["title"])
-    cfg["welcome"].setdefault("description", "")
-    cfg["welcome"].setdefault("channels", {})
-    cfg["welcome"].setdefault("arrival_images", [])
-    cfg["welcome"].setdefault("bot_add", {
-        "enabled": True,
-        "channel_id": None
-    })
+    w = cfg["welcome"]
+    w.setdefault("enabled", True)
+    w.setdefault("welcome_channel_id", None)
+    w.setdefault("title", DEFAULT_CONFIG["welcome"]["title"])
+    w.setdefault("description", "")
+    w.setdefault("channels", {})
+    w.setdefault("arrival_images", [])
+    w.setdefault("bot_add", {"enabled": True, "channel_id": None})
 
-    cfg["member_logs"].setdefault("enabled", True)
-    cfg["member_logs"].setdefault("channel_id", None)
-    cfg["member_logs"].setdefault("log_leave", True)
-    cfg["member_logs"].setdefault("log_kick", True)
-    cfg["member_logs"].setdefault("log_ban", True)
+    m = cfg["member_logs"]
+    m.setdefault("enabled", True)
+    m.setdefault("channel_id", None)
+    m.setdefault("log_leave", True)
+    m.setdefault("log_kick", True)
+    m.setdefault("log_ban", True)
 
     return cfg
-
 
 def load_config():
     url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
@@ -88,10 +85,8 @@ def load_config():
         cfg = ensure_config(cfg)
         save_config(cfg)
         return cfg
-
     save_config(DEFAULT_CONFIG.copy())
     return DEFAULT_CONFIG.copy()
-
 
 def save_config(cfg):
     url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
@@ -126,8 +121,8 @@ def render(text, *, user, guild, member_count, channels):
         out = out.replace(f"{{channel:{name}}}", f"<#{cid}>")
     return out
 
-def _cid(val):
-    return val.id if hasattr(val, "id") else int(val)
+def _cid(v):
+    return v.id if hasattr(v, "id") else int(v)
 
 # ======================================================
 # MODALS
@@ -136,7 +131,7 @@ class EditTitleModal(Modal):
     def __init__(self):
         cfg = load_config()
         super().__init__(title="Edit Welcome Title")
-        self.text = TextInput(label="Title", max_length=256, default=cfg["welcome"]["title"])
+        self.text = TextInput(label="Title", default=cfg["welcome"]["title"], max_length=256)
         self.add_item(self.text)
 
     async def on_submit(self, interaction):
@@ -152,8 +147,8 @@ class EditTextModal(Modal):
         self.text = TextInput(
             label="Text",
             style=discord.TextStyle.paragraph,
-            max_length=2000,
-            default=cfg["welcome"]["description"]
+            default=cfg["welcome"]["description"],
+            max_length=2000
         )
         self.add_item(self.text)
 
@@ -165,7 +160,7 @@ class EditTextModal(Modal):
 
 class AddImageModal(Modal):
     def __init__(self):
-        super().__init__(title="Add Welcome Image")
+        super().__init__(title="Add Arrival Image")
         self.url = TextInput(label="Image URL")
         self.add_item(self.url)
 
@@ -253,20 +248,20 @@ class LogChannelPicker(View):
 class WelcomeSettingsView(View):
     def __init__(self):
         super().__init__(timeout=None)
-        self._btn("Edit Title", self.edit_title)
-        self._btn("Edit Text", self.edit_text)
-        self._btn("Set Welcome Channel", self.set_channel)
-        self._btn("Add/Edit Channel Slot", self.add_slot)
-        self._btn("Add Image", self.add_image)
-        self._btn("Toggle Bot Add Logs", self.toggle_bot_add)
-        self._btn("Set Bot Add Channel", self.set_bot_channel)
-        self._btn("Preview", self.preview, discord.ButtonStyle.success)
-        self._btn("Toggle Welcome On/Off", self.toggle, discord.ButtonStyle.danger)
+        self._b("Edit Title", self.edit_title)
+        self._b("Edit Text", self.edit_text)
+        self._b("Set Welcome Channel", self.set_channel)
+        self._b("Add/Edit Channel Slot", self.add_slot)
+        self._b("Add Image", self.add_image)
+        self._b("Toggle Bot Add Logs", self.toggle_bot)
+        self._b("Set Bot Add Channel", self.set_bot_channel)
+        self._b("Preview", self.preview, discord.ButtonStyle.success)
+        self._b("Toggle Welcome On/Off", self.toggle, discord.ButtonStyle.danger)
 
-    def _btn(self, label, cb, style=discord.ButtonStyle.secondary):
-        b = discord.ui.Button(label=label, style=style)
-        b.callback = cb
-        self.add_item(b)
+    def _b(self, label, cb, style=discord.ButtonStyle.secondary):
+        btn = discord.ui.Button(label=label, style=style)
+        btn.callback = cb
+        self.add_item(btn)
 
     async def interaction_check(self, interaction):
         if not has_permission(interaction):
@@ -274,79 +269,74 @@ class WelcomeSettingsView(View):
             return False
         return True
 
-    async def edit_title(self, interaction): await interaction.response.send_modal(EditTitleModal())
-    async def edit_text(self, interaction): await interaction.response.send_modal(EditTextModal())
-    async def set_channel(self, interaction): await interaction.response.send_message("Select welcome channel:", view=WelcomeChannelPicker())
-    async def add_slot(self, interaction): await interaction.response.send_modal(AddChannelSlotModal())
-    async def add_image(self, interaction): await interaction.response.send_modal(AddImageModal())
-    async def set_bot_channel(self, interaction): await interaction.response.send_message("Select bot add channel:", view=BotAddChannelPicker())
+    async def edit_title(self, i): await i.response.send_modal(EditTitleModal())
+    async def edit_text(self, i): await i.response.send_modal(EditTextModal())
+    async def set_channel(self, i): await i.response.send_message("Select welcome channel:", view=WelcomeChannelPicker())
+    async def add_slot(self, i): await i.response.send_modal(AddChannelSlotModal())
+    async def add_image(self, i): await i.response.send_modal(AddImageModal())
+    async def set_bot_channel(self, i): await i.response.send_message("Select bot add channel:", view=BotAddChannelPicker())
 
-    async def toggle(self, interaction):
+    async def toggle(self, i):
         cfg = load_config()
         cfg["welcome"]["enabled"] = not cfg["welcome"]["enabled"]
         save_config(cfg)
-        await interaction.response.send_message(f"Welcome {'enabled' if cfg['welcome']['enabled'] else 'disabled'}.")
+        await i.response.send_message(f"Welcome {'enabled' if cfg['welcome']['enabled'] else 'disabled'}.")
 
-    async def toggle_bot_add(self, interaction):
+    async def toggle_bot(self, i):
         cfg = load_config()
         cfg["welcome"]["bot_add"]["enabled"] = not cfg["welcome"]["bot_add"]["enabled"]
         save_config(cfg)
-        await interaction.response.send_message(f"Bot add logs {'enabled' if cfg['welcome']['bot_add']['enabled'] else 'disabled'}.")
+        await i.response.send_message(f"Bot add logs {'enabled' if cfg['welcome']['bot_add']['enabled'] else 'disabled'}.")
 
-    async def preview(self, interaction):
+    async def preview(self, i):
         cfg = load_config()
         w = cfg["welcome"]
-        count = human_member_number(interaction.guild)
-        now = discord.utils.utcnow()
-        time_str = now.strftime("%H:%M")
+        count = human_member_number(i.guild)
+        now = discord.utils.utcnow().strftime("%H:%M")
 
         embed = discord.Embed(
-            title=render(w["title"], user=interaction.user, guild=interaction.guild, member_count=count, channels=w["channels"]),
-            description=render(w["description"], user=interaction.user, guild=interaction.guild, member_count=count, channels=w["channels"]),
-            timestamp=now
+            title=render(w["title"], user=i.user, guild=i.guild, member_count=count, channels=w["channels"]),
+            description=render(w["description"], user=i.user, guild=i.guild, member_count=count, channels=w["channels"])
         )
 
-        embed.set_footer(text=f"You landed as passenger #{count} ✈️ | Today at {time_str}")
+        embed.set_footer(text=f"You landed as passenger #{count} ✈️ | Today at {now}")
 
         if w["arrival_images"]:
             embed.set_image(url=random.choice(w["arrival_images"]))
 
-        try:
-            await interaction.response.send_message(embed=embed)
-        except discord.InteractionResponded:
-            await interaction.followup.send(embed=embed)
+        await i.response.send_message(embed=embed)
 
 class LeaveSettingsView(View):
     def __init__(self):
         super().__init__(timeout=None)
-        self._btn("Set Member Log Channel", self.set_log)
-        self._btn("Toggle Leave Logs", self.toggle_leave)
-        self._btn("Toggle Kick Logs", self.toggle_kick)
-        self._btn("Toggle Ban Logs", self.toggle_ban)
+        self._b("Set Member Log Channel", self.set_log)
+        self._b("Toggle Leave Logs", self.toggle_leave)
+        self._b("Toggle Kick Logs", self.toggle_kick)
+        self._b("Toggle Ban Logs", self.toggle_ban)
 
-    def _btn(self, label, cb):
-        b = discord.ui.Button(label=label)
-        b.callback = cb
-        self.add_item(b)
+    def _b(self, label, cb):
+        btn = discord.ui.Button(label=label)
+        btn.callback = cb
+        self.add_item(btn)
 
-    async def interaction_check(self, interaction):
-        if not has_permission(interaction):
-            await interaction.response.send_message("No permission.", ephemeral=True)
+    async def interaction_check(self, i):
+        if not has_permission(i):
+            await i.response.send_message("No permission.", ephemeral=True)
             return False
         return True
 
-    async def set_log(self, interaction):
-        await interaction.response.send_message("Select log channel:", view=LogChannelPicker())
+    async def set_log(self, i):
+        await i.response.send_message("Select log channel:", view=LogChannelPicker())
 
-    async def _toggle(self, interaction, key, name):
+    async def _toggle(self, i, key, name):
         cfg = load_config()
         cfg["member_logs"][key] = not cfg["member_logs"][key]
         save_config(cfg)
-        await interaction.response.send_message(f"{name} logs {'enabled' if cfg['member_logs'][key] else 'disabled'}.")
+        await i.response.send_message(f"{name} logs {'enabled' if cfg['member_logs'][key] else 'disabled'}.")
 
-    async def toggle_leave(self, interaction): await self._toggle(interaction, "log_leave", "Leave")
-    async def toggle_kick(self, interaction): await self._toggle(interaction, "log_kick", "Kick")
-    async def toggle_ban(self, interaction): await self._toggle(interaction, "log_ban", "Ban")
+    async def toggle_leave(self, i): await self._toggle(i, "log_leave", "Leave")
+    async def toggle_kick(self, i): await self._toggle(i, "log_kick", "Kick")
+    async def toggle_ban(self, i): await self._toggle(i, "log_ban", "Ban")
 
 # ======================================================
 # RUNTIME SYSTEM
@@ -370,16 +360,14 @@ class WelcomeSystem:
             return
 
         count = human_member_number(member.guild)
-        now = discord.utils.utcnow()
-        time_str = now.strftime("%H:%M")
+        time = discord.utils.utcnow().strftime("%H:%M")
 
         embed = discord.Embed(
             title=render(w["title"], user=member, guild=member.guild, member_count=count, channels=w["channels"]),
-            description=render(w["description"], user=member, guild=member.guild, member_count=count, channels=w["channels"]),
-            timestamp=now
+            description=render(w["description"], user=member, guild=member.guild, member_count=count, channels=w["channels"])
         )
 
-        embed.set_footer(text=f"You landed as passenger #{count} ✈️ | Today at {time_str}")
+        embed.set_footer(text=f"You landed as passenger #{count} ✈️ | Today at {time}")
 
         if w["arrival_images"]:
             embed.set_image(url=random.choice(w["arrival_images"]))
@@ -388,11 +376,11 @@ class WelcomeSystem:
 
     async def on_bot_join(self, member):
         cfg = load_config()
-        bot_cfg = cfg["welcome"]["bot_add"]
-        if not bot_cfg["enabled"] or not bot_cfg["channel_id"]:
+        b = cfg["welcome"]["bot_add"]
+        if not b["enabled"] or not b["channel_id"]:
             return
 
-        channel = self.client.get_channel(bot_cfg["channel_id"])
+        channel = self.client.get_channel(b["channel_id"])
         if not channel:
             return
 
@@ -404,31 +392,31 @@ class WelcomeSystem:
 
     async def on_member_remove(self, member):
         cfg = load_config()
-        logs = cfg["member_logs"]
-        if not logs["enabled"] or not logs["channel_id"]:
+        m = cfg["member_logs"]
+        if not m["enabled"] or not m["channel_id"]:
             return
 
-        channel = self.client.get_channel(logs["channel_id"])
+        channel = self.client.get_channel(m["channel_id"])
         if not channel:
             return
 
         await asyncio.sleep(1.5)
         async for entry in member.guild.audit_logs(limit=5, action=discord.AuditLogAction.kick):
             if entry.target and entry.target.id == member.id:
-                if logs["log_kick"]:
+                if m["log_kick"]:
                     await channel.send(f"{member.name} was kicked from the server by {entry.user}")
                 return
 
-        if logs["log_leave"]:
+        if m["log_leave"]:
             await channel.send(f"{member.name} left the server")
 
     async def on_member_ban(self, guild, user):
         cfg = load_config()
-        logs = cfg["member_logs"]
-        if not logs["enabled"] or not logs["log_ban"] or not logs["channel_id"]:
+        m = cfg["member_logs"]
+        if not m["enabled"] or not m["log_ban"] or not m["channel_id"]:
             return
 
-        channel = self.client.get_channel(logs["channel_id"])
+        channel = self.client.get_channel(m["channel_id"])
         if not channel:
             return
 
