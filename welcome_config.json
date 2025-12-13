@@ -2,8 +2,8 @@
   "welcome": {
     "enabled": true,
     "welcome_channel_id": 1444274467864838207,
-    "title": "Welcome to the server, {user}! 👋🏼",
-    "description": "Regardless of how you found us, we hope you enjoy your time here! ✨🎮\n\nCheck out:\n• {channel:self_roles} to pick your roles\n• {channel:birthday} to get a birthday message 🎂",
+    "title": "Welcome to the server, {user}! \ud83d\udc4b\ud83c\udffc",
+    "description": "Regardless of how you found us, we hope you enjoy your time here! \u2728\ud83c\udfae\n\nCheck out:\n\u2022 {channel:self_roles} to pick your roles\n\u2022 {channel:birthday} to get a birthday message \ud83c\udf82",
     "channels": {
       "self_roles": 1404103196078768261,
       "birthday": 1406250261915369512,
@@ -16,7 +16,7 @@
     ],
     "bot_add": {
       "enabled": true,
-      "channel_id": null
+      "channel_id": 1404500058375717056
     },
     "control_panel_message_id": 1449382367964958721
   },
