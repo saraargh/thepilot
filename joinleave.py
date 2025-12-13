@@ -10,7 +10,7 @@ import base64
 import requests
 
 # ======================================================
-# ALLOWED ROLE IDS (LOCKED)
+# ALLOWED ROLE IDS
 # ======================================================
 ALLOWED_ROLE_IDS = [
     1413545658006110401,  # William/Admin
@@ -56,19 +56,48 @@ DEFAULT_CONFIG = {
 # ======================================================
 # CONFIG HELPERS
 # ======================================================
+def ensure_config(cfg):
+    cfg.setdefault("welcome", {})
+    cfg.setdefault("member_logs", {})
+
+    cfg["welcome"].setdefault("enabled", True)
+    cfg["welcome"].setdefault("welcome_channel_id", None)
+    cfg["welcome"].setdefault("title", DEFAULT_CONFIG["welcome"]["title"])
+    cfg["welcome"].setdefault("description", "")
+    cfg["welcome"].setdefault("channels", {})
+    cfg["welcome"].setdefault("arrival_images", [])
+    cfg["welcome"].setdefault("bot_add", {
+        "enabled": True,
+        "channel_id": None
+    })
+
+    cfg["member_logs"].setdefault("enabled", True)
+    cfg["member_logs"].setdefault("channel_id", None)
+    cfg["member_logs"].setdefault("log_leave", True)
+    cfg["member_logs"].setdefault("log_kick", True)
+    cfg["member_logs"].setdefault("log_ban", True)
+
+    return cfg
+
+
 def load_config():
     url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
     r = requests.get(url, headers=HEADERS)
     if r.status_code == 200:
-        return json.loads(base64.b64decode(r.json()["content"]).decode())
+        cfg = json.loads(base64.b64decode(r.json()["content"]).decode())
+        cfg = ensure_config(cfg)
+        save_config(cfg)
+        return cfg
+
     save_config(DEFAULT_CONFIG.copy())
     return DEFAULT_CONFIG.copy()
+
 
 def save_config(cfg):
     url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
     r = requests.get(url, headers=HEADERS)
     payload = {
-        "message": "Update member settings",
+        "message": "Update welcome configuration",
         "content": base64.b64encode(json.dumps(cfg, indent=2).encode()).decode()
     }
     if r.status_code == 200:
@@ -107,11 +136,7 @@ class EditTitleModal(Modal):
     def __init__(self):
         cfg = load_config()
         super().__init__(title="Edit Welcome Title")
-        self.text = TextInput(
-            label="Title",
-            max_length=256,
-            default=cfg["welcome"]["title"]
-        )
+        self.text = TextInput(label="Title", max_length=256, default=cfg["welcome"]["title"])
         self.add_item(self.text)
 
     async def on_submit(self, interaction):
@@ -178,10 +203,7 @@ class ChannelSlotPickerView(View):
         cid = _cid(interaction.data["values"][0])
         cfg["welcome"]["channels"][self.slot] = cid
         save_config(cfg)
-        await interaction.response.edit_message(
-            content=f"Saved `{self.slot}` → <#{cid}>",
-            view=None
-        )
+        await interaction.response.edit_message(content=f"Saved `{self.slot}` → <#{cid}>", view=None)
 
 class WelcomeChannelPicker(View):
     def __init__(self):
@@ -195,10 +217,7 @@ class WelcomeChannelPicker(View):
         cid = _cid(interaction.data["values"][0])
         cfg["welcome"]["welcome_channel_id"] = cid
         save_config(cfg)
-        await interaction.response.edit_message(
-            content=f"Welcome channel set to <#{cid}>",
-            view=None
-        )
+        await interaction.response.edit_message(content=f"Welcome channel set to <#{cid}>", view=None)
 
 class BotAddChannelPicker(View):
     def __init__(self):
@@ -212,10 +231,7 @@ class BotAddChannelPicker(View):
         cid = _cid(interaction.data["values"][0])
         cfg["welcome"]["bot_add"]["channel_id"] = cid
         save_config(cfg)
-        await interaction.response.edit_message(
-            content=f"Bot add channel set to <#{cid}>",
-            view=None
-        )
+        await interaction.response.edit_message(content=f"Bot add channel set to <#{cid}>", view=None)
 
 class LogChannelPicker(View):
     def __init__(self):
@@ -229,10 +245,7 @@ class LogChannelPicker(View):
         cid = _cid(interaction.data["values"][0])
         cfg["member_logs"]["channel_id"] = cid
         save_config(cfg)
-        await interaction.response.edit_message(
-            content=f"Member log channel set to <#{cid}>",
-            view=None
-        )
+        await interaction.response.edit_message(content=f"Member log channel set to <#{cid}>", view=None)
 
 # ======================================================
 # SETTINGS VIEWS
@@ -272,23 +285,20 @@ class WelcomeSettingsView(View):
         cfg = load_config()
         cfg["welcome"]["enabled"] = not cfg["welcome"]["enabled"]
         save_config(cfg)
-        await interaction.response.send_message(
-            f"Welcome {'enabled' if cfg['welcome']['enabled'] else 'disabled'}."
-        )
+        await interaction.response.send_message(f"Welcome {'enabled' if cfg['welcome']['enabled'] else 'disabled'}.")
 
     async def toggle_bot_add(self, interaction):
         cfg = load_config()
         cfg["welcome"]["bot_add"]["enabled"] = not cfg["welcome"]["bot_add"]["enabled"]
         save_config(cfg)
-        await interaction.response.send_message(
-            f"Bot add logs {'enabled' if cfg['welcome']['bot_add']['enabled'] else 'disabled'}."
-        )
+        await interaction.response.send_message(f"Bot add logs {'enabled' if cfg['welcome']['bot_add']['enabled'] else 'disabled'}.")
 
     async def preview(self, interaction):
         cfg = load_config()
         w = cfg["welcome"]
         count = human_member_number(interaction.guild)
         now = discord.utils.utcnow()
+        time_str = now.strftime("%H:%M")
 
         embed = discord.Embed(
             title=render(w["title"], user=interaction.user, guild=interaction.guild, member_count=count, channels=w["channels"]),
@@ -296,9 +306,7 @@ class WelcomeSettingsView(View):
             timestamp=now
         )
 
-        embed.set_footer(
-            text=f"You landed as passenger #{count} ✈️ | {discord.utils.format_dt(now, style='t')}"
-        )
+        embed.set_footer(text=f"You landed as passenger #{count} ✈️ | Today at {time_str}")
 
         if w["arrival_images"]:
             embed.set_image(url=random.choice(w["arrival_images"]))
@@ -334,9 +342,7 @@ class LeaveSettingsView(View):
         cfg = load_config()
         cfg["member_logs"][key] = not cfg["member_logs"][key]
         save_config(cfg)
-        await interaction.response.send_message(
-            f"{name} logs {'enabled' if cfg['member_logs'][key] else 'disabled'}."
-        )
+        await interaction.response.send_message(f"{name} logs {'enabled' if cfg['member_logs'][key] else 'disabled'}.")
 
     async def toggle_leave(self, interaction): await self._toggle(interaction, "log_leave", "Leave")
     async def toggle_kick(self, interaction): await self._toggle(interaction, "log_kick", "Kick")
@@ -365,6 +371,7 @@ class WelcomeSystem:
 
         count = human_member_number(member.guild)
         now = discord.utils.utcnow()
+        time_str = now.strftime("%H:%M")
 
         embed = discord.Embed(
             title=render(w["title"], user=member, guild=member.guild, member_count=count, channels=w["channels"]),
@@ -372,9 +379,7 @@ class WelcomeSystem:
             timestamp=now
         )
 
-        embed.set_footer(
-            text=f"You landed as passenger #{count} ✈️ | {discord.utils.format_dt(now, style='t')}"
-        )
+        embed.set_footer(text=f"You landed as passenger #{count} ✈️ | Today at {time_str}")
 
         if w["arrival_images"]:
             embed.set_image(url=random.choice(w["arrival_images"]))
@@ -394,9 +399,7 @@ class WelcomeSystem:
         await asyncio.sleep(1.5)
         async for entry in member.guild.audit_logs(limit=5, action=discord.AuditLogAction.bot_add):
             if entry.target and entry.target.id == member.id:
-                await channel.send(
-                    f"🤖 {entry.user.mention} added a bot ({member.name}) to the server."
-                )
+                await channel.send(f"🤖 {entry.user.mention} added a bot ({member.name}) to the server.")
                 return
 
     async def on_member_remove(self, member):
@@ -410,7 +413,6 @@ class WelcomeSystem:
             return
 
         await asyncio.sleep(1.5)
-
         async for entry in member.guild.audit_logs(limit=5, action=discord.AuditLogAction.kick):
             if entry.target and entry.target.id == member.id:
                 if logs["log_kick"]:
