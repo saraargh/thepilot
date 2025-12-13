@@ -21,6 +21,6 @@
     "channel_id": 1404500058375717056,
     "log_leave": false,
     "log_kick": false,
-    "log_ban": true
+    "log_ban": false
   }
 }
