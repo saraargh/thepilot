@@ -3,12 +3,16 @@
     "enabled": true,
     "welcome_channel_id": 1444274467864838207,
     "title": "Welcome to the server, {user}! 👋🏼",
-    "description": "Regardless of how you found us, we hope you enjoy your time here! ✨🎮\n\n• {channel:self_roles}\n• {channel:birthday}",
+    "description": "Regardless of how you found us, we hope you enjoy your time here! ✨🎮\n\nCheck out:\n• {channel:self_roles} to pick your roles\n• {channel:birthday} to get a birthday message 🎂",
     "channels": {
       "self_roles": 1404103196078768261,
       "birthday": 1406250261915369512
     },
-    "arrival_images": [],
+    "arrival_images": [
+      "https://cdn.discordapp.com/attachments/1444274467864838207/1449039978205155448/IMG_8494.jpg",
+      "https://cdn.discordapp.com/attachments/1444274467864838207/1449040274499174451/IMG_8497.jpg",
+      "https://cdn.discordapp.com/attachments/1444274467864838207/1449040298482073770/IMG_8498.jpg"
+    ],
     "control_panel_message_id": null
   },
   "member_logs": {
