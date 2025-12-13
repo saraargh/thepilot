@@ -6,8 +6,8 @@ import os
 from flask import Flask
 from threading import Thread
 
-# ✅ ADD
 from joinleave import WelcomeSystem
+from welcome_system import setup_welcome
 
 # ===== CONFIG =====
 TOKEN = os.getenv("TOKEN")  # Render environment variable
@@ -31,42 +31,36 @@ class ThePilot(discord.Client):
         super().__init__(intents=intents)
         self.tree = app_commands.CommandTree(self)
 
-        # ✅ ADD
         self.joinleave = WelcomeSystem(self)
 
-    # ✅ ADD
     async def on_member_join(self, member: discord.Member):
         await self.joinleave.on_member_join(member)
 
-    # ✅ ADD
     async def on_member_remove(self, member: discord.Member):
         await self.joinleave.on_member_remove(member)
 
+    async def on_member_ban(self, guild: discord.Guild, user: discord.User):
+        await self.joinleave.on_member_ban(guild, user)
+
     async def setup_hook(self):
-        # Start scheduled tasks
         scheduled_tasks.start(self)
 
-        # Load command modules
         from plane import setup_plane_commands
         from tournament import setup_tournament_commands
         from poo import setup_poo_commands
         from goat import setup_goat_commands
         from bot_warnings import setup_warnings_commands
-        from mute import setup_mute_commands  # Hard-mute commands
+        from mute import setup_mute_commands
 
-        # Setup commands
         setup_plane_commands(self.tree)
         setup_tournament_commands(self.tree, allowed_role_ids=ALLOWED_ROLE_IDS)
 
-        # ==== FIXED DAILY POO ====
         poo_task = setup_poo_commands(self.tree, self, allowed_role_ids=ALLOWED_ROLE_IDS)
-        poo_task.start()   # <-- START THE TASK PROPERLY
+        poo_task.start()
 
-        # ==== DAILY GOAT ====
         goat_task = setup_goat_commands(self.tree, self, allowed_role_ids=ALLOWED_ROLE_IDS)
-        goat_task.start()  # <-- START GOAT TASK
+        goat_task.start()
 
-        # Warnings
         ALLOWED_WARNROLE_IDS = [
             1420817462290681936,
             1413545658006110401,
@@ -75,25 +69,21 @@ class ThePilot(discord.Client):
         ]
         setup_warnings_commands(self.tree, allowed_role_ids=ALLOWED_WARNROLE_IDS)
 
-        # Setup hard-mute commands and listener
         setup_mute_commands(self, self.tree)
 
-        # Sync all slash commands
+        setup_welcome(self.tree, self)
+
         await self.tree.sync()
 
 client = ThePilot()
 
-# ===== Automation Tasks =====
 @tasks.loop(minutes=1)
 async def scheduled_tasks(bot_client):
-    """Placeholder for automated tasks"""
     now = discord.utils.utcnow().astimezone(UK_TZ)
     guild = bot_client.guilds[0] if bot_client.guilds else None
     if guild:
-        # Add more scheduled tasks here if needed
         pass
 
-# ===== Flask Keep-Alive =====
 app = Flask("")
 
 @app.route("/")
@@ -106,5 +96,4 @@ def run_flask():
 
 Thread(target=run_flask).start()
 
-# ===== Run Bot =====
 client.run(TOKEN)
