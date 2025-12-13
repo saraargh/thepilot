@@ -7,7 +7,6 @@ from flask import Flask
 from threading import Thread
 
 from joinleave import WelcomeSystem
-from welcome_system import setup_welcome
 
 # ===== CONFIG =====
 TOKEN = os.getenv("TOKEN")  # Render environment variable
@@ -71,7 +70,7 @@ class ThePilot(discord.Client):
 
         setup_mute_commands(self, self.tree)
 
-        setup_welcome(self.tree, self)
+
 
         await self.tree.sync()
 
