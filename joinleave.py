@@ -18,10 +18,11 @@ GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
 
 ALLOWED_ROLE_IDS = [
-    1413545658006110401,
-    1404098545006546954,
-    1420817462290681936,
-    1406242523952713820
+    1413545658006110401,  # William/Admin
+    1404098545006546954,  # serversorter
+    1420817462290681936,  # kd
+    1404105470204969000,  # greg
+    1404104881098195015   # sazzles
 ]
 
 # ======================================================
