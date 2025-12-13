@@ -9,25 +9,24 @@ import json
 import base64
 import requests
 
-# =========================
+# ======================================================
 # GITHUB CONFIG
-# =========================
+# ======================================================
 GITHUB_REPO = os.getenv("GITHUB_REPO", "saraargh/the-pilot")
 GITHUB_FILE_PATH = "welcome_config.json"
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
 
 ALLOWED_ROLE_IDS = [
-    1413545658006110401,  # William/Admin
-    1404098545006546954, #serversorter
-    1420817462290681936, #kd
-    1404105470204969000, #greg
-    1404104881098195015 #sazzles
+    1413545658006110401,
+    1404098545006546954,
+    1420817462290681936,
+    1406242523952713820
 ]
 
-# =========================
-# DEFAULT CONFIG (BOOTSTRAP)
-# =========================
+# ======================================================
+# DEFAULT CONFIG (BOOTSTRAP ONLY)
+# ======================================================
 DEFAULT_CONFIG = {
     "welcome": {
         "enabled": True,
@@ -47,9 +46,9 @@ DEFAULT_CONFIG = {
     }
 }
 
-# =========================
+# ======================================================
 # CONFIG HELPERS
-# =========================
+# ======================================================
 def load_config():
     url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
     r = requests.get(url, headers=HEADERS)
@@ -74,9 +73,9 @@ def save_config(config):
 
     requests.put(url, headers=HEADERS, json=data)
 
-# =========================
+# ======================================================
 # UTILS
-# =========================
+# ======================================================
 def has_permission(interaction: discord.Interaction):
     return any(r.id in ALLOWED_ROLE_IDS for r in interaction.user.roles)
 
@@ -96,15 +95,56 @@ def render(text, *, user, guild, member_count, channels):
 
     return text
 
-# =========================
-# UI COMPONENTS
-# =========================
-class LogChannelPickerView(View):
-    def __init__(self):
+# ======================================================
+# MODALS
+# ======================================================
+class EditTitleModal(Modal, title="Edit Welcome Title"):
+    value = TextInput(label="Title", max_length=256)
+
+    async def on_submit(self, interaction: discord.Interaction):
+        cfg = load_config()
+        cfg["welcome"]["title"] = self.value.value
+        save_config(cfg)
+        await interaction.response.send_message("Title updated.", ephemeral=True)
+
+class EditTextModal(Modal, title="Edit Welcome Text"):
+    value = TextInput(label="Text", style=discord.TextStyle.paragraph, max_length=2000)
+
+    async def on_submit(self, interaction: discord.Interaction):
+        cfg = load_config()
+        cfg["welcome"]["description"] = self.value.value
+        save_config(cfg)
+        await interaction.response.send_message("Text updated.", ephemeral=True)
+
+class AddImageModal(Modal, title="Add Welcome Image"):
+    url = TextInput(label="Image URL")
+
+    async def on_submit(self, interaction: discord.Interaction):
+        cfg = load_config()
+        cfg["welcome"]["arrival_images"].append(self.url.value)
+        save_config(cfg)
+        await interaction.response.send_message("Image added.", ephemeral=True)
+
+class AddChannelSlotModal(Modal, title="Add / Edit Channel Slot"):
+    name = TextInput(label="Slot name (e.g. self_roles)", max_length=32)
+
+    async def on_submit(self, interaction: discord.Interaction):
+        await interaction.response.send_message(
+            f"Select channel for `{self.name.value}`:",
+            view=ChannelSlotPickerView(self.name.value),
+            ephemeral=True
+        )
+
+# ======================================================
+# VIEWS
+# ======================================================
+class ChannelSlotPickerView(View):
+    def __init__(self, slot_name):
         super().__init__(timeout=60)
+        self.slot_name = slot_name
 
         select = discord.ui.ChannelSelect(
-            placeholder="Select log channel…",
+            placeholder="Select channel…",
             channel_types=[discord.ChannelType.text],
             min_values=1,
             max_values=1
@@ -113,23 +153,118 @@ class LogChannelPickerView(View):
         self.add_item(select)
 
     async def pick(self, interaction: discord.Interaction):
-        if not has_permission(interaction):
-            return await interaction.response.send_message("No permission.", ephemeral=True)
-
         channel = interaction.data["values"][0]
 
         cfg = load_config()
-        cfg["member_logs"]["channel_id"] = int(channel)
+        cfg["welcome"]["channels"][self.slot_name] = int(channel)
         save_config(cfg)
 
         await interaction.response.edit_message(
-            content=f"Member log channel set to <#{channel}>",
+            content=f"Saved `{self.slot_name}` → <#{channel}>",
             view=None
         )
 
-# =========================
+class RemoveChannelView(View):
+    def __init__(self):
+        super().__init__(timeout=60)
+        cfg = load_config()
+
+        options = [
+            discord.SelectOption(label=k, value=k, description=f"<#{v}>")
+            for k, v in cfg["welcome"]["channels"].items()
+        ]
+
+        if not options:
+            options = [discord.SelectOption(label="No channels", value="none")]
+
+        select = Select(options=options)
+        select.callback = self.remove
+        self.add_item(select)
+
+    async def remove(self, interaction: discord.Interaction):
+        key = interaction.data["values"][0]
+        if key == "none":
+            return await interaction.response.send_message("Nothing to remove.", ephemeral=True)
+
+        cfg = load_config()
+        cfg["welcome"]["channels"].pop(key, None)
+        save_config(cfg)
+
+        await interaction.response.edit_message(
+            content=f"Removed `{key}`",
+            view=None
+        )
+
+class RemoveImageView(View):
+    def __init__(self):
+        super().__init__(timeout=60)
+        cfg = load_config()
+
+        options = [
+            discord.SelectOption(label=f"Image {i+1}", value=url)
+            for i, url in enumerate(cfg["welcome"]["arrival_images"])
+        ]
+
+        if not options:
+            options = [discord.SelectOption(label="No images", value="none")]
+
+        select = Select(options=options)
+        select.callback = self.remove
+        self.add_item(select)
+
+    async def remove(self, interaction: discord.Interaction):
+        val = interaction.data["values"][0]
+        if val == "none":
+            return await interaction.response.send_message("Nothing to remove.", ephemeral=True)
+
+        cfg = load_config()
+        cfg["welcome"]["arrival_images"].remove(val)
+        save_config(cfg)
+
+        await interaction.response.edit_message(
+            content="Image removed.",
+            view=None
+        )
+
+class WelcomeSettingsView(View):
+    def __init__(self):
+        super().__init__(timeout=None)
+
+    @Button(label="Edit Title")
+    async def edit_title(self, interaction, _):
+        await interaction.response.send_modal(EditTitleModal())
+
+    @Button(label="Edit Text")
+    async def edit_text(self, interaction, _):
+        await interaction.response.send_modal(EditTextModal())
+
+    @Button(label="Add / Edit Channel")
+    async def add_channel(self, interaction, _):
+        await interaction.response.send_modal(AddChannelSlotModal())
+
+    @Button(label="Remove Channel")
+    async def remove_channel(self, interaction, _):
+        await interaction.response.send_message(
+            "Select channel to remove:",
+            view=RemoveChannelView(),
+            ephemeral=True
+        )
+
+    @Button(label="Add Image")
+    async def add_image(self, interaction, _):
+        await interaction.response.send_modal(AddImageModal())
+
+    @Button(label="Remove Image")
+    async def remove_image(self, interaction, _):
+        await interaction.response.send_message(
+            "Select image to remove:",
+            view=RemoveImageView(),
+            ephemeral=True
+        )
+
+# ======================================================
 # MAIN SYSTEM
-# =========================
+# ======================================================
 class WelcomeSystem:
     def __init__(self, client: discord.Client):
         self.client = client
@@ -223,16 +358,29 @@ class WelcomeSystem:
                 )
                 return
 
-# =========================
+# ======================================================
 # SLASH COMMAND REGISTRATION
-# =========================
+# ======================================================
 def setup_welcome_commands(tree: app_commands.CommandTree):
     @tree.command(name="setwelcome", description="Open welcome settings")
     async def setwelcome(interaction: discord.Interaction):
         if not has_permission(interaction):
             return await interaction.response.send_message("No permission.", ephemeral=True)
 
-        await interaction.response.send_message(
-            "Welcome settings UI is wired and working.",
-            ephemeral=True
+        cfg = load_config()
+        old_id = cfg["welcome"].get("control_panel_message_id")
+
+        if old_id:
+            try:
+                old = await interaction.channel.fetch_message(old_id)
+                await old.delete()
+            except:
+                pass
+
+        msg = await interaction.channel.send(
+            f"Welcome Settings\nEdited by {interaction.user.mention}",
+            view=WelcomeSettingsView()
         )
+
+        cfg["welcome"]["control_panel_message_id"] = msg.id
+        save_config(cfg)
