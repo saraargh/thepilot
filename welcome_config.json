@@ -1,0 +1,21 @@
+{
+  "welcome": {
+    "enabled": true,
+    "welcome_channel_id": 1444274467864838207,
+    "title": "Welcome to the server, {user}! 👋🏼",
+    "description": "Regardless of how you found us, we hope you enjoy your time here! ✨🎮\n\n• {channel:self_roles}\n• {channel:birthday}",
+    "channels": {
+      "self_roles": 1404103196078768261,
+      "birthday": 1406250261915369512
+    },
+    "arrival_images": [],
+    "control_panel_message_id": null
+  },
+  "member_logs": {
+    "enabled": true,
+    "channel_id": 1404500058375717056,
+    "log_leave": true,
+    "log_kick": true,
+    "log_ban": true
+  }
+}
