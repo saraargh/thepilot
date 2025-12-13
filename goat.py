@@ -15,11 +15,11 @@ GENERAL_CHANNEL_ID = 1398508734506078240
 
 ALLOWED_ROLE_IDS = [
     1413545658006110401,  # William/Admin
-    1404098545006546954, #serversorter
-    1420817462290681936, #kd
-    1404105470204969000, #greg
-    1404104881098195015, #sazzles
-    1406242523952713820 #birthday
+    1404098545006546954,  # serversorter
+    1420817462290681936,  # kd
+    1404105470204969000,  # greg
+    1404104881098195015,  # sazzles
+    1406242523952713820   # birthday
 ]
 
 # ===== Helpers =====
@@ -29,6 +29,8 @@ def user_allowed(member: discord.Member, allowed_roles=None):
 
 async def clear_goat_role(guild: discord.Guild):
     goat_role = guild.get_role(GOAT_ROLE_ID)
+    if not goat_role:
+        return
     for member in guild.members:
         if goat_role in member.roles:
             await member.remove_roles(goat_role)
@@ -38,6 +40,9 @@ async def assign_random_goat(guild: discord.Guild):
     poo_role = guild.get_role(POO_ROLE_ID)
     passengers_role = guild.get_role(PASSENGERS_ROLE_ID)
     general_channel = guild.get_channel(GENERAL_CHANNEL_ID)
+
+    if not all([goat_role, poo_role, passengers_role, general_channel]):
+        return
 
     eligible = [
         m for m in passengers_role.members
@@ -52,10 +57,13 @@ async def assign_random_goat(guild: discord.Guild):
         await general_channel.send("No passengers available to assign goat!")
 
 async def test_goat(guild: discord.Guild):
-    passengers_role = guild.get_role(PASSENGERS_ROLE_ID)
-    poo_role = guild.get_role(POO_ROLE_ID)
     goat_role = guild.get_role(GOAT_ROLE_ID)
+    poo_role = guild.get_role(POO_ROLE_ID)
+    passengers_role = guild.get_role(PASSENGERS_ROLE_ID)
     general_channel = guild.get_channel(GENERAL_CHANNEL_ID)
+
+    if not all([goat_role, poo_role, passengers_role, general_channel]):
+        return
 
     eligible = [
         m for m in passengers_role.members
@@ -79,45 +87,51 @@ def setup_goat_commands(tree: app_commands.CommandTree, client: discord.Client, 
     async def daily_goat_task():
         now = datetime.datetime.now(UK_TZ)
 
-        if client.guilds:
-            guild = client.guilds[0]
+        guild = client.guilds[0] if client.guilds else None
+        if not guild:
+            return
 
-            if now.hour == 11 and now.minute == 0:
-                await clear_goat_role(guild)
+        # 11am — clear goat
+        if now.hour == 11 and now.minute == 0:
+            await clear_goat_role(guild)
 
-            if now.hour == 13 and now.minute == 0:
-                await clear_goat_role(guild)
-                await assign_random_goat(guild)
+        # 1pm — clear + assign new goat
+        if now.hour == 13 and now.minute == 0:
+            await clear_goat_role(guild)
+            await assign_random_goat(guild)
 
-    @tree.command(name="cleargoat")
+    @daily_goat_task.before_loop
+    async def before_goat():
+        await client.wait_until_ready()
+
+    # ===== Slash Commands =====
+    @tree.command(name="cleargoat", description="Clear the goat role from everyone")
     async def cleargoat(interaction: discord.Interaction):
         if not user_allowed(interaction.user, allowed_role_ids):
-            await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
-            return
+            return await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
         await clear_goat_role(interaction.guild)
         await interaction.response.send_message("✅ Cleared goat role from everyone.")
 
-    @tree.command(name="assigngoat")
+    @tree.command(name="assigngoat", description="Manually assign the goat role to a member")
+    @app_commands.describe(member="The member to assign the goat role")
     async def assigngoat(interaction: discord.Interaction, member: discord.Member):
         if not user_allowed(interaction.user, allowed_role_ids):
-            await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
-            return
+            return await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
         await member.add_roles(interaction.guild.get_role(GOAT_ROLE_ID))
         await interaction.response.send_message(f"🎉 {member.mention} has been assigned the goat role.")
 
-    @tree.command(name="removegoat")
+    @tree.command(name="removegoat", description="Remove the goat role from a member")
+    @app_commands.describe(member="The member to remove the goat role from")
     async def removegoat(interaction: discord.Interaction, member: discord.Member):
         if not user_allowed(interaction.user, allowed_role_ids):
-            await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
-            return
+            return await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
         await member.remove_roles(interaction.guild.get_role(GOAT_ROLE_ID))
         await interaction.response.send_message(f"❌ {member.mention} has had the goat role removed.")
 
-    @tree.command(name="testgoat")
+    @tree.command(name="testgoat", description="Test the goat automation")
     async def testgoat_command(interaction: discord.Interaction):
         if not user_allowed(interaction.user, allowed_role_ids):
-            await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
-            return
+            return await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
         await test_goat(interaction.guild)
         await interaction.response.send_message("🧪 Test goat completed!")
 
