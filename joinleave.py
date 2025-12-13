@@ -38,7 +38,11 @@ DEFAULT_CONFIG = {
         "title": "Welcome to the server, {user}! 👋🏼",
         "description": "",
         "channels": {},
-        "arrival_images": []
+        "arrival_images": [],
+        "bot_add": {
+            "enabled": True,
+            "channel_id": None
+        }
     },
     "member_logs": {
         "enabled": True,
@@ -55,50 +59,42 @@ DEFAULT_CONFIG = {
 def load_config():
     url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
     r = requests.get(url, headers=HEADERS)
-
     if r.status_code == 200:
         return json.loads(base64.b64decode(r.json()["content"]).decode())
-
     save_config(DEFAULT_CONFIG.copy())
     return DEFAULT_CONFIG.copy()
 
 def save_config(cfg):
     url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
     r = requests.get(url, headers=HEADERS)
-
-    data = {
+    payload = {
         "message": "Update member settings",
         "content": base64.b64encode(json.dumps(cfg, indent=2).encode()).decode()
     }
-
     if r.status_code == 200:
-        data["sha"] = r.json()["sha"]
-
-    requests.put(url, headers=HEADERS, json=data)
+        payload["sha"] = r.json()["sha"]
+    requests.put(url, headers=HEADERS, json=payload)
 
 # ======================================================
 # UTILS
 # ======================================================
-def has_permission(interaction: discord.Interaction):
+def has_permission(interaction):
     return any(r.id in ALLOWED_ROLE_IDS for r in interaction.user.roles)
 
-def human_member_number(guild: discord.Guild):
+def human_member_number(guild):
     return len([m for m in guild.members if not m.bot])
 
 def render(text, *, user, guild, member_count, channels):
     if not text:
         return ""
-
     out = (
         text.replace("{user}", user.name)
         .replace("{mention}", user.mention)
         .replace("{server}", guild.name)
         .replace("{member_count}", str(member_count))
     )
-
     for name, cid in channels.items():
         out = out.replace(f"{{channel:{name}}}", f"<#{cid}>")
-
     return out
 
 def _cid(val):
@@ -114,7 +110,7 @@ class EditTitleModal(Modal):
         self.text = TextInput(
             label="Title",
             max_length=256,
-            default=cfg["welcome"].get("title", "")
+            default=cfg["welcome"]["title"]
         )
         self.add_item(self.text)
 
@@ -132,7 +128,7 @@ class EditTextModal(Modal):
             label="Text",
             style=discord.TextStyle.paragraph,
             max_length=2000,
-            default=cfg["welcome"].get("description", "")
+            default=cfg["welcome"]["description"]
         )
         self.add_item(self.text)
 
@@ -204,45 +200,22 @@ class WelcomeChannelPicker(View):
             view=None
         )
 
-class RemoveChannelSlotView(View):
+class BotAddChannelPicker(View):
     def __init__(self):
         super().__init__(timeout=60)
-        cfg = load_config()
-        opts = [discord.SelectOption(label=k, value=k) for k in cfg["welcome"]["channels"]] or \
-               [discord.SelectOption(label="None", value="none")]
-        sel = Select(options=opts)
-        sel.callback = self.remove
+        sel = discord.ui.ChannelSelect(channel_types=[discord.ChannelType.text])
+        sel.callback = self.pick
         self.add_item(sel)
 
-    async def remove(self, interaction):
-        key = interaction.data["values"][0]
-        if key == "none":
-            return await interaction.response.send_message("Nothing to remove.")
+    async def pick(self, interaction):
         cfg = load_config()
-        cfg["welcome"]["channels"].pop(key, None)
+        cid = _cid(interaction.data["values"][0])
+        cfg["welcome"]["bot_add"]["channel_id"] = cid
         save_config(cfg)
-        await interaction.response.edit_message(content=f"Removed `{key}`", view=None)
-
-class RemoveImageView(View):
-    def __init__(self):
-        super().__init__(timeout=60)
-        cfg = load_config()
-        opts = [
-            discord.SelectOption(label=f"Image {i+1}", value=url, description=url[:80])
-            for i, url in enumerate(cfg["welcome"]["arrival_images"])
-        ] or [discord.SelectOption(label="None", value="none")]
-        sel = Select(options=opts)
-        sel.callback = self.remove
-        self.add_item(sel)
-
-    async def remove(self, interaction):
-        val = interaction.data["values"][0]
-        if val == "none":
-            return await interaction.response.send_message("Nothing to remove.")
-        cfg = load_config()
-        cfg["welcome"]["arrival_images"].remove(val)
-        save_config(cfg)
-        await interaction.response.edit_message(content="Image removed.", view=None)
+        await interaction.response.edit_message(
+            content=f"Bot add channel set to <#{cid}>",
+            view=None
+        )
 
 class LogChannelPicker(View):
     def __init__(self):
@@ -267,13 +240,13 @@ class LogChannelPicker(View):
 class WelcomeSettingsView(View):
     def __init__(self):
         super().__init__(timeout=None)
-        self._btn("Edit Title", self.edit_title, discord.ButtonStyle.primary)
-        self._btn("Edit Text", self.edit_text, discord.ButtonStyle.primary)
+        self._btn("Edit Title", self.edit_title)
+        self._btn("Edit Text", self.edit_text)
         self._btn("Set Welcome Channel", self.set_channel)
         self._btn("Add/Edit Channel Slot", self.add_slot)
-        self._btn("Remove Channel Slot", self.remove_slot)
         self._btn("Add Image", self.add_image)
-        self._btn("Remove Image", self.remove_image)
+        self._btn("Toggle Bot Add Logs", self.toggle_bot_add)
+        self._btn("Set Bot Add Channel", self.set_bot_channel)
         self._btn("Preview", self.preview, discord.ButtonStyle.success)
         self._btn("Toggle Welcome On/Off", self.toggle, discord.ButtonStyle.danger)
 
@@ -288,26 +261,12 @@ class WelcomeSettingsView(View):
             return False
         return True
 
-    async def edit_title(self, interaction):
-        await interaction.response.send_modal(EditTitleModal())
-
-    async def edit_text(self, interaction):
-        await interaction.response.send_modal(EditTextModal())
-
-    async def set_channel(self, interaction):
-        await interaction.response.send_message("Select welcome channel:", view=WelcomeChannelPicker())
-
-    async def add_slot(self, interaction):
-        await interaction.response.send_modal(AddChannelSlotModal())
-
-    async def remove_slot(self, interaction):
-        await interaction.response.send_message("Select slot to remove:", view=RemoveChannelSlotView())
-
-    async def add_image(self, interaction):
-        await interaction.response.send_modal(AddImageModal())
-
-    async def remove_image(self, interaction):
-        await interaction.response.send_message("Select image to remove:", view=RemoveImageView())
+    async def edit_title(self, interaction): await interaction.response.send_modal(EditTitleModal())
+    async def edit_text(self, interaction): await interaction.response.send_modal(EditTextModal())
+    async def set_channel(self, interaction): await interaction.response.send_message("Select welcome channel:", view=WelcomeChannelPicker())
+    async def add_slot(self, interaction): await interaction.response.send_modal(AddChannelSlotModal())
+    async def add_image(self, interaction): await interaction.response.send_modal(AddImageModal())
+    async def set_bot_channel(self, interaction): await interaction.response.send_message("Select bot add channel:", view=BotAddChannelPicker())
 
     async def toggle(self, interaction):
         cfg = load_config()
@@ -317,9 +276,15 @@ class WelcomeSettingsView(View):
             f"Welcome {'enabled' if cfg['welcome']['enabled'] else 'disabled'}."
         )
 
-    async def preview(self, interaction):
-        await interaction.response.defer()
+    async def toggle_bot_add(self, interaction):
+        cfg = load_config()
+        cfg["welcome"]["bot_add"]["enabled"] = not cfg["welcome"]["bot_add"]["enabled"]
+        save_config(cfg)
+        await interaction.response.send_message(
+            f"Bot add logs {'enabled' if cfg['welcome']['bot_add']['enabled'] else 'disabled'}."
+        )
 
+    async def preview(self, interaction):
         cfg = load_config()
         w = cfg["welcome"]
         count = human_member_number(interaction.guild)
@@ -338,7 +303,10 @@ class WelcomeSettingsView(View):
         if w["arrival_images"]:
             embed.set_image(url=random.choice(w["arrival_images"]))
 
-        await interaction.followup.send(embed=embed)
+        try:
+            await interaction.response.send_message(embed=embed)
+        except discord.InteractionResponded:
+            await interaction.followup.send(embed=embed)
 
 class LeaveSettingsView(View):
     def __init__(self):
@@ -366,20 +334,16 @@ class LeaveSettingsView(View):
         cfg = load_config()
         cfg["member_logs"][key] = not cfg["member_logs"][key]
         save_config(cfg)
-        state = "enabled" if cfg["member_logs"][key] else "disabled"
-        await interaction.response.send_message(f"{name} logs {state}.")
+        await interaction.response.send_message(
+            f"{name} logs {'enabled' if cfg['member_logs'][key] else 'disabled'}."
+        )
 
-    async def toggle_leave(self, interaction):
-        await self._toggle(interaction, "log_leave", "Leave")
-
-    async def toggle_kick(self, interaction):
-        await self._toggle(interaction, "log_kick", "Kick")
-
-    async def toggle_ban(self, interaction):
-        await self._toggle(interaction, "log_ban", "Ban")
+    async def toggle_leave(self, interaction): await self._toggle(interaction, "log_leave", "Leave")
+    async def toggle_kick(self, interaction): await self._toggle(interaction, "log_kick", "Kick")
+    async def toggle_ban(self, interaction): await self._toggle(interaction, "log_ban", "Ban")
 
 # ======================================================
-# JOIN / LEAVE / BAN HANDLERS
+# RUNTIME SYSTEM
 # ======================================================
 class WelcomeSystem:
     def __init__(self, client):
@@ -387,6 +351,7 @@ class WelcomeSystem:
 
     async def on_member_join(self, member):
         if member.bot:
+            await self.on_bot_join(member)
             return
 
         cfg = load_config()
@@ -415,6 +380,24 @@ class WelcomeSystem:
             embed.set_image(url=random.choice(w["arrival_images"]))
 
         await channel.send(content=member.mention, embed=embed)
+
+    async def on_bot_join(self, member):
+        cfg = load_config()
+        bot_cfg = cfg["welcome"]["bot_add"]
+        if not bot_cfg["enabled"] or not bot_cfg["channel_id"]:
+            return
+
+        channel = self.client.get_channel(bot_cfg["channel_id"])
+        if not channel:
+            return
+
+        await asyncio.sleep(1.5)
+        async for entry in member.guild.audit_logs(limit=5, action=discord.AuditLogAction.bot_add):
+            if entry.target and entry.target.id == member.id:
+                await channel.send(
+                    f"🤖 {entry.user.mention} added a bot ({member.name}) to the server."
+                )
+                return
 
     async def on_member_remove(self, member):
         cfg = load_config()
@@ -448,7 +431,6 @@ class WelcomeSystem:
             return
 
         await asyncio.sleep(1.5)
-
         async for entry in guild.audit_logs(limit=5, action=discord.AuditLogAction.ban):
             if entry.target and entry.target.id == user.id:
                 await channel.send(f"{user.name} was banned from the server by {entry.user}")
@@ -458,7 +440,7 @@ class WelcomeSystem:
 # SLASH COMMANDS
 # ======================================================
 def setup_welcome_commands(tree: app_commands.CommandTree):
-    @tree.command(name="welcomesettings", description="Manage welcome messages")
+    @tree.command(name="welcomesettings", description="Manage welcome settings")
     async def welcomesettings(interaction: discord.Interaction):
         if not has_permission(interaction):
             return await interaction.response.send_message("No permission.", ephemeral=True)
