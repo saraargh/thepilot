@@ -4,10 +4,11 @@ from datetime import datetime, timedelta
 
 # Roles allowed to mute/unmute
 ALLOWED_ROLE_IDS = [
-    1404104881098195015,
-    1420817462290681936,
-    1404105470204969000,
-    1413545658006110401
+    1413545658006110401,  # William/Admin
+    1404098545006546954, #serversorter
+    1420817462290681936, #kd
+    1404105470204969000, #greg
+    1404104881098195015 #sazzles
 ]
 
 # Store currently muted users
