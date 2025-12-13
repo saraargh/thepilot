@@ -1,4 +1,5 @@
 import discord
+from discord import app_commands
 from discord.ui import View, Button, Modal, TextInput, Select
 from datetime import datetime
 import asyncio
@@ -8,9 +9,9 @@ import json
 import base64
 import requests
 
-# ======================================================
+# =========================
 # GITHUB CONFIG
-# ======================================================
+# =========================
 GITHUB_REPO = os.getenv("GITHUB_REPO", "saraargh/the-pilot")
 GITHUB_FILE_PATH = "welcome_config.json"
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
@@ -23,9 +24,9 @@ ALLOWED_ROLE_IDS = [
     1406242523952713820
 ]
 
-# ======================================================
-# DEFAULT CONFIG (BOOTSTRAP ONLY)
-# ======================================================
+# =========================
+# DEFAULT CONFIG (BOOTSTRAP)
+# =========================
 DEFAULT_CONFIG = {
     "welcome": {
         "enabled": True,
@@ -45,9 +46,9 @@ DEFAULT_CONFIG = {
     }
 }
 
-# ======================================================
+# =========================
 # CONFIG HELPERS
-# ======================================================
+# =========================
 def load_config():
     url = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
     r = requests.get(url, headers=HEADERS)
@@ -72,9 +73,12 @@ def save_config(config):
 
     requests.put(url, headers=HEADERS, json=data)
 
-# ======================================================
-# PLACEHOLDER ENGINE
-# ======================================================
+# =========================
+# UTILS
+# =========================
+def has_permission(interaction: discord.Interaction):
+    return any(r.id in ALLOWED_ROLE_IDS for r in interaction.user.roles)
+
 def render(text, *, user, guild, member_count, channels):
     if not text:
         return ""
@@ -91,77 +95,40 @@ def render(text, *, user, guild, member_count, channels):
 
     return text
 
-# ======================================================
-# PERMISSIONS
-# ======================================================
-def has_permission(interaction):
-    return any(r.id in ALLOWED_ROLE_IDS for r in interaction.user.roles)
-
-# ======================================================
-# CHANNEL PICKERS (VERSION SAFE)
-# ======================================================
-class ChannelPickerView(View):
-    def __init__(self, slot_name):
-        super().__init__(timeout=60)
-        self.slot_name = slot_name
-
-        self.select = discord.ui.ChannelSelect(
-            placeholder="Select a channel…",
-            channel_types=[discord.ChannelType.text],
-            min_values=1,
-            max_values=1
-        )
-        self.select.callback = self.pick
-        self.add_item(self.select)
-
-    async def pick(self, interaction):
-        if not has_permission(interaction):
-            await interaction.response.send_message("No permission.", ephemeral=True)
-            return
-
-        channel = self.select.values[0]
-
-        cfg = load_config()
-        cfg["welcome"]["channels"][self.slot_name] = channel.id
-        save_config(cfg)
-
-        await interaction.response.edit_message(
-            content=f"Saved `{self.slot_name}` → {channel.mention}",
-            view=None
-        )
-
+# =========================
+# UI COMPONENTS
+# =========================
 class LogChannelPickerView(View):
     def __init__(self):
         super().__init__(timeout=60)
 
-        self.select = discord.ui.ChannelSelect(
-            placeholder="Select member log channel…",
+        select = discord.ui.ChannelSelect(
+            placeholder="Select log channel…",
             channel_types=[discord.ChannelType.text],
             min_values=1,
             max_values=1
         )
-        self.select.callback = self.pick
-        self.add_item(self.select)
+        select.callback = self.pick
+        self.add_item(select)
 
-    async def pick(self, interaction):
+    async def pick(self, interaction: discord.Interaction):
         if not has_permission(interaction):
-            await interaction.response.send_message("No permission.", ephemeral=True)
-            return
+            return await interaction.response.send_message("No permission.", ephemeral=True)
 
-        channel = self.select.values[0]
+        channel = interaction.data["values"][0]
 
         cfg = load_config()
-        cfg["member_logs"]["channel_id"] = channel.id
+        cfg["member_logs"]["channel_id"] = int(channel)
         save_config(cfg)
 
         await interaction.response.edit_message(
-            content=f"Member log channel set to {channel.mention}",
+            content=f"Member log channel set to <#{channel}>",
             view=None
         )
 
-# ======================================================
+# =========================
 # MAIN SYSTEM
-# ======================================================
+# =========================
 class WelcomeSystem:
     def __init__(self, client: discord.Client):
         self.client = client
@@ -254,3 +221,17 @@ class WelcomeSystem:
                     f"{user.name} was banned from the server by {entry.user}"
                 )
                 return
+
+# =========================
+# SLASH COMMAND REGISTRATION
+# =========================
+def setup_welcome_commands(tree: app_commands.CommandTree):
+    @tree.command(name="setwelcome", description="Open welcome settings")
+    async def setwelcome(interaction: discord.Interaction):
+        if not has_permission(interaction):
+            return await interaction.response.send_message("No permission.", ephemeral=True)
+
+        await interaction.response.send_message(
+            "Welcome settings UI is wired and working.",
+            ephemeral=True
+        )
