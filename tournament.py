@@ -582,13 +582,18 @@ def setup_tournament_commands(tree: app_commands.CommandTree, allowed_role_ids):
         await interaction.response.send_message("🗑 Deleted.", ephemeral=True)
 
 
-    # ------------------- /wchelp -------------------
-    @tree.command(name="wchelp", description="World Cup help")
-    async def wchelp(interaction: discord.Interaction):
-        embed = discord.Embed(title="📝 World Cup Commands")
-        embed.add_field(name="/addwcitem", value="Add an item", inline=False)
-        embed.add_field(name="/startwc", value="Start tournament", inline=False)
-        embed.add_field(name="/closematch", value="Lock voting", inline=False)
-        embed.add_field(name="/endwc", value="End tournament", inline=False)
-        embed.add_field(name="/cuphistory", value="View past cups", inline=False)
-        await interaction.response.send_message(embed=embed, ephemeral=True)
+    @tree.command(name="wchelp", description="Help menu")
+async def wchelp(interaction: discord.Interaction):
+    embed = discord.Embed(title="📝 World Cup Help", color=discord.Color.blue())
+
+    embed.add_field(name="/addwcitem", value="Add items (1 per user; admins unlimited)", inline=False)
+    embed.add_field(name="/removewcitem", value="Remove items (admin only)", inline=False)
+    embed.add_field(name="/listwcitems", value="List all items", inline=False)
+    embed.add_field(name="/startwc", value="Start the tournament", inline=False)
+    embed.add_field(name="/closematch", value="Lock voting on current match", inline=False)
+    embed.add_field(name="/nextwcround", value="Advance the tournament. Use twice at end of 32/16/QF/SF", inline=False)
+    embed.add_field(name="/scoreboard", value="View match progress", inline=False)
+    embed.add_field(name="/endwc", value="Announce the winner", inline=False)
+    embed.add_field(name="/resetwc", value="Reset the tournament", inline=False)
+
+    return await interaction.response.send_message(embed=embed, ephemeral=True)
