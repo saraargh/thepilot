@@ -82,6 +82,9 @@ def save_config(cfg):
 def has_permission(interaction: discord.Interaction):
     return any(r.id in ALLOWED_ROLE_IDS for r in interaction.user.roles)
 
+def human_member_number(guild: discord.Guild):
+    return len([m for m in guild.members if not m.bot])
+
 def render(text, *, user, guild, member_count, channels):
     if not text:
         return ""
@@ -102,14 +105,17 @@ def _cid(val):
     return val.id if hasattr(val, "id") else int(val)
 
 # ======================================================
-# MODALS (pre-fill with current values)
+# MODALS
 # ======================================================
 class EditTitleModal(Modal):
     def __init__(self):
         cfg = load_config()
-        current = cfg["welcome"].get("title", "")
         super().__init__(title="Edit Welcome Title")
-        self.text = TextInput(label="Title", max_length=256, default=current)
+        self.text = TextInput(
+            label="Title",
+            max_length=256,
+            default=cfg["welcome"].get("title", "")
+        )
         self.add_item(self.text)
 
     async def on_submit(self, interaction):
@@ -121,13 +127,12 @@ class EditTitleModal(Modal):
 class EditTextModal(Modal):
     def __init__(self):
         cfg = load_config()
-        current = cfg["welcome"].get("description", "")
         super().__init__(title="Edit Welcome Text")
         self.text = TextInput(
             label="Text",
             style=discord.TextStyle.paragraph,
             max_length=2000,
-            default=current
+            default=cfg["welcome"].get("description", "")
         )
         self.add_item(self.text)
 
@@ -168,7 +173,6 @@ class ChannelSlotPickerView(View):
     def __init__(self, slot):
         super().__init__(timeout=60)
         self.slot = slot
-
         sel = discord.ui.ChannelSelect(channel_types=[discord.ChannelType.text])
         sel.callback = self.pick
         self.add_item(sel)
@@ -223,9 +227,10 @@ class RemoveImageView(View):
     def __init__(self):
         super().__init__(timeout=60)
         cfg = load_config()
-        opts = [discord.SelectOption(label=f"Image {i+1}", value=url, description=url[:80])
-                for i, url in enumerate(cfg["welcome"]["arrival_images"])] or \
-               [discord.SelectOption(label="None", value="none")]
+        opts = [
+            discord.SelectOption(label=f"Image {i+1}", value=url, description=url[:80])
+            for i, url in enumerate(cfg["welcome"]["arrival_images"])
+        ] or [discord.SelectOption(label="None", value="none")]
         sel = Select(options=opts)
         sel.callback = self.remove
         self.add_item(sel)
@@ -235,9 +240,8 @@ class RemoveImageView(View):
         if val == "none":
             return await interaction.response.send_message("Nothing to remove.")
         cfg = load_config()
-        if val in cfg["welcome"]["arrival_images"]:
-            cfg["welcome"]["arrival_images"].remove(val)
-            save_config(cfg)
+        cfg["welcome"]["arrival_images"].remove(val)
+        save_config(cfg)
         await interaction.response.edit_message(content="Image removed.", view=None)
 
 class LogChannelPicker(View):
@@ -263,7 +267,6 @@ class LogChannelPicker(View):
 class WelcomeSettingsView(View):
     def __init__(self):
         super().__init__(timeout=None)
-
         self._btn("Edit Title", self.edit_title, discord.ButtonStyle.primary)
         self._btn("Edit Text", self.edit_text, discord.ButtonStyle.primary)
         self._btn("Set Welcome Channel", self.set_channel)
@@ -310,21 +313,28 @@ class WelcomeSettingsView(View):
         cfg = load_config()
         cfg["welcome"]["enabled"] = not cfg["welcome"]["enabled"]
         save_config(cfg)
-        await interaction.response.send_message(f"Welcome {'enabled' if cfg['welcome']['enabled'] else 'disabled'}.")
+        await interaction.response.send_message(
+            f"Welcome {'enabled' if cfg['welcome']['enabled'] else 'disabled'}."
+        )
 
     async def preview(self, interaction):
-        # Prevent UI lock by deferring + followup
         await interaction.response.defer()
 
         cfg = load_config()
         w = cfg["welcome"]
-        humans = len([m for m in interaction.guild.members if not m.bot])
+        count = human_member_number(interaction.guild)
+        now = discord.utils.utcnow()
 
         embed = discord.Embed(
-            title=render(w["title"], user=interaction.user, guild=interaction.guild, member_count=humans, channels=w["channels"]),
-            description=render(w["description"], user=interaction.user, guild=interaction.guild, member_count=humans, channels=w["channels"]),
-            timestamp=datetime.utcnow()
+            title=render(w["title"], user=interaction.user, guild=interaction.guild, member_count=count, channels=w["channels"]),
+            description=render(w["description"], user=interaction.user, guild=interaction.guild, member_count=count, channels=w["channels"]),
+            timestamp=now
         )
+
+        embed.set_footer(
+            text=f"You landed as passenger #{count} ✈️ | {discord.utils.format_dt(now, style='t')}"
+        )
+
         if w["arrival_images"]:
             embed.set_image(url=random.choice(w["arrival_images"]))
 
@@ -388,13 +398,19 @@ class WelcomeSystem:
         if not channel:
             return
 
-        humans = len([m for m in member.guild.members if not m.bot])
+        count = human_member_number(member.guild)
+        now = discord.utils.utcnow()
 
         embed = discord.Embed(
-            title=render(w["title"], user=member, guild=member.guild, member_count=humans, channels=w["channels"]),
-            description=render(w["description"], user=member, guild=member.guild, member_count=humans, channels=w["channels"]),
-            timestamp=datetime.utcnow()
+            title=render(w["title"], user=member, guild=member.guild, member_count=count, channels=w["channels"]),
+            description=render(w["description"], user=member, guild=member.guild, member_count=count, channels=w["channels"]),
+            timestamp=now
         )
+
+        embed.set_footer(
+            text=f"You landed as passenger #{count} ✈️ | {discord.utils.format_dt(now, style='t')}"
+        )
+
         if w["arrival_images"]:
             embed.set_image(url=random.choice(w["arrival_images"]))
 
