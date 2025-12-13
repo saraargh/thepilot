@@ -102,12 +102,14 @@ def _cid(val):
     return val.id if hasattr(val, "id") else int(val)
 
 # ======================================================
-# MODALS
+# MODALS (pre-fill with current values)
 # ======================================================
 class EditTitleModal(Modal):
     def __init__(self):
+        cfg = load_config()
+        current = cfg["welcome"].get("title", "")
         super().__init__(title="Edit Welcome Title")
-        self.text = TextInput(label="Title", max_length=256)
+        self.text = TextInput(label="Title", max_length=256, default=current)
         self.add_item(self.text)
 
     async def on_submit(self, interaction):
@@ -118,8 +120,15 @@ class EditTitleModal(Modal):
 
 class EditTextModal(Modal):
     def __init__(self):
+        cfg = load_config()
+        current = cfg["welcome"].get("description", "")
         super().__init__(title="Edit Welcome Text")
-        self.text = TextInput(label="Text", style=discord.TextStyle.paragraph, max_length=2000)
+        self.text = TextInput(
+            label="Text",
+            style=discord.TextStyle.paragraph,
+            max_length=2000,
+            default=current
+        )
         self.add_item(self.text)
 
     async def on_submit(self, interaction):
@@ -166,10 +175,11 @@ class ChannelSlotPickerView(View):
 
     async def pick(self, interaction):
         cfg = load_config()
-        cfg["welcome"]["channels"][self.slot] = _cid(interaction.data["values"][0])
+        cid = _cid(interaction.data["values"][0])
+        cfg["welcome"]["channels"][self.slot] = cid
         save_config(cfg)
         await interaction.response.edit_message(
-            content=f"Saved `{self.slot}` → <#{cfg['welcome']['channels'][self.slot]}>",
+            content=f"Saved `{self.slot}` → <#{cid}>",
             view=None
         )
 
@@ -182,10 +192,11 @@ class WelcomeChannelPicker(View):
 
     async def pick(self, interaction):
         cfg = load_config()
-        cfg["welcome"]["welcome_channel_id"] = _cid(interaction.data["values"][0])
+        cid = _cid(interaction.data["values"][0])
+        cfg["welcome"]["welcome_channel_id"] = cid
         save_config(cfg)
         await interaction.response.edit_message(
-            content=f"Welcome channel set to <#{cfg['welcome']['welcome_channel_id']}>",
+            content=f"Welcome channel set to <#{cid}>",
             view=None
         )
 
@@ -212,8 +223,8 @@ class RemoveImageView(View):
     def __init__(self):
         super().__init__(timeout=60)
         cfg = load_config()
-        opts = [discord.SelectOption(label=url[:90], value=url)
-                for url in cfg["welcome"]["arrival_images"]] or \
+        opts = [discord.SelectOption(label=f"Image {i+1}", value=url, description=url[:80])
+                for i, url in enumerate(cfg["welcome"]["arrival_images"])] or \
                [discord.SelectOption(label="None", value="none")]
         sel = Select(options=opts)
         sel.callback = self.remove
@@ -224,8 +235,9 @@ class RemoveImageView(View):
         if val == "none":
             return await interaction.response.send_message("Nothing to remove.")
         cfg = load_config()
-        cfg["welcome"]["arrival_images"].remove(val)
-        save_config(cfg)
+        if val in cfg["welcome"]["arrival_images"]:
+            cfg["welcome"]["arrival_images"].remove(val)
+            save_config(cfg)
         await interaction.response.edit_message(content="Image removed.", view=None)
 
 class LogChannelPicker(View):
@@ -237,10 +249,11 @@ class LogChannelPicker(View):
 
     async def pick(self, interaction):
         cfg = load_config()
-        cfg["member_logs"]["channel_id"] = _cid(interaction.data["values"][0])
+        cid = _cid(interaction.data["values"][0])
+        cfg["member_logs"]["channel_id"] = cid
         save_config(cfg)
         await interaction.response.edit_message(
-            content=f"Member log channel set to <#{cfg['member_logs']['channel_id']}>",
+            content=f"Member log channel set to <#{cid}>",
             view=None
         )
 
@@ -251,14 +264,14 @@ class WelcomeSettingsView(View):
     def __init__(self):
         super().__init__(timeout=None)
 
-        self._btn("Edit Title", self.edit_title)
-        self._btn("Edit Text", self.edit_text)
+        self._btn("Edit Title", self.edit_title, discord.ButtonStyle.primary)
+        self._btn("Edit Text", self.edit_text, discord.ButtonStyle.primary)
         self._btn("Set Welcome Channel", self.set_channel)
         self._btn("Add/Edit Channel Slot", self.add_slot)
         self._btn("Remove Channel Slot", self.remove_slot)
         self._btn("Add Image", self.add_image)
         self._btn("Remove Image", self.remove_image)
-        self._btn("Preview", self.preview)
+        self._btn("Preview", self.preview, discord.ButtonStyle.success)
         self._btn("Toggle Welcome On/Off", self.toggle, discord.ButtonStyle.danger)
 
     def _btn(self, label, cb, style=discord.ButtonStyle.secondary):
@@ -272,13 +285,26 @@ class WelcomeSettingsView(View):
             return False
         return True
 
-    async def edit_title(self, interaction): await interaction.response.send_modal(EditTitleModal())
-    async def edit_text(self, interaction): await interaction.response.send_modal(EditTextModal())
-    async def set_channel(self, interaction): await interaction.response.send_message("Select welcome channel:", view=WelcomeChannelPicker())
-    async def add_slot(self, interaction): await interaction.response.send_modal(AddChannelSlotModal())
-    async def remove_slot(self, interaction): await interaction.response.send_message("Select slot to remove:", view=RemoveChannelSlotView())
-    async def add_image(self, interaction): await interaction.response.send_modal(AddImageModal())
-    async def remove_image(self, interaction): await interaction.response.send_message("Select image to remove:", view=RemoveImageView())
+    async def edit_title(self, interaction):
+        await interaction.response.send_modal(EditTitleModal())
+
+    async def edit_text(self, interaction):
+        await interaction.response.send_modal(EditTextModal())
+
+    async def set_channel(self, interaction):
+        await interaction.response.send_message("Select welcome channel:", view=WelcomeChannelPicker())
+
+    async def add_slot(self, interaction):
+        await interaction.response.send_modal(AddChannelSlotModal())
+
+    async def remove_slot(self, interaction):
+        await interaction.response.send_message("Select slot to remove:", view=RemoveChannelSlotView())
+
+    async def add_image(self, interaction):
+        await interaction.response.send_modal(AddImageModal())
+
+    async def remove_image(self, interaction):
+        await interaction.response.send_message("Select image to remove:", view=RemoveImageView())
 
     async def toggle(self, interaction):
         cfg = load_config()
@@ -287,6 +313,9 @@ class WelcomeSettingsView(View):
         await interaction.response.send_message(f"Welcome {'enabled' if cfg['welcome']['enabled'] else 'disabled'}.")
 
     async def preview(self, interaction):
+        # Prevent UI lock by deferring + followup
+        await interaction.response.defer()
+
         cfg = load_config()
         w = cfg["welcome"]
         humans = len([m for m in interaction.guild.members if not m.bot])
@@ -298,7 +327,8 @@ class WelcomeSettingsView(View):
         )
         if w["arrival_images"]:
             embed.set_image(url=random.choice(w["arrival_images"]))
-        await interaction.response.send_message(embed=embed)
+
+        await interaction.followup.send(embed=embed)
 
 class LeaveSettingsView(View):
     def __init__(self):
@@ -319,16 +349,24 @@ class LeaveSettingsView(View):
             return False
         return True
 
-    async def set_log(self, interaction): await interaction.response.send_message("Select log channel:", view=LogChannelPicker())
-    async def toggle_leave(self, interaction): self._toggle(interaction, "log_leave", "Leave")
-    async def toggle_kick(self, interaction): self._toggle(interaction, "log_kick", "Kick")
-    async def toggle_ban(self, interaction): self._toggle(interaction, "log_ban", "Ban")
+    async def set_log(self, interaction):
+        await interaction.response.send_message("Select log channel:", view=LogChannelPicker())
 
-    def _toggle(self, interaction, key, name):
+    async def _toggle(self, interaction, key, name):
         cfg = load_config()
         cfg["member_logs"][key] = not cfg["member_logs"][key]
         save_config(cfg)
-        return interaction.response.send_message(f"{name} logs {'enabled' if cfg['member_logs'][key] else 'disabled'}.")
+        state = "enabled" if cfg["member_logs"][key] else "disabled"
+        await interaction.response.send_message(f"{name} logs {state}.")
+
+    async def toggle_leave(self, interaction):
+        await self._toggle(interaction, "log_leave", "Leave")
+
+    async def toggle_kick(self, interaction):
+        await self._toggle(interaction, "log_kick", "Kick")
+
+    async def toggle_ban(self, interaction):
+        await self._toggle(interaction, "log_ban", "Ban")
 
 # ======================================================
 # JOIN / LEAVE / BAN HANDLERS
@@ -347,6 +385,9 @@ class WelcomeSystem:
             return
 
         channel = self.client.get_channel(w["welcome_channel_id"])
+        if not channel:
+            return
+
         humans = len([m for m in member.guild.members if not m.bot])
 
         embed = discord.Embed(
@@ -366,10 +407,13 @@ class WelcomeSystem:
             return
 
         channel = self.client.get_channel(logs["channel_id"])
+        if not channel:
+            return
+
         await asyncio.sleep(1.5)
 
         async for entry in member.guild.audit_logs(limit=5, action=discord.AuditLogAction.kick):
-            if entry.target.id == member.id:
+            if entry.target and entry.target.id == member.id:
                 if logs["log_kick"]:
                     await channel.send(f"{member.name} was kicked from the server by {entry.user}")
                 return
@@ -384,10 +428,13 @@ class WelcomeSystem:
             return
 
         channel = self.client.get_channel(logs["channel_id"])
+        if not channel:
+            return
+
         await asyncio.sleep(1.5)
 
         async for entry in guild.audit_logs(limit=5, action=discord.AuditLogAction.ban):
-            if entry.target.id == user.id:
+            if entry.target and entry.target.id == user.id:
                 await channel.send(f"{user.name} was banned from the server by {entry.user}")
                 return
 
@@ -399,7 +446,6 @@ def setup_welcome_commands(tree: app_commands.CommandTree):
     async def welcomesettings(interaction: discord.Interaction):
         if not has_permission(interaction):
             return await interaction.response.send_message("No permission.", ephemeral=True)
-
         await interaction.channel.send(view=WelcomeSettingsView())
         await interaction.response.send_message("Opened welcome settings.", ephemeral=True)
 
@@ -407,6 +453,5 @@ def setup_welcome_commands(tree: app_commands.CommandTree):
     async def leavesettings(interaction: discord.Interaction):
         if not has_permission(interaction):
             return await interaction.response.send_message("No permission.", ephemeral=True)
-
         await interaction.channel.send(view=LeaveSettingsView())
         await interaction.response.send_message("Opened leave settings.", ephemeral=True)
