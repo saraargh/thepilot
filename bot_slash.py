@@ -53,10 +53,10 @@ class ThePilot(discord.Client):
 
         setup_plane_commands(self.tree)
 
-        poo_task = setup_poo_commands(self.tree, self, allowed_role_ids=ALLOWED_ROLE_IDS)
+        poo_task = setup_poo_commands(self.tree, self)
         poo_task.start()
 
-        goat_task = setup_goat_commands(self.tree, self, allowed_role_ids=ALLOWED_ROLE_IDS)
+        goat_task = setup_goat_commands(self.tree, self)
         goat_task.start()
 
         ALLOWED_WARNROLE_IDS = [
