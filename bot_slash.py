@@ -7,7 +7,7 @@ from flask import Flask
 from threading import Thread
 
 from joinleave import WelcomeSystem
-from adminsettings import setup_admin_settings, PilotSettingsView  # 👈 IMPORTANT
+from adminsettings import setup_admin_settings
 
 # ===== CONFIG =====
 TOKEN = os.getenv("TOKEN")
@@ -24,7 +24,6 @@ class ThePilot(discord.Client):
         self.tree = app_commands.CommandTree(self)
         self.joinleave = WelcomeSystem(self)
 
-    # ================= MEMBER EVENTS =================
     async def on_member_join(self, member: discord.Member):
         await self.joinleave.on_member_join(member)
 
@@ -34,7 +33,6 @@ class ThePilot(discord.Client):
     async def on_member_ban(self, guild: discord.Guild, user: discord.User):
         await self.joinleave.on_member_ban(guild, user)
 
-    # ================= BOT SETUP =================
     async def setup_hook(self):
         scheduled_tasks.start(self)
 
@@ -44,34 +42,24 @@ class ThePilot(discord.Client):
         from bot_warnings import setup_warnings_commands
         from mute import setup_mute_commands
 
-        # Plane
         setup_plane_commands(self.tree)
 
-        # Poo
         poo_task = setup_poo_commands(self.tree, self)
         poo_task.start()
 
-        # Goat
         goat_task = setup_goat_commands(self.tree, self)
         goat_task.start()
 
-        # Warnings
         setup_warnings_commands(self.tree)
-
-        # Mute
         setup_mute_commands(self, self.tree)
 
-        # Admin Panel (/pilotsettings)
+        # ✅ ONLY /pilotsettings
         setup_admin_settings(self.tree)
-
 
         await self.tree.sync()
 
-
-# ================= CLIENT =================
 client = ThePilot()
 
-# ================= SCHEDULED TASKS =================
 @tasks.loop(minutes=1)
 async def scheduled_tasks(bot_client):
     now = discord.utils.utcnow().astimezone(UK_TZ)
@@ -79,7 +67,7 @@ async def scheduled_tasks(bot_client):
     if guild:
         pass
 
-# ================= FLASK KEEP-ALIVE =================
+# ===== Flask keep-alive =====
 app = Flask("")
 
 @app.route("/")
