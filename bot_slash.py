@@ -7,6 +7,7 @@ from flask import Flask
 from threading import Thread
 
 from joinleave import WelcomeSystem, setup_welcome_commands
+from adminsettings import pilotsettings  # ✅ ADDED
 
 # ===== CONFIG =====
 TOKEN = os.getenv("TOKEN")  # Render environment variable
@@ -71,6 +72,9 @@ class ThePilot(discord.Client):
 
         # REGISTER /setwelcome
         setup_welcome_commands(self.tree)
+
+        # ✅ REGISTER /pilotsettings
+        self.tree.add_command(pilotsettings)
 
         await self.tree.sync()
 
