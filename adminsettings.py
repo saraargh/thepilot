@@ -3,6 +3,8 @@ import discord
 from discord import app_commands
 from typing import List, Dict, Any
 
+import random
+
 from permissions import (
     has_global_access,
     has_app_access,
