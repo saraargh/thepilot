@@ -64,8 +64,6 @@ class ThePilot(discord.Client):
         # Admin Panel (/pilotsettings)
         setup_admin_settings(self.tree)
 
-        # 🔑 REGISTER PERSISTENT ADMIN VIEW (THIS WAS THE MISSING PIECE)
-        self.add_view(PilotSettingsView())
 
         await self.tree.sync()
 
