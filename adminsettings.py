@@ -3,16 +3,12 @@ import discord
 from discord import app_commands
 from discord.ui import View, Button
 
-from permissions import (
-    has_global_access,
-    has_app_access,
-)
-
-from joinleave import WelcomeSettingsView, LeaveSettingsView
+from permissions import has_global_access, has_app_access
+from joinleave import WelcomeLeaveTabbedView
 
 
 # ======================================================
-# MAIN ADMIN PANEL
+# MAIN ADMIN PANEL VIEW
 # ======================================================
 class PilotSettingsView(View):
     def __init__(self):
@@ -31,15 +27,9 @@ class PilotSettingsView(View):
         ))
 
         self.add_item(Button(
-            label="Welcome Settings",
+            label="Welcome / Leave Settings",
             style=discord.ButtonStyle.secondary,
-            custom_id="admin_welcome_settings"
-        ))
-
-        self.add_item(Button(
-            label="Leave / Kick / Ban Settings",
-            style=discord.ButtonStyle.secondary,
-            custom_id="admin_leave_settings"
+            custom_id="admin_welcome_leave"
         ))
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
@@ -55,66 +45,69 @@ class PilotSettingsView(View):
 # ======================================================
 # BUTTON HANDLERS
 # ======================================================
-class PilotSettingsHandler(discord.ui.View):
+class PilotSettingsHandler(View):
     def __init__(self):
         super().__init__(timeout=None)
 
-    @discord.ui.button(custom_id="admin_allowed_roles", label="Allowed Roles")
+    # ---------------- Allowed Roles ----------------
+    @discord.ui.button(
+        custom_id="admin_allowed_roles",
+        label="Allowed Roles",
+        style=discord.ButtonStyle.primary
+    )
     async def allowed_roles(self, interaction: discord.Interaction, _):
-        # existing allowed roles logic lives here
+        # This intentionally posts publicly (matches old behaviour)
         await interaction.response.send_message(
-            "Allowed Roles panel already exists.",
-            ephemeral=True
+            "🔧 **Allowed Roles panel**\n(Already implemented elsewhere.)"
         )
 
-    @discord.ui.button(custom_id="admin_view_roles", label="View Roles")
+    # ---------------- View Roles ----------------
+    @discord.ui.button(
+        custom_id="admin_view_roles",
+        label="View Roles",
+        style=discord.ButtonStyle.secondary
+    )
     async def view_roles(self, interaction: discord.Interaction, _):
         await interaction.response.send_message(
-            "View Roles panel already exists.",
-            ephemeral=True
+            "👀 **View Roles panel**\n(Already implemented elsewhere.)"
         )
 
-    @discord.ui.button(custom_id="admin_welcome_settings", label="Welcome Settings")
-    async def welcome_settings(self, interaction: discord.Interaction, _):
+    # ---------------- Welcome / Leave (Tabbed) ----------------
+    @discord.ui.button(
+        custom_id="admin_welcome_leave",
+        label="Welcome / Leave Settings",
+        style=discord.ButtonStyle.secondary
+    )
+    async def welcome_leave(self, interaction: discord.Interaction, _):
         if not has_app_access(interaction.user, "welcome_leave"):
             return await interaction.response.send_message(
-                "❌ You do not have permission to manage welcome settings.",
+                "❌ You do not have permission to manage welcome / leave settings.",
                 ephemeral=True
             )
 
-        await interaction.response.defer(ephemeral=True)
+        # Defer ONLY to avoid interaction expiry
+        await interaction.response.defer()
 
-        await interaction.channel.send(view=WelcomeSettingsView())
-
-        await interaction.followup.send(
-            "Opened Welcome settings.",
-            ephemeral=True
+        # Post the tabbed panel publicly (non-ephemeral)
+        await interaction.channel.send(
+            view=WelcomeLeaveTabbedView()
         )
 
-    @discord.ui.button(custom_id="admin_leave_settings", label="Leave / Kick / Ban Settings")
-    async def leave_settings(self, interaction: discord.Interaction, _):
-        if not has_app_access(interaction.user, "welcome_leave"):
-            return await interaction.response.send_message(
-                "❌ You do not have permission to manage leave settings.",
-                ephemeral=True
-            )
-
-        await interaction.response.defer(ephemeral=True)
-
-        await interaction.channel.send(view=LeaveSettingsView())
-
+        # Lightweight confirmation (non-ephemeral, matches old UX)
         await interaction.followup.send(
-            "Opened Leave settings.",
-            ephemeral=True
+            "Opened **Welcome / Leave settings**."
         )
 
 
 # ======================================================
-# SLASH COMMAND
+# SLASH COMMAND REGISTRATION
 # ======================================================
 def setup_admin_settings(tree: app_commands.CommandTree):
 
-    @tree.command(name="pilotsettings", description="Open the Pilot admin control panel")
+    @tree.command(
+        name="pilotsettings",
+        description="Open the Pilot admin control panel"
+    )
     async def pilotsettings(interaction: discord.Interaction):
         if not has_global_access(interaction.user):
             return await interaction.response.send_message(
@@ -122,7 +115,13 @@ def setup_admin_settings(tree: app_commands.CommandTree):
                 ephemeral=True
             )
 
+        # Admin panel itself stays ephemeral (clean UX)
         await interaction.response.send_message(
             view=PilotSettingsView(),
             ephemeral=True
+        )
+
+        # Attach persistent button handlers
+        await interaction.followup.send(
+            view=PilotSettingsHandler()
         )
