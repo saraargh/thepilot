@@ -8,7 +8,7 @@ from joinleave import WelcomeLeaveTabbedView
 
 
 # ======================================================
-# MAIN ADMIN PANEL VIEW (SINGLE SOURCE OF TRUTH)
+# MAIN ADMIN PANEL VIEW (PUBLIC)
 # ======================================================
 class PilotSettingsView(View):
     def __init__(self):
@@ -76,9 +76,9 @@ class PilotSettingsView(View):
                 ephemeral=True
             )
 
+        # Defer to avoid timeout, but keep it PUBLIC
         await interaction.response.defer()
 
-        # Post the tabbed settings panel publicly
         await interaction.channel.send(
             view=WelcomeLeaveTabbedView()
         )
@@ -104,8 +104,7 @@ def setup_admin_settings(tree: app_commands.CommandTree):
                 ephemeral=True
             )
 
-        # One ephemeral admin panel, fully wired
+        # PUBLIC admin panel
         await interaction.response.send_message(
-            view=PilotSettingsView(),
-            ephemeral=True
+            view=PilotSettingsView()
         )
