@@ -81,7 +81,6 @@ def setup_poo_commands(tree: app_commands.CommandTree, client: discord.Client):
     @tasks.loop(minutes=1)
     async def daily_poo_task():
         now = datetime.datetime.now(UK_TZ)
-
         guild = client.guilds[0] if client.guilds else None
         if not guild:
             return
@@ -103,30 +102,25 @@ def setup_poo_commands(tree: app_commands.CommandTree, client: discord.Client):
     @tree.command(name="clearpoo", description="Clear the poo role from everyone")
     async def clearpoo(interaction: discord.Interaction):
         if not has_app_access(interaction.user, "poo_goat"):
-            return await interaction.response.send_message(
-                "❌ You do not have permission.",
-                ephemeral=True
-            )
+            return await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
 
+        await interaction.response.defer()
         await clear_poo_role(interaction.guild)
-        await interaction.response.send_message(
-            "✅ Cleared poo role from everyone."
-        )
+        await interaction.followup.send("✅ Cleared poo role from everyone.")
 
     @tree.command(name="assignpoo", description="Manually assign the poo role to a member")
     @app_commands.describe(member="The member to assign the poo role")
     async def assignpoo(interaction: discord.Interaction, member: discord.Member):
         if not has_app_access(interaction.user, "poo_goat"):
-            return await interaction.response.send_message(
-                "❌ You do not have permission.",
-                ephemeral=True
-            )
+            return await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
+
+        await interaction.response.defer()
 
         poo_role = interaction.guild.get_role(POO_ROLE_ID)
         if poo_role:
             await member.add_roles(poo_role)
 
-        await interaction.response.send_message(
+        await interaction.followup.send(
             f"🎉 {member.mention} has been assigned the poo role."
         )
 
@@ -134,31 +128,25 @@ def setup_poo_commands(tree: app_commands.CommandTree, client: discord.Client):
     @app_commands.describe(member="The member to remove the poo role from")
     async def removepoo(interaction: discord.Interaction, member: discord.Member):
         if not has_app_access(interaction.user, "poo_goat"):
-            return await interaction.response.send_message(
-                "❌ You do not have permission.",
-                ephemeral=True
-            )
+            return await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
+
+        await interaction.response.defer()
 
         poo_role = interaction.guild.get_role(POO_ROLE_ID)
         if poo_role:
             await member.remove_roles(poo_role)
 
-        await interaction.response.send_message(
+        await interaction.followup.send(
             f"❌ {member.mention} has had the poo role removed."
         )
 
     @tree.command(name="testpoo", description="Test the poo automation")
     async def testpoo_command(interaction: discord.Interaction):
         if not has_app_access(interaction.user, "poo_goat"):
-            return await interaction.response.send_message(
-                "❌ You do not have permission.",
-                ephemeral=True
-            )
+            return await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
 
+        await interaction.response.defer()
         await test_poo(interaction.guild)
-        await interaction.response.send_message(
-            "🧪 Test poo completed!"
-        )
+        await interaction.followup.send("🧪 Test poo completed!")
 
-    # RETURN TASK FOR botslash.py
     return daily_poo_task
