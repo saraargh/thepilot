@@ -19,6 +19,7 @@ HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
 PASSENGERS_ROLE_ID = 1404100554807971971
 WILLIAM_ROLE_ID = 1413545658006110401
 SAZZLES_ROLE_ID = 1404104881098195015
+KD_ROLE_ID = 1420817462290681936  # ✅ KD can warn Sazzles
 
 # ------------------- Default JSON structure -------------------
 DEFAULT_DATA = {
@@ -88,7 +89,7 @@ def add_warning(user_id: int, reason: str | None = None):
         data["warnings"][uid] = []
 
     data["warnings"][uid].append(reason or "No reason provided")
-    sha = save_data(data, sha)
+    save_data(data, sha)
     return len(data["warnings"][uid])
 
 def get_warnings(user_id: int):
@@ -107,18 +108,22 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
     @app_commands.describe(member="Member to warn", reason="Reason (optional)")
     async def warn(interaction: discord.Interaction, member: discord.Member, reason: str = None):
 
-        # Sazzles cannot be warned (unchanged behaviour)
-        if SAZZLES_ROLE_ID in [r.id for r in member.roles]:
-            await interaction.response.send_message(
-                "⚠️ You cannot warn this user as she is the best and made this so you could all warn William 🖤",
-                ephemeral=False
-            )
-            return
+        author_roles = {r.id for r in interaction.user.roles}
 
-        # Permission check (NEW SYSTEM)
+        # ---------------- Sazzles protection (KD exception) ----------------
+        if SAZZLES_ROLE_ID in [r.id for r in member.roles]:
+            if KD_ROLE_ID not in author_roles:
+                await interaction.response.send_message(
+                    "❌ Only Mr KD can warn this user becausr she is too pretty to be warned and made this so you can all warn William!",
+                    ephemeral=False
+                )
+                return
+            # KD is allowed → continue normally
+
+        # ---------------- Permission check ----------------
         if not has_app_access(interaction.user, "warnings"):
             # Passenger punishment logic preserved
-            if PASSENGERS_ROLE_ID in [r.id for r in interaction.user.roles]:
+            if PASSENGERS_ROLE_ID in author_roles:
                 offender = interaction.user
                 target = member
                 reason_text = f"Trying to warn {target.mention}"
@@ -138,7 +143,7 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
             )
             return
 
-        # Normal warn
+        # ---------------- Normal warn ----------------
         count = add_warning(member.id, reason)
         msg = f"⚠️ {member.mention} was warned"
         if reason:
