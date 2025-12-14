@@ -243,4 +243,4 @@ class PilotSettingsView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=180)
 
-    async def interaction_check(self, interaction: discord.Interaction) -> bool
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
