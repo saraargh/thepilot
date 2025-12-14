@@ -44,30 +44,45 @@ def format_roles(guild: discord.Guild, role_ids: List[int]) -> str:
             mentions.append(role.mention)
     return "\n".join(mentions) if mentions else "*None*"
 
+
 def roles_embed(guild: discord.Guild, settings: Dict[str, Any]) -> discord.Embed:
-    embed = discord.Embed(title="⚙️ Pilot Role Permissions", color=discord.Color.blurple())
+    embed = discord.Embed(
+        title="⚙️ Pilot Role Permissions",
+        color=discord.Color.blurple()
+    )
+
     embed.add_field(
         name="🔐 Global Admin",
         value=format_roles(guild, settings.get("global_allowed_roles", [])),
         inline=False
     )
+
     labels = {
         "mute": "🔇 Mute",
         "warnings": "⚠️ Warnings",
         "poo_goat": "💩🐐 Poo / Goat",
         "welcome_leave": "👋 Welcome / Leave",
     }
+
     for k, label in labels.items():
         embed.add_field(
             name=label,
-            value=format_roles(guild, settings["apps"].get(k, {}).get("allowed_roles", [])),
+            value=format_roles(
+                guild,
+                settings["apps"].get(k, {}).get("allowed_roles", [])
+            ),
             inline=False
         )
+
     embed.set_footer(text="Server owner & override role always have access")
     return embed
-    
-    def build_role_pages(guild: discord.Guild, settings: Dict[str, Any]) -> List[discord.Embed]:
-    pages = []
+
+
+def build_role_pages(
+    guild: discord.Guild,
+    settings: Dict[str, Any]
+) -> List[discord.Embed]:
+    pages: List[discord.Embed] = []
 
     sections = [
         ("🔐 Global Admin", settings.get("global_allowed_roles", [])),
@@ -77,15 +92,15 @@ def roles_embed(guild: discord.Guild, settings: Dict[str, Any]) -> discord.Embed
         ("👋 Welcome / Leave", settings["apps"].get("welcome_leave", {}).get("allowed_roles", [])),
     ]
 
-    chunk_size = 2  # sections per page (keeps it readable)
+    CHUNK_SIZE = 2
 
-    for i in range(0, len(sections), chunk_size):
+    for i in range(0, len(sections), CHUNK_SIZE):
         embed = discord.Embed(
             title="⚙️ Pilot Role Permissions",
             color=discord.Color.blurple()
         )
 
-        for name, ids in sections[i:i + chunk_size]:
+        for name, ids in sections[i:i + CHUNK_SIZE]:
             embed.add_field(
                 name=name,
                 value=format_roles(guild, ids),
@@ -96,6 +111,7 @@ def roles_embed(guild: discord.Guild, settings: Dict[str, Any]) -> discord.Embed
         pages.append(embed)
 
     return pages
+
 
 def welcome_status_text(cfg: Dict[str, Any]) -> str:
     w = cfg["welcome"]
@@ -108,22 +124,23 @@ def welcome_status_text(cfg: Dict[str, Any]) -> str:
         f"**Bot Add Logs:** `{w.get('bot_add', {}).get('enabled')}`"
     )
 
+
 def logs_status_text(cfg: Dict[str, Any]) -> str:
     m = cfg["member_logs"]
     ch = f"<#{m['channel_id']}>" if m.get("channel_id") else "*Not set*"
     return (
         f"**Logs Enabled:** `{m.get('enabled')}`\n"
         f"**Log Channel:** {ch}\n"
-        f"**Leave:** `{m.get('log_leave')}` | **Kick:** `{m.get('log_kick')}` | **Ban:** `{m.get('log_ban')}`"
+        f"**Leave:** `{m.get('log_leave')}` | "
+        f"**Kick:** `{m.get('log_kick')}` | "
+        f"**Ban:** `{m.get('log_ban')}`"
     )
 
 # -------------------------
 # Interaction-safe helpers
 # -------------------------
 
-async def _no_perm(interaction: discord.Interaction, msg: str = "❌ You do not have permission."):
-    # User asked: no ephemerals – so make it public.
-    # Also: if we can't respond, fall back to sending in channel.
+async def _no_perm(interaction: discord.Interaction, msg="❌ You do not have permission."):
     try:
         if interaction.response.is_done():
             await interaction.followup.send(msg)
@@ -133,126 +150,32 @@ async def _no_perm(interaction: discord.Interaction, msg: str = "❌ You do not 
         if interaction.channel:
             await interaction.channel.send(msg)
 
+
 async def _safe_defer(interaction: discord.Interaction):
-    # Defer ONLY if we haven't responded yet.
-    # Never defer before modals.
     try:
         if not interaction.response.is_done():
             await interaction.response.defer(thinking=False)
     except Exception:
         pass
 
-async def _safe_edit_panel_message(interaction: discord.Interaction, *, embed: discord.Embed, view: discord.ui.View):
-    # After a defer, you must NOT use response.edit_message.
-    # Editing the original message directly is safe.
+
+async def _safe_edit_panel_message(
+    interaction: discord.Interaction,
+    *,
+    embed: discord.Embed,
+    view: discord.ui.View
+):
     try:
         if interaction.message:
-            await interaction.message.edit(content=None, embed=embed, view=view)
-        else:
-            # Fallback if somehow there's no message context
+            await interaction.message.edit(embed=embed, view=view)
+        elif interaction.channel:
             await interaction.channel.send(embed=embed, view=view)
     except Exception as e:
-        # Last-resort fallback so it never silently dies
         if interaction.channel:
             await interaction.channel.send(f"❌ Panel update failed: `{type(e).__name__}`")
 
 # =========================
-# Single Message Panel
-# =========================
-
-class PanelState:
-    ROOT = "root"
-    ROLES = "roles"
-    WELCOME = "welcome"
-    LEAVE = "leave"
-
-class PilotPanelView(discord.ui.View):
-    def __init__(self, state: str = PanelState.ROOT):
-        super().__init__(timeout=600)
-        self.state = state
-        self.build()
-
-    def build(self):
-        self.clear_items()
-        # top navigation (lists)
-        self.add_item(PanelNavSelect(current=self.state))
-
-        if self.state == PanelState.ROLES:
-            self.add_item(RoleScopeSelect())
-
-        elif self.state == PanelState.WELCOME:
-            self.add_item(WelcomeActionSelect())
-
-        elif self.state == PanelState.LEAVE:
-            self.add_item(LeaveActionSelect())
-
-    async def interaction_check(self, interaction: discord.Interaction) -> bool:
-        if not has_global_access(interaction.user):
-            await _no_perm(interaction, "❌ You do not have permission.")
-            return False
-        return True
-
-class PanelNavSelect(discord.ui.Select):
-    def __init__(self, current: str):
-        opts = [
-            discord.SelectOption(label="Home", value=PanelState.ROOT, emoji="⚙️"),
-            discord.SelectOption(label="Roles", value=PanelState.ROLES, emoji="🛂"),
-            discord.SelectOption(label="Welcome", value=PanelState.WELCOME, emoji="👋"),
-            discord.SelectOption(label="Leave / Logs", value=PanelState.LEAVE, emoji="📄"),
-        ]
-        super().__init__(placeholder="Navigate panel…", options=opts, min_values=1, max_values=1)
-        self.current = current
-
-    async def callback(self, interaction: discord.Interaction):
-        if not has_global_access(interaction.user):
-            return await _no_perm(interaction)
-
-        target = self.values[0]
-
-        # These calls can hit GitHub (load_config), so ALWAYS defer first.
-        await _safe_defer(interaction)
-
-        if target == PanelState.ROOT:
-            cfg = load_config()
-            embed = discord.Embed(title="⚙️ Pilot Settings", color=discord.Color.blurple())
-            embed.add_field(name="👋 Welcome", value=welcome_status_text(cfg), inline=False)
-            embed.add_field(name="📄 Leave / Logs", value=logs_status_text(cfg), inline=False)
-            embed.add_field(
-                name="🛂 Roles",
-                value="Use **Navigate panel…** → Roles to manage access.\n"
-                      "Inside Roles you can also choose **View Roles Overview**.",
-                inline=False
-            )
-
-            view = PilotPanelView(state=PanelState.ROOT)
-            await _safe_edit_panel_message(interaction, embed=embed, view=view)
-            return
-
-        if target == PanelState.ROLES:
-            embed = discord.Embed(
-                title="🛂 Role Permissions",
-                description="Pick a scope to manage roles (or view overview).",
-                color=discord.Color.blurple()
-            )
-        elif target == PanelState.WELCOME:
-            cfg = load_config()
-            embed = discord.Embed(
-                title="👋 Welcome Settings",
-                description=welcome_status_text(cfg),
-                color=discord.Color.blurple()
-            )
-        else:  # LEAVE
-            cfg = load_config()
-            embed = discord.Embed(
-                title="📄 Leave / Logs Settings",
-                description=logs_status_text(cfg),
-                color=discord.Color.blurple()
-            )
-
-        await _safe_edit_panel_message(interaction, embed=embed, view=PilotPanelView(state=target))
-
-# =========================
-# ROLES MANAGEMENT
+# Panel / Roles (FIXED PART)
 # =========================
 
 class RolesOverviewView(discord.ui.View):
@@ -260,12 +183,11 @@ class RolesOverviewView(discord.ui.View):
         super().__init__(timeout=300)
         self.pages = pages
         self.index = index
-
-        self.prev.disabled = self.index == 0
-        self.next.disabled = self.index >= len(self.pages) - 1
+        self.prev.disabled = index == 0
+        self.next.disabled = index >= len(pages) - 1
 
     @discord.ui.button(label="◀ Prev", style=discord.ButtonStyle.secondary)
-    async def prev(self, interaction: discord.Interaction, button: discord.ui.Button):
+    async def prev(self, interaction: discord.Interaction, _):
         self.index -= 1
         await interaction.response.edit_message(
             embed=self.pages[self.index],
@@ -273,7 +195,7 @@ class RolesOverviewView(discord.ui.View):
         )
 
     @discord.ui.button(label="Next ▶", style=discord.ButtonStyle.secondary)
-    async def next(self, interaction: discord.Interaction, button: discord.ui.Button):
+    async def next(self, interaction: discord.Interaction, _):
         self.index += 1
         await interaction.response.edit_message(
             embed=self.pages[self.index],
@@ -281,62 +203,18 @@ class RolesOverviewView(discord.ui.View):
         )
 
 
-class RoleScopeSelect(discord.ui.Select):
-    def __init__(self):
-        # View roles must ONLY exist as a list option under Roles — not a button.
-        options = [
-            discord.SelectOption(label="👀 View Roles Overview", value="__view__"),
-        ] + [discord.SelectOption(label=v, value=k) for k, v in SCOPES.items()]
-
-        super().__init__(placeholder="Choose a role scope to edit…", options=options, min_values=1, max_values=1)
-
-    async def callback(self, interaction: discord.Interaction):
-        if not has_global_access(interaction.user):
-            return await _no_perm(interaction, "❌ No permission.")
-
-        choice = self.values[0]
-
-        # Viewing roles or loading settings may be slow — defer.
-        await _safe_defer(interaction)
-
-        if choice == "__view__":
-            settings = load_settings()
-            embed = roles_embed(interaction.guild, settings)
-            # Public send
-            if interaction.channel:
-                await interaction.channel.send(embed=embed)
-
-            # Keep panel on Roles screen
-            embed2 = discord.Embed(
-                title="🛂 Role Permissions",
-                description="Roles overview posted in this channel.\nPick a scope to manage roles.",
-                color=discord.Color.blurple()
-            )
-            await _safe_edit_panel_message(interaction, embed=embed2, view=PilotPanelView(state=PanelState.ROLES))
-            return
-
-        scope = choice
-        embed = discord.Embed(
-            title=f"🛂 Editing: {SCOPES[scope]}",
-            description="Choose add/remove/show, then pick roles.",
-            color=discord.Color.blurple()
-        )
-        view = PilotPanelView(state=PanelState.ROLES)
-        view.add_item(RoleActionSelect(scope))
-        await _safe_edit_panel_message(interaction, embed=embed, view=view)
-
 class RoleActionSelect(discord.ui.Select):
     def __init__(self, scope: str):
         self.scope = scope
         super().__init__(
-            placeholder="Add or remove roles…",
+            placeholder="Add / remove / view roles…",
             options=[
                 discord.SelectOption(label="Add roles", value="add", emoji="➕"),
                 discord.SelectOption(label="Remove roles", value="remove", emoji="➖"),
                 discord.SelectOption(label="Show current roles", value="show", emoji="👀"),
             ],
             min_values=1,
-            max_values=1
+            max_values=1,
         )
 
     async def callback(self, interaction: discord.Interaction):
@@ -347,296 +225,32 @@ class RoleActionSelect(discord.ui.Select):
         settings = load_settings()
 
         if action == "show":
-    pages = build_role_pages(interaction.guild, settings)
+            pages = build_role_pages(interaction.guild, settings)
 
-    if not pages:
-        await interaction.response.send_message("No roles configured.")
-        return
+            if not pages:
+                await interaction.response.send_message("No roles configured.")
+                return
 
-    await interaction.channel.send(
-        embed=pages[0],
-        view=RolesOverviewView(pages)
-    )
-    return
-        
-
-        # RoleSelect UI (this MUST be first response if not deferred).
-        picker = discord.ui.View(timeout=180)
-        if action == "add":
-            picker.add_item(AddRolesSelect(self.scope))
-            # Respond fast (no defer)
-            if interaction.response.is_done():
-                await interaction.followup.send("Select roles to **ADD**:", view=picker)
-            else:
-                await interaction.response.send_message("Select roles to **ADD**:", view=picker)
-        else:
-            picker.add_item(RemoveRolesSelect(self.scope))
-            if interaction.response.is_done():
-                await interaction.followup.send("Select roles to **REMOVE**:", view=picker)
-            else:
-                await interaction.response.send_message("Select roles to **REMOVE**:", view=picker)
-
-class AddRolesSelect(discord.ui.RoleSelect):
-    def __init__(self, scope: str):
-        self.scope = scope
-        super().__init__(placeholder="Select roles to ADD", min_values=1, max_values=10)
-
-    async def callback(self, interaction: discord.Interaction):
-        if not has_global_access(interaction.user):
-            return await _no_perm(interaction)
-
-        settings = load_settings()
-        if self.scope == "global":
-            role_set = set(settings.get("global_allowed_roles", []))
-        else:
-            role_set = set(settings["apps"][self.scope]["allowed_roles"])
-
-        for r in self.values:
-            role_set.add(r.id)
-
-        if self.scope == "global":
-            settings["global_allowed_roles"] = list(role_set)
-        else:
-            settings["apps"][self.scope]["allowed_roles"] = list(role_set)
-
-        save_settings(settings)
-        await interaction.response.send_message(f"✅ Added roles to **{SCOPES[self.scope]}**.")
-
-class RemoveRolesSelect(discord.ui.RoleSelect):
-    def __init__(self, scope: str):
-        self.scope = scope
-        super().__init__(placeholder="Select roles to REMOVE", min_values=1, max_values=10)
-
-    async def callback(self, interaction: discord.Interaction):
-        if not has_global_access(interaction.user):
-            return await _no_perm(interaction)
-
-        settings = load_settings()
-        if self.scope == "global":
-            role_set = set(settings.get("global_allowed_roles", []))
-        else:
-            role_set = set(settings["apps"][self.scope]["allowed_roles"])
-
-        for r in self.values:
-            role_set.discard(r.id)
-
-        if self.scope == "global":
-            settings["global_allowed_roles"] = list(role_set)
-        else:
-            settings["apps"][self.scope]["allowed_roles"] = list(role_set)
-
-        save_settings(settings)
-        await interaction.response.send_message(f"✅ Removed roles from **{SCOPES[self.scope]}**.")
-
-# =========================
-# WELCOME MANAGEMENT
-# =========================
-
-class WelcomeActionSelect(discord.ui.Select):
-    def __init__(self):
-        super().__init__(
-            placeholder="Choose a welcome action…",
-            options=[
-                discord.SelectOption(label="Toggle Welcome On/Off", value="toggle"),
-                discord.SelectOption(label="Set Welcome Channel", value="set_channel"),
-                discord.SelectOption(label="Edit Title", value="edit_title"),
-                discord.SelectOption(label="Edit Text", value="edit_text"),
-                discord.SelectOption(label="Add/Edit Channel Slot", value="slot"),
-                discord.SelectOption(label="Add Arrival Image", value="add_img"),
-                discord.SelectOption(label="Remove Arrival Image", value="rm_img"),
-                discord.SelectOption(label="Toggle Bot Add Logs", value="toggle_bot"),
-                discord.SelectOption(label="Set Bot Add Channel", value="bot_channel"),
-                discord.SelectOption(label="Preview Welcome", value="preview"),
-            ],
-            min_values=1,
-            max_values=1
-        )
-
-    async def callback(self, interaction: discord.Interaction):
-        if not has_app_access(interaction.user, "welcome_leave"):
-            return await _no_perm(interaction, "❌ You don’t have permission for Welcome/Leave settings.")
-
-        choice = self.values[0]
-
-        # IMPORTANT:
-        # - NEVER defer before opening modals
-        # - For actions that hit GitHub (load/save), defer first
-
-        if choice == "set_channel":
-            return await interaction.response.send_message("Select the welcome channel:", view=WelcomeChannelPickerView())
-
-        if choice == "edit_title":
-            return await interaction.response.send_modal(EditWelcomeTitleModal())
-
-        if choice == "edit_text":
-            return await interaction.response.send_modal(EditWelcomeTextModal())
-
-        if choice == "slot":
-            return await interaction.response.send_modal(AddChannelSlotNameModal())
-
-        if choice == "add_img":
-            return await interaction.response.send_modal(AddArrivalImageModal())
-
-        if choice == "bot_channel":
-            return await interaction.response.send_message("Select the bot-add log channel:", view=BotAddChannelPickerView())
-
-        # Everything below may do network or more work
-        await _safe_defer(interaction)
-
-        cfg = load_config()
-        w = cfg["welcome"]
-
-        if choice == "toggle":
-            w["enabled"] = not w.get("enabled", True)
-            save_config(cfg)
-
-        elif choice == "toggle_bot":
-            w.setdefault("bot_add", {})
-            w["bot_add"]["enabled"] = not w["bot_add"].get("enabled", True)
-            save_config(cfg)
-
-        elif choice == "rm_img":
-            imgs = w.get("arrival_images") or []
-            if not imgs:
-                if interaction.channel:
-                    await interaction.channel.send("No arrival images to remove.")
-            else:
-                if interaction.channel:
-                    await interaction.channel.send("Select an image to remove:", view=RemoveImageView(imgs))
-
-        elif choice == "preview":
-            await send_welcome_preview(interaction)
+            await interaction.channel.send(
+                embed=pages[0],
+                view=RolesOverviewView(pages)
+            )
             return
 
-        # update panel message (edit original panel message safely)
-        cfg2 = load_config()
-        embed = discord.Embed(
-            title="👋 Welcome Settings",
-            description=welcome_status_text(cfg2),
-            color=discord.Color.blurple()
-        )
-        await _safe_edit_panel_message(interaction, embed=embed, view=PilotPanelView(state=PanelState.WELCOME))
+        picker = discord.ui.View(timeout=180)
 
-class RemoveImageSelect(discord.ui.Select):
-    def __init__(self, imgs: List[str]):
-        self.imgs = imgs
-        opts = []
-        for i, _url in enumerate(imgs[:25]):
-            opts.append(discord.SelectOption(label=f"Image {i+1}", value=str(i)))
-        super().__init__(placeholder="Pick an image to remove…", options=opts, min_values=1, max_values=1)
-
-    async def callback(self, interaction: discord.Interaction):
-        if not has_app_access(interaction.user, "welcome_leave"):
-            return await _no_perm(interaction, "❌ You don’t have permission for Welcome/Leave settings.")
-
-        await _safe_defer(interaction)
-
-        cfg = load_config()
-        imgs = cfg["welcome"].get("arrival_images") or []
-        idx = int(self.values[0])
-
-        if 0 <= idx < len(imgs):
-            imgs.pop(idx)
-            cfg["welcome"]["arrival_images"] = imgs
-            save_config(cfg)
-            # Public confirmation
-            if interaction.channel:
-                await interaction.channel.send("✅ Removed that arrival image.")
+        if action == "add":
+            picker.add_item(AddRolesSelect(self.scope))
+            await interaction.response.send_message(
+                "Select roles to **ADD**:",
+                view=picker
+            )
         else:
-            if interaction.channel:
-                await interaction.channel.send("❌ Couldn’t remove that image (index mismatch).")
-
-class RemoveImageView(discord.ui.View):
-    def __init__(self, imgs: List[str]):
-        super().__init__(timeout=180)
-        self.add_item(RemoveImageSelect(imgs))
-
-async def send_welcome_preview(interaction: discord.Interaction):
-    # This is called after defer from the selector, so use channel send (public),
-    # not interaction.response.
-    cfg = load_config()
-    w = cfg["welcome"]
-
-    count = human_member_number(interaction.guild)
-    now = discord.utils.utcnow().strftime("%H:%M")
-
-    embed = discord.Embed(
-        title=render(
-            w["title"],
-            user=interaction.user,
-            guild=interaction.guild,
-            member_count=count,
-            channels=w.get("channels", {}),
-        ),
-        description=render(
-            w["description"],
-            user=interaction.user,
-            guild=interaction.guild,
-            member_count=count,
-            channels=w.get("channels", {}),
-        ),
-    )
-    embed.set_footer(text=f"You landed as passenger #{count} ✈️ | Today at {now}")
-    imgs = w.get("arrival_images") or []
-    if imgs:
-        embed.set_image(url=random.choice(imgs))
-
-    if interaction.channel:
-        await interaction.channel.send(embed=embed)
-
-# =========================
-# LEAVE / LOGS MANAGEMENT
-# =========================
-
-class LeaveActionSelect(discord.ui.Select):
-    def __init__(self):
-        super().__init__(
-            placeholder="Choose a leave/log action…",
-            options=[
-                discord.SelectOption(label="Toggle Logs On/Off", value="toggle_logs"),
-                discord.SelectOption(label="Set Log Channel", value="set_log_channel"),
-                discord.SelectOption(label="Toggle Leave Logs", value="toggle_leave"),
-                discord.SelectOption(label="Toggle Kick Logs", value="toggle_kick"),
-                discord.SelectOption(label="Toggle Ban Logs", value="toggle_ban"),
-            ],
-            min_values=1,
-            max_values=1
-        )
-
-    async def callback(self, interaction: discord.Interaction):
-        if not has_app_access(interaction.user, "welcome_leave"):
-            return await _no_perm(interaction, "❌ You don’t have permission for Welcome/Leave settings.")
-
-        choice = self.values[0]
-
-        if choice == "set_log_channel":
-            # Must be first response (no defer)
-            return await interaction.response.send_message("Select the member log channel:", view=LogChannelPickerView())
-
-        # toggles can hit GitHub -> defer
-        await _safe_defer(interaction)
-
-        cfg = load_config()
-        m = cfg["member_logs"]
-
-        if choice == "toggle_logs":
-            m["enabled"] = not m.get("enabled", True)
-        elif choice == "toggle_leave":
-            m["log_leave"] = not m.get("log_leave", True)
-        elif choice == "toggle_kick":
-            m["log_kick"] = not m.get("log_kick", True)
-        elif choice == "toggle_ban":
-            m["log_ban"] = not m.get("log_ban", True)
-
-        save_config(cfg)
-
-        cfg2 = load_config()
-        embed = discord.Embed(
-            title="📄 Leave / Logs Settings",
-            description=logs_status_text(cfg2),
-            color=discord.Color.blurple()
-        )
-        await _safe_edit_panel_message(interaction, embed=embed, view=PilotPanelView(state=PanelState.LEAVE))
+            picker.add_item(RemoveRolesSelect(self.scope))
+            await interaction.response.send_message(
+                "Select roles to **REMOVE**:",
+                view=picker
+            )
 
 # =========================
 # Slash Command
@@ -649,7 +263,6 @@ def setup_admin_settings(tree: app_commands.CommandTree):
         if not has_global_access(interaction.user):
             return await interaction.response.send_message("❌ You do not have permission.")
 
-        # load_config can be slow (GitHub) -> defer first, then followup send.
         await interaction.response.defer(thinking=False)
 
         cfg = load_config()
@@ -658,12 +271,9 @@ def setup_admin_settings(tree: app_commands.CommandTree):
         embed.add_field(name="📄 Leave / Logs", value=logs_status_text(cfg), inline=False)
         embed.add_field(
             name="🛂 Roles",
-            value="Use **Navigate panel…** → Roles to edit scopes.\n"
-                  "Inside Roles you can also choose **View Roles Overview**.",
+            value="Navigate → Roles to manage scopes or view overview.",
             inline=False
         )
 
-        view = PilotPanelView(state=PanelState.ROOT)
-
-        # Public message
+        view = PilotPanelView(state="root")
         await interaction.followup.send(embed=embed, view=view)
