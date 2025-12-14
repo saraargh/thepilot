@@ -65,6 +65,37 @@ def roles_embed(guild: discord.Guild, settings: Dict[str, Any]) -> discord.Embed
         )
     embed.set_footer(text="Server owner & override role always have access")
     return embed
+    
+    def build_role_pages(guild: discord.Guild, settings: Dict[str, Any]) -> List[discord.Embed]:
+    pages = []
+
+    sections = [
+        ("🔐 Global Admin", settings.get("global_allowed_roles", [])),
+        ("🔇 Mute", settings["apps"].get("mute", {}).get("allowed_roles", [])),
+        ("⚠️ Warnings", settings["apps"].get("warnings", {}).get("allowed_roles", [])),
+        ("💩🐐 Poo / Goat", settings["apps"].get("poo_goat", {}).get("allowed_roles", [])),
+        ("👋 Welcome / Leave", settings["apps"].get("welcome_leave", {}).get("allowed_roles", [])),
+    ]
+
+    chunk_size = 2  # sections per page (keeps it readable)
+
+    for i in range(0, len(sections), chunk_size):
+        embed = discord.Embed(
+            title="⚙️ Pilot Role Permissions",
+            color=discord.Color.blurple()
+        )
+
+        for name, ids in sections[i:i + chunk_size]:
+            embed.add_field(
+                name=name,
+                value=format_roles(guild, ids),
+                inline=False
+            )
+
+        embed.set_footer(text="Server owner & override role always have access")
+        pages.append(embed)
+
+    return pages
 
 def welcome_status_text(cfg: Dict[str, Any]) -> str:
     w = cfg["welcome"]
@@ -224,6 +255,32 @@ class PanelNavSelect(discord.ui.Select):
 # ROLES MANAGEMENT
 # =========================
 
+class RolesOverviewView(discord.ui.View):
+    def __init__(self, pages: List[discord.Embed], index: int = 0):
+        super().__init__(timeout=300)
+        self.pages = pages
+        self.index = index
+
+        self.prev.disabled = self.index == 0
+        self.next.disabled = self.index >= len(self.pages) - 1
+
+    @discord.ui.button(label="◀ Prev", style=discord.ButtonStyle.secondary)
+    async def prev(self, interaction: discord.Interaction, button: discord.ui.Button):
+        self.index -= 1
+        await interaction.response.edit_message(
+            embed=self.pages[self.index],
+            view=RolesOverviewView(self.pages, self.index)
+        )
+
+    @discord.ui.button(label="Next ▶", style=discord.ButtonStyle.secondary)
+    async def next(self, interaction: discord.Interaction, button: discord.ui.Button):
+        self.index += 1
+        await interaction.response.edit_message(
+            embed=self.pages[self.index],
+            view=RolesOverviewView(self.pages, self.index)
+        )
+
+
 class RoleScopeSelect(discord.ui.Select):
     def __init__(self):
         # View roles must ONLY exist as a list option under Roles — not a button.
@@ -290,19 +347,18 @@ class RoleActionSelect(discord.ui.Select):
         settings = load_settings()
 
         if action == "show":
-            ids = settings.get("global_allowed_roles", []) if self.scope == "global" else settings["apps"][self.scope]["allowed_roles"]
-            embed = discord.Embed(
-                title=f"👀 Current roles — {SCOPES[self.scope]}",
-                description=format_roles(interaction.guild, ids),
-                color=discord.Color.blurple()
-            )
-            view = PilotPanelView(state=PanelState.ROLES)
-            view.add_item(RoleActionSelect(self.scope))
+    pages = build_role_pages(interaction.guild, settings)
 
-            # Defer because editing panel may race; safe.
-            await _safe_defer(interaction)
-            await _safe_edit_panel_message(interaction, embed=embed, view=view)
-            return
+    if not pages:
+        await interaction.response.send_message("No roles configured.")
+        return
+
+    await interaction.channel.send(
+        embed=pages[0],
+        view=RolesOverviewView(pages)
+    )
+    return
+        
 
         # RoleSelect UI (this MUST be first response if not deferred).
         picker = discord.ui.View(timeout=180)
