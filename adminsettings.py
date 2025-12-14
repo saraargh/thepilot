@@ -22,25 +22,26 @@ SCOPES = [
     ("welcome_leave", "👋 Welcome / Leave"),
 ]
 
-SCOPE_LABELS = {k: v for k, v in SCOPES}
-
+SCOPE_LABELS = dict(SCOPES)
 
 # ======================================================
 # HELPERS
 # ======================================================
 def format_roles(guild: discord.Guild, role_ids: list[int]) -> str:
-    roles = []
+    if not guild:
+        return "*None*"
+    out = []
     for rid in role_ids:
         role = guild.get_role(int(rid))
         if role:
-            roles.append(role.mention)
-    return "\n".join(roles) if roles else "*None*"
+            out.append(role.mention)
+    return "\n".join(out) if out else "*None*"
 
 
 def get_scope_roles(settings: dict, scope: str) -> list[int]:
     if scope == "global":
         return list(settings.get("global_allowed_roles", []))
-    return list(settings["apps"].get(scope, {}).get("allowed_roles", []))
+    return list(settings.get("apps", {}).get(scope, {}).get("allowed_roles", []))
 
 
 def set_scope_roles(settings: dict, scope: str, roles: list[int]):
@@ -62,19 +63,20 @@ class AddRolesSelect(discord.ui.RoleSelect):
 
     async def callback(self, interaction: discord.Interaction):
         if not has_global_access(interaction.user):
-            return await interaction.response.send_message("❌ No permission.", ephemeral=True)
+            await interaction.response.send_message("❌ No permission.", ephemeral=True)
+            return
 
         settings = load_settings()
-        role_set = set(get_scope_roles(settings, self.scope))
+        roles = set(get_scope_roles(settings, self.scope))
 
         for role in self.values:
-            role_set.add(role.id)
+            roles.add(role.id)
 
-        set_scope_roles(settings, self.scope, list(role_set))
+        set_scope_roles(settings, self.scope, list(roles))
         save_settings(settings)
 
         await interaction.response.send_message(
-            f"✅ Added roles to **{SCOPE_LABELS[self.scope]}**."
+            f"✅ Roles added to **{SCOPE_LABELS[self.scope]}**."
         )
 
 
@@ -85,19 +87,20 @@ class RemoveRolesSelect(discord.ui.RoleSelect):
 
     async def callback(self, interaction: discord.Interaction):
         if not has_global_access(interaction.user):
-            return await interaction.response.send_message("❌ No permission.", ephemeral=True)
+            await interaction.response.send_message("❌ No permission.", ephemeral=True)
+            return
 
         settings = load_settings()
-        role_set = set(get_scope_roles(settings, self.scope))
+        roles = set(get_scope_roles(settings, self.scope))
 
         for role in self.values:
-            role_set.discard(role.id)
+            roles.discard(role.id)
 
-        set_scope_roles(settings, self.scope, list(role_set))
+        set_scope_roles(settings, self.scope, list(roles))
         save_settings(settings)
 
         await interaction.response.send_message(
-            f"✅ Removed roles from **{SCOPE_LABELS[self.scope]}**."
+            f"✅ Roles removed from **{SCOPE_LABELS[self.scope]}**."
         )
 
 
@@ -111,38 +114,34 @@ class ManageRolesView(discord.ui.View):
 
     @discord.ui.button(label="➕ Add Roles", style=discord.ButtonStyle.success)
     async def add_roles(self, interaction: discord.Interaction, _):
-        v = discord.ui.View(timeout=180)
-        v.add_item(AddRolesSelect(self.scope))
+        view = discord.ui.View(timeout=180)
+        view.add_item(AddRolesSelect(self.scope))
         await interaction.response.send_message(
             f"Select roles to **add** for **{SCOPE_LABELS[self.scope]}**:",
-            view=v
+            view=view
         )
 
     @discord.ui.button(label="➖ Remove Roles", style=discord.ButtonStyle.danger)
     async def remove_roles(self, interaction: discord.Interaction, _):
-        v = discord.ui.View(timeout=180)
-        v.add_item(RemoveRolesSelect(self.scope))
+        view = discord.ui.View(timeout=180)
+        view.add_item(RemoveRolesSelect(self.scope))
         await interaction.response.send_message(
             f"Select roles to **remove** for **{SCOPE_LABELS[self.scope]}**:",
-            view=v
+            view=view
         )
 
 
 class ScopeSelect(discord.ui.Select):
     def __init__(self):
-        options = [discord.SelectOption(label=label, value=key) for key, label in SCOPES]
         super().__init__(
             placeholder="Which area do you want to manage?",
-            options=options,
-            min_values=1,
-            max_values=1,
+            options=[discord.SelectOption(label=v, value=k) for k, v in SCOPES],
         )
 
     async def callback(self, interaction: discord.Interaction):
-        scope = self.values[0]
         await interaction.response.send_message(
-            f"⚙️ **{SCOPE_LABELS[scope]}** — manage roles:",
-            view=ManageRolesView(scope)
+            f"⚙️ **{SCOPE_LABELS[self.values[0]]}** — manage roles:",
+            view=ManageRolesView(self.values[0])
         )
 
 
@@ -153,21 +152,20 @@ class AllowedRolesView(discord.ui.View):
 
 
 # ======================================================
-# VIEW ROLES (PUBLIC + PAGINATED)
+# VIEW ROLES (PUBLIC, PAGINATED)
 # ======================================================
 class ViewRolesPager(discord.ui.View):
-    def __init__(self, page: int = 0):
+    def __init__(self):
         super().__init__(timeout=300)
-        self.page = page
+        self.page = 0
 
     def embed(self, guild: discord.Guild) -> discord.Embed:
         settings = load_settings()
-        scope, label = SCOPES[self.page]
-
+        key, label = SCOPES[self.page]
         embed = discord.Embed(
             title="⚙️ Pilot Role Permissions",
-            description=f"**{label}**\n\n{format_roles(guild, get_scope_roles(settings, scope))}",
-            color=discord.Color.blurple(),
+            description=f"**{label}**\n\n{format_roles(guild, get_scope_roles(settings, key))}",
+            color=discord.Color.blurple()
         )
         embed.set_footer(text=f"Page {self.page + 1}/{len(SCOPES)}")
         return embed
@@ -184,50 +182,45 @@ class ViewRolesPager(discord.ui.View):
 
 
 # ======================================================
-# WELCOME / LEAVE TABBED VIEW
+# WELCOME / LEAVE TABS
 # ======================================================
-class TabButton(discord.ui.Button):
-    def __init__(self, label: str, tab: str, active: str):
-        super().__init__(
-            label=label,
-            style=discord.ButtonStyle.success if tab == active else discord.ButtonStyle.danger,
-            row=0,
-        )
-        self.tab = tab
-
-    async def callback(self, interaction: discord.Interaction):
-        await interaction.response.edit_message(
-            view=WelcomeLeaveTabbedView(active=self.tab)
-        )
-
-
 class WelcomeLeaveTabbedView(discord.ui.View):
-    def __init__(self, active: str = "welcome"):
+    def __init__(self, active: str):
         super().__init__(timeout=None)
         self.active = active
 
-        # Tabs
-        self.add_item(TabButton("Welcome", "welcome", self.active))
-        self.add_item(TabButton("Leave / Logs", "leave", self.active))
+        self.add_item(self._tab("Welcome", "welcome"))
+        self.add_item(self._tab("Leave / Logs", "leave"))
 
-        # Content
-        src = WelcomeSettingsView() if self.active == "welcome" else LeaveSettingsView()
+        content = WelcomeSettingsView() if active == "welcome" else LeaveSettingsView()
         row = 1
         col = 0
 
-        for item in src.children:
-            btn = discord.ui.Button(
-                label=item.label,
-                style=item.style,
-                row=row,
+        for btn in content.children:
+            clone = discord.ui.Button(
+                label=btn.label,
+                style=btn.style,
+                row=row
             )
-            btn.callback = item.callback
-            self.add_item(btn)
+            clone.callback = btn.callback
+            self.add_item(clone)
 
             col += 1
             if col == 5:
                 col = 0
                 row += 1
+
+    def _tab(self, label: str, tab: str) -> discord.ui.Button:
+        style = discord.ButtonStyle.success if tab == self.active else discord.ButtonStyle.danger
+        button = discord.ui.Button(label=label, style=style, row=0)
+
+        async def callback(interaction: discord.Interaction):
+            await interaction.response.edit_message(
+                view=WelcomeLeaveTabbedView(tab)
+            )
+
+        button.callback = callback
+        return button
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if not has_app_access(interaction.user, "welcome_leave"):
@@ -244,3 +237,51 @@ class PilotSettingsView(discord.ui.View):
         super().__init__(timeout=180)
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
+        if not has_global_access(interaction.user):
+            await interaction.response.send_message("❌ No permission.", ephemeral=True)
+            return False
+        return True
+
+    @discord.ui.button(label="Allowed Roles", style=discord.ButtonStyle.primary)
+    async def allowed_roles(self, interaction: discord.Interaction, _):
+        await interaction.response.send_message(
+            "⚙️ **Allowed Roles**",
+            view=AllowedRolesView()
+        )
+
+    @discord.ui.button(label="View Roles", style=discord.ButtonStyle.secondary)
+    async def view_roles(self, interaction: discord.Interaction, _):
+        pager = ViewRolesPager()
+        await interaction.response.send_message(
+            embed=pager.embed(interaction.guild),
+            view=pager
+        )
+
+    @discord.ui.button(label="Welcome / Leave Settings", style=discord.ButtonStyle.secondary)
+    async def welcome_leave(self, interaction: discord.Interaction, _):
+        if not has_app_access(interaction.user, "welcome_leave"):
+            await interaction.response.send_message("❌ No permission.", ephemeral=True)
+            return
+
+        await interaction.response.send_message(
+            "👋 **Welcome / Leave Settings**",
+            view=WelcomeLeaveTabbedView("welcome")
+        )
+
+
+# ======================================================
+# SLASH COMMAND
+# ======================================================
+def setup_admin_settings(tree: app_commands.CommandTree):
+
+    @tree.command(name="pilotsettings", description="Configure Pilot settings")
+    async def pilotsettings(interaction: discord.Interaction):
+        if not has_global_access(interaction.user):
+            await interaction.response.send_message("❌ No permission.", ephemeral=True)
+            return
+
+        await interaction.response.send_message(
+            "⚙️ **Pilot Settings**",
+            view=PilotSettingsView(),
+            ephemeral=True
+        )
