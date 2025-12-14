@@ -1,65 +1,64 @@
+# adminsettings.py
 import discord
 from discord import app_commands
 from permissions import has_global_access
+from joinleave import WelcomeActionSelect, LeaveActionSelect
 
 # ======================================================
-# MAIN VIEW
+# ROOT VIEW
 # ======================================================
 
 class PilotSettingsView(discord.ui.View):
     def __init__(self):
-        super().__init__(timeout=None)
+        super().__init__(timeout=180)
+        self.add_item(SectionSelect())
 
-    @discord.ui.button(
-        label="Allowed Roles",
-        style=discord.ButtonStyle.primary
-    )
-    async def allowed_roles(self, interaction: discord.Interaction, _):
-        await interaction.response.send_message(
-            "⚙️ Allowed Roles panel (hook goes here).",
-            ephemeral=False
+
+class SectionSelect(discord.ui.Select):
+    def __init__(self):
+        super().__init__(
+            placeholder="Choose a settings section",
+            options=[
+                discord.SelectOption(label="Welcome Settings", value="welcome", emoji="👋"),
+                discord.SelectOption(label="Leave / Log Settings", value="leave", emoji="📄"),
+            ],
+            min_values=1,
+            max_values=1,
         )
 
-    @discord.ui.button(
-        label="View Roles",
-        style=discord.ButtonStyle.secondary
-    )
-    async def view_roles(self, interaction: discord.Interaction, _):
-        await interaction.response.send_message(
-            "👀 View Roles panel (pagination later).",
-            ephemeral=False
-        )
-
-    @discord.ui.button(
-        label="Welcome / Leave Settings",
-        style=discord.ButtonStyle.secondary,
-        row=1
-    )
-    async def welcome_leave(self, interaction: discord.Interaction, _):
-        await interaction.response.send_message(
-            "👋 Welcome / Leave settings panel.",
-            ephemeral=False
-        )
-
-    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+    async def callback(self, interaction: discord.Interaction):
         if not has_global_access(interaction.user):
-            await interaction.response.send_message(
+            return await interaction.response.send_message(
                 "❌ You do not have permission.",
                 ephemeral=True
             )
-            return False
-        return True
+
+        section = self.values[0]
+
+        view = discord.ui.View(timeout=180)
+        if section == "welcome":
+            view.add_item(WelcomeActionSelect())
+            await interaction.response.send_message(
+                "👋 **Welcome Settings**",
+                view=view
+            )
+        else:
+            view.add_item(LeaveActionSelect())
+            await interaction.response.send_message(
+                "📄 **Leave / Log Settings**",
+                view=view
+            )
 
 
 # ======================================================
-# SLASH COMMAND REGISTRATION
+# SLASH COMMAND
 # ======================================================
 
 def setup_admin_settings(tree: app_commands.CommandTree):
 
     @tree.command(
         name="pilotsettings",
-        description="Open the Pilot admin control panel"
+        description="Open the Pilot admin settings panel"
     )
     async def pilotsettings(interaction: discord.Interaction):
         if not has_global_access(interaction.user):
@@ -70,6 +69,5 @@ def setup_admin_settings(tree: app_commands.CommandTree):
 
         await interaction.response.send_message(
             "⚙️ **Pilot Settings**",
-            view=PilotSettingsView(),
-            ephemeral=False
+            view=PilotSettingsView()
         )
