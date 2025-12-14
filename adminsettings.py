@@ -8,7 +8,7 @@ from joinleave import WelcomeLeaveTabbedView
 
 
 # ======================================================
-# MAIN ADMIN PANEL VIEW
+# MAIN ADMIN PANEL VIEW (SINGLE SOURCE OF TRUTH)
 # ======================================================
 class PilotSettingsView(View):
     def __init__(self):
@@ -41,14 +41,6 @@ class PilotSettingsView(View):
             return False
         return True
 
-
-# ======================================================
-# BUTTON HANDLERS
-# ======================================================
-class PilotSettingsHandler(View):
-    def __init__(self):
-        super().__init__(timeout=None)
-
     # ---------------- Allowed Roles ----------------
     @discord.ui.button(
         custom_id="admin_allowed_roles",
@@ -56,7 +48,6 @@ class PilotSettingsHandler(View):
         style=discord.ButtonStyle.primary
     )
     async def allowed_roles(self, interaction: discord.Interaction, _):
-        # This intentionally posts publicly (matches old behaviour)
         await interaction.response.send_message(
             "🔧 **Allowed Roles panel**\n(Already implemented elsewhere.)"
         )
@@ -85,15 +76,13 @@ class PilotSettingsHandler(View):
                 ephemeral=True
             )
 
-        # Defer ONLY to avoid interaction expiry
         await interaction.response.defer()
 
-        # Post the tabbed panel publicly (non-ephemeral)
+        # Post the tabbed settings panel publicly
         await interaction.channel.send(
             view=WelcomeLeaveTabbedView()
         )
 
-        # Lightweight confirmation (non-ephemeral, matches old UX)
         await interaction.followup.send(
             "Opened **Welcome / Leave settings**."
         )
@@ -115,13 +104,8 @@ def setup_admin_settings(tree: app_commands.CommandTree):
                 ephemeral=True
             )
 
-        # Admin panel itself stays ephemeral (clean UX)
+        # One ephemeral admin panel, fully wired
         await interaction.response.send_message(
             view=PilotSettingsView(),
             ephemeral=True
-        )
-
-        # Attach persistent button handlers
-        await interaction.followup.send(
-            view=PilotSettingsHandler()
         )
