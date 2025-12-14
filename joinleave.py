@@ -439,33 +439,37 @@ class WelcomeSystem:
                 return
 
 # ======================================================
-# TABBED WELCOME / LEAVE VIEW
+# TABBED WELCOME / LEAVE VIEW (FIXED)
 # ======================================================
 class WelcomeLeaveTabbedView(discord.ui.View):
     def __init__(self, active: str = "welcome"):
         super().__init__(timeout=None)
         self.active = active
-        self.build()
+        self.build_content()
 
-    def build(self):
+    def build_content(self):
+        # Remove everything except the tabs
         self.clear_items()
 
-        # Tabs
-        self.add_item(discord.ui.Button(
-            label="Welcome",
-            style=discord.ButtonStyle.primary if self.active == "welcome" else discord.ButtonStyle.secondary,
-            custom_id="tab_welcome"
-        ))
-        self.add_item(discord.ui.Button(
-            label="Leave / Logs",
-            style=discord.ButtonStyle.primary if self.active == "leave" else discord.ButtonStyle.secondary,
-            custom_id="tab_leave"
-        ))
+        # Tabs (defined by decorators, but styled here)
+        self.tab_welcome.style = (
+            discord.ButtonStyle.primary
+            if self.active == "welcome"
+            else discord.ButtonStyle.secondary
+        )
+        self.tab_leave.style = (
+            discord.ButtonStyle.primary
+            if self.active == "leave"
+            else discord.ButtonStyle.secondary
+        )
+
+        self.add_item(self.tab_welcome)
+        self.add_item(self.tab_leave)
 
         # Spacer
         self.add_item(discord.ui.Button(label=" ", disabled=True))
 
-        # Content
+        # Active content
         if self.active == "welcome":
             for item in WelcomeSettingsView().children:
                 self.add_item(item)
@@ -474,7 +478,6 @@ class WelcomeLeaveTabbedView(discord.ui.View):
                 self.add_item(item)
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
-        from permissions import has_app_access
         if not has_app_access(interaction.user, "welcome_leave"):
             await interaction.response.send_message(
                 "❌ You do not have permission.",
@@ -483,13 +486,14 @@ class WelcomeLeaveTabbedView(discord.ui.View):
             return False
         return True
 
-    @discord.ui.button(custom_id="tab_welcome", label="Welcome", row=0)
+    # ---------------- Tabs ----------------
+    @discord.ui.button(label="Welcome", row=0)
     async def tab_welcome(self, interaction: discord.Interaction, _):
         await interaction.response.edit_message(
             view=WelcomeLeaveTabbedView(active="welcome")
         )
 
-    @discord.ui.button(custom_id="tab_leave", label="Leave / Logs", row=0)
+    @discord.ui.button(label="Leave / Logs", row=0)
     async def tab_leave(self, interaction: discord.Interaction, _):
         await interaction.response.edit_message(
             view=WelcomeLeaveTabbedView(active="leave")
