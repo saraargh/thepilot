@@ -70,8 +70,6 @@ class ThePilot(discord.Client):
 
         setup_mute_commands(self, self.tree)
 
-        # REGISTER /setwelcome
-        setup_welcome_commands(self.tree)
 
         # ✅ REGISTER /pilotsettings
         self.tree.add_command(pilotsettings)
