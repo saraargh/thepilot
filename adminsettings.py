@@ -4,7 +4,7 @@ from discord import app_commands
 from discord.ui import View, Button
 
 from permissions import (
-    has_global_admin_access,
+    has_global_access,
     has_app_access,
 )
 
@@ -43,7 +43,7 @@ class PilotSettingsView(View):
         ))
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
-        if not has_global_admin_access(interaction.user):
+        if not has_global_access(interaction.user):
             await interaction.response.send_message(
                 "❌ You do not have permission to access admin settings.",
                 ephemeral=True
@@ -116,7 +116,7 @@ def setup_admin_settings(tree: app_commands.CommandTree):
 
     @tree.command(name="pilotsettings", description="Open the Pilot admin control panel")
     async def pilotsettings(interaction: discord.Interaction):
-        if not has_global_admin_access(interaction.user):
+        if not has_global_access(interaction.user):
             return await interaction.response.send_message(
                 "❌ You do not have permission to use this command.",
                 ephemeral=True
