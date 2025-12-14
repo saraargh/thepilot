@@ -437,3 +437,60 @@ class WelcomeSystem:
                     f"{user.name} was banned from the server by {entry.user}"
                 )
                 return
+
+# ======================================================
+# TABBED WELCOME / LEAVE VIEW
+# ======================================================
+class WelcomeLeaveTabbedView(discord.ui.View):
+    def __init__(self, active: str = "welcome"):
+        super().__init__(timeout=None)
+        self.active = active
+        self.build()
+
+    def build(self):
+        self.clear_items()
+
+        # Tabs
+        self.add_item(discord.ui.Button(
+            label="Welcome",
+            style=discord.ButtonStyle.primary if self.active == "welcome" else discord.ButtonStyle.secondary,
+            custom_id="tab_welcome"
+        ))
+        self.add_item(discord.ui.Button(
+            label="Leave / Logs",
+            style=discord.ButtonStyle.primary if self.active == "leave" else discord.ButtonStyle.secondary,
+            custom_id="tab_leave"
+        ))
+
+        # Spacer
+        self.add_item(discord.ui.Button(label=" ", disabled=True))
+
+        # Content
+        if self.active == "welcome":
+            for item in WelcomeSettingsView().children:
+                self.add_item(item)
+        else:
+            for item in LeaveSettingsView().children:
+                self.add_item(item)
+
+    async def interaction_check(self, interaction: discord.Interaction) -> bool:
+        from permissions import has_app_access
+        if not has_app_access(interaction.user, "welcome_leave"):
+            await interaction.response.send_message(
+                "❌ You do not have permission.",
+                ephemeral=True
+            )
+            return False
+        return True
+
+    @discord.ui.button(custom_id="tab_welcome", label="Welcome", row=0)
+    async def tab_welcome(self, interaction: discord.Interaction, _):
+        await interaction.response.edit_message(
+            view=WelcomeLeaveTabbedView(active="welcome")
+        )
+
+    @discord.ui.button(custom_id="tab_leave", label="Leave / Logs", row=0)
+    async def tab_leave(self, interaction: discord.Interaction, _):
+        await interaction.response.edit_message(
+            view=WelcomeLeaveTabbedView(active="leave")
+        )
