@@ -6,7 +6,7 @@ import os
 from flask import Flask
 from threading import Thread
 
-from joinleave import WelcomeSystem, setup_welcome_commands
+from joinleave import WelcomeSystem
 from adminsettings import pilotsettings  # ✅ ADDED
 
 # ===== CONFIG =====
