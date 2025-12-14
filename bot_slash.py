@@ -7,16 +7,16 @@ from flask import Flask
 from threading import Thread
 
 from joinleave import WelcomeSystem
-from adminsettings import setup_admin_settings  # ✅ CORRECT IMPORT
+from adminsettings import setup_admin_settings, PilotSettingsView  # 👈 IMPORTANT
 
 # ===== CONFIG =====
-TOKEN = os.getenv("TOKEN")  # Render environment variable
+TOKEN = os.getenv("TOKEN")
 UK_TZ = pytz.timezone("Europe/London")
 
 # ===== Discord Client =====
 intents = discord.Intents.default()
 intents.members = True
-intents.message_content = True  # Needed for mute message deletion
+intents.message_content = True
 
 class ThePilot(discord.Client):
     def __init__(self):
@@ -64,12 +64,14 @@ class ThePilot(discord.Client):
         # Admin Panel (/pilotsettings)
         setup_admin_settings(self.tree)
 
+        # 🔑 REGISTER PERSISTENT ADMIN VIEW (THIS WAS THE MISSING PIECE)
+        self.add_view(PilotSettingsView())
+
         await self.tree.sync()
 
 
 # ================= CLIENT =================
 client = ThePilot()
-
 
 # ================= SCHEDULED TASKS =================
 @tasks.loop(minutes=1)
@@ -78,7 +80,6 @@ async def scheduled_tasks(bot_client):
     guild = bot_client.guilds[0] if bot_client.guilds else None
     if guild:
         pass
-
 
 # ================= FLASK KEEP-ALIVE =================
 app = Flask("")
