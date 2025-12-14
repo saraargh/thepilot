@@ -289,3 +289,4 @@ def setup_admin_settings(tree: app_commands.CommandTree):
             content="⚙️ **Pilot Settings**",
             view=view
         )
+        
