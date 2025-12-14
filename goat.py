@@ -17,7 +17,7 @@ PASSENGERS_ROLE_ID = 1404100554807971971
 GENERAL_CHANNEL_ID = 1398508734506078240
 
 
-# ===== Role Helpers =====
+# ===== Helpers =====
 async def clear_goat_role(guild: discord.Guild):
     goat_role = guild.get_role(GOAT_ROLE_ID)
     if not goat_role:
@@ -80,7 +80,6 @@ def setup_goat_commands(tree: app_commands.CommandTree, client: discord.Client):
     @tasks.loop(minutes=1)
     async def daily_goat_task():
         now = datetime.datetime.now(UK_TZ)
-
         guild = client.guilds[0] if client.guilds else None
         if not guild:
             return
@@ -99,34 +98,28 @@ def setup_goat_commands(tree: app_commands.CommandTree, client: discord.Client):
         await client.wait_until_ready()
 
     # ===== Slash Commands =====
-
     @tree.command(name="cleargoat", description="Clear the goat role from everyone")
     async def cleargoat(interaction: discord.Interaction):
         if not has_app_access(interaction.user, "poo_goat"):
-            return await interaction.response.send_message(
-                "❌ You do not have permission.",
-                ephemeral=True
-            )
+            return await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
 
+        await interaction.response.defer()
         await clear_goat_role(interaction.guild)
-        await interaction.response.send_message(
-            "✅ Cleared goat role from everyone."
-        )
+        await interaction.followup.send("✅ Cleared goat role from everyone.")
 
     @tree.command(name="assigngoat", description="Manually assign the goat role to a member")
     @app_commands.describe(member="The member to assign the goat role")
     async def assigngoat(interaction: discord.Interaction, member: discord.Member):
         if not has_app_access(interaction.user, "poo_goat"):
-            return await interaction.response.send_message(
-                "❌ You do not have permission.",
-                ephemeral=True
-            )
+            return await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
+
+        await interaction.response.defer()
 
         goat_role = interaction.guild.get_role(GOAT_ROLE_ID)
         if goat_role:
             await member.add_roles(goat_role)
 
-        await interaction.response.send_message(
+        await interaction.followup.send(
             f"🎉 {member.mention} has been assigned the goat role."
         )
 
@@ -134,28 +127,25 @@ def setup_goat_commands(tree: app_commands.CommandTree, client: discord.Client):
     @app_commands.describe(member="The member to remove the goat role from")
     async def removegoat(interaction: discord.Interaction, member: discord.Member):
         if not has_app_access(interaction.user, "poo_goat"):
-            return await interaction.response.send_message(
-                "❌ You do not have permission.",
-                ephemeral=True
-            )
+            return await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
+
+        await interaction.response.defer()
 
         goat_role = interaction.guild.get_role(GOAT_ROLE_ID)
         if goat_role:
             await member.remove_roles(goat_role)
 
-        await interaction.response.send_message(
+        await interaction.followup.send(
             f"❌ {member.mention} has had the goat role removed."
         )
 
     @tree.command(name="testgoat", description="Test the goat automation")
     async def testgoat_command(interaction: discord.Interaction):
         if not has_app_access(interaction.user, "poo_goat"):
-            return await interaction.response.send_message(
-                "❌ You do not have permission.",
-                ephemeral=True
-            )
+            return await interaction.response.send_message("❌ You do not have permission.", ephemeral=True)
 
+        await interaction.response.defer()
         await test_goat(interaction.guild)
-        await interaction.response.send_message("🧪 Test goat completed!")
+        await interaction.followup.send("🧪 Test goat completed!")
 
     return daily_goat_task
