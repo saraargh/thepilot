@@ -255,8 +255,8 @@ class WelcomeSettingsView(View):
         self._b("Add Image", self.add_image)
         self._b("Toggle Bot Add Logs", self.toggle_bot)
         self._b("Set Bot Add Channel", self.set_bot_channel)
-        self._b("Preview", self.preview, discord.ButtonStyle.success)
-        self._b("Toggle Welcome On/Off", self.toggle, discord.ButtonStyle.danger)
+        self._b("Preview", self.preview, discord.ButtonStyle.secondary)
+        self._b("Toggle Welcome On/Off", self.toggle, discord.ButtonStyle.secondary)
 
     def _b(self, label, cb, style=discord.ButtonStyle.secondary):
         btn = discord.ui.Button(label=label, style=style)
