@@ -450,6 +450,7 @@ class WelcomeActionSelect(discord.ui.Select):
 
         elif choice == "preview":
             await send_welcome_preview(interaction)
+            return
 
         # update panel message (edit original panel message safely)
         cfg2 = load_config()
