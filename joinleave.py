@@ -437,36 +437,3 @@ class WelcomeSystem:
                     f"{user.name} was banned from the server by {entry.user}"
                 )
                 return
-
-# ======================================================
-# SLASH COMMANDS
-# ======================================================
-def setup_welcome_commands(tree: app_commands.CommandTree):
-
-    @tree.command(name="welcomesettings", description="Manage welcome settings")
-    async def welcomesettings(interaction: discord.Interaction):
-        if not has_app_access(interaction.user, "welcome_leave"):
-            return await interaction.response.send_message(
-                "No permission.",
-                ephemeral=True
-            )
-
-        await interaction.channel.send(view=WelcomeSettingsView())
-        await interaction.response.send_message(
-            "Opened welcome settings.",
-            ephemeral=True
-        )
-
-    @tree.command(name="leavesettings", description="Manage leave, kick and ban logs")
-    async def leavesettings(interaction: discord.Interaction):
-        if not has_app_access(interaction.user, "welcome_leave"):
-            return await interaction.response.send_message(
-                "No permission.",
-                ephemeral=True
-            )
-
-        await interaction.channel.send(view=LeaveSettingsView())
-        await interaction.response.send_message(
-            "Opened leave settings.",
-            ephemeral=True
-        )
