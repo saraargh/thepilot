@@ -283,5 +283,5 @@ def setup_admin_settings(tree: app_commands.CommandTree):
         await interaction.response.send_message(
             "⚙️ **Pilot Settings**",
             view=PilotSettingsView(),
-            ephemeral=True
+            ephemeral=False
         )
