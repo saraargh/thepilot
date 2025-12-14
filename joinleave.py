@@ -8,16 +8,7 @@ import json
 import base64
 import requests
 
-# ======================================================
-# ALLOWED ROLE IDS
-# ======================================================
-ALLOWED_ROLE_IDS = [
-    1413545658006110401,  # William/Admin
-    1404098545006546954,  # serversorter
-    1420817462290681936,  # kd
-    1404105470204969000,  # greg
-    1404104881098195015   # sazzles
-]
+from permissions import has_app_access
 
 # ======================================================
 # GITHUB CONFIG
@@ -102,9 +93,6 @@ def save_config(cfg):
 # ======================================================
 # UTILS
 # ======================================================
-def has_permission(interaction):
-    return any(r.id in ALLOWED_ROLE_IDS for r in interaction.user.roles)
-
 def human_member_number(guild):
     return len([m for m in guild.members if not m.bot])
 
@@ -198,7 +186,10 @@ class ChannelSlotPickerView(View):
         cid = _cid(interaction.data["values"][0])
         cfg["welcome"]["channels"][self.slot] = cid
         save_config(cfg)
-        await interaction.response.edit_message(content=f"Saved `{self.slot}` → <#{cid}>", view=None)
+        await interaction.response.edit_message(
+            content=f"Saved `{self.slot}` → <#{cid}>",
+            view=None
+        )
 
 class WelcomeChannelPicker(View):
     def __init__(self):
@@ -212,7 +203,10 @@ class WelcomeChannelPicker(View):
         cid = _cid(interaction.data["values"][0])
         cfg["welcome"]["welcome_channel_id"] = cid
         save_config(cfg)
-        await interaction.response.edit_message(content=f"Welcome channel set to <#{cid}>", view=None)
+        await interaction.response.edit_message(
+            content=f"Welcome channel set to <#{cid}>",
+            view=None
+        )
 
 class BotAddChannelPicker(View):
     def __init__(self):
@@ -226,7 +220,10 @@ class BotAddChannelPicker(View):
         cid = _cid(interaction.data["values"][0])
         cfg["welcome"]["bot_add"]["channel_id"] = cid
         save_config(cfg)
-        await interaction.response.edit_message(content=f"Bot add channel set to <#{cid}>", view=None)
+        await interaction.response.edit_message(
+            content=f"Bot add channel set to <#{cid}>",
+            view=None
+        )
 
 class LogChannelPicker(View):
     def __init__(self):
@@ -240,7 +237,10 @@ class LogChannelPicker(View):
         cid = _cid(interaction.data["values"][0])
         cfg["member_logs"]["channel_id"] = cid
         save_config(cfg)
-        await interaction.response.edit_message(content=f"Member log channel set to <#{cid}>", view=None)
+        await interaction.response.edit_message(
+            content=f"Member log channel set to <#{cid}>",
+            view=None
+        )
 
 # ======================================================
 # SETTINGS VIEWS
@@ -264,7 +264,7 @@ class WelcomeSettingsView(View):
         self.add_item(btn)
 
     async def interaction_check(self, interaction):
-        if not has_permission(interaction):
+        if not has_app_access(interaction.user, "welcome_leave"):
             await interaction.response.send_message("No permission.", ephemeral=True)
             return False
         return True
@@ -280,13 +280,17 @@ class WelcomeSettingsView(View):
         cfg = load_config()
         cfg["welcome"]["enabled"] = not cfg["welcome"]["enabled"]
         save_config(cfg)
-        await i.response.send_message(f"Welcome {'enabled' if cfg['welcome']['enabled'] else 'disabled'}.")
+        await i.response.send_message(
+            f"Welcome {'enabled' if cfg['welcome']['enabled'] else 'disabled'}."
+        )
 
     async def toggle_bot(self, i):
         cfg = load_config()
         cfg["welcome"]["bot_add"]["enabled"] = not cfg["welcome"]["bot_add"]["enabled"]
         save_config(cfg)
-        await i.response.send_message(f"Bot add logs {'enabled' if cfg['welcome']['bot_add']['enabled'] else 'disabled'}.")
+        await i.response.send_message(
+            f"Bot add logs {'enabled' if cfg['welcome']['bot_add']['enabled'] else 'disabled'}."
+        )
 
     async def preview(self, i):
         cfg = load_config()
@@ -320,7 +324,7 @@ class LeaveSettingsView(View):
         self.add_item(btn)
 
     async def interaction_check(self, i):
-        if not has_permission(i):
+        if not has_app_access(i.user, "welcome_leave"):
             await i.response.send_message("No permission.", ephemeral=True)
             return False
         return True
@@ -332,7 +336,9 @@ class LeaveSettingsView(View):
         cfg = load_config()
         cfg["member_logs"][key] = not cfg["member_logs"][key]
         save_config(cfg)
-        await i.response.send_message(f"{name} logs {'enabled' if cfg['member_logs'][key] else 'disabled'}.")
+        await i.response.send_message(
+            f"{name} logs {'enabled' if cfg['member_logs'][key] else 'disabled'}."
+        )
 
     async def toggle_leave(self, i): await self._toggle(i, "log_leave", "Leave")
     async def toggle_kick(self, i): await self._toggle(i, "log_kick", "Kick")
@@ -387,7 +393,9 @@ class WelcomeSystem:
         await asyncio.sleep(1.5)
         async for entry in member.guild.audit_logs(limit=5, action=discord.AuditLogAction.bot_add):
             if entry.target and entry.target.id == member.id:
-                await channel.send(f"🤖 {entry.user.mention} added a bot ({member.name}) to the server.")
+                await channel.send(
+                    f"🤖 {entry.user.mention} added a bot ({member.name}) to the server."
+                )
                 return
 
     async def on_member_remove(self, member):
@@ -404,7 +412,9 @@ class WelcomeSystem:
         async for entry in member.guild.audit_logs(limit=5, action=discord.AuditLogAction.kick):
             if entry.target and entry.target.id == member.id:
                 if m["log_kick"]:
-                    await channel.send(f"{member.name} was kicked from the server by {entry.user}")
+                    await channel.send(
+                        f"{member.name} was kicked from the server by {entry.user}"
+                    )
                 return
 
         if m["log_leave"]:
@@ -423,23 +433,40 @@ class WelcomeSystem:
         await asyncio.sleep(1.5)
         async for entry in guild.audit_logs(limit=5, action=discord.AuditLogAction.ban):
             if entry.target and entry.target.id == user.id:
-                await channel.send(f"{user.name} was banned from the server by {entry.user}")
+                await channel.send(
+                    f"{user.name} was banned from the server by {entry.user}"
+                )
                 return
 
 # ======================================================
 # SLASH COMMANDS
 # ======================================================
 def setup_welcome_commands(tree: app_commands.CommandTree):
+
     @tree.command(name="welcomesettings", description="Manage welcome settings")
     async def welcomesettings(interaction: discord.Interaction):
-        if not has_permission(interaction):
-            return await interaction.response.send_message("No permission.", ephemeral=True)
+        if not has_app_access(interaction.user, "welcome_leave"):
+            return await interaction.response.send_message(
+                "No permission.",
+                ephemeral=True
+            )
+
         await interaction.channel.send(view=WelcomeSettingsView())
-        await interaction.response.send_message("Opened welcome settings.", ephemeral=True)
+        await interaction.response.send_message(
+            "Opened welcome settings.",
+            ephemeral=True
+        )
 
     @tree.command(name="leavesettings", description="Manage leave, kick and ban logs")
     async def leavesettings(interaction: discord.Interaction):
-        if not has_permission(interaction):
-            return await interaction.response.send_message("No permission.", ephemeral=True)
+        if not has_app_access(interaction.user, "welcome_leave"):
+            return await interaction.response.send_message(
+                "No permission.",
+                ephemeral=True
+            )
+
         await interaction.channel.send(view=LeaveSettingsView())
-        await interaction.response.send_message("Opened leave settings.", ephemeral=True)
+        await interaction.response.send_message(
+            "Opened leave settings.",
+            ephemeral=True
+        )
