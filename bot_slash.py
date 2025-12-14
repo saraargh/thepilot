@@ -66,7 +66,7 @@ class ThePilot(discord.Client):
             1404105470204969000,  # greg
             1404104881098195015   # sazzles
         ]
-        setup_warnings_commands(self.tree, allowed_role_ids=ALLOWED_WARNROLE_IDS)
+        setup_warnings_commands(self.tree)
 
         setup_mute_commands(self, self.tree)
 
