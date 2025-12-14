@@ -97,7 +97,7 @@ def logs_status_text(cfg: Dict[str, Any]) -> str:
     )
 
 # =====================================================
-# PANEL STATES
+# PANEL STATE
 # =====================================================
 
 class PanelState:
@@ -128,12 +128,12 @@ class PilotPanelView(discord.ui.View):
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if not has_global_access(interaction.user):
-            await interaction.response.send_message("❌ No permission.")
+            await interaction.response.send_message("❌ You do not have permission.")
             return False
         return True
 
 # =====================================================
-# NAVIGATION SELECT
+# NAVIGATION
 # =====================================================
 
 class PanelNavSelect(discord.ui.Select):
@@ -146,8 +146,6 @@ class PanelNavSelect(discord.ui.Select):
                 discord.SelectOption(label="Welcome", value=PanelState.WELCOME, emoji="👋"),
                 discord.SelectOption(label="Leave / Logs", value=PanelState.LEAVE, emoji="📄"),
             ],
-            min_values=1,
-            max_values=1
         )
 
     async def callback(self, interaction: discord.Interaction):
@@ -158,18 +156,14 @@ class PanelNavSelect(discord.ui.Select):
             embed = discord.Embed(title="⚙️ Pilot Settings", color=discord.Color.blurple())
             embed.add_field(name="👋 Welcome", value=welcome_status_text(cfg), inline=False)
             embed.add_field(name="📄 Leave / Logs", value=logs_status_text(cfg), inline=False)
-            embed.add_field(
-                name="🛂 Roles",
-                value="Navigate to **Roles** to manage permissions or view overview.",
-                inline=False
-            )
+            embed.add_field(name="🛂 Roles", value="Manage access & permissions", inline=False)
             await interaction.response.edit_message(embed=embed, view=PilotPanelView(PanelState.ROOT))
             return
 
         if choice == PanelState.ROLES:
             embed = discord.Embed(
                 title="🛂 Role Permissions",
-                description="Choose a scope or view overview.",
+                description="Manage role access or view overview 👀",
                 color=discord.Color.blurple()
             )
         elif choice == PanelState.WELCOME:
@@ -190,7 +184,7 @@ class PanelNavSelect(discord.ui.Select):
         await interaction.response.edit_message(embed=embed, view=PilotPanelView(choice))
 
 # =====================================================
-# ROLE OVERVIEW PAGINATION
+# ROLE OVERVIEW (PAGINATED, INSIDE PANEL)
 # =====================================================
 
 class RolesOverviewView(discord.ui.View):
@@ -226,16 +220,9 @@ class RoleScopeSelect(discord.ui.Select):
     def __init__(self):
         options = [
             discord.SelectOption(label="👀 View Roles Overview", value="__view__"),
-        ] + [
-            discord.SelectOption(label=v, value=k) for k, v in SCOPES.items()
-        ]
+        ] + [discord.SelectOption(label=v, value=k) for k, v in SCOPES.items()]
 
-        super().__init__(
-            placeholder="Choose a role scope…",
-            options=options,
-            min_values=1,
-            max_values=1
-        )
+        super().__init__(placeholder="Choose a role scope…", options=options)
 
     async def callback(self, interaction: discord.Interaction):
         choice = self.values[0]
@@ -243,7 +230,7 @@ class RoleScopeSelect(discord.ui.Select):
         if choice == "__view__":
             settings = load_settings()
             pages = build_role_pages(interaction.guild, settings)
-            await interaction.channel.send(
+            await interaction.response.edit_message(
                 embed=pages[0],
                 view=RolesOverviewView(pages)
             )
@@ -251,7 +238,7 @@ class RoleScopeSelect(discord.ui.Select):
 
         embed = discord.Embed(
             title=f"🛂 Editing: {SCOPES[choice]}",
-            description="Choose add/remove or show roles.",
+            description="Add ➕ / Remove ➖ / Show 👀 roles",
             color=discord.Color.blurple()
         )
         view = PilotPanelView(PanelState.ROLES)
@@ -264,41 +251,32 @@ class RoleActionSelect(discord.ui.Select):
         super().__init__(
             placeholder="Role action…",
             options=[
-                discord.SelectOption(label="Add roles", value="add"),
-                discord.SelectOption(label="Remove roles", value="remove"),
-                discord.SelectOption(label="Show current roles", value="show"),
-            ],
-            min_values=1,
-            max_values=1
+                discord.SelectOption(label="➕ Add roles", value="add"),
+                discord.SelectOption(label="➖ Remove roles", value="remove"),
+                discord.SelectOption(label="👀 Show roles", value="show"),
+            ]
         )
 
     async def callback(self, interaction: discord.Interaction):
         settings = load_settings()
 
         if self.values[0] == "show":
-            ids = (
-                settings.get("global_allowed_roles", [])
-                if self.scope == "global"
-                else settings["apps"][self.scope]["allowed_roles"]
-            )
+            ids = settings.get("global_allowed_roles", []) if self.scope == "global" else settings["apps"][self.scope]["allowed_roles"]
             embed = discord.Embed(
-                title=f"👀 {SCOPES[self.scope]} Roles",
+                title=f"👀 {SCOPES[self.scope]}",
                 description=format_roles(interaction.guild, ids),
                 color=discord.Color.blurple()
             )
             await interaction.channel.send(embed=embed)
             return
 
-        picker = discord.ui.View(timeout=180)
+        picker = discord.ui.View()
         picker.add_item(
             AddRolesSelect(self.scope)
             if self.values[0] == "add"
             else RemoveRolesSelect(self.scope)
         )
-        await interaction.response.send_message(
-            f"Select roles to **{self.values[0].upper()}**:",
-            view=picker
-        )
+        await interaction.response.send_message("Select roles:", view=picker)
 
 class AddRolesSelect(discord.ui.RoleSelect):
     def __init__(self, scope: str):
@@ -307,11 +285,7 @@ class AddRolesSelect(discord.ui.RoleSelect):
 
     async def callback(self, interaction: discord.Interaction):
         settings = load_settings()
-        target = (
-            settings.setdefault("global_allowed_roles", [])
-            if self.scope == "global"
-            else settings["apps"][self.scope]["allowed_roles"]
-        )
+        target = settings.setdefault("global_allowed_roles", []) if self.scope == "global" else settings["apps"][self.scope]["allowed_roles"]
         for r in self.values:
             if r.id not in target:
                 target.append(r.id)
@@ -325,16 +299,32 @@ class RemoveRolesSelect(discord.ui.RoleSelect):
 
     async def callback(self, interaction: discord.Interaction):
         settings = load_settings()
-        target = (
-            settings.get("global_allowed_roles", [])
-            if self.scope == "global"
-            else settings["apps"][self.scope]["allowed_roles"]
-        )
+        target = settings.get("global_allowed_roles", []) if self.scope == "global" else settings["apps"][self.scope]["allowed_roles"]
         for r in self.values:
             if r.id in target:
                 target.remove(r.id)
         save_settings(settings)
         await interaction.response.send_message("✅ Roles removed.")
+
+# =====================================================
+# REMOVE IMAGE SELECT
+# =====================================================
+
+class RemoveArrivalImageSelect(discord.ui.Select):
+    def __init__(self, images: List[str]):
+        self.images = images
+        options = [
+            discord.SelectOption(label=f"🖼 Image {i+1}", value=str(i))
+            for i in range(len(images))
+        ]
+        super().__init__(placeholder="Select image to remove…", options=options)
+
+    async def callback(self, interaction: discord.Interaction):
+        idx = int(self.values[0])
+        cfg = load_config()
+        cfg["welcome"]["arrival_images"].pop(idx)
+        save_config(cfg)
+        await interaction.response.send_message("🗑 Image removed.")
 
 # =====================================================
 # WELCOME ACTIONS
@@ -345,16 +335,16 @@ class WelcomeActionSelect(discord.ui.Select):
         super().__init__(
             placeholder="Welcome action…",
             options=[
-                discord.SelectOption(label="Toggle Welcome", value="toggle"),
-                discord.SelectOption(label="Set Welcome Channel", value="set_channel"),
-                discord.SelectOption(label="Edit Title", value="edit_title"),
-                discord.SelectOption(label="Edit Text", value="edit_text"),
-                discord.SelectOption(label="Add/Edit Channel Slot", value="slot"),
-                discord.SelectOption(label="Add Arrival Image", value="add_img"),
-                discord.SelectOption(label="Remove Arrival Image", value="rm_img"),
-                discord.SelectOption(label="Toggle Bot Add Logs", value="toggle_bot"),
-                discord.SelectOption(label="Set Bot Add Channel", value="bot_channel"),
-                discord.SelectOption(label="Preview Welcome", value="preview"),
+                discord.SelectOption(label="Toggle Welcome", value="toggle", emoji="🔁"),
+                discord.SelectOption(label="Set Welcome Channel", value="set_channel", emoji="📍"),
+                discord.SelectOption(label="Edit Title", value="edit_title", emoji="✏️"),
+                discord.SelectOption(label="Edit Text", value="edit_text", emoji="📝"),
+                discord.SelectOption(label="Add/Edit Channel Slot", value="slot", emoji="➕"),
+                discord.SelectOption(label="Add Arrival Image", value="add_img", emoji="🖼"),
+                discord.SelectOption(label="Remove Arrival Image", value="rm_img", emoji="🗑"),
+                discord.SelectOption(label="Toggle Bot Add Logs", value="toggle_bot", emoji="🤖"),
+                discord.SelectOption(label="Set Bot Add Channel", value="bot_channel", emoji="📍"),
+                discord.SelectOption(label="Preview Welcome", value="preview", emoji="👀"),
             ]
         )
 
@@ -373,38 +363,33 @@ class WelcomeActionSelect(discord.ui.Select):
         if choice == "add_img":
             return await interaction.response.send_modal(AddArrivalImageModal())
         if choice == "set_channel":
-            return await interaction.response.send_message(
-                "Select welcome channel:",
-                view=WelcomeChannelPickerView()
-            )
+            return await interaction.response.send_message("Select channel:", view=WelcomeChannelPickerView())
         if choice == "bot_channel":
-            return await interaction.response.send_message(
-                "Select bot-add channel:",
-                view=BotAddChannelPickerView()
-            )
+            return await interaction.response.send_message("Select channel:", view=BotAddChannelPickerView())
 
         cfg = load_config()
         w = cfg["welcome"]
 
         if choice == "toggle":
             w["enabled"] = not w["enabled"]
-            save_config(cfg)
         elif choice == "toggle_bot":
             w["bot_add"]["enabled"] = not w["bot_add"]["enabled"]
-            save_config(cfg)
         elif choice == "rm_img":
             imgs = w.get("arrival_images", [])
-            if imgs:
-                imgs.pop()
-                save_config(cfg)
+            if not imgs:
+                return await interaction.response.send_message("No images to remove.")
+            view = discord.ui.View()
+            view.add_item(RemoveArrivalImageSelect(imgs))
+            return await interaction.response.send_message("Choose image:", view=view)
         elif choice == "preview":
             await send_welcome_preview(interaction)
             return
 
-        cfg2 = load_config()
+        save_config(cfg)
+
         embed = discord.Embed(
             title="👋 Welcome Settings",
-            description=welcome_status_text(cfg2),
+            description=welcome_status_text(load_config()),
             color=discord.Color.blurple()
         )
         await interaction.response.edit_message(embed=embed, view=PilotPanelView(PanelState.WELCOME))
@@ -415,41 +400,29 @@ async def send_welcome_preview(interaction: discord.Interaction):
     count = human_member_number(interaction.guild)
 
     embed = discord.Embed(
-        title=render(
-            w["title"],
-            user=interaction.user,
-            guild=interaction.guild,
-            member_count=count,
-            channels=w.get("channels", {})
-        ),
-        description=render(
-            w["description"],
-            user=interaction.user,
-            guild=interaction.guild,
-            member_count=count,
-            channels=w.get("channels", {})
-        )
+        title=render(w["title"], user=interaction.user, guild=interaction.guild, member_count=count, channels=w.get("channels", {})),
+        description=render(w["description"], user=interaction.user, guild=interaction.guild, member_count=count, channels=w.get("channels", {})),
     )
-    embed.set_footer(text=f"Passenger #{count}")
+    embed.set_footer(text=f"You landed as passenger #{count} ✈️")
     if w.get("arrival_images"):
         embed.set_image(url=random.choice(w["arrival_images"]))
 
     await interaction.channel.send(embed=embed)
 
 # =====================================================
-# LEAVE / LOGS ACTIONS
+# LEAVE / LOGS
 # =====================================================
 
 class LeaveActionSelect(discord.ui.Select):
     def __init__(self):
         super().__init__(
-            placeholder="Leave/log action…",
+            placeholder="Leave / log action…",
             options=[
-                discord.SelectOption(label="Toggle Logs", value="toggle_logs"),
-                discord.SelectOption(label="Set Log Channel", value="set_channel"),
-                discord.SelectOption(label="Toggle Leave Logs", value="leave"),
-                discord.SelectOption(label="Toggle Kick Logs", value="kick"),
-                discord.SelectOption(label="Toggle Ban Logs", value="ban"),
+                discord.SelectOption(label="Toggle Logs", value="toggle_logs", emoji="🔁"),
+                discord.SelectOption(label="Set Log Channel", value="set_channel", emoji="📍"),
+                discord.SelectOption(label="Toggle Leave Logs", value="leave", emoji="👋"),
+                discord.SelectOption(label="Toggle Kick Logs", value="kick", emoji="🥾"),
+                discord.SelectOption(label="Toggle Ban Logs", value="ban", emoji="⛔"),
             ]
         )
 
@@ -461,10 +434,7 @@ class LeaveActionSelect(discord.ui.Select):
         m = cfg["member_logs"]
 
         if self.values[0] == "set_channel":
-            return await interaction.response.send_message(
-                "Select log channel:",
-                view=LogChannelPickerView()
-            )
+            return await interaction.response.send_message("Select channel:", view=LogChannelPickerView())
 
         if self.values[0] == "toggle_logs":
             m["enabled"] = not m["enabled"]
@@ -479,7 +449,7 @@ class LeaveActionSelect(discord.ui.Select):
 
         embed = discord.Embed(
             title="📄 Leave / Logs Settings",
-            description=logs_status_text(cfg),
+            description=logs_status_text(load_config()),
             color=discord.Color.blurple()
         )
         await interaction.response.edit_message(embed=embed, view=PilotPanelView(PanelState.LEAVE))
@@ -499,13 +469,6 @@ def setup_admin_settings(tree: app_commands.CommandTree):
         embed = discord.Embed(title="⚙️ Pilot Settings", color=discord.Color.blurple())
         embed.add_field(name="👋 Welcome", value=welcome_status_text(cfg), inline=False)
         embed.add_field(name="📄 Leave / Logs", value=logs_status_text(cfg), inline=False)
-        embed.add_field(
-            name="🛂 Roles",
-            value="Navigate to **Roles** to manage permissions.",
-            inline=False
-        )
+        embed.add_field(name="🛂 Roles", value="Manage access & permissions", inline=False)
 
-        await interaction.response.send_message(
-            embed=embed,
-            view=PilotPanelView(PanelState.ROOT)
-        )
+        await interaction.response.send_message(embed=embed, view=PilotPanelView(PanelState.ROOT))
