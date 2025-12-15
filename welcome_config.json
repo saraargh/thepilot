@@ -19,7 +19,7 @@
     "control_panel_message_id": 1449382367964958721
   },
   "member_logs": {
-    "enabled": true,
+    "enabled": false,
     "channel_id": 1404500058375717056,
     "log_leave": true,
     "log_kick": true,
