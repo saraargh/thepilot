@@ -26,5 +26,14 @@
     "log_leave": true,
     "log_kick": true,
     "log_ban": true
-  }
+  },
+  
+  "boost": {
+  "enabled": true,
+  "channel_id": null,
+  "title": "thankyou 🙈",
+  "description": "💎 {user} just boosted the server! 💎",
+  "images": []
+}
+  
 }
