@@ -8,9 +8,7 @@ from threading import Thread
 
 from joinleave import WelcomeSystem
 from adminsettings import setup_admin_settings
-
 from image_linker import setup as image_linker_setup
-await image_linker_setup(self.tree)
 
 # ===== CONFIG =====
 TOKEN = os.getenv("TOKEN")
@@ -59,8 +57,10 @@ class ThePilot(discord.Client):
         # ✅ ONLY /pilotsettings
         setup_admin_settings(self.tree)
 
+        # ✅ /imagelink command
+        await image_linker_setup(self.tree)
+
         await self.tree.sync()
-        
 
 
 client = ThePilot()
