@@ -19,28 +19,35 @@ async def setup(tree: app_commands.CommandTree):
             )
             return
 
-        # Download uploaded image
-        image_bytes = await image.read()
+        # ACK the interaction silently (THIS IS CRITICAL)
+        await interaction.response.defer()
 
-        # Upload it to Discord to get a real CDN URL
+        # Download the image
+        data = await image.read()
+
+        # Upload ONCE
         file = discord.File(
-            fp=io.BytesIO(image_bytes),
+            fp=io.BytesIO(data),
             filename=image.filename
         )
 
-        await interaction.response.send_message(
-            "processing image…",
-            file=file
+        # Send ONE clean message (no edits)
+        msg = await interaction.followup.send(
+            content=(
+                "✅ **please copy the link below for use.**\n"
+                "_note: do not delete this message or channel – "
+                "the image link may no longer be valid if you do so._\n\n"
+                "{link}\n\n"
+                "```{link}```"
+            ),
+            file=file,
+            wait=True
         )
 
-        msg = await interaction.original_response()
-
-        # Grab the real CDN URL
+        # Get the real CDN link
         real_url = msg.attachments[0].url
 
-        # Edit message:
-        # - remove attachment
-        # - show raw link (outside + inside box)
+        # Replace placeholder text ONCE (safe edit, no attachment change)
         await msg.edit(
             content=(
                 "✅ **please copy the link below for use.**\n"
@@ -48,6 +55,5 @@ async def setup(tree: app_commands.CommandTree):
                 "the image link may no longer be valid if you do so._\n\n"
                 f"{real_url}\n\n"
                 f"```{real_url}```"
-            ),
-            attachments=[]
+            )
         )
