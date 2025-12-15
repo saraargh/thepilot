@@ -115,6 +115,7 @@ def render(text: str, *, user, guild, member_count: int, channels: Dict[str, int
         return ""
     out = (
         text.replace("{user}", getattr(user, "mention", ""))
+            .replace("{mention}", getattr(user, "mention", ""))
             .replace("{server}", guild.name)
             .replace("{member_count}", str(member_count))
     )
@@ -129,95 +130,8 @@ def render(text: str, *, user, guild, member_count: int, channels: Dict[str, int
 class WelcomeSystem:
     def __init__(self, client: discord.Client):
         self.client = client
-
-    # ---------------- MEMBER JOIN ----------------
-
-    async def on_member_join(self, member: discord.Member):
-        if member.bot:
-            await self.on_bot_join(member)
-            return
-
-        cfg = load_config()
-        w = cfg["welcome"]
-        if not w["enabled"] or not w["welcome_channel_id"]:
-            return
-
-        channel = self.client.get_channel(w["welcome_channel_id"])
-        if not channel:
-            return
-
-        count = human_member_number(member.guild)
-        now = discord.utils.utcnow().strftime("%H:%M")
-
-        embed = discord.Embed(
-            title=render(w["title"], user=member, guild=member.guild, member_count=count, channels=w["channels"]),
-            description=render(w["description"], user=member, guild=member.guild, member_count=count, channels=w["channels"])
-        )
-        embed.set_footer(text=f"You landed as passenger #{count} ✈️ | Today at {now}")
-
-        imgs = w.get("arrival_images") or []
-        if imgs:
-            embed.set_image(url=random.choice(imgs))
-
-        await channel.send(content=member.mention, embed=embed)
-
-    # ---------------- BOT ADD ----------------
-
-    async def on_bot_join(self, member: discord.Member):
-        cfg = load_config()
-        b = cfg["welcome"]["bot_add"]
-        if not b.get("enabled") or not b.get("channel_id"):
-            return
-
-        channel = self.client.get_channel(b["channel_id"])
-        if not channel:
-            return
-
-        await asyncio.sleep(1.5)
-        async for entry in member.guild.audit_logs(limit=5, action=discord.AuditLogAction.bot_add):
-            if entry.target and entry.target.id == member.id:
-                await channel.send(f"🤖 {entry.user.mention} added a bot ({member.name}) to the server.")
-                return
-
-    # ---------------- MEMBER REMOVE ----------------
-
-    async def on_member_remove(self, member: discord.Member):
-        cfg = load_config()
-        m = cfg["member_logs"]
-        if not m["enabled"] or not m["channel_id"]:
-            return
-
-        channel = self.client.get_channel(m["channel_id"])
-        if not channel:
-            return
-
-        await asyncio.sleep(1.5)
-        async for entry in member.guild.audit_logs(limit=5, action=discord.AuditLogAction.kick):
-            if entry.target and entry.target.id == member.id:
-                if m.get("log_kick"):
-                    await channel.send(f"{member.name} was kicked from the server by {entry.user}")
-                return
-
-        if m.get("log_leave"):
-            await channel.send(f"{member.name} left the server")
-
-    # ---------------- MEMBER BAN ----------------
-
-    async def on_member_ban(self, guild: discord.Guild, user: discord.User):
-        cfg = load_config()
-        m = cfg["member_logs"]
-        if not m["enabled"] or not m.get("log_ban") or not m["channel_id"]:
-            return
-
-        channel = self.client.get_channel(m["channel_id"])
-        if not channel:
-            return
-
-        await asyncio.sleep(1.5)
-        async for entry in guild.audit_logs(limit=5, action=discord.AuditLogAction.ban):
-            if entry.target and entry.target.id == user.id:
-                await channel.send(f"{user.name} was banned from the server by {entry.user}")
-                return
+        self._recent_boosts: Dict[int, float] = {}
+        self._last_tier: Dict[int, int] = {}
 
     # ---------------- BOOST EVENT ----------------
 
@@ -236,26 +150,38 @@ class WelcomeSystem:
         if not channel:
             return
 
-        await asyncio.sleep(1.5)
+        await asyncio.sleep(1.2)
 
         guild = after.guild
-        total_boosts = guild.premium_subscription_count or 0
-        count = human_member_number(guild)
+        now_ts = discord.utils.utcnow().timestamp()
         now = discord.utils.utcnow().strftime("%H:%M")
 
-        # Tier override > double > single
-        if guild.premium_tier > 0 and total_boosts in (2, 7, 14):
+        total_boosts = guild.premium_subscription_count or 0
+        prev_tier = self._last_tier.get(guild.id, guild.premium_tier)
+        new_tier = guild.premium_tier
+        self._last_tier[guild.id] = new_tier
+
+        user_id = after.id
+        last_boost = self._recent_boosts.get(user_id)
+
+        # --- Decide message ---
+        if new_tier > prev_tier:
             text = b["messages"]["tier"]
-        elif total_boosts % 2 == 0:
+
+        elif last_boost and (now_ts - last_boost) <= 8:
             text = b["messages"]["double"]
+
         else:
             text = b["messages"]["single"]
 
+        self._recent_boosts[user_id] = now_ts
+
         embed = discord.Embed(
-            description=render(text, user=after, guild=guild, member_count=count, channels={})
+            description=render(text, user=after, guild=guild, member_count=total_boosts, channels={}),
+            color=discord.Color.blurple()
         )
         embed.set_footer(
-            text=f"this server has {total_boosts} total boosts! | Today at {now}"
+            text=f"{total_boosts} boosts total | Today at {now}"
         )
 
         imgs = b.get("images") or []
