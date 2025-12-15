@@ -7,7 +7,7 @@ import os
 import json
 import base64
 import requests
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 
 # ------------------- GitHub Config -------------------
 GITHUB_REPO = os.getenv("GITHUB_REPO", "saraargh/the-pilot")
@@ -39,8 +39,11 @@ DEFAULT_CONFIG: Dict[str, Any] = {
     "boost": {
         "enabled": True,
         "channel_id": None,
-        "title": "🚀 Server Boost!",
-        "description": "{user} just boosted the server!",
+        "messages": {
+            "single": "💎 {user} just boosted the server! 💎",
+            "double": "🔥 {user} just used **both boosts**! 🔥",
+            "tier": "🚀 **NEW BOOST TIER UNLOCKED!** 🚀\nThanks to {user}!"
+        },
         "images": []
     }
 }
@@ -61,7 +64,11 @@ def ensure_config(cfg: Dict[str, Any]) -> Dict[str, Any]:
     cfg["welcome"].setdefault("arrival_images", [])
     cfg["welcome"].setdefault("bot_add", {"enabled": True, "channel_id": None})
 
-    cfg["boost"].setdefault("images", [])
+    b = cfg["boost"]
+    b.setdefault("enabled", True)
+    b.setdefault("channel_id", None)
+    b.setdefault("messages", DEFAULT_CONFIG["boost"]["messages"])
+    b.setdefault("images", [])
 
     return cfg
 
@@ -107,8 +114,7 @@ def render(text: str, *, user, guild, member_count: int, channels: Dict[str, int
     if not text:
         return ""
     out = (
-        text.replace("{user}", getattr(user, "name", ""))
-            .replace("{mention}", getattr(user, "mention", ""))
+        text.replace("{user}", getattr(user, "mention", ""))
             .replace("{server}", guild.name)
             .replace("{member_count}", str(member_count))
     )
@@ -117,133 +123,7 @@ def render(text: str, *, user, guild, member_count: int, channels: Dict[str, int
     return out
 
 # ======================================================
-# MODALS (UNCHANGED)
-# ======================================================
-
-class EditWelcomeTitleModal(Modal):
-    def __init__(self):
-        cfg = load_config()
-        super().__init__(title="Edit Welcome Title")
-        self.text = TextInput(label="Title", default=cfg["welcome"]["title"], max_length=256)
-        self.add_item(self.text)
-
-    async def on_submit(self, interaction: discord.Interaction):
-        cfg = load_config()
-        cfg["welcome"]["title"] = self.text.value
-        save_config(cfg)
-        await interaction.response.send_message("✅ Welcome title updated.")
-
-class EditWelcomeTextModal(Modal):
-    def __init__(self):
-        cfg = load_config()
-        super().__init__(title="Edit Welcome Text")
-        self.text = TextInput(
-            label="Text",
-            style=discord.TextStyle.paragraph,
-            default=cfg["welcome"]["description"],
-            max_length=2000
-        )
-        self.add_item(self.text)
-
-    async def on_submit(self, interaction: discord.Interaction):
-        cfg = load_config()
-        cfg["welcome"]["description"] = self.text.value
-        save_config(cfg)
-        await interaction.response.send_message("✅ Welcome text updated.")
-
-class AddChannelSlotNameModal(Modal):
-    def __init__(self):
-        super().__init__(title="Add / Edit Channel Slot")
-        self.name = TextInput(label="Slot name (e.g. self_roles)", max_length=50)
-        self.add_item(self.name)
-
-    async def on_submit(self, interaction: discord.Interaction):
-        slot = self.name.value.strip()
-        if not slot:
-            return await interaction.response.send_message("❌ Slot name cannot be empty.")
-        await interaction.response.send_message(
-            f"Select a channel for slot **{slot}**:",
-            view=ChannelSlotPickerView(slot)
-        )
-
-class AddArrivalImageModal(Modal):
-    def __init__(self):
-        super().__init__(title="Add Arrival Image")
-        self.url = TextInput(label="Image URL", max_length=400)
-        self.add_item(self.url)
-
-    async def on_submit(self, interaction: discord.Interaction):
-        cfg = load_config()
-        cfg["welcome"]["arrival_images"].append(self.url.value.strip())
-        save_config(cfg)
-        await interaction.response.send_message("✅ Arrival image added.")
-
-# ======================================================
-# CHANNEL PICKERS (UNCHANGED)
-# ======================================================
-
-def _cid(v):
-    return v.id if hasattr(v, "id") else int(v)
-
-class WelcomeChannelPickerView(discord.ui.View):
-    def __init__(self):
-        super().__init__(timeout=120)
-        sel = discord.ui.ChannelSelect(channel_types=[discord.ChannelType.text])
-        sel.callback = self.pick
-        self.add_item(sel)
-
-    async def pick(self, interaction: discord.Interaction):
-        cfg = load_config()
-        cid = _cid(interaction.data["values"][0])
-        cfg["welcome"]["welcome_channel_id"] = cid
-        save_config(cfg)
-        await interaction.response.edit_message(content=f"✅ Welcome channel set to <#{cid}>", view=None)
-
-class BotAddChannelPickerView(discord.ui.View):
-    def __init__(self):
-        super().__init__(timeout=120)
-        sel = discord.ui.ChannelSelect(channel_types=[discord.ChannelType.text])
-        sel.callback = self.pick
-        self.add_item(sel)
-
-    async def pick(self, interaction: discord.Interaction):
-        cfg = load_config()
-        cid = _cid(interaction.data["values"][0])
-        cfg["welcome"]["bot_add"]["channel_id"] = cid
-        save_config(cfg)
-        await interaction.response.edit_message(content=f"✅ Bot add channel set to <#{cid}>", view=None)
-
-class LogChannelPickerView(discord.ui.View):
-    def __init__(self):
-        super().__init__(timeout=120)
-        sel = discord.ui.ChannelSelect(channel_types=[discord.ChannelType.text])
-        sel.callback = self.pick
-        self.add_item(sel)
-
-    async def pick(self, interaction: discord.Interaction):
-        cfg = load_config()
-        cid = _cid(interaction.data["values"][0])
-        cfg["member_logs"]["channel_id"] = cid
-        save_config(cfg)
-        await interaction.response.edit_message(content=f"✅ Member log channel set to <#{cid}>", view=None)
-
-class ChannelSlotPickerView(discord.ui.View):
-    def __init__(self, slot: str):
-        super().__init__(timeout=120)
-        self.slot = slot
-        sel = discord.ui.ChannelSelect(channel_types=[discord.ChannelType.text])
-        sel.callback = self.pick
-        self.add_item(sel)
-
-    async def pick(self, interaction: discord.Interaction):
-        cfg = load_config()
-        cid = _cid(interaction.data["values"][0])
-        cfg["welcome"]["channels"][self.slot] = cid
-        save_config(cfg)
-        await interaction.response.edit_message(content=f"✅ Saved slot **{self.slot}** → <#{cid}>", view=None)
-
-# ======================================================
-# RUNTIME SYSTEM (WELCOME + LOGS + BOOST)
+# RUNTIME SYSTEM
 # ======================================================
 
 class WelcomeSystem:
@@ -343,32 +223,43 @@ class WelcomeSystem:
 
     async def on_member_update(self, before: discord.Member, after: discord.Member):
         if before.premium_since == after.premium_since:
-            return  # no change
-
+            return
         if after.premium_since is None:
-            return  # stopped boosting (ignore)
+            return
 
         cfg = load_config()
-        b = cfg.get("boost", {})
-        if not b.get("enabled") or not b.get("channel_id"):
+        b = cfg["boost"]
+        if not b["enabled"] or not b["channel_id"]:
             return
 
         channel = self.client.get_channel(b["channel_id"])
         if not channel:
             return
 
-        count = human_member_number(after.guild)
+        await asyncio.sleep(1.5)
+
+        guild = after.guild
+        total_boosts = guild.premium_subscription_count or 0
+        count = human_member_number(guild)
         now = discord.utils.utcnow().strftime("%H:%M")
 
+        # Tier override > double > single
+        if guild.premium_tier > 0 and total_boosts in (2, 7, 14):
+            text = b["messages"]["tier"]
+        elif total_boosts % 2 == 0:
+            text = b["messages"]["double"]
+        else:
+            text = b["messages"]["single"]
+
         embed = discord.Embed(
-            title=render(b.get("title", ""), user=after, guild=after.guild, member_count=count, channels={}),
-            description=render(b.get("description", ""), user=after, guild=after.guild, member_count=count, channels={}),
-            color=discord.Color.blurple()
+            description=render(text, user=after, guild=guild, member_count=count, channels={})
         )
-        embed.set_footer(text=f"🚀 Server Boost • Today at {now}")
+        embed.set_footer(
+            text=f"this server has {total_boosts} total boosts! | Today at {now}"
+        )
 
         imgs = b.get("images") or []
         if imgs:
             embed.set_image(url=random.choice(imgs))
 
-        await channel.send(embed=embed)
+        await channel.send(content=after.mention, embed=embed)
