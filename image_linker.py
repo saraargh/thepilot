@@ -28,8 +28,8 @@ async def setup(tree: app_commands.CommandTree):
         )
 
         await interaction.response.send_message(
-            "✅ **please copy the link below for use.**\n"
-            "_note: do not delete this message or channel – the image link may no longer be valid if you do so._",
+            "**Please copy the link below for use.**\n"
+            "⚠️⚠️ Do not delete this message or channel – the image link may no longer be valid if you do so.",
             file=file
         )
 
@@ -42,8 +42,8 @@ async def setup(tree: app_commands.CommandTree):
         # Edit message to add links (outside + inside box)
         await msg.edit(
             content=(
-                "✅ **please copy the link below for use.**\n"
-                "_note: do not delete this message or channel – the image link may no longer be valid if you do so._\n\n"
+                "**Please copy the link below for use.**\n"
+                "⚠️⚠️ Do not delete this message or channel – the image link may no longer be valid if you do so.\n\n"
                 f"{real_url}\n\n"
                 f"```{real_url}```"
             )
