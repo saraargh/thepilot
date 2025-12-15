@@ -27,16 +27,15 @@
     "log_kick": true,
     "log_ban": true
   },
-  
   "boost": {
-  "enabled": true,
-  "channel_id": null,
-  "title": "thankyou 🙈",
-  "messages": {
-    "single": "💎 {mention} just boosted the server! 💎",
-    "double": "🔥 {mention} just boosted the server twice! 🔥",
-    "tier": "🚀 WE JUST HIT BOOST LEVEL {tier}! 🚀"
-  },
-  "images": []
+    "enabled": true,
+    "channel_id": 1398508734506078240,
+    "title": "thankyou \ud83d\ude48",
+    "messages": {
+      "single": "\ud83d\udc8e {mention} just boosted the server! \ud83d\udc8e",
+      "double": "\ud83d\udd25 {mention} just boosted the server twice! \ud83d\udd25",
+      "tier": "\ud83d\ude80 WE JUST HIT BOOST LEVEL {tier}! \ud83d\ude80"
+    },
+    "images": []
   }
 }
