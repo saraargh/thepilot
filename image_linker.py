@@ -1,26 +1,32 @@
 import discord
+from discord import app_commands
 
-async def setup(client: discord.Client):
+async def setup(tree: app_commands.CommandTree):
 
-    @client.event
-    async def on_message(message: discord.Message):
-        # Ignore bots
-        if message.author.bot:
+    @tree.command(
+        name="imagelink",
+        description="Upload an image or GIF to get a Discord CDN link"
+    )
+    async def imagelink(
+        interaction: discord.Interaction,
+        image: discord.Attachment
+    ):
+        # Optional safety check
+        if image.content_type and not image.content_type.startswith("image"):
+            await interaction.response.send_message(
+                "❌ Please upload an image or GIF.",
+                ephemeral=True
+            )
             return
 
-        # No attachments = nothing to do
-        if not message.attachments:
-            return
+        message = (
+            "✅ **Please copy the link below for use.**\n\n"
+            "⚠️ *Note: Do not delete this message or channel — "
+            "the image link may no longer be valid if you do so.*\n\n"
+            f"{image.url}"
+        )
 
-        links = []
-        for attachment in message.attachments:
-            if attachment.content_type and attachment.content_type.startswith("image"):
-                links.append(attachment.url)
-
-        if not links:
-            return
-
-        await message.reply(
-            "\n".join(links),
-            mention_author=False
+        await interaction.response.send_message(
+            message,
+            ephemeral=False
         )
