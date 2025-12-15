@@ -718,8 +718,9 @@ class LeaveActionSelect(discord.ui.Select):
         await _safe_edit_panel_message(interaction, embed=embed, view=PilotPanelView(state=PanelState.LEAVE))
 
 
+
 # ======================================================
-# BOOST MANAGEMENT (panel + 3 text sections)
+# BOOST MANAGEMENT (panel + 3 text sections) — FIXED
 # ======================================================
 
 def _ensure_boost(cfg: Dict[str, Any]) -> Dict[str, Any]:
@@ -727,236 +728,70 @@ def _ensure_boost(cfg: Dict[str, Any]) -> Dict[str, Any]:
     b = cfg["boost"]
     b.setdefault("enabled", True)
     b.setdefault("channel_id", None)
-    b.setdefault("title", "")
-    b.setdefault("description", "")
-    b.setdefault("double_description", "")
-    b.setdefault("tier_description", "")
+    b.setdefault("messages", {
+        "single": "",
+        "double": "",
+        "tier": "",
+    })
     b.setdefault("images", [])
     return cfg
 
 
-class BoostChannelPickerView(discord.ui.View):
-    def __init__(self):
-        super().__init__(timeout=120)
-        sel = discord.ui.ChannelSelect(channel_types=[discord.ChannelType.text])
-        sel.callback = self.pick
-        self.add_item(sel)
-
-    async def pick(self, interaction: discord.Interaction):
-        cid = _cid(interaction.data["values"][0])
-        cfg = load_config()
-        cfg = _ensure_boost(cfg)
-        cfg["boost"]["channel_id"] = cid
-        save_config(cfg)
-        await interaction.response.edit_message(content=f"✅ Boost channel set to <#{cid}>", view=None)
-
-
-class EditBoostTitleModal(discord.ui.Modal, title="Edit Boost Title"):
-    text = discord.ui.TextInput(label="Title", max_length=256)
-
-    def __init__(self, default: str):
-        super().__init__()
-        self.text.default = default
-
-    async def on_submit(self, interaction: discord.Interaction):
-        cfg = load_config()
-        cfg = _ensure_boost(cfg)
-        cfg["boost"]["title"] = self.text.value
-        save_config(cfg)
-        await interaction.response.send_message("✅ Boost title updated.")
-
-
 class EditBoostTextModal(discord.ui.Modal, title="Edit Boost Text"):
-    text = discord.ui.TextInput(label="Text", style=discord.TextStyle.paragraph, max_length=2000)
-
-    def __init__(self, default: str):
+    def __init__(self):
+        cfg = _ensure_boost(load_config())
         super().__init__()
-        self.text.default = default
+        self.text = discord.ui.TextInput(
+            label="Text",
+            style=discord.TextStyle.paragraph,
+            default=cfg["boost"]["messages"].get("single", ""),
+            max_length=2000
+        )
+        self.add_item(self.text)
 
     async def on_submit(self, interaction: discord.Interaction):
-        cfg = load_config()
-        cfg = _ensure_boost(cfg)
-        cfg["boost"]["description"] = self.text.value
+        cfg = _ensure_boost(load_config())
+        cfg["boost"]["messages"]["single"] = self.text.value
         save_config(cfg)
         await interaction.response.send_message("✅ Boost text updated.")
 
 
 class EditDoubleBoostTextModal(discord.ui.Modal, title="Edit Double Boost Text"):
-    text = discord.ui.TextInput(label="Text", style=discord.TextStyle.paragraph, max_length=2000)
-
-    def __init__(self, default: str):
+    def __init__(self):
+        cfg = _ensure_boost(load_config())
         super().__init__()
-        self.text.default = default
+        self.text = discord.ui.TextInput(
+            label="Text",
+            style=discord.TextStyle.paragraph,
+            default=cfg["boost"]["messages"].get("double", ""),
+            max_length=2000
+        )
+        self.add_item(self.text)
 
     async def on_submit(self, interaction: discord.Interaction):
-        cfg = load_config()
-        cfg = _ensure_boost(cfg)
-        cfg["boost"]["double_description"] = self.text.value
+        cfg = _ensure_boost(load_config())
+        cfg["boost"]["messages"]["double"] = self.text.value
         save_config(cfg)
         await interaction.response.send_message("✅ Double boost text updated.")
 
 
 class EditTierUnlockTextModal(discord.ui.Modal, title="Edit Tier Unlock Text"):
-    text = discord.ui.TextInput(label="Text", style=discord.TextStyle.paragraph, max_length=2000)
-
-    def __init__(self, default: str):
+    def __init__(self):
+        cfg = _ensure_boost(load_config())
         super().__init__()
-        self.text.default = default
+        self.text = discord.ui.TextInput(
+            label="Text",
+            style=discord.TextStyle.paragraph,
+            default=cfg["boost"]["messages"].get("tier", ""),
+            max_length=2000
+        )
+        self.add_item(self.text)
 
     async def on_submit(self, interaction: discord.Interaction):
-        cfg = load_config()
-        cfg = _ensure_boost(cfg)
-        cfg["boost"]["tier_description"] = self.text.value
+        cfg = _ensure_boost(load_config())
+        cfg["boost"]["messages"]["tier"] = self.text.value
         save_config(cfg)
         await interaction.response.send_message("✅ Tier unlock text updated.")
-
-
-class AddBoostImageModal(discord.ui.Modal, title="Add Boost Image"):
-    url = discord.ui.TextInput(label="Image URL", max_length=400)
-
-    async def on_submit(self, interaction: discord.Interaction):
-        cfg = load_config()
-        cfg = _ensure_boost(cfg)
-        cfg["boost"]["images"].append(self.url.value.strip())
-        save_config(cfg)
-        await interaction.response.send_message("✅ Boost image added.")
-
-
-class BoostRemoveImageMenu(discord.ui.View):
-    def __init__(self):
-        super().__init__(timeout=300)
-        self.add_item(BoostRemoveImageSelect())
-
-
-class BoostRemoveImageSelect(discord.ui.Select):
-    def __init__(self):
-        super().__init__(
-            placeholder="Boost images…",
-            options=[
-                discord.SelectOption(label="👀 View images", value="view"),
-                discord.SelectOption(label="🗑️ Remove an image", value="remove"),
-            ],
-            min_values=1, max_values=1
-        )
-
-    async def callback(self, interaction: discord.Interaction):
-        cfg = load_config()
-        cfg = _ensure_boost(cfg)
-        imgs = cfg["boost"].get("images") or []
-
-        if self.values[0] == "view":
-            if not imgs:
-                return await interaction.response.send_message("No boost images.")
-            return await interaction.response.send_message(
-                embed=image_embed("🚀 Boost Images", imgs, 0),
-                view=ImagePagerView("🚀 Boost Images", imgs, 0)
-            )
-
-        if not imgs:
-            return await interaction.response.send_message("No boost images to remove.")
-        await interaction.response.send_message("Pick an image to remove:", view=RemoveImagePicker("boost", imgs))
-
-
-class BoostActionSelect(discord.ui.Select):
-    def __init__(self):
-        super().__init__(
-            placeholder="Boost action…",
-            options=[
-                discord.SelectOption(label="🔁 Toggle Boost On/Off", value="toggle"),
-                discord.SelectOption(label="📍 Set Boost Channel", value="set_channel"),
-                discord.SelectOption(label="✏️ Edit Title", value="edit_title"),
-                discord.SelectOption(label="📝 Edit Boost Text", value="edit_text"),
-                discord.SelectOption(label="💎 Edit Double Boost Text", value="edit_double"),
-                discord.SelectOption(label="🏆 Edit Tier Unlock Text", value="edit_tier"),
-                discord.SelectOption(label="🖼️ Add Boost Image", value="add_img"),
-                discord.SelectOption(label="🗑️ Remove Boost Image", value="rm_img"),
-                discord.SelectOption(label="🚀 Preview Boost", value="preview"),
-            ],
-            min_values=1,
-            max_values=1
-        )
-
-    async def callback(self, interaction: discord.Interaction):
-        if not has_app_access(interaction.user, "welcome_leave"):
-            return await _no_perm(interaction, "❌ You don’t have permission for Welcome/Leave/Boost settings.")
-
-        choice = self.values[0]
-
-        # these must be first response (no defer)
-        if choice == "set_channel":
-            return await interaction.response.send_message("Select the boost channel:", view=BoostChannelPickerView())
-
-        if choice == "edit_title":
-            cfg = load_config()
-            cfg = _ensure_boost(cfg)
-            return await interaction.response.send_modal(EditBoostTitleModal(cfg["boost"].get("title", "")))
-
-        if choice == "edit_text":
-            cfg = load_config()
-            cfg = _ensure_boost(cfg)
-            return await interaction.response.send_modal(EditBoostTextModal(cfg["boost"].get("description", "")))
-
-        if choice == "edit_double":
-            cfg = load_config()
-            cfg = _ensure_boost(cfg)
-            return await interaction.response.send_modal(EditDoubleBoostTextModal(cfg["boost"].get("double_description", "")))
-
-        if choice == "edit_tier":
-            cfg = load_config()
-            cfg = _ensure_boost(cfg)
-            return await interaction.response.send_modal(EditTierUnlockTextModal(cfg["boost"].get("tier_description", "")))
-
-        if choice == "add_img":
-            return await interaction.response.send_modal(AddBoostImageModal())
-
-        await _safe_defer(interaction)
-        cfg = load_config()
-        cfg = _ensure_boost(cfg)
-        b = cfg["boost"]
-
-        if choice == "toggle":
-            b["enabled"] = not b.get("enabled", True)
-            save_config(cfg)
-
-        elif choice == "rm_img":
-            imgs = b.get("images") or []
-            if not imgs:
-                if interaction.channel:
-                    await interaction.channel.send("No boost images to remove.")
-            else:
-                if interaction.channel:
-                    await interaction.channel.send("Choose:", view=BoostRemoveImageMenu())
-
-        elif choice == "preview":
-            await send_boost_preview(interaction)
-            return
-
-        cfg2 = load_config()
-        embed = discord.Embed(title="🚀 Boost Settings", description=boost_status_text(cfg2), color=discord.Color.blurple())
-        await _safe_edit_panel_message(interaction, embed=embed, view=PilotPanelView(state=PanelState.BOOST))
-
-
-async def send_boost_preview(interaction: discord.Interaction):
-    cfg = load_config()
-    cfg = _ensure_boost(cfg)
-    b = cfg["boost"]
-
-    boosts_total = interaction.guild.premium_subscription_count or 0
-    now = discord.utils.utcnow().strftime("%H:%M")
-
-    # allow mention via {mention} in your text if you want
-    title = render(b.get("title", ""), user=interaction.user, guild=interaction.guild, member_count=boosts_total, channels={})
-    desc = render(b.get("description", ""), user=interaction.user, guild=interaction.guild, member_count=boosts_total, channels={})
-
-    embed = discord.Embed(title=title, description=desc, color=discord.Color.blurple())
-    embed.set_footer(text=f"{boosts_total} boosts total | Today at {now}")
-
-    imgs = b.get("images") or []
-    if imgs:
-        embed.set_image(url=random.choice(imgs))
-
-    if interaction.channel:
-        await interaction.channel.send(embed=embed)
 
 
 # ======================================================
