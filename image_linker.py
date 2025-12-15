@@ -18,25 +18,33 @@ async def setup(tree: app_commands.CommandTree):
             )
             return
 
-        embed = discord.Embed(
-            title="🖼️ Image link ready",
-            description=(
-                "Copy the link below for use.\n\n"
-                "⚠️*Do not delete this message or channel — "
-                "the image link may stop working if you do so.*"
-            ),
-            color=0x5865F2  # Discord blurple
-        )
+        # Download the image
+        image_bytes = await image.read()
 
-        embed.add_field(
-            name="🔗 Direct CDN Link",
-            value=f"```{image.url}```",
-            inline=False
+        # Re-upload it so we get a REAL CDN attachment
+        file = discord.File(
+            fp=discord.BytesIO(image_bytes),
+            filename=image.filename
         )
-
-        embed.set_footer(text="Powered by The Pilot ✈️")
 
         await interaction.response.send_message(
-            embed=embed,
-            ephemeral=False
+            "✅ **please copy the link below for use.**\n"
+            "_note: do not delete this message or channel – the image link may no longer be valid if you do so._",
+            file=file
+        )
+
+        # Get the message we just sent
+        msg = await interaction.original_response()
+
+        # The real CDN link (non-ephemeral)
+        real_url = msg.attachments[0].url
+
+        # Edit message to add links (outside + inside box)
+        await msg.edit(
+            content=(
+                "✅ **please copy the link below for use.**\n"
+                "_note: do not delete this message or channel – the image link may no longer be valid if you do so._\n\n"
+                f"{real_url}\n\n"
+                f"```{real_url}```"
+            )
         )
