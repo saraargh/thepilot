@@ -34,7 +34,7 @@
     "messages": {
       "single": "\ud83d\udc8e {mention} just boosted the server! \ud83d\udc8e",
       "double": "\ud83d\udd25 {mention} just boosted the server twice! \ud83d\udd25",
-      "tier": "\ud83d\ude80 WE JUST HIT BOOST LEVEL {tier}! \ud83d\ude80"
+      "tier": "\ud83d\ude80 WE JUST HIT BOOST LEVEL {tier}! \ud83d\ude80\n\n {mention} just boosted the server!  \u2764\ufe0f\ud83d\udd25"
     },
     "images": [
       "https://cdn.discordapp.com/attachments/1444274467864838207/1450096279425257695/IMG_8558.gif?ex=69414ae6&is=693ff966&hm=4aae687f792325a68d3de9c6ba45ff23761bc01d419dfb65460a4a84697f1501&"
