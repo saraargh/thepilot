@@ -27,13 +27,11 @@
     "log_kick": true,
     "log_ban": true
   },
-  
   "boost": {
-  "enabled": true,
-  "channel_id": null,
-  "title": "thankyou 🙈",
-  "description": "💎 {user} just boosted the server! 💎",
-  "images": []
-}
-  
+    "enabled": true,
+    "channel_id": 1398508734506078240,
+    "title": "thankyou \ud83d\ude48",
+    "description": "\ud83d\udc8e {user} just boosted the server! \ud83d\udc8e",
+    "images": []
+  }
 }
