@@ -1,5 +1,6 @@
 import discord
 from discord import app_commands
+import io
 
 async def setup(tree: app_commands.CommandTree):
 
@@ -18,32 +19,32 @@ async def setup(tree: app_commands.CommandTree):
             )
             return
 
-        # Download the image
+        # Download the uploaded image
         image_bytes = await image.read()
 
-        # Re-upload it so we get a REAL CDN attachment
+        # Re-upload it to get a REAL (non-ephemeral) CDN attachment
         file = discord.File(
-            fp=discord.BytesIO(image_bytes),
+            fp=io.BytesIO(image_bytes),
             filename=image.filename
         )
 
         await interaction.response.send_message(
-            "**Please copy the link below for use.**\n"
-            "⚠️⚠️ Do not delete this message or channel – the image link may no longer be valid if you do so.",
+            "✅ **please copy the link below for use.**\n"
+            "_note: do not delete this message or channel – the image link may no longer be valid if you do so._",
             file=file
         )
 
         # Get the message we just sent
         msg = await interaction.original_response()
 
-        # The real CDN link (non-ephemeral)
+        # Real permanent CDN link
         real_url = msg.attachments[0].url
 
-        # Edit message to add links (outside + inside box)
+        # Edit message to include link outside + inside box
         await msg.edit(
             content=(
-                "**Please copy the link below for use.**\n"
-                "⚠️⚠️ Do not delete this message or channel – the image link may no longer be valid if you do so.\n\n"
+                "✅ **please copy the link below for use.**\n"
+                "_note: do not delete this message or channel – the image link may no longer be valid if you do so._\n\n"
                 f"{real_url}\n\n"
                 f"```{real_url}```"
             )
