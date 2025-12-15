@@ -30,7 +30,7 @@
   "boost": {
     "enabled": true,
     "channel_id": 1398508734506078240,
-    "title": "thankyou \ud83d\ude48",
+    "title": "Thankyou \ud83d\ude48",
     "messages": {
       "single": "\ud83d\udc8e {mention} just boosted the server! \ud83d\udc8e",
       "double": "\ud83d\udd25 {mention} just boosted the server twice! \ud83d\udd25",
