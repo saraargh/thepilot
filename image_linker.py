@@ -22,7 +22,7 @@ async def setup(tree: app_commands.CommandTree):
             title="🖼️ Image link ready",
             description=(
                 "Copy the link below for use.\n\n"
-                "*Do not delete this message or channel — "
+                "⚠️*Do not delete this message or channel — "
                 "the image link may stop working if you do so.*"
             ),
             color=0x5865F2  # Discord blurple
