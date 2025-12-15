@@ -649,14 +649,13 @@ class RoleScopeSelect(discord.ui.Select):
                     embed=discord.Embed(title="🛂 Role Permissions", description="No role permissions configured.", color=discord.Color.blurple()),
                     view=PilotPanelView(state=PanelState.ROLES)
                 )
-            if interaction.channel:
-                await interaction.channel.send(embed=pages[0], view=RolesOverviewView(pages, 0))
-            embed = discord.Embed(
-                title="🛂 Role Permissions",
-                description="Roles overview posted below 👇\nPick a scope to manage roles.",
-                color=discord.Color.blurple()
+
+            # ✅ FIX: DO NOT send a new message. Edit the panel message in-place.
+            return await _safe_edit_panel_message(
+                interaction,
+                embed=pages[0],
+                view=RolesOverviewView(pages, 0)
             )
-            return await _safe_edit_panel_message(interaction, embed=embed, view=PilotPanelView(state=PanelState.ROLES))
 
         scope = choice
         embed = discord.Embed(
@@ -756,8 +755,7 @@ class RemoveRolesSelect(discord.ui.RoleSelect):
 
         save_settings(settings)
         await interaction.response.send_message(f"✅ Removed roles from **{SCOPES[self.scope]}**.")
-
-
+        
 # ======================================================
 # WELCOME MANAGEMENT (self-contained modals)
 # ======================================================
