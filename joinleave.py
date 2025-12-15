@@ -22,8 +22,8 @@ DEFAULT_CONFIG: Dict[str, Any] = {
         "welcome_channel_id": None,
         "title": "Welcome to the server, {user}! 👋🏼",
         "description": "",
-        "channels": {},              # slot_name -> channel_id
-        "arrival_images": [],        # list[str]
+        "channels": {},
+        "arrival_images": [],
         "bot_add": {
             "enabled": True,
             "channel_id": None
@@ -35,31 +35,33 @@ DEFAULT_CONFIG: Dict[str, Any] = {
         "log_leave": True,
         "log_kick": True,
         "log_ban": True
+    },
+    "boost": {
+        "enabled": True,
+        "channel_id": None,
+        "title": "🚀 Server Boost!",
+        "description": "{user} just boosted the server!",
+        "images": []
     }
 }
+
+# ======================================================
+# CONFIG IO
+# ======================================================
 
 def _gh_url() -> str:
     return f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
 
 def ensure_config(cfg: Dict[str, Any]) -> Dict[str, Any]:
-    cfg.setdefault("welcome", {})
-    cfg.setdefault("member_logs", {})
+    cfg.setdefault("welcome", DEFAULT_CONFIG["welcome"])
+    cfg.setdefault("member_logs", DEFAULT_CONFIG["member_logs"])
+    cfg.setdefault("boost", DEFAULT_CONFIG["boost"])
 
-    w = cfg["welcome"]
-    w.setdefault("enabled", True)
-    w.setdefault("welcome_channel_id", None)
-    w.setdefault("title", DEFAULT_CONFIG["welcome"]["title"])
-    w.setdefault("description", "")
-    w.setdefault("channels", {})
-    w.setdefault("arrival_images", [])
-    w.setdefault("bot_add", {"enabled": True, "channel_id": None})
+    cfg["welcome"].setdefault("channels", {})
+    cfg["welcome"].setdefault("arrival_images", [])
+    cfg["welcome"].setdefault("bot_add", {"enabled": True, "channel_id": None})
 
-    m = cfg["member_logs"]
-    m.setdefault("enabled", True)
-    m.setdefault("channel_id", None)
-    m.setdefault("log_leave", True)
-    m.setdefault("log_kick", True)
-    m.setdefault("log_ban", True)
+    cfg["boost"].setdefault("images", [])
 
     return cfg
 
@@ -69,9 +71,7 @@ def load_config() -> Dict[str, Any]:
         if r.status_code == 200:
             raw = base64.b64decode(r.json()["content"]).decode()
             cfg = json.loads(raw) if raw.strip() else DEFAULT_CONFIG.copy()
-            cfg = ensure_config(cfg)
-            return cfg
-        # create default
+            return ensure_config(cfg)
         save_config(DEFAULT_CONFIG.copy())
         return ensure_config(DEFAULT_CONFIG.copy())
     except Exception:
@@ -91,28 +91,33 @@ def save_config(cfg: Dict[str, Any]) -> None:
         }
         if sha:
             payload["sha"] = sha
+
         requests.put(_gh_url(), headers=HEADERS, json=payload, timeout=10)
     except Exception:
         pass
 
+# ======================================================
+# HELPERS
+# ======================================================
+
 def human_member_number(guild: discord.Guild) -> int:
     return len([m for m in guild.members if not m.bot])
 
-def render(text: str, *, user: discord.abc.User, guild: discord.Guild, member_count: int, channels: Dict[str, int]) -> str:
+def render(text: str, *, user, guild, member_count: int, channels: Dict[str, int]) -> str:
     if not text:
         return ""
     out = (
         text.replace("{user}", getattr(user, "name", ""))
-        .replace("{mention}", getattr(user, "mention", ""))
-        .replace("{server}", getattr(guild, "name", ""))
-        .replace("{member_count}", str(member_count))
+            .replace("{mention}", getattr(user, "mention", ""))
+            .replace("{server}", guild.name)
+            .replace("{member_count}", str(member_count))
     )
     for name, cid in (channels or {}).items():
         out = out.replace(f"{{channel:{name}}}", f"<#{cid}>")
     return out
 
 # ======================================================
-# MODALS
+# MODALS (UNCHANGED)
 # ======================================================
 
 class EditWelcomeTitleModal(Modal):
@@ -132,7 +137,12 @@ class EditWelcomeTextModal(Modal):
     def __init__(self):
         cfg = load_config()
         super().__init__(title="Edit Welcome Text")
-        self.text = TextInput(label="Text", style=discord.TextStyle.paragraph, default=cfg["welcome"]["description"], max_length=2000)
+        self.text = TextInput(
+            label="Text",
+            style=discord.TextStyle.paragraph,
+            default=cfg["welcome"]["description"],
+            max_length=2000
+        )
         self.add_item(self.text)
 
     async def on_submit(self, interaction: discord.Interaction):
@@ -169,7 +179,7 @@ class AddArrivalImageModal(Modal):
         await interaction.response.send_message("✅ Arrival image added.")
 
 # ======================================================
-# CHANNEL PICKERS
+# CHANNEL PICKERS (UNCHANGED)
 # ======================================================
 
 def _cid(v):
@@ -233,12 +243,14 @@ class ChannelSlotPickerView(discord.ui.View):
         await interaction.response.edit_message(content=f"✅ Saved slot **{self.slot}** → <#{cid}>", view=None)
 
 # ======================================================
-# RUNTIME SYSTEM
+# RUNTIME SYSTEM (WELCOME + LOGS + BOOST)
 # ======================================================
 
 class WelcomeSystem:
     def __init__(self, client: discord.Client):
         self.client = client
+
+    # ---------------- MEMBER JOIN ----------------
 
     async def on_member_join(self, member: discord.Member):
         if member.bot:
@@ -269,6 +281,8 @@ class WelcomeSystem:
 
         await channel.send(content=member.mention, embed=embed)
 
+    # ---------------- BOT ADD ----------------
+
     async def on_bot_join(self, member: discord.Member):
         cfg = load_config()
         b = cfg["welcome"]["bot_add"]
@@ -284,6 +298,8 @@ class WelcomeSystem:
             if entry.target and entry.target.id == member.id:
                 await channel.send(f"🤖 {entry.user.mention} added a bot ({member.name}) to the server.")
                 return
+
+    # ---------------- MEMBER REMOVE ----------------
 
     async def on_member_remove(self, member: discord.Member):
         cfg = load_config()
@@ -305,6 +321,8 @@ class WelcomeSystem:
         if m.get("log_leave"):
             await channel.send(f"{member.name} left the server")
 
+    # ---------------- MEMBER BAN ----------------
+
     async def on_member_ban(self, guild: discord.Guild, user: discord.User):
         cfg = load_config()
         m = cfg["member_logs"]
@@ -320,3 +338,37 @@ class WelcomeSystem:
             if entry.target and entry.target.id == user.id:
                 await channel.send(f"{user.name} was banned from the server by {entry.user}")
                 return
+
+    # ---------------- BOOST EVENT ----------------
+
+    async def on_member_update(self, before: discord.Member, after: discord.Member):
+        if before.premium_since == after.premium_since:
+            return  # no change
+
+        if after.premium_since is None:
+            return  # stopped boosting (ignore)
+
+        cfg = load_config()
+        b = cfg.get("boost", {})
+        if not b.get("enabled") or not b.get("channel_id"):
+            return
+
+        channel = self.client.get_channel(b["channel_id"])
+        if not channel:
+            return
+
+        count = human_member_number(after.guild)
+        now = discord.utils.utcnow().strftime("%H:%M")
+
+        embed = discord.Embed(
+            title=render(b.get("title", ""), user=after, guild=after.guild, member_count=count, channels={}),
+            description=render(b.get("description", ""), user=after, guild=after.guild, member_count=count, channels={}),
+            color=discord.Color.blurple()
+        )
+        embed.set_footer(text=f"🚀 Server Boost • Today at {now}")
+
+        imgs = b.get("images") or []
+        if imgs:
+            embed.set_image(url=random.choice(imgs))
+
+        await channel.send(embed=embed)
