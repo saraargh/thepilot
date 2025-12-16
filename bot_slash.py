@@ -25,15 +25,23 @@ class ThePilot(discord.Client):
         self.tree = app_commands.CommandTree(self)
         self.joinleave = WelcomeSystem(self)
 
+    # ---------------- MEMBER JOIN ----------------
     async def on_member_join(self, member: discord.Member):
         await self.joinleave.on_member_join(member)
 
+    # ---------------- MEMBER REMOVE (leave / kick) ----------------
     async def on_member_remove(self, member: discord.Member):
         await self.joinleave.on_member_remove(member)
 
+    # ---------------- MEMBER BAN ----------------
     async def on_member_ban(self, guild: discord.Guild, user: discord.User):
         await self.joinleave.on_member_ban(guild, user)
 
+    # ---------------- BOOST EVENTS (FIX) ----------------
+    async def on_member_update(self, before: discord.Member, after: discord.Member):
+        await self.joinleave.on_member_update(before, after)
+
+    # ---------------- SETUP ----------------
     async def setup_hook(self):
         scheduled_tasks.start(self)
 
@@ -54,10 +62,10 @@ class ThePilot(discord.Client):
         setup_warnings_commands(self.tree)
         setup_mute_commands(self, self.tree)
 
-        # ✅ ONLY /pilotsettings
+        # ✅ Admin panel
         setup_admin_settings(self.tree)
 
-        # ✅ /imagelink command
+        # ✅ Image linker
         await image_linker_setup(self.tree)
 
         await self.tree.sync()
@@ -65,12 +73,14 @@ class ThePilot(discord.Client):
 
 client = ThePilot()
 
+# ===== Scheduled tasks =====
 @tasks.loop(minutes=1)
 async def scheduled_tasks(bot_client):
     now = discord.utils.utcnow().astimezone(UK_TZ)
     guild = bot_client.guilds[0] if bot_client.guilds else None
     if guild:
         pass
+
 
 # ===== Flask keep-alive =====
 app = Flask("")
