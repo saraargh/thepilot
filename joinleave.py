@@ -1,6 +1,5 @@
 # joinleave.py
 import discord
-from discord.ui import Modal, TextInput
 import asyncio
 import random
 import os
@@ -133,6 +132,125 @@ class WelcomeSystem:
         self._recent_boosts: Dict[int, float] = {}
         self._last_tier: Dict[int, int] = {}
 
+    # ---------------- MEMBER JOIN ----------------
+
+    async def on_member_join(self, member: discord.Member):
+        cfg = load_config()
+
+        # ---- BOT ADD ----
+        if member.bot:
+            b = (cfg.get("welcome", {}) or {}).get("bot_add", {}) or {}
+            if not b.get("enabled") or not b.get("channel_id"):
+                return
+
+            channel = self.client.get_channel(b["channel_id"])
+            if not channel:
+                return
+
+            await asyncio.sleep(1.5)
+
+            async for entry in member.guild.audit_logs(
+                limit=5, action=discord.AuditLogAction.bot_add
+            ):
+                if entry.target and entry.target.id == member.id:
+                    await channel.send(
+                        f"🤖 {entry.user.mention} added a bot (**{member.name}**)"
+                    )
+                    return
+            return
+
+        # ---- WELCOME ----
+        w = cfg.get("welcome", {}) or {}
+        if not w.get("enabled") or not w.get("welcome_channel_id"):
+            return
+
+        channel = self.client.get_channel(w["welcome_channel_id"])
+        if not channel:
+            return
+
+        count = human_member_number(member.guild)
+        now = discord.utils.utcnow().strftime("%H:%M")
+
+        embed = discord.Embed(
+            title=render(
+                w.get("title", ""),
+                user=member,
+                guild=member.guild,
+                member_count=count,
+                channels=w.get("channels", {}),
+            ),
+            description=render(
+                w.get("description", ""),
+                user=member,
+                guild=member.guild,
+                member_count=count,
+                channels=w.get("channels", {}),
+            ),
+            color=discord.Color.blurple(),
+        )
+
+        embed.set_footer(
+            text=f"You landed as passenger #{count} ✈️ | Today at {now}"
+        )
+
+        imgs = w.get("arrival_images") or []
+        if imgs:
+            embed.set_image(url=random.choice(imgs))
+
+        await channel.send(content=member.mention, embed=embed)
+
+    # ---------------- MEMBER REMOVE ----------------
+
+    async def on_member_remove(self, member: discord.Member):
+        cfg = load_config()
+        m = cfg.get("member_logs", {}) or {}
+
+        if not m.get("enabled") or not m.get("channel_id"):
+            return
+
+        channel = self.client.get_channel(m["channel_id"])
+        if not channel:
+            return
+
+        await asyncio.sleep(1.5)
+
+        async for entry in member.guild.audit_logs(
+            limit=5, action=discord.AuditLogAction.kick
+        ):
+            if entry.target and entry.target.id == member.id:
+                if m.get("log_kick", True):
+                    await channel.send(
+                        f"🥾 **{member.name}** was kicked by {entry.user.mention}"
+                    )
+                return
+
+        if m.get("log_leave", True):
+            await channel.send(f"👋 **{member.name}** left the server")
+
+    # ---------------- MEMBER BAN ----------------
+
+    async def on_member_ban(self, guild: discord.Guild, user: discord.User):
+        cfg = load_config()
+        m = cfg.get("member_logs", {}) or {}
+
+        if not m.get("enabled") or not m.get("log_ban") or not m.get("channel_id"):
+            return
+
+        channel = self.client.get_channel(m["channel_id"])
+        if not channel:
+            return
+
+        await asyncio.sleep(1.5)
+
+        async for entry in guild.audit_logs(
+            limit=5, action=discord.AuditLogAction.ban
+        ):
+            if entry.target and entry.target.id == user.id:
+                await channel.send(
+                    f"⛔ **{user.name}** was banned by {entry.user.mention}"
+                )
+                return
+
     # ---------------- BOOST EVENT ----------------
 
     async def on_member_update(self, before: discord.Member, after: discord.Member):
@@ -142,8 +260,8 @@ class WelcomeSystem:
             return
 
         cfg = load_config()
-        b = cfg["boost"]
-        if not b["enabled"] or not b["channel_id"]:
+        b = cfg.get("boost", {}) or {}
+        if not b.get("enabled") or not b.get("channel_id"):
             return
 
         channel = self.client.get_channel(b["channel_id"])
@@ -164,22 +282,26 @@ class WelcomeSystem:
         user_id = after.id
         last_boost = self._recent_boosts.get(user_id)
 
-        # --- Decide message ---
         if new_tier > prev_tier:
             text = b["messages"]["tier"]
-
         elif last_boost and (now_ts - last_boost) <= 8:
             text = b["messages"]["double"]
-
         else:
             text = b["messages"]["single"]
 
         self._recent_boosts[user_id] = now_ts
 
         embed = discord.Embed(
-            description=render(text, user=after, guild=guild, member_count=total_boosts, channels={}),
-            color=discord.Color.blurple()
+            description=render(
+                text,
+                user=after,
+                guild=guild,
+                member_count=total_boosts,
+                channels={}
+            ),
+            color=discord.Color.blurple(),
         )
+
         embed.set_footer(
             text=f"{total_boosts} boosts total | Today at {now}"
         )
