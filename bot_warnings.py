@@ -19,7 +19,7 @@ HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
 PASSENGERS_ROLE_ID = 1404100554807971971
 WILLIAM_ROLE_ID = 1413545658006110401
 SAZZLES_ROLE_ID = 1404104881098195015
-KD_ROLE_ID = 1420817462290681936  # ✅ KD can warn Sazzles
+KD_ROLE_ID = 1420817462290681936  # KD can warn Sazzles
 
 # ------------------- Default JSON structure -------------------
 DEFAULT_DATA = {
@@ -109,20 +109,32 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
     async def warn(interaction: discord.Interaction, member: discord.Member, reason: str = None):
 
         author_roles = {r.id for r in interaction.user.roles}
+        target_roles = {r.id for r in member.roles}
 
         # ---------------- Sazzles protection (KD exception) ----------------
-        if SAZZLES_ROLE_ID in [r.id for r in member.roles]:
+        if SAZZLES_ROLE_ID in target_roles:
             if KD_ROLE_ID not in author_roles:
                 await interaction.response.send_message(
                     "❌ Only Mr KD can warn this user becausr she is too pretty to be warned and made this so you can all warn William!",
                     ephemeral=False
                 )
                 return
-            # KD is allowed → continue normally
+            # KD allowed → continue
+
+        # ---------------- PASSENGER → WILLIAM (ALLOWED) ----------------
+        if PASSENGERS_ROLE_ID in author_roles and WILLIAM_ROLE_ID in target_roles:
+            count = add_warning(member.id, reason)
+            msg = f"⚠️ {member.mention} was warned"
+            if reason:
+                msg += f" for {reason}"
+            msg += f", this is their {ordinal(count)} warning."
+            await interaction.response.send_message(msg, ephemeral=False)
+            return
 
         # ---------------- Permission check ----------------
         if not has_app_access(interaction.user, "warnings"):
-            # Passenger punishment logic preserved
+
+            # Passenger punishment (NOT William)
             if PASSENGERS_ROLE_ID in author_roles:
                 offender = interaction.user
                 target = member
