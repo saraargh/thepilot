@@ -57,7 +57,6 @@
       },
       "emoji": "🌈"
     },
-
     "deathnote": {
       "title": "Death Note",
       "description": "",
@@ -106,9 +105,8 @@
       },
       "emoji": "<:deathnote:1404113410303721612>"
     },
-
     "deceit": {
-      "title": "🐰 Deceit 2",
+      "title": "Deceit 2",
       "description": "",
       "multi_select": true,
       "roles": {
@@ -175,7 +173,6 @@
       },
       "emoji": null
     },
-
     "misc": {
       "title": "Miscellaneous",
       "description": "",
@@ -196,7 +193,6 @@
         }
       }
     },
-
     "pings": {
       "title": "Game Pings",
       "description": "",
