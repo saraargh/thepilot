@@ -25,12 +25,27 @@ def save_config(cfg: Dict[str, Any]) -> None:
     with open(CONFIG_FILE, "w", encoding="utf-8") as f:
         json.dump(cfg, f, indent=2, ensure_ascii=False)
 
-def guild_me(guild: discord.Guild) -> Optional[discord.Member]:
-    return guild.me or guild.get_member(guild.client.user.id)
+def ensure_shape(cfg: Dict[str, Any]) -> Dict[str, Any]:
+    cfg.setdefault("selfroles_channel_id", None)
+    cfg.setdefault("selfroles_message_id", None)
+
+    cfg.setdefault("logging", {})
+    cfg["logging"].setdefault("enabled", False)
+    cfg["logging"].setdefault("channel_id", None)
+
+    cfg.setdefault("auto_roles", {})
+    cfg["auto_roles"].setdefault("humans", [])
+    cfg["auto_roles"].setdefault("bots", [])
+
+    cfg.setdefault("categories", {})
+    return cfg
 
 # =========================================================
-# EMOJI / ROLE SAFETY
+# HELPERS
 # =========================================================
+
+def guild_me(guild: discord.Guild) -> Optional[discord.Member]:
+    return guild.me or guild.get_member(guild.client.user.id)
 
 def parse_emoji(raw: Optional[str]):
     if not raw:
@@ -52,11 +67,11 @@ def role_manageable(role: discord.Role, me: discord.Member) -> bool:
     return True
 
 # =========================================================
-# AUTO ROLES (HUMANS / BOTS)
+# AUTO ROLES
 # =========================================================
 
 async def apply_auto_roles(member: discord.Member):
-    cfg = load_config()
+    cfg = ensure_shape(load_config())
     auto = cfg.get("auto_roles", {})
     role_ids = auto.get("bots" if member.bot else "humans", [])
 
@@ -78,21 +93,39 @@ async def apply_auto_roles(member: discord.Member):
             pass
 
 # =========================================================
-# PUBLIC SELF-ROLES (LIST UI ONLY)
+# PUBLIC SELF-ROLES (CATEGORY + ROLE LIST — NO BUTTONS)
 # =========================================================
 
+def public_embed() -> discord.Embed:
+    return discord.Embed(
+        title="✨ Choose Your Roles",
+        description=(
+            "Select a category, then pick your roles.\n"
+            "You can change these any time ✈️"
+        ),
+        color=discord.Color.blurple(),
+    )
+
+def role_embed(cat: dict) -> discord.Embed:
+    return discord.Embed(
+        title=cat.get("title", "Roles"),
+        description="Select your roles from the list below.",
+        color=discord.Color.blurple(),
+    )
+
 class CategorySelect(discord.ui.Select):
-    def __init__(self):
-        cfg = load_config()
+    def __init__(self, selected: Optional[str] = None):
+        cfg = ensure_shape(load_config())
         categories = cfg.get("categories", {}) or {}
 
-        options = []
+        options: List[discord.SelectOption] = []
         for key, cat in categories.items():
             options.append(
                 discord.SelectOption(
                     label=(cat.get("title") or key)[:100],
                     value=key,
-                    emoji=parse_emoji(cat.get("emoji"))
+                    emoji=parse_emoji(cat.get("emoji")),
+                    default=(key == selected),
                 )
             )
 
@@ -100,43 +133,37 @@ class CategorySelect(discord.ui.Select):
             placeholder="Select a category…",
             min_values=1,
             max_values=1,
-            options=options[:25]
+            options=options[:25],
         )
 
     async def callback(self, interaction: discord.Interaction):
-        cfg = load_config()
         key = self.values[0]
+        cfg = ensure_shape(load_config())
         cat = cfg.get("categories", {}).get(key)
 
         if not cat:
             return await interaction.response.send_message(
                 "❌ Category no longer exists.",
-                ephemeral=True
+                ephemeral=True,
             )
 
-        roles = cat.get("roles", {}) or {}
-        if not roles:
-            return await interaction.response.send_message(
-                "ℹ️ No roles in this category yet.",
-                ephemeral=True
-            )
-
+        view = PublicSelfRolesView(active_category=key)
         await interaction.response.edit_message(
             embed=role_embed(cat),
-            view=RoleSelectView(key, cat)
+            view=view,
         )
 
 class RoleSelect(discord.ui.Select):
     def __init__(self, category_key: str, category: dict):
         self.category_key = category_key
 
-        options = []
+        options: List[discord.SelectOption] = []
         for rid, meta in category.get("roles", {}).items():
             options.append(
                 discord.SelectOption(
                     label=(meta.get("label") or "Role")[:100],
                     value=str(rid),
-                    emoji=parse_emoji(meta.get("emoji"))
+                    emoji=parse_emoji(meta.get("emoji")),
                 )
             )
 
@@ -146,7 +173,7 @@ class RoleSelect(discord.ui.Select):
             placeholder="Select your roles…",
             min_values=0,
             max_values=len(options) if multi else 1,
-            options=options[:25]
+            options=options[:25],
         )
 
     async def callback(self, interaction: discord.Interaction):
@@ -154,7 +181,7 @@ class RoleSelect(discord.ui.Select):
         if not member:
             return
 
-        cfg = load_config()
+        cfg = ensure_shape(load_config())
         cat = cfg.get("categories", {}).get(self.category_key)
         if not cat:
             return
@@ -163,12 +190,12 @@ class RoleSelect(discord.ui.Select):
         if not me:
             return
 
-        valid_role_ids = {int(r) for r in cat.get("roles", {}).keys()}
+        valid_ids = {int(r) for r in cat.get("roles", {}).keys()}
         selected = {int(v) for v in self.values}
 
         added, removed = [], []
 
-        for rid in valid_role_ids:
+        for rid in valid_ids:
             role = interaction.guild.get_role(rid)
             if not role or not role_manageable(role, me):
                 continue
@@ -190,56 +217,28 @@ class RoleSelect(discord.ui.Select):
 
         await interaction.response.send_message("\n".join(lines), ephemeral=True)
 
-class RoleSelectView(discord.ui.View):
-    def __init__(self, key: str, cat: dict):
-        super().__init__(timeout=None)
-        self.add_item(RoleSelect(key, cat))
-
 class PublicSelfRolesView(discord.ui.View):
-    def __init__(self):
+    def __init__(self, active_category: Optional[str] = None):
         super().__init__(timeout=None)
-        self.add_item(CategorySelect())
 
-def public_embed() -> discord.Embed:
-    return discord.Embed(
-        title="✨ Choose Your Roles",
-        description="Tap a category, then pick your roles.\nYou can change these any time ✈️",
-        color=discord.Color.blurple()
-    )
+        cfg = ensure_shape(load_config())
+        categories = cfg.get("categories", {}) or {}
 
-def role_embed(cat: dict) -> discord.Embed:
-    return discord.Embed(
-        title=cat.get("title", "Roles"),
-        description="Select your roles from the list below.",
-        color=discord.Color.blurple()
-    )
-    
+        # Category selector ALWAYS visible
+        self.add_item(CategorySelect(selected=active_category))
+
+        # Role selector ONLY if a category is active
+        if active_category and active_category in categories:
+            cat = categories[active_category]
+            if cat.get("roles"):
+                self.add_item(RoleSelect(active_category, cat))
+
 # =========================================================
-# ADMIN PANELS + DEPLOY/UPDATE MENU + ROLE/CATEGORY EDITORS
+# ADMIN PANELS + DEPLOY/UPDATE MENU + EDITORS + LOGGING
 # =========================================================
-
-def ensure_shape(cfg: Dict[str, Any]) -> Dict[str, Any]:
-    cfg.setdefault("selfroles_channel_id", None)
-    cfg.setdefault("selfroles_message_id", None)
-
-    cfg.setdefault("logging", {})
-    cfg["logging"].setdefault("enabled", False)
-    cfg["logging"].setdefault("channel_id", None)
-
-    cfg.setdefault("auto_roles", {})
-    cfg["auto_roles"].setdefault("humans", [])
-    cfg["auto_roles"].setdefault("bots", [])
-
-    cfg.setdefault("categories", {})
-    # category shape:
-    # categories[key] = {"title": "...", "emoji": "<:x:id>"| "❤️" | None, "multi_select": bool, "roles": {rid: {"label": "...", "emoji": "..."} } }
-    return cfg
 
 def save_config_safe(cfg: Dict[str, Any]) -> None:
     save_config(ensure_shape(cfg))
-
-def log_enabled(cfg: Dict[str, Any]) -> bool:
-    return bool((cfg.get("logging") or {}).get("enabled"))
 
 async def send_log(guild: discord.Guild, embed: discord.Embed):
     cfg = ensure_shape(load_config())
@@ -273,7 +272,7 @@ async def deploy_or_update_menu(guild: discord.Guild) -> str:
 
     # Persistent list-based view (NO buttons)
     em = public_embed()
-    view = PublicSelfRolesView()
+    view = PublicSelfRolesView(active_category=None)
 
     mid = cfg.get("selfroles_message_id")
     if mid:
@@ -290,41 +289,51 @@ async def deploy_or_update_menu(guild: discord.Guild) -> str:
     return "✅ Posted a new self-role menu."
 
 # =========================================================
-# ADMIN: SET CHANNEL PICKERS
+# ADMIN: SET CHANNEL PICKERS (USES SELECT VALUES PROPERLY)
 # =========================================================
 
 class SetSelfRolesChannelView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=180)
-        sel = discord.ui.ChannelSelect(channel_types=[discord.ChannelType.text], min_values=1, max_values=1)
-        sel.callback = self.pick  # type: ignore
-        self.add_item(sel)
+
+        self.sel = discord.ui.ChannelSelect(
+            placeholder="Select the self-roles channel",
+            channel_types=[discord.ChannelType.text],
+            min_values=1,
+            max_values=1,
+        )
+        self.sel.callback = self.pick  # type: ignore
+        self.add_item(self.sel)
 
     async def pick(self, interaction: discord.Interaction):
-        channel = interaction.data["values"][0]
-        cid = int(channel)
+        channel: discord.abc.GuildChannel = self.sel.values[0]
         cfg = ensure_shape(load_config())
-        cfg["selfroles_channel_id"] = cid
+        cfg["selfroles_channel_id"] = channel.id
         save_config_safe(cfg)
-        await interaction.response.send_message(f"📍 Self-roles channel set to <#{cid}>", ephemeral=True)
+        await interaction.response.send_message(f"📍 Self-roles channel set to {channel.mention}", ephemeral=True)
 
 class SetLogChannelView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=180)
-        sel = discord.ui.ChannelSelect(channel_types=[discord.ChannelType.text], min_values=1, max_values=1)
-        sel.callback = self.pick  # type: ignore
-        self.add_item(sel)
+
+        self.sel = discord.ui.ChannelSelect(
+            placeholder="Select the log channel",
+            channel_types=[discord.ChannelType.text],
+            min_values=1,
+            max_values=1,
+        )
+        self.sel.callback = self.pick  # type: ignore
+        self.add_item(self.sel)
 
     async def pick(self, interaction: discord.Interaction):
-        channel = interaction.data["values"][0]
-        cid = int(channel)
+        channel: discord.abc.GuildChannel = self.sel.values[0]
         cfg = ensure_shape(load_config())
-        cfg["logging"]["channel_id"] = cid
+        cfg["logging"]["channel_id"] = channel.id
         save_config_safe(cfg)
-        await interaction.response.send_message(f"🧾 Log channel set to <#{cid}>", ephemeral=True)
+        await interaction.response.send_message(f"🧾 Log channel set to {channel.mention}", ephemeral=True)
 
 # =========================================================
-# ADMIN: CATEGORY MODAL (allows custom emoji in title via separate emoji field)
+# ADMIN: CATEGORY MODAL (custom emoji supported via emoji field)
 # =========================================================
 
 class CategoryModal(discord.ui.Modal, title="Category Settings"):
@@ -382,17 +391,11 @@ class CategoryModal(discord.ui.Modal, title="Category Settings"):
         if self.mode == "add":
             if key in cats:
                 return await interaction.response.send_message("❌ That category key already exists.", ephemeral=True)
-            cats[key] = {
-                "title": self.title_in.value.strip(),
-                "emoji": emoji_raw or None,
-                "multi_select": multi,
-                "roles": {}
-            }
+            cats[key] = {"title": self.title_in.value.strip(), "emoji": emoji_raw or None, "multi_select": multi, "roles": {}}
         else:
             if not self.existing_key or self.existing_key not in cats:
                 return await interaction.response.send_message("❌ Category missing.", ephemeral=True)
 
-            # rename key if changed
             if key != self.existing_key:
                 if key in cats:
                     return await interaction.response.send_message("❌ New key already exists.", ephemeral=True)
@@ -420,7 +423,7 @@ def category_options(cfg: Dict[str, Any]) -> List[discord.SelectOption]:
         opts.append(discord.SelectOption(
             label=(v.get("title") or k)[:100],
             value=k,
-            emoji=parse_emoji(v.get("emoji"))
+            emoji=parse_emoji(v.get("emoji")),
         ))
     return opts
 
@@ -430,7 +433,7 @@ class CategoryPicker(discord.ui.Select):
         super().__init__(placeholder=placeholder, min_values=1, max_values=1, options=category_options(cfg))
 
 # =========================================================
-# ADMIN: CATEGORY MANAGER VIEW
+# ADMIN: CATEGORY MANAGER
 # =========================================================
 
 class CategoryManagerView(discord.ui.View):
@@ -479,7 +482,8 @@ class CategoryManagerView(discord.ui.View):
         await interaction.response.send_message("❌ Category missing.", ephemeral=True)
 
 # =========================================================
-# ADMIN: ROLES IN CATEGORIES (multi-add up to 25 + emoji defaults)
+# ADMIN: ROLES IN CATEGORIES (multi-add up to 25)
+# - IMPORTANT: Discord UI limits are 25 per select. That's the max.
 # =========================================================
 
 class RoleMetaModal(discord.ui.Modal, title="Role Display (Optional Override)"):
@@ -566,29 +570,20 @@ class RolesCategoryManagerView(discord.ui.View):
             for role in rs.values:
                 if not role_manageable(role, me):
                     continue
-
                 rid = str(role.id)
                 if rid in roles_cfg:
                     continue
 
-                # Default emoji: if role has an icon, discord does NOT expose "emoji in name",
-                # so default to None. You can still put emoji in label manually.
-                roles_cfg[rid] = {
-                    "label": role.name,   # label can include emoji text manually later
-                    "emoji": None
-                }
+                roles_cfg[rid] = {"label": role.name, "emoji": None}
                 added.append(role)
 
             cat["roles"] = roles_cfg
             save_config_safe(cfg)
 
             if added:
-                await i.response.send_message(
-                    "✅ Added: " + ", ".join(r.mention for r in added),
-                    ephemeral=True
-                )
+                await i.response.send_message("✅ Added: " + ", ".join(r.mention for r in added), ephemeral=True)
             else:
-                await i.response.send_message("ℹ️ No roles added (maybe blocked / already present).", ephemeral=True)
+                await i.response.send_message("ℹ️ No roles added (blocked / already present).", ephemeral=True)
 
         rs.callback = on_pick  # type: ignore
         v.add_item(rs)
@@ -611,9 +606,9 @@ class RolesCategoryManagerView(discord.ui.View):
         options = []
         for rid, meta in list(roles_cfg.items())[:25]:
             options.append(discord.SelectOption(
-                label=(meta.get("label") or rid)[:100],
+                label=(meta.get("label") or str(rid))[:100],
                 value=str(rid),
-                emoji=parse_emoji(meta.get("emoji"))
+                emoji=parse_emoji(meta.get("emoji")),
             ))
 
         sel = discord.ui.Select(placeholder="Pick a role to remove", min_values=1, max_values=1, options=options)
@@ -655,9 +650,9 @@ class RolesCategoryManagerView(discord.ui.View):
         options = []
         for rid, meta in list(roles_cfg.items())[:25]:
             options.append(discord.SelectOption(
-                label=(meta.get("label") or rid)[:100],
+                label=(meta.get("label") or str(rid))[:100],
                 value=str(rid),
-                emoji=parse_emoji(meta.get("emoji"))
+                emoji=parse_emoji(meta.get("emoji")),
             ))
 
         sel = discord.ui.Select(placeholder="Pick a role to edit", min_values=1, max_values=1, options=options)
@@ -695,7 +690,7 @@ class LoggingView(discord.ui.View):
         save_config_safe(cfg)
         await interaction.response.send_message(
             f"🧾 Logging is now **{'ON' if cfg['logging']['enabled'] else 'OFF'}**.",
-            ephemeral=True
+            ephemeral=True,
         )
 
     @discord.ui.button(label="📍 Set Log Channel", style=discord.ButtonStyle.secondary)
@@ -789,7 +784,7 @@ class AutoRolesView(discord.ui.View):
         await interaction.response.send_message("Pick one:", view=v, ephemeral=True)
 
 # =========================================================
-# ADMIN: ASSIGN / REMOVE ROLES FOR USERS (ONLY MANAGEABLE ROLES)
+# ADMIN: ASSIGN / REMOVE ROLES FOR USERS (manageable roles only)
 # =========================================================
 
 class AdminUserRoleView(discord.ui.View):
@@ -808,13 +803,14 @@ class PickUserView(discord.ui.View):
     def __init__(self, mode: str):
         super().__init__(timeout=180)
         self.mode = mode
-        us = discord.ui.UserSelect(placeholder="Pick a user", min_values=1, max_values=1)
-        us.callback = self.pick  # type: ignore
-        self.add_item(us)
+        self.us = discord.ui.UserSelect(placeholder="Pick a user", min_values=1, max_values=1)
+        self.us.callback = self.pick  # type: ignore
+        self.add_item(self.us)
 
     async def pick(self, interaction: discord.Interaction):
-        user = interaction.data["values"][0]
-        uid = int(user)
+        user: discord.User = self.us.values[0]
+        uid = user.id
+
         if self.mode == "assign":
             await interaction.response.send_message("Pick a role to assign:", view=PickRoleAssignView(uid), ephemeral=True)
         else:
@@ -826,10 +822,9 @@ class PickRoleAssignView(discord.ui.View):
     def __init__(self, user_id: int):
         super().__init__(timeout=180)
         self.user_id = user_id
-        rs = discord.ui.RoleSelect(placeholder="Pick a role", min_values=1, max_values=1)
-        rs.callback = self.pick  # type: ignore
-        self.add_item(rs)
-        self.rs = rs
+        self.rs = discord.ui.RoleSelect(placeholder="Pick a role", min_values=1, max_values=1)
+        self.rs.callback = self.pick  # type: ignore
+        self.add_item(self.rs)
 
     async def pick(self, interaction: discord.Interaction):
         assert interaction.guild is not None
@@ -841,7 +836,7 @@ class PickRoleAssignView(discord.ui.View):
         if not member:
             return await interaction.response.send_message("❌ User not found.", ephemeral=True)
 
-        role = self.rs.values[0]
+        role: discord.Role = self.rs.values[0]
         if not role_manageable(role, me):
             return await interaction.response.send_message("❌ That role is blocked / not manageable.", ephemeral=True)
 
@@ -870,8 +865,8 @@ class PickRoleRemoveView(discord.ui.View):
         self.add_item(self.sel)
 
     async def populate(self, guild: discord.Guild):
-        member = guild.get_member(self.user_id)
-        me = guild_me(guild)
+        member = guild.get_member(self.user_id) if guild else None
+        me = guild_me(guild) if guild else None
         if not member or not me:
             self.sel.options = [discord.SelectOption(label="(Not available)", value="__none__", default=True)]
             return
@@ -886,6 +881,7 @@ class PickRoleRemoveView(discord.ui.View):
 
     async def pick(self, interaction: discord.Interaction):
         assert interaction.guild is not None
+
         if self.sel.values[0] == "__none__":
             return await interaction.response.send_message("ℹ️ Nothing to remove.", ephemeral=True)
 
@@ -960,7 +956,6 @@ class RoleSettingsDashboard(discord.ui.View):
 
 @app_commands.command(name="rolesettings", description="Admin panel for self-roles + role tools")
 async def rolesettings(interaction: discord.Interaction):
-    # ✅ Admin access = Pilot permissions (has_global_access)
     if not isinstance(interaction.user, discord.Member) or not has_global_access(interaction.user):
         return await interaction.response.send_message("❌ You do not have permission to use this.", ephemeral=True)
 
@@ -981,7 +976,7 @@ async def rolesettings(interaction: discord.Interaction):
     embed = discord.Embed(
         title="⚙️ Role Settings",
         description="\n".join(desc),
-        color=discord.Color.blurple()
+        color=discord.Color.blurple(),
     )
 
     await interaction.response.send_message(embed=embed, view=RoleSettingsDashboard(), ephemeral=True)
@@ -991,11 +986,10 @@ async def rolesettings(interaction: discord.Interaction):
 # =========================================================
 
 def setup(tree: app_commands.CommandTree, client: discord.Client):
-    # Register admin slash command
     tree.add_command(rolesettings)
 
     # Register persistent public view so it survives restarts
     try:
-        client.add_view(PublicSelfRolesView())
+        client.add_view(PublicSelfRolesView(active_category=None))
     except Exception:
         pass
