@@ -1,14 +1,17 @@
 {
   "selfroles_channel_id": 1444274467864838207,
   "selfroles_message_id": 1451970085928435872,
+
   "logging": {
     "enabled": false,
     "channel_id": 1444274467864838207
   },
+
   "auto_roles": {
     "humans": [],
     "bots": []
   },
+
   "categories": {
     "colours": {
       "title": "🎨 Colour Roles",
@@ -19,31 +22,55 @@
           "label": "Red",
           "emoji": "❤️"
         }
-      },
-      "emoji": null
+      }
     },
+
     "deathnote": {
-      "title": "🩸 Deathnote",
+      "title": "📓 Death Note",
       "description": "",
       "multi_select": true,
       "roles": {
-        "1404160898280587307": {
-          "label": "Bad Mello",
-          "emoji": null
+        "1405497055409082470": {
+          "label": "Worst NPA Ever",
+          "emoji": "<:WorstNPAEver:1405497744055078973>"
         },
-        "1404160867074838650": {
-          "label": "Good Mello",
-          "emoji": null
+        "1405499537208119326": {
+          "label": "Best NPA Ever",
+          "emoji": "<:BestNPAEver:1405499582443556915>"
+        },
+        "1405502648374792294": {
+          "label": "Wise Watari",
+          "emoji": "<:GoodWatari:1405501962853552128>"
+        },
+        "1405502702510805026": {
+          "label": "Washed Watari",
+          "emoji": "<:WashedWatari:1405505730164822077>"
+        },
+        "1404160423888027891": {
+          "label": "L Team",
+          "emoji": "<:LTeam:1405498627261988876>"
+        },
+        "1404160469970976928": {
+          "label": "Kira Team",
+          "emoji": "<:KiraTeam:1405498676754907187>"
+        },
+        "1405502738560847942": {
+          "label": "Shinigami Eyes",
+          "emoji": "<:ShinigamiEyes:1405501964929732650>"
         },
         "1404160542783967333": {
           "label": "Mello Victim",
-          "emoji": null
+          "emoji": "<:MelloVictim:1405506680367743058>"
+        },
+        "1404160867074838650": {
+          "label": "Good Mello",
+          "emoji": "<:GoodMello:1405498755549102181>"
+        },
+        "1404160898280587307": {
+          "label": "Bad Mello",
+          "emoji": "<:BadMello:1405505935761211412>"
         }
-      },
-      "emoji": null
+      }
     }
-  },
-  "selfroles_message_ids": [
-    1451962778360217632
-  ]
+  }
 }
