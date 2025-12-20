@@ -144,6 +144,13 @@
         }
       },
       "emoji": null
+    },
+    "misc": {
+      "title": "Miscellaneous",
+      "description": "",
+      "emoji": "💛",
+      "multi_select": true,
+      "roles": {}
     }
   },
   "selfroles_message_id": 1452031024006434920
