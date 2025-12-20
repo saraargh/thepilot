@@ -3,6 +3,7 @@ import discord
 from discord import app_commands
 from datetime import datetime, timedelta
 from collections import defaultdict, deque
+from typing import Optional
 
 MAX_HISTORY = 10
 EXPIRE_AFTER = 300  # 5 minutes
@@ -21,20 +22,24 @@ def clean(q: deque):
         q.popleft()
 
 
-# ---------------- PAGINATION VIEW ----------------
+def resolve_channel(
+    interaction: discord.Interaction,
+    channel: Optional[discord.TextChannel]
+) -> discord.TextChannel:
+    return channel if channel else interaction.channel
+
+
+# ---------------- PAGINATED VIEW (ISNIPE ONLY) ----------------
 class ISnipeView(discord.ui.View):
-    def __init__(self, entries: list):
+    def __init__(self, entries: list[dict]):
         super().__init__(timeout=EXPIRE_AFTER)
         self.entries = entries
         self.index = 0
 
-    def embed(self) -> discord.Embed:
+    def build_embed(self) -> discord.Embed:
         e = self.entries[self.index]
 
-        colour = (
-            discord.Colour.red() if e["type"] == "delete"
-            else discord.Colour.orange()
-        )
+        colour = discord.Colour.red() if e["type"] == "delete" else discord.Colour.orange()
 
         embed = discord.Embed(
             title=f"✈️ Incident Log ({self.index + 1}/{len(self.entries)})",
@@ -55,28 +60,28 @@ class ISnipeView(discord.ui.View):
             )
         else:
             embed.add_field(
-                name="✏️ Before Edit",
+                name="✏️ Before",
                 value=e["before"] or "*[Empty]*",
                 inline=False
             )
             embed.add_field(
-                name="After Edit",
+                name="After",
                 value=e["after"] or "*[Empty]*",
                 inline=False
             )
 
-        embed.set_footer(text="🕔 Flight data will self-purge in 5 minutes")
+        embed.set_footer(text="Auto-purges in 5 minutes")
         return embed
 
     @discord.ui.button(label="◀", style=discord.ButtonStyle.secondary)
     async def back(self, interaction: discord.Interaction, _):
         self.index = max(0, self.index - 1)
-        await interaction.response.edit_message(embed=self.embed(), view=self)
+        await interaction.response.edit_message(embed=self.build_embed(), view=self)
 
     @discord.ui.button(label="▶", style=discord.ButtonStyle.secondary)
     async def next(self, interaction: discord.Interaction, _):
         self.index = min(len(self.entries) - 1, self.index + 1)
-        await interaction.response.edit_message(embed=self.embed(), view=self)
+        await interaction.response.edit_message(embed=self.build_embed(), view=self)
 
 
 # ---------------- SETUP ----------------
@@ -85,7 +90,7 @@ def setup(client: discord.Client, tree: app_commands.CommandTree):
     # ---------- DELETE ----------
     @client.event
     async def on_message_delete(message: discord.Message):
-        if message.author.bot or not message.guild:
+        if not message.guild or message.author.bot:
             return
 
         DELETED[message.channel.id].append({
@@ -98,7 +103,7 @@ def setup(client: discord.Client, tree: app_commands.CommandTree):
     # ---------- EDIT ----------
     @client.event
     async def on_message_edit(before: discord.Message, after: discord.Message):
-        if before.author.bot or not before.guild:
+        if not before.guild or before.author.bot:
             return
         if before.content == after.content:
             return
@@ -112,20 +117,32 @@ def setup(client: discord.Client, tree: app_commands.CommandTree):
         })
 
     # ---------- /SNIPE ----------
-    @tree.command(name="snipe", description="✈️ Snipe the last deleted message")
-    @app_commands.describe(ephemeral="Only visible to you?")
-    async def snipe(interaction: discord.Interaction, ephemeral: bool = False):
-        q = DELETED[interaction.channel.id]
+    @tree.command(name="snipe", description="✈️ Snipe a deleted message")
+    @app_commands.describe(
+        channel="Channel to snipe (defaults to current)",
+        num_back="How far back (1 = most recent, max 10)",
+        ephemeral="Only visible to you?"
+    )
+    async def snipe(
+        interaction: discord.Interaction,
+        channel: Optional[discord.TextChannel] = None,
+        num_back: int = 1,
+        ephemeral: bool = False
+    ):
+        target = resolve_channel(interaction, channel)
+        q = DELETED[target.id]
         clean(q)
 
         if not q:
             await interaction.response.send_message(
-                "🛬 Nothing to snipe.",
+                "🛬 Nothing to snipe in that channel.",
                 ephemeral=True
             )
             return
 
-        s = q[-1]
+        num_back = max(1, min(num_back, len(q)))
+        s = q[-num_back]
+
         embed = discord.Embed(
             title="✈️ Black Box — Deleted Message",
             description=s["content"] or "*[No content]*",
@@ -136,7 +153,7 @@ def setup(client: discord.Client, tree: app_commands.CommandTree):
             name=str(s["author"]),
             icon_url=s["author"].display_avatar.url
         )
-        embed.set_footer(text="🗑️ Deleted • Auto-purges in 5 minutes")
+        embed.set_footer(text=f"{target.name} • {num_back} back")
 
         await interaction.response.send_message(
             embed=embed,
@@ -145,20 +162,32 @@ def setup(client: discord.Client, tree: app_commands.CommandTree):
         )
 
     # ---------- /ESNIPE ----------
-    @tree.command(name="esnipe", description="✈️ Snipe the last edited message")
-    @app_commands.describe(ephemeral="Only visible to you?")
-    async def esnipe(interaction: discord.Interaction, ephemeral: bool = False):
-        q = EDITED[interaction.channel.id]
+    @tree.command(name="esnipe", description="✈️ Snipe an edited message")
+    @app_commands.describe(
+        channel="Channel to snipe (defaults to current)",
+        num_back="How far back (1 = most recent, max 10)",
+        ephemeral="Only visible to you?"
+    )
+    async def esnipe(
+        interaction: discord.Interaction,
+        channel: Optional[discord.TextChannel] = None,
+        num_back: int = 1,
+        ephemeral: bool = False
+    ):
+        target = resolve_channel(interaction, channel)
+        q = EDITED[target.id]
         clean(q)
 
         if not q:
             await interaction.response.send_message(
-                "🛬 No edits detected.",
+                "🛬 No edits detected in that channel.",
                 ephemeral=True
             )
             return
 
-        s = q[-1]
+        num_back = max(1, min(num_back, len(q)))
+        s = q[-num_back]
+
         embed = discord.Embed(
             title="✈️ Flight Recorder — Edited Message",
             colour=discord.Colour.orange(),
@@ -170,7 +199,7 @@ def setup(client: discord.Client, tree: app_commands.CommandTree):
         )
         embed.add_field(name="✏️ Before", value=s["before"] or "*[Empty]*", inline=False)
         embed.add_field(name="After", value=s["after"] or "*[Empty]*", inline=False)
-        embed.set_footer(text="✏️ Edited • Auto-purges in 5 minutes")
+        embed.set_footer(text=f"{target.name} • {num_back} back")
 
         await interaction.response.send_message(
             embed=embed,
@@ -178,16 +207,25 @@ def setup(client: discord.Client, tree: app_commands.CommandTree):
             delete_after=None if ephemeral else EXPIRE_AFTER
         )
 
-    # ---------- /ISNIPE ----------
-    @tree.command(name="isnipe", description="✈️ Browse recent incidents")
-    @app_commands.describe(ephemeral="Only visible to you?")
-    async def isnipe(interaction: discord.Interaction, ephemeral: bool = False):
-        dq = DELETED[interaction.channel.id]
-        eq = EDITED[interaction.channel.id]
+    # ---------- /ISNIPE (PAGINATED) ----------
+    @tree.command(name="isnipe", description="✈️ Browse deleted + edited messages")
+    @app_commands.describe(
+        channel="Channel to inspect (defaults to current)",
+        ephemeral="Only visible to you?"
+    )
+    async def isnipe(
+        interaction: discord.Interaction,
+        channel: Optional[discord.TextChannel] = None,
+        ephemeral: bool = False
+    ):
+        target = resolve_channel(interaction, channel)
+
+        dq = DELETED[target.id]
+        eq = EDITED[target.id]
         clean(dq)
         clean(eq)
 
-        entries = []
+        entries: list[dict] = []
 
         for d in dq:
             entries.append({
@@ -208,7 +246,7 @@ def setup(client: discord.Client, tree: app_commands.CommandTree):
 
         if not entries:
             await interaction.response.send_message(
-                "🛬 No incidents logged.",
+                "🛬 No incidents logged in that channel.",
                 ephemeral=True
             )
             return
@@ -216,8 +254,9 @@ def setup(client: discord.Client, tree: app_commands.CommandTree):
         entries = sorted(entries, key=lambda x: x["time"], reverse=True)[:MAX_HISTORY]
 
         view = ISnipeView(entries)
+
         await interaction.response.send_message(
-            embed=view.embed(),
+            embed=view.build_embed(),
             view=view,
             ephemeral=ephemeral,
             delete_after=None if ephemeral else EXPIRE_AFTER
