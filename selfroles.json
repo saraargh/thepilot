@@ -30,7 +30,7 @@
       "emoji": "🌈"
     },
     "deathnote": {
-      "title": "📓 Death Note",
+      "title": "Death Note",
       "description": "",
       "multi_select": true,
       "roles": {
@@ -75,7 +75,7 @@
           "emoji": "<:BadMello:1405505935761211412>"
         }
       },
-      "emoji": null
+      "emoji": "<:deathnote:1404113410303721612>"
     },
     "deceit": {
       "title": "🐰 Deceit 2",
