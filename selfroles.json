@@ -1,28 +1,28 @@
 {
   "selfroles_channel_id": 1444274467864838207,
   "selfroles_message_id": null,
-
   "logging": {
     "enabled": false,
     "channel_id": 1444274467864838207
   },
-
   "auto_roles": {
     "humans": [],
     "bots": []
   },
-  
   "categories": {
-  "colours": {
-    "title": "🎨 Colour Roles",
-    "description": "",
-    "multi_select": false,
-    "roles": {
-      "1404106263578546288": {
-        "label": "Red",
-        "emoji": "❤️"
+    "colours": {
+      "title": "🎨 Colour Roles",
+      "description": "",
+      "multi_select": false,
+      "roles": {
+        "1404106263578546288": {
+          "label": "Red",
+          "emoji": "❤️"
+        }
       }
     }
-  }
-}
+  },
+  "selfroles_message_ids": [
+    1451962778360217632
+  ]
 }
