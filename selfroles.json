@@ -1,12 +1,16 @@
 {
   "selfroles_channel_id": null,
+  "selfroles_message_id": null,
+
   "logging": {
     "enabled": false,
     "channel_id": null
   },
+
   "auto_roles": {
     "humans": [],
     "bots": []
   },
+
   "categories": {}
 }
