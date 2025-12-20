@@ -7,10 +7,9 @@ from typing import Any, Dict, List, Optional, Tuple
 import discord
 from discord import app_commands
 
-CONFIG_FILE = "selfroles.json"
+from permissions import has_app_access
 
-# Injected from botslash.py via setup()
-_ALLOWED_ROLE_IDS: List[int] = []
+CONFIG_FILE = "selfroles.json"
 
 
 # ======================================================
@@ -34,12 +33,8 @@ def _guild_me(guild: discord.Guild) -> Optional[discord.Member]:
 
 
 # ======================================================
-# Permissions / guardrails
+# Guardrails
 # ======================================================
-
-def _has_admin_access(member: discord.Member) -> bool:
-    return any(r.id in _ALLOWED_ROLE_IDS for r in member.roles)
-
 
 def _role_assignable(role: discord.Role, me: discord.Member) -> bool:
     if role.is_default():
@@ -63,7 +58,7 @@ def _parse_emoji(raw: str | None) -> Optional[discord.PartialEmoji]:
 
 
 # ======================================================
-# Auto-roles (humans vs bots)
+# Auto roles (humans vs bots)
 # ======================================================
 
 async def apply_auto_roles(member: discord.Member) -> None:
@@ -94,7 +89,7 @@ async def apply_auto_roles(member: discord.Member) -> None:
 
 
 # ======================================================
-# Public self-role menu (DYNAMIC – no persistence)
+# Public self-role menu (dynamic)
 # ======================================================
 
 class CategorySelect(discord.ui.Select):
@@ -183,15 +178,6 @@ class SelfRoleView(discord.ui.View):
                 self.add_item(CategorySelect(key, cat))
 
 
-async def _build_menu() -> Tuple[discord.Embed, discord.ui.View]:
-    embed = discord.Embed(
-        title="✨ Choose Your Roles",
-        description="Use the menus below to update your roles at any time ✈️",
-        colour=discord.Colour.blurple(),
-    )
-    return embed, SelfRoleView()
-
-
 async def _deploy_menu(guild: discord.Guild) -> str:
     cfg = _load_config()
     ch_id = cfg.get("selfroles_channel_id")
@@ -202,7 +188,12 @@ async def _deploy_menu(guild: discord.Guild) -> str:
     if not isinstance(channel, discord.TextChannel):
         return "❌ Invalid self-roles channel."
 
-    embed, view = await _build_menu()
+    embed = discord.Embed(
+        title="✨ Choose Your Roles",
+        description="Use the menus below to update your roles ✈️",
+        colour=discord.Colour.blurple(),
+    )
+    view = SelfRoleView()
 
     msg_id = cfg.get("selfroles_message_id")
     if msg_id:
@@ -220,7 +211,7 @@ async def _deploy_menu(guild: discord.Guild) -> str:
 
 
 # ======================================================
-# /rolesettings dashboard (admin)
+# /rolesettings
 # ======================================================
 
 class RoleSettingsDashboard(discord.ui.View):
@@ -235,7 +226,7 @@ class RoleSettingsDashboard(discord.ui.View):
 
 @app_commands.command(name="rolesettings", description="Admin panel for self-roles")
 async def rolesettings(interaction: discord.Interaction):
-    if not isinstance(interaction.user, discord.Member) or not _has_admin_access(interaction.user):
+    if not has_app_access(interaction.user, "roles"):
         return await interaction.response.send_message("❌ No permission.", ephemeral=True)
 
     cfg = _load_config()
@@ -250,10 +241,8 @@ async def rolesettings(interaction: discord.Interaction):
 
 
 # ======================================================
-# Setup hook
+# Setup
 # ======================================================
 
-def setup(tree: app_commands.CommandTree, client: discord.Client, allowed_role_ids: List[int]):
-    global _ALLOWED_ROLE_IDS
-    _ALLOWED_ROLE_IDS = list(allowed_role_ids)
+def setup(tree: app_commands.CommandTree, client: discord.Client):
     tree.add_command(rolesettings)
