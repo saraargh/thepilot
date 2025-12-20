@@ -73,10 +73,10 @@
       },
       "emoji": null
     },
-    "roles": {
-      "title": "🎭 Roles",
+    "deceit": {
+      "title": "🐰 Deceit 2",
       "description": "",
-      "multi_select": false,
+      "multi_select": true,
       "roles": {
         "1405480988863107122": {
           "label": "Human",
