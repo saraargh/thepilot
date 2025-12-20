@@ -25,7 +25,6 @@
       },
       "emoji": null
     },
-
     "deathnote": {
       "title": "📓 Death Note",
       "description": "",
@@ -74,7 +73,6 @@
       },
       "emoji": null
     },
-
     "roles": {
       "title": "🎭 Roles",
       "description": "",
@@ -144,5 +142,5 @@
       "emoji": null
     }
   },
-  "selfroles_message_id": 1452006540793086223
+  "selfroles_message_id": 1452031024006434920
 }
