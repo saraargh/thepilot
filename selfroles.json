@@ -164,6 +164,13 @@
           "emoji": "<:Phamo:1404965631945867326>"
         }
       }
+    },
+    "pings": {
+      "title": "Game Pings",
+      "description": "",
+      "emoji": "🎮",
+      "multi_select": true,
+      "roles": {}
     }
   },
   "selfroles_message_id": 1452040246098137281
