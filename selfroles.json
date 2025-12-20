@@ -1,16 +1,13 @@
 {
   "selfroles_channel_id": 1444274467864838207,
-
   "logging": {
     "enabled": false,
     "channel_id": 1444274467864838207
   },
-
   "auto_roles": {
     "humans": [],
     "bots": []
   },
-
   "categories": {
     "colours": {
       "title": "🎨 Colour Roles",
@@ -21,9 +18,9 @@
           "label": "Red",
           "emoji": "❤️"
         }
-      }
+      },
+      "emoji": null
     },
-
     "deathnote": {
       "title": "📓 Death Note",
       "description": "",
@@ -69,7 +66,9 @@
           "label": "Bad Mello",
           "emoji": "<:BadMello:1405505935761211412>"
         }
-      }
+      },
+      "emoji": null
     }
-  }
+  },
+  "selfroles_message_id": 1452006540793086223
 }
