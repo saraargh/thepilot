@@ -9,7 +9,6 @@ from threading import Thread
 from joinleave import WelcomeSystem
 from adminsettings import setup_admin_settings
 from image_linker import setup as image_linker_setup
-
 from snipe import setup as snipe_setup
 
 # ===== CONFIG =====
@@ -20,6 +19,7 @@ UK_TZ = pytz.timezone("Europe/London")
 intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
+
 
 class ThePilot(discord.Client):
     def __init__(self):
@@ -39,12 +39,13 @@ class ThePilot(discord.Client):
     async def on_member_ban(self, guild: discord.Guild, user: discord.User):
         await self.joinleave.on_member_ban(guild, user)
 
-    # ---------------- BOOST EVENTS (FIX) ----------------
+    # ---------------- BOOST EVENTS ----------------
     async def on_member_update(self, before: discord.Member, after: discord.Member):
         await self.joinleave.on_member_update(before, after)
 
     # ---------------- SETUP ----------------
     async def setup_hook(self):
+        # Start scheduled loop
         scheduled_tasks.start(self)
 
         from plane import setup_plane_commands
@@ -53,6 +54,7 @@ class ThePilot(discord.Client):
         from bot_warnings import setup_warnings_commands
         from mute import setup_mute_commands
 
+        # Commands
         setup_plane_commands(self.tree)
 
         poo_task = setup_poo_commands(self.tree, self)
@@ -64,21 +66,16 @@ class ThePilot(discord.Client):
         setup_warnings_commands(self.tree)
         setup_mute_commands(self, self.tree)
 
-        # ✅ Admin panel
+        # Admin panel
         setup_admin_settings(self.tree)
 
-        # ✅ Image linker
+        # Image linker
         await image_linker_setup(self.tree)
 
-        await self.tree.sync()
-        
-class ThePilot(discord.Client):
-    def __init__(self):
-        super().__init__(intents=intents)
-        self.tree = app_commands.CommandTree(self)
-
-    async def setup_hook(self):
+        # ✅ SNIPE SYSTEM
         snipe_setup(self, self.tree)
+
+        # Sync once
         await self.tree.sync()
 
 
@@ -86,7 +83,7 @@ client = ThePilot()
 
 # ===== Scheduled tasks =====
 @tasks.loop(minutes=1)
-async def scheduled_tasks(bot_client):
+async def scheduled_tasks(bot_client: ThePilot):
     now = discord.utils.utcnow().astimezone(UK_TZ)
     guild = bot_client.guilds[0] if bot_client.guilds else None
     if guild:
@@ -94,16 +91,18 @@ async def scheduled_tasks(bot_client):
 
 
 # ===== Flask keep-alive =====
-app = Flask("")
+app = Flask("pilot")
 
 @app.route("/")
 def home():
-    return "The Pilot Bot is alive!"
+    return "✈️ The Pilot Bot is alive!"
+
 
 def run_flask():
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
 
-Thread(target=run_flask).start()
+
+Thread(target=run_flask, daemon=True).start()
 
 client.run(TOKEN)
