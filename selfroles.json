@@ -25,7 +25,20 @@
       "title": "🩸 Deathnote",
       "description": "",
       "multi_select": true,
-      "roles": {}
+      "roles": {
+        "1404160898280587307": {
+          "label": "Bad Mello",
+          "emoji": null
+        },
+        "1404160867074838650": {
+          "label": "Good Mello",
+          "emoji": null
+        },
+        "1404160542783967333": {
+          "label": "Mello Victim",
+          "emoji": null
+        }
+      }
     }
   },
   "selfroles_message_ids": [
