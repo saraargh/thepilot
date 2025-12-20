@@ -52,6 +52,7 @@ class ThePilot(discord.Client):
 
     # ---------------- SETUP ----------------
     async def setup_hook(self):
+        # Start scheduled loop
         scheduled_tasks.start(self)
 
         from plane import setup_plane_commands
@@ -81,7 +82,8 @@ class ThePilot(discord.Client):
         # Snipe
         snipe_setup(self, self.tree)
 
-        # ✅ Self roles (NO hardcoded permissions)
+        # ✅ Self roles
+        # NOTE: setup() now only takes (tree, client)
         selfroles_setup(self.tree, self)
 
         # Sync once
