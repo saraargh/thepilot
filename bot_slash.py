@@ -11,6 +11,10 @@ from adminsettings import setup_admin_settings
 from image_linker import setup as image_linker_setup
 from snipe import setup as snipe_setup
 
+# ✅ SELF ROLES
+from selfroles import setup as selfroles_setup
+from selfroles import apply_auto_roles
+
 # ===== CONFIG =====
 TOKEN = os.getenv("TOKEN")
 UK_TZ = pytz.timezone("Europe/London")
@@ -29,7 +33,11 @@ class ThePilot(discord.Client):
 
     # ---------------- MEMBER JOIN ----------------
     async def on_member_join(self, member: discord.Member):
+        # Existing welcome / logging logic
         await self.joinleave.on_member_join(member)
+
+        # ✅ Auto roles (humans vs bots)
+        await apply_auto_roles(member)
 
     # ---------------- MEMBER REMOVE (leave / kick) ----------------
     async def on_member_remove(self, member: discord.Member):
@@ -74,6 +82,9 @@ class ThePilot(discord.Client):
 
         # ✅ SNIPE SYSTEM
         snipe_setup(self, self.tree)
+
+        # ✅ SELF ROLES SYSTEM
+        selfroles_setup(self.tree, self)
 
         # Sync once
         await self.tree.sync()
