@@ -15,6 +15,9 @@ from snipe import setup as snipe_setup
 from selfroles import setup as selfroles_setup
 from selfroles import apply_auto_roles
 
+# ✅ ROLE + EMOJI TOOLS
+from role_tools import setup as role_tools_setup
+
 # ===== CONFIG =====
 TOKEN = os.getenv("TOKEN")
 UK_TZ = pytz.timezone("Europe/London")
@@ -83,8 +86,11 @@ class ThePilot(discord.Client):
         snipe_setup(self, self.tree)
 
         # ✅ Self roles
-        # NOTE: setup() now only takes (tree, client)
+        # setup(tree, client)
         selfroles_setup(self.tree, self)
+
+        # ✅ Role / Emoji tools
+        role_tools_setup(self.tree)
 
         # Sync once
         await self.tree.sync()
