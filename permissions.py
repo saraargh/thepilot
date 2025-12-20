@@ -1,4 +1,3 @@
-# permissions.py
 import os
 import json
 import base64
@@ -50,6 +49,16 @@ DEFAULT_SETTINGS: Dict[str, Any] = {
             ]
         },
         "welcome_leave": {
+            "allowed_roles": [
+                1413545658006110401,
+                1404098545006546954,
+                1420817462290681936,
+                1404105470204969000,
+                1404104881098195015,
+            ]
+        },
+
+        "roles": {
             "allowed_roles": [
                 1413545658006110401,
                 1404098545006546954,
