@@ -14,7 +14,7 @@
   },
   "categories": {
     "colours": {
-      "title": "🎨 Colour Roles",
+      "title": "Colours",
       "description": "",
       "multi_select": false,
       "roles": {
@@ -27,7 +27,7 @@
           "emoji": "💙"
         }
       },
-      "emoji": null
+      "emoji": "🌈"
     },
     "deathnote": {
       "title": "📓 Death Note",
