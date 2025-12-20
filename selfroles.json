@@ -5,7 +5,9 @@
     "channel_id": 1444274467864838207
   },
   "auto_roles": {
-    "humans": [],
+    "humans": [
+      "1404100554807971971"
+    ],
     "bots": []
   },
   "categories": {
