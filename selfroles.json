@@ -1,6 +1,6 @@
 {
   "selfroles_channel_id": 1444274467864838207,
-  "selfroles_message_id": null,
+  "selfroles_message_id": 1451970085928435872,
   "logging": {
     "enabled": false,
     "channel_id": 1444274467864838207
@@ -19,7 +19,8 @@
           "label": "Red",
           "emoji": "❤️"
         }
-      }
+      },
+      "emoji": null
     },
     "deathnote": {
       "title": "🩸 Deathnote",
@@ -38,7 +39,8 @@
           "label": "Mello Victim",
           "emoji": null
         }
-      }
+      },
+      "emoji": null
     }
   },
   "selfroles_message_ids": [
