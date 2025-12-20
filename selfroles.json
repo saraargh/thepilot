@@ -23,12 +23,41 @@
           "emoji": "❤️"
         },
         "1404106675060867124": {
-          "label": "blue",
+          "label": "Blue",
           "emoji": "💙"
+        },
+        "1404106329454547054": {
+          "label": "Orange",
+          "emoji": "🧡"
+        },
+        "1404106460048261270": {
+          "label": "Yellow",
+          "emoji": "💛"
+        },
+        "1404106570442473623": {
+          "label": "Green",
+          "emoji": "💚"
+        },
+        "1404106784301645844": {
+          "label": "Purple",
+          "emoji": "💜"
+        },
+        "1404106853985554482": {
+          "label": "Black",
+          "emoji": "🖤"
+        },
+        "1404106943781408801": {
+          "label": "Brown",
+          "emoji": "🤎"
+        },
+        "1404107160715132928": {
+          "label": "Pink",
+          "emoji": "🩷"
         }
       },
       "emoji": "🌈"
     },
+
     "deathnote": {
       "title": "Death Note",
       "description": "",
@@ -77,6 +106,7 @@
       },
       "emoji": "<:deathnote:1404113410303721612>"
     },
+
     "deceit": {
       "title": "🐰 Deceit 2",
       "description": "",
@@ -145,6 +175,7 @@
       },
       "emoji": null
     },
+
     "misc": {
       "title": "Miscellaneous",
       "description": "",
@@ -165,6 +196,7 @@
         }
       }
     },
+
     "pings": {
       "title": "Game Pings",
       "description": "",
