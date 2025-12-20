@@ -10,6 +10,8 @@ from joinleave import WelcomeSystem
 from adminsettings import setup_admin_settings
 from image_linker import setup as image_linker_setup
 
+from snipe import setup as snipe_setup
+
 # ===== CONFIG =====
 TOKEN = os.getenv("TOKEN")
 UK_TZ = pytz.timezone("Europe/London")
@@ -68,6 +70,15 @@ class ThePilot(discord.Client):
         # ✅ Image linker
         await image_linker_setup(self.tree)
 
+        await self.tree.sync()
+        
+class ThePilot(discord.Client):
+    def __init__(self):
+        super().__init__(intents=intents)
+        self.tree = app_commands.CommandTree(self)
+
+    async def setup_hook(self):
+        snipe_setup(self, self.tree)
         await self.tree.sync()
 
 
