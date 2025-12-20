@@ -11,21 +11,13 @@ from adminsettings import setup_admin_settings
 from image_linker import setup as image_linker_setup
 from snipe import setup as snipe_setup
 
+# ✅ SELF ROLES
+from selfroles import setup as selfroles_setup
+from selfroles import apply_auto_roles
+
 # ===== CONFIG =====
 TOKEN = os.getenv("TOKEN")
 UK_TZ = pytz.timezone("Europe/London")
-
-# Roles allowed to run restricted commands (tournament/poo & mute etc.)
-ALLOWED_ROLE_IDS = [
-    1413545658006110401,
-    1404098545006546954,
-    1420817462290681936,
-    1406242523952713820
-]
-
-# ✅ SELF ROLES SYSTEM
-from selfroles import setup as selfroles_setup
-from selfroles import apply_auto_roles
 
 # ===== Discord Client =====
 intents = discord.Intents.default()
@@ -42,9 +34,11 @@ class ThePilot(discord.Client):
     # ---------------- MEMBER JOIN ----------------
     async def on_member_join(self, member: discord.Member):
         await self.joinleave.on_member_join(member)
+
+        # ✅ Auto roles (humans vs bots)
         await apply_auto_roles(member)
 
-    # ---------------- MEMBER REMOVE (leave / kick) ----------------
+    # ---------------- MEMBER REMOVE ----------------
     async def on_member_remove(self, member: discord.Member):
         await self.joinleave.on_member_remove(member)
 
@@ -66,6 +60,7 @@ class ThePilot(discord.Client):
         from bot_warnings import setup_warnings_commands
         from mute import setup_mute_commands
 
+        # Commands
         setup_plane_commands(self.tree)
 
         poo_task = setup_poo_commands(self.tree, self)
@@ -77,21 +72,25 @@ class ThePilot(discord.Client):
         setup_warnings_commands(self.tree)
         setup_mute_commands(self, self.tree)
 
+        # Admin settings (Pilot source of truth)
         setup_admin_settings(self.tree)
 
+        # Image linker
         await image_linker_setup(self.tree)
 
+        # Snipe
         snipe_setup(self, self.tree)
 
-        # ✅ SELF ROLES (pass allowed roles list)
-        selfroles_setup(self.tree, self, ALLOWED_ROLE_IDS)
+        # ✅ Self roles (NO hardcoded permissions)
+        selfroles_setup(self.tree, self)
 
+        # Sync once
         await self.tree.sync()
 
 
 client = ThePilot()
 
-
+# ===== Scheduled tasks =====
 @tasks.loop(minutes=1)
 async def scheduled_tasks(bot_client: ThePilot):
     now = discord.utils.utcnow().astimezone(UK_TZ)
@@ -100,6 +99,7 @@ async def scheduled_tasks(bot_client: ThePilot):
         pass
 
 
+# ===== Flask keep-alive =====
 app = Flask("pilot")
 
 @app.route("/")
