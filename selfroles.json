@@ -11,6 +11,17 @@
     "humans": [],
     "bots": []
   },
-
-  "categories": {}
+  
+  "categories": {
+  "colours": {
+    "title": "🎨 Colour Roles",
+    "description": "",
+    "multi_select": false,
+    "roles": {
+      "123456789012345678": {
+        "label": "Red",
+        "emoji": "❤️"
+      }
+    }
+  }
 }
