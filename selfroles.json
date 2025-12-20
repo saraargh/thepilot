@@ -150,7 +150,20 @@
       "description": "",
       "emoji": "💛",
       "multi_select": true,
-      "roles": {}
+      "roles": {
+        "1411656101555867668": {
+          "label": "Arsenal",
+          "emoji": null
+        },
+        "1404806645820817488": {
+          "label": "Girlypops",
+          "emoji": null
+        },
+        "1404122892169642006": {
+          "label": "Ghost Hunter",
+          "emoji": null
+        }
+      }
     }
   },
   "selfroles_message_id": 1452040246098137281
