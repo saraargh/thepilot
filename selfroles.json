@@ -20,6 +20,12 @@
           "emoji": "❤️"
         }
       }
+    },
+    "deathnote": {
+      "title": "🩸 Deathnote",
+      "description": "",
+      "multi_select": true,
+      "roles": {}
     }
   },
   "selfroles_message_ids": [
