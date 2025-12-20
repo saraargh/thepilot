@@ -553,7 +553,7 @@ class CategoryModal(discord.ui.Modal, title="Category Settings"):
             default=str(existing.get("emoji") or ""),
         )
         self.multi_in = discord.ui.TextInput(
-            label="Multi-select? (yes/no)",
+            label="Allow multiple roles",
             required=True,
             max_length=5,
             default=("yes" if existing.get("multi_select", True) else "no"),
@@ -714,7 +714,7 @@ class RoleMetaModal(discord.ui.Modal, title="Role Display Settings"):
             default=str(meta.get("label") or ""),
         )
         self.emoji_in = discord.ui.TextInput(
-            label="Emoji override (optional, <:name:id> or unicode)",
+            label="Emoji override",
             required=False,
             max_length=80,
             default=str(meta.get("emoji") or ""),
