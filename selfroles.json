@@ -198,7 +198,44 @@
       "description": "",
       "emoji": "🎮",
       "multi_select": true,
-      "roles": {}
+      "roles": {
+        "1407746677670150154": {
+          "label": "Mudae",
+          "emoji": null
+        },
+        "1407743296184516733": {
+          "label": "fortnite",
+          "emoji": null
+        },
+        "1407738760682278963": {
+          "label": "Marvel Rivals",
+          "emoji": null
+        },
+        "1407738413691437246": {
+          "label": "codenames",
+          "emoji": null
+        },
+        "1407737744184053794": {
+          "label": "DBD",
+          "emoji": null
+        },
+        "1407677818653114432": {
+          "label": "teatime",
+          "emoji": null
+        },
+        "1404167942098259978": {
+          "label": "baldurs-gate-3",
+          "emoji": null
+        },
+        "1404111221266972775": {
+          "label": "Deceit",
+          "emoji": null
+        },
+        "1404110071692263435": {
+          "label": "Death note",
+          "emoji": null
+        }
+      }
     }
   },
   "selfroles_message_id": 1452040246098137281
