@@ -78,7 +78,7 @@
       "emoji": "<:deathnote:1404113410303721612>"
     },
     "deceit": {
-      "title": "Deceit 2",
+      "title": "🐰 Deceit 2",
       "description": "",
       "multi_select": true,
       "roles": {
@@ -143,7 +143,7 @@
           "emoji": "<:Experiment:1405480363966464021>"
         }
       },
-      "emoji": "<:deceit:1404113638465343641>"
+      "emoji": null
     },
     "misc": {
       "title": "Miscellaneous",
