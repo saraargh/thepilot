@@ -41,17 +41,23 @@ ENTRIES_PER_PAGE = 10
 # GITHUB STORAGE CONFIG
 # ==============================
 
-POO_GOAT_GITHUB_TOKEN = os.getenv("POO_GOAT_GITHUB_TOKEN")
-POO_GOAT_GITHUB_REPO = os.getenv("POO_GOAT_GITHUB_REPO")
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+GITHUB_REPO = os.getenv("GITHUB_REPO")
 POO_GOAT_GITHUB_PATH = os.getenv("POO_GOAT_GITHUB_PATH")
+
+if not all([GITHUB_TOKEN, GITHUB_REPO, POO_GOAT_GITHUB_PATH]):
+    raise RuntimeError(
+        "Missing GitHub env vars. Required: "
+        "GITHUB_TOKEN, GITHUB_REPO, POO_GOAT_GITHUB_PATH"
+    )
 
 GITHUB_API_URL = (
     f"https://api.github.com/repos/"
-    f"{POO_GOAT_GITHUB_REPO}/contents/{POO_GOAT_GITHUB_PATH}"
+    f"{GITHUB_REPO}/contents/{POO_GOAT_GITHUB_PATH}"
 )
 
 GITHUB_HEADERS = {
-    "Authorization": f"token {POO_GOAT_GITHUB_TOKEN}",
+    "Authorization": f"token {GITHUB_TOKEN}",
     "Accept": "application/vnd.github+json"
 }
 
@@ -194,7 +200,6 @@ class LeaderboardView(discord.ui.View):
 
 def setup(bot: discord.Client):
 
-    # -------- MESSAGE LISTENER --------
     async def on_message(message: discord.Message):
         if not message.author.bot:
             return
@@ -257,7 +262,6 @@ def setup(bot: discord.Client):
 
     bot.on_message = on_message
 
-    # -------- ROLE CLEANUP TASK --------
     @tasks.loop(hours=1)
     async def poo_cleanup():
         data = load_data()
@@ -279,7 +283,6 @@ def setup(bot: discord.Client):
 
     poo_cleanup.start()
 
-    # -------- SLASH COMMANDS --------
     @app_commands.command(name="pooboard", description="View the POO leaderboard")
     async def pooboard(interaction: discord.Interaction):
         data = load_data()
@@ -296,7 +299,6 @@ def setup(bot: discord.Client):
             view=LeaderboardView(interaction.guild, "goat", data)
         )
 
-    # -------- REBUILD COMMAND --------
     @app_commands.command(
         name="rebuild_poo_goat",
         description="Rebuild POO / GOAT history from announcements"
@@ -313,15 +315,12 @@ def setup(bot: discord.Client):
         data = load_data()
 
         async for message in channel.history(limit=None, oldest_first=True):
-            if message.author.id != PILOT_BOT_ID:
-                continue
-            if not message.mentions:
+            if message.author.id != PILOT_BOT_ID or not message.mentions:
                 continue
 
             content = message.content.lower()
             is_poo = "is today’s poo" in content
             is_goat = "is today’s goat" in content
-
             if not is_poo and not is_goat:
                 continue
 
@@ -334,9 +333,6 @@ def setup(bot: discord.Client):
                 count = data["scores"]["poo"].get(uid, 0) + 1
                 data["scores"]["poo"][uid] = count
                 data["dates"][date]["poo"] = True
-                data.setdefault("poo_milestones", {}).setdefault(uid, [])
-                if count in POO_MILESTONES:
-                    data["poo_milestones"][uid].append(count)
 
             if is_goat and not data["dates"][date]["goat"]:
                 data["scores"]["goat"][uid] = data["scores"]["goat"].get(uid, 0) + 1
