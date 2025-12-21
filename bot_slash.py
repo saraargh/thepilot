@@ -18,6 +18,9 @@ from selfroles import apply_auto_roles
 # ✅ ROLE + EMOJI TOOLS
 from role_tools import setup as role_tools_setup
 
+# 🎂 BIRTHDAYS
+from birthdays import setup as birthdays_setup
+
 # ===== CONFIG =====
 TOKEN = os.getenv("TOKEN")
 UK_TZ = pytz.timezone("Europe/London")
@@ -55,7 +58,7 @@ class ThePilot(discord.Client):
 
     # ---------------- SETUP ----------------
     async def setup_hook(self):
-        # Start scheduled loop
+        # Start scheduled loop (safe to keep even if empty)
         scheduled_tasks.start(self)
 
         from plane import setup_plane_commands
@@ -79,6 +82,9 @@ class ThePilot(discord.Client):
         # Admin settings (Pilot source of truth)
         setup_admin_settings(self.tree)
 
+        # 🎂 Birthdays
+        birthdays_setup(self)
+
         # Image linker
         await image_linker_setup(self.tree)
 
@@ -86,7 +92,6 @@ class ThePilot(discord.Client):
         snipe_setup(self, self.tree)
 
         # ✅ Self roles
-        # setup(tree, client)
         selfroles_setup(self.tree, self)
 
         # ✅ Role / Emoji tools
