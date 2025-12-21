@@ -6,7 +6,9 @@
     "announce": true,
     "message_single": "Happy Birthday {user} - hope you have the best most magical day ever and all your wishes come true!! 🎂🎉🎁🎈",
     "message_multiple": "Happy Birthday {users} - hope you have the best most magical day ever and all your wishes come true!! 🎂🎉🎁🎈",
-    "images": [],
+    "images": [
+      "https://cdn.discordapp.com/ephemeral-attachments/1450222619327729757/1452431240673362204/IMG_8760.gif?ex=6949c980&is=69487800&hm=a4730d79401de4aa7e39a0f8b8149abd482da0edb6e4e93cfc81dcd15fcd5805&"
+    ],
     "embed": {
       "enabled": true,
       "title": "🎉 Birthday Time!",
