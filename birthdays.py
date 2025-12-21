@@ -31,10 +31,11 @@ UK_TZ = ZoneInfo("Europe/London")
 DEFAULT_DATA: Dict[str, Any] = {
     "settings": {
         "enabled": True,
-        "channel_id": None,          # where announcements go
-        "birthday_role_id": None,    # optional role to apply on birthday day
-        "message": "🎂 Happy Birthday {user}! ✈️",  # supports placeholders
-        "announce": True             # allow turning off announcements but keep role logic
+        "channel_id": None,
+        "birthday_role_id": None,
+        "announce": True,
+        "message_single": "🎂 Happy Birthday {user}! ✈️",
+        "message_multiple": "🎉 Happy Birthday {users}! 🎂"
     },
     "birthdays": {
         # "user_id_str": {"day": 21, "month": 3, "timezone": "Europe/London"}
@@ -201,7 +202,45 @@ async def timezone_autocomplete(interaction: discord.Interaction, current: str) 
     return [app_commands.Choice(name=m, value=m) for m in matches[:20]]
 
 
+#dualmodal#
+
+class BirthdayMessageModal(discord.ui.Modal, title="Edit Birthday Messages"):
+    single_message = discord.ui.TextInput(
+        label="Single birthday message",
+        style=discord.TextStyle.paragraph,
+        required=True
+    )
+
+    multiple_message = discord.ui.TextInput(
+        label="Multiple birthdays message",
+        style=discord.TextStyle.paragraph,
+        required=True
+    )
+
+    def __init__(self, data: dict):
+        super().__init__()
+        self.data = data
+        s = data.get("settings", {})
+        self.single_message.default = s.get("message_single", "")
+        self.multiple_message.default = s.get("message_multiple", "")
+
+    async def on_submit(self, interaction: discord.Interaction):
+        s = self.data.setdefault("settings", {})
+        s["message_single"] = self.single_message.value
+        s["message_multiple"] = self.multiple_message.value
+    
+        # persist
+        data, sha = await load_data()
+        data["settings"].update(s)
+        await save_data(data, sha)
+    
+        await interaction.response.send_message(
+            "✅ Birthday messages updated.",
+            ephemeral=True
+        )
+
 # ------------------- Settings View -------------------
+
 class BirthdaySettingsView(discord.ui.View):
     def __init__(self, bot: discord.Client, data: dict, sha: Optional[str]):
         super().__init__(timeout=300)
@@ -215,7 +254,10 @@ class BirthdaySettingsView(discord.ui.View):
         channel_id = s.get("channel_id")
         role_id = s.get("birthday_role_id")
         announce = s.get("announce", True)
-        msg = s.get("message", DEFAULT_DATA["settings"]["message"])
+        msg = (
+            f"Single:\n{s.get('message_single')}\n\n"
+            f"Multiple:\n{s.get('message_multiple')}"
+        )
 
         channel_str = f"<#{channel_id}>" if channel_id else "Not set"
         role_str = f"<@&{role_id}>" if role_id else "Not set"
@@ -324,31 +366,17 @@ class BirthdaySettingsView(discord.ui.View):
         self.data.setdefault("settings", {})["birthday_role_id"] = role.id
         await interaction.followup.send(f"✅ Birthday role set to {role.mention}", ephemeral=True)
 
-    @discord.ui.button(label="Edit message", style=discord.ButtonStyle.success)
-    async def edit_message(self, interaction: discord.Interaction, button: discord.ui.Button):
+    @discord.ui.button(label="Edit birthday messages", style=discord.ButtonStyle.success)
+    async def edit_messages(self, interaction: discord.Interaction, button: discord.ui.Button):
         if not has_app_access(interaction.user, "birthdays"):
             return await interaction.response.send_message(
                 "❌ You don’t have permission to manage birthdays.",
                 ephemeral=True
             )
         
-        await interaction.response.send_message(
-            "Reply with the new birthday message template within 120s.\n"
-            "Placeholders: `{user}`, `{username}`, `{date}`, `{timezone}`",
-            ephemeral=True
-        )
-
-        def check(m: discord.Message):
-            return m.author.id == interaction.user.id and m.channel.id == interaction.channel_id
-
-        try:
-            msg = await self.bot.wait_for("message", check=check, timeout=120)
-        except asyncio.TimeoutError:
-            return
-
-        self.data.setdefault("settings", {})["message"] = msg.content.strip()
-        await interaction.followup.send("✅ Message template updated.", ephemeral=True)
-
+        modal = BirthdayMessageModal(self.data)
+        await interaction.response.send_modal(modal)
+        
     @discord.ui.button(label="Export all birthdays", style=discord.ButtonStyle.danger)
     async def export_birthdays(self, interaction: discord.Interaction, button: discord.ui.Button):
         if not has_app_access(interaction.user, "birthdays"):
@@ -548,110 +576,160 @@ def setup(bot: discord.Client):
         view = BirthdaySettingsView(bot, data, sha)
         await interaction.response.send_message(embed=view._embed(), view=view, ephemeral=True)
 
+    @birthday_group.command(name="test", description="Force-test birthday announcements.")
+    @app_commands.describe(mode="Use 'today' to simulate today's birthdays")
+    async def birthday_test(interaction: discord.Interaction, mode: str):
+        if not has_app_access(interaction.user, "birthdays"):
+            return await interaction.response.send_message(
+                "❌ You don’t have permission to test birthdays.",
+                ephemeral=True
+            )
+    
+        if mode.lower() != "today":
+            return await interaction.response.send_message(
+                "Only supported mode is `today`.",
+                ephemeral=True
+            )
+    
+        data, _ = await load_data()
+        s = data.get("settings", {})
+        channel_id = s.get("channel_id")
+    
+        if not channel_id:
+            return await interaction.response.send_message(
+                "❌ No birthday channel set.",
+                ephemeral=True
+            )
+    
+        channel = interaction.guild.get_channel(int(channel_id))
+        if not channel:
+            return await interaction.response.send_message(
+                "❌ Birthday channel not found.",
+                ephemeral=True
+            )
+    
+        today = datetime.now(UK_TZ).date()
+        members = []
+    
+        for uid, rec in data.get("birthdays", {}).items():
+            if rec.get("day") == today.day and rec.get("month") == today.month:
+                m = interaction.guild.get_member(int(uid))
+                if m:
+                    members.append(m)
+    
+        if not members:
+            return await interaction.response.send_message(
+                "No birthdays today to test.",
+                ephemeral=True
+            )
+    
+        if len(members) == 1:
+            tpl = s.get("message_single")
+            text = _fmt_template(tpl, member=members[0], local_date=today, tz="Europe/London")
+        else:
+            tpl = s.get("message_multiple")
+            text = tpl.replace("{users}", ", ".join(m.mention for m in members))
+    
+        await channel.send(f"🧪 **TEST MODE**\n{text}")
+        await interaction.response.send_message("✅ Test sent.", ephemeral=True)
+
+
     # ------------------- Background Task -------------------
     @tasks.loop(minutes=15)
     async def birthday_tick():
-        # We need a guild context; if your bot is in multiple guilds, this runs per guild.
-        # If you only have one server, this is fine.
         for guild in bot.guilds:
             try:
                 data, sha = await load_data()
-                s = data.get("settings", {}) or {}
+                s = data.get("settings", {})
                 if not s.get("enabled", True):
                     continue
-
-                bds: Dict[str, Any] = data.get("birthdays", {}) or {}
+    
+                bds = data.get("birthdays", {})
                 if not bds:
                     continue
-
+    
                 _normalize_state_lists(data)
                 announced = set(data["state"].get("announced_keys", []))
                 role_assigned = set(data["state"].get("role_assigned_keys", []))
-
-                channel_id = s.get("channel_id")
-                role_id = s.get("birthday_role_id")
+    
+                channel = guild.get_channel(s.get("channel_id")) if s.get("channel_id") else None
+                role = guild.get_role(s.get("birthday_role_id")) if s.get("birthday_role_id") else None
                 do_announce = bool(s.get("announce", True))
-                template = s.get("message", DEFAULT_DATA["settings"]["message"])
-
-                channel = guild.get_channel(int(channel_id)) if channel_id else None
-                role = guild.get_role(int(role_id)) if role_id else None
-
-                # Keep state cleanup mild (remove very old keys by length already handled)
+    
                 now_utc = datetime.now(timezone.utc)
-
+    
+                # ---- collect birthdays by local date ----
+                today_birthdays: Dict[str, List[discord.Member]] = {}
+    
                 for uid, rec in bds.items():
                     member = guild.get_member(int(uid))
                     if not member:
                         continue
-
-                    tz = str(rec.get("timezone", "")).strip()
+    
+                    tz = rec.get("timezone", "Europe/London")
                     if not _is_valid_tz(tz):
                         continue
-
-                    user_tz = ZoneInfo(tz)
-                    now_local = now_utc.astimezone(user_tz)
-                    local_d = now_local.date()
-
-                    try:
-                        d = int(rec.get("day"))
-                        m = int(rec.get("month"))
-                    except Exception:
-                        continue
-
-                    is_bday = (local_d.day == d and local_d.month == m)
-                    key = f"{local_d.isoformat()}|{uid}"
-
-                    # Announce once per user per local date
-                    if is_bday and do_announce and channel and key not in announced:
-                        text = _fmt_template(template, member=member, local_date=local_d, tz=tz)
-                        try:
-                            await channel.send(text)
-                            announced.add(key)
-                        except Exception:
-                            # don’t crash loop if perms missing
-                            pass
-
-                    # Role apply/remove
+    
+                    local_now = now_utc.astimezone(ZoneInfo(tz))
+                    local_date = local_now.date()
+    
+                    if rec["day"] == local_date.day and rec["month"] == local_date.month:
+                        today_birthdays.setdefault(local_date.isoformat(), []).append(member)
+    
+                    # ---- role handling (per member) ----
+                    key = f"{local_date.isoformat()}|{uid}"
+    
                     if role:
-                        if is_bday and key not in role_assigned:
-                            try:
-                                if role not in member.roles:
-                                    await member.add_roles(role, reason="Birthday role (The Pilot)")
-                                role_assigned.add(key)
-                            except Exception:
-                                pass
-                        if (not is_bday) and (role in member.roles):
-                            # Only remove if we previously assigned it at least once (avoid nuking manual assignments)
-                            # If you want “always remove when not birthday”, remove this guard.
-                            # Guard: if user had any role_assigned key in last 2 days, allow removal.
-                            # This avoids a permanent role in case of failures.
-                            allow_remove = False
-                            for k in list(role_assigned):
-                                if k.endswith(f"|{uid}"):
-                                    try:
-                                        kdate = date.fromisoformat(k.split("|")[0])
-                                        if (local_d - kdate).days >= 1:
-                                            allow_remove = True
-                                    except Exception:
-                                        continue
-                            if allow_remove:
+                        if rec["day"] == local_date.day and rec["month"] == local_date.month:
+                            if key not in role_assigned:
                                 try:
-                                    await member.remove_roles(role, reason="Birthday role expired (The Pilot)")
+                                    await member.add_roles(role, reason="Birthday role")
+                                    role_assigned.add(key)
                                 except Exception:
                                     pass
-
-                # Persist state
+                        else:
+                            if role in member.roles:
+                                try:
+                                    await member.remove_roles(role, reason="Birthday role expired")
+                                except Exception:
+                                    pass
+    
+                # ---- announcements ----
+                for date_key, members in today_birthdays.items():
+                    announce_key = f"{date_key}|announce"
+                    if not do_announce or not channel or announce_key in announced:
+                        continue
+    
+                    if len(members) == 1:
+                        tpl = s.get("message_single")
+                        text = _fmt_template(
+                            tpl,
+                            member=members[0],
+                            local_date=date.fromisoformat(date_key),
+                            tz = bds[str(members[0].id)]["timezone"]
+                        )
+                    else:
+                        tpl = s.get("message_multiple")
+                        mentions = ", ".join(m.mention for m in members)
+                        text = tpl.replace("{users}", mentions).replace("{count}", str(len(members)))
+    
+                    try:
+                        await channel.send(text)
+                        announced.add(announce_key)
+                    except Exception:
+                        pass
+    
                 data["state"]["announced_keys"] = list(announced)
                 data["state"]["role_assigned_keys"] = list(role_assigned)
-                _normalize_state_lists(data)
                 await save_data(data, sha)
-
+    
             except Exception:
-                # keep the loop alive no matter what
                 continue
 
+
+    
     @birthday_tick.before_loop
     async def before_birthday_tick():
         await bot.wait_until_ready()
-
+    
     birthday_tick.start()
