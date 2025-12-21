@@ -238,6 +238,58 @@ class BirthdayMessageModal(discord.ui.Modal, title="Edit Birthday Messages"):
             "✅ Birthday messages updated.",
             ephemeral=True
         )
+###select channel and role###
+
+class BirthdayChannelSelect(discord.ui.ChannelSelect):
+    def __init__(self):
+        super().__init__(
+            placeholder="Select birthday announcement channel…",
+            channel_types=[discord.ChannelType.text],
+            min_values=1,
+            max_values=1
+        )
+
+    async def callback(self, interaction: discord.Interaction):
+        view: BirthdaySettingsView = self.view  # type: ignore
+
+        if not has_app_access(interaction.user, "birthdays"):
+            return await interaction.response.send_message(
+                "❌ You don’t have permission to manage birthdays.",
+                ephemeral=True
+            )
+
+        channel = self.values[0]
+        view.data.setdefault("settings", {})["channel_id"] = channel.id
+
+        await view._save_and_refresh(interaction)
+
+
+class BirthdayRoleSelect(discord.ui.RoleSelect):
+    def __init__(self):
+        super().__init__(
+            placeholder="Select birthday role (optional)…",
+            min_values=1,
+            max_values=1
+        )
+
+    async def callback(self, interaction: discord.Interaction):
+        view: BirthdaySettingsView = self.view  # type: ignore
+
+        if not has_app_access(interaction.user, "birthdays"):
+            return await interaction.response.send_message(
+                "❌ You don’t have permission to manage birthdays.",
+                ephemeral=True
+            )
+
+        role = self.values[0]
+        if role.is_default():
+            return await interaction.response.send_message(
+                "❌ You can’t use @everyone.",
+                ephemeral=True
+            )
+
+        view.data.setdefault("settings", {})["birthday_role_id"] = role.id
+        await view._save_and_refresh(interaction)
 
 # ------------------- Settings View -------------------
 
@@ -247,6 +299,10 @@ class BirthdaySettingsView(discord.ui.View):
         self.bot = bot
         self.data = data
         self.sha = sha
+
+        # ✅ Add selects
+        self.add_item(BirthdayChannelSelect())
+        self.add_item(BirthdayRoleSelect())
 
     def _embed(self) -> discord.Embed:
         s = self.data.get("settings", {})
@@ -304,67 +360,6 @@ class BirthdaySettingsView(discord.ui.View):
         s = self.data.setdefault("settings", {})
         s["announce"] = not bool(s.get("announce", True))
         await self._save_and_refresh(interaction)
-
-    @discord.ui.button(label="Set channel", style=discord.ButtonStyle.secondary)
-    async def set_channel(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if not has_app_access(interaction.user, "birthdays"):
-            return await interaction.response.send_message(
-                "❌ You don’t have permission to manage birthdays.",
-                ephemeral=True
-            )
-
-        await interaction.response.send_message(
-            "Reply with the channel mention (e.g. #birthdays) within 60s.",
-            ephemeral=True
-        )
-
-        def check(m: discord.Message):
-            return m.author.id == interaction.user.id and m.channel.id == interaction.channel_id
-
-        try:
-            msg = await self.bot.wait_for("message", check=check, timeout=60)
-        except asyncio.TimeoutError:
-            return
-
-        if not msg.channel_mentions:
-            return await interaction.followup.send("❌ No channel detected. Try again.", ephemeral=True)
-
-        ch = msg.channel_mentions[0]
-        self.data.setdefault("settings", {})["channel_id"] = ch.id
-        await interaction.followup.send(f"✅ Channel set to {ch.mention}", ephemeral=True)
-
-    @discord.ui.button(label="Set role", style=discord.ButtonStyle.secondary)
-    async def set_role(self, interaction: discord.Interaction, button: discord.ui.Button):
-        if not has_app_access(interaction.user, "birthdays"):
-            return await interaction.response.send_message(
-                "❌ You don’t have permission to manage birthdays.",
-                ephemeral=True
-            )
-        
-        await interaction.response.send_message(
-            "Reply with the role mention (e.g. @Birthday) or `none` within 60s.",
-            ephemeral=True
-        )
-
-        def check(m: discord.Message):
-            return m.author.id == interaction.user.id and m.channel.id == interaction.channel_id
-
-        try:
-            msg = await self.bot.wait_for("message", check=check, timeout=60)
-        except asyncio.TimeoutError:
-            return
-
-        txt = msg.content.strip().lower()
-        if txt == "none":
-            self.data.setdefault("settings", {})["birthday_role_id"] = None
-            return await interaction.followup.send("✅ Birthday role cleared.", ephemeral=True)
-
-        if not msg.role_mentions:
-            return await interaction.followup.send("❌ No role detected. Try again.", ephemeral=True)
-
-        role = msg.role_mentions[0]
-        self.data.setdefault("settings", {})["birthday_role_id"] = role.id
-        await interaction.followup.send(f"✅ Birthday role set to {role.mention}", ephemeral=True)
 
     @discord.ui.button(label="Edit birthday messages", style=discord.ButtonStyle.success)
     async def edit_messages(self, interaction: discord.Interaction, button: discord.ui.Button):
