@@ -195,8 +195,57 @@ def setup(bot: discord.Client):
         await interaction.response.send_message(
             embed=build_leaderboard_embed(interaction.guild, "goat", 0, data)
         )
+        
+        # -------- REBUILD COMMAND --------
+    @app_commands.command(name="rebuild_poo_goat",description="Rebuild POO / GOAT history from announcements")
+    @app_commands.checks.has_permissions(administrator=True)
+    async def rebuild_poo_goat(interaction: discord.Interaction):
+        await interaction.response.defer(ephemeral=True)
+
+        channel = interaction.guild.get_channel(ANNOUNCEMENT_CHANNEL_ID)
+        if not channel:
+            await interaction.followup.send("❌ Announcement channel not found.")
+            return
+
+        data = _default_data()
+
+        async for message in channel.history(limit=None, oldest_first=True):
+            if not message.author.bot:
+                continue
+            if message.author.id != PILOT_BOT_ID:
+                continue
+            if not message.mentions:
+                continue
+
+            content = message.content.lower()
+            date = date_str(message.created_at)
+            data["dates"].setdefault(date, {"goat": False, "poo": False})
+
+            uid = str(message.mentions[0].id)
+
+            # 💩 POO
+            if "is today’s poo" in content and not data["dates"][date]["poo"]:
+                count = data["scores"]["poo"].get(uid, 0) + 1
+                data["scores"]["poo"][uid] = count
+                data["dates"][date]["poo"] = True
+                data.setdefault("poo_milestones", {}).setdefault(uid, [])
+
+                if count in POO_MILESTONES:
+                    data["poo_milestones"][uid].append(count)
+
+                await message.add_reaction(POO_EMOJI)
+
+            # 🐐 GOAT
+            if "is today’s goat" in content and not data["dates"][date]["goat"]:
+                data["scores"]["goat"][uid] = data["scores"]["goat"].get(uid, 0) + 1
+                data["dates"][date]["goat"] = True
+                await message.add_reaction(GOAT_EMOJI)
+
+        save_data(data)
+        await interaction.followup.send("✅ POO / GOAT history rebuilt.")
 
     bot.tree.add_command(pooboard)
     bot.tree.add_command(goatboard)
+    bot.tree.add_command(rebuild_poo_goat)
 
     print("🐐💩 poo_goat_tracker registered")
