@@ -32,7 +32,7 @@ POO_EMOJI = "💩"
 
 POO_ROLE_ID = 1452316099541471233
 POO_MILESTONES = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100}
-POO_ROLE_DURATION_DAYS = 14
+POO_ROLE_DURATION_DAYS = 7
 
 ENTRIES_PER_PAGE = 10
 
@@ -236,7 +236,7 @@ def setup(bot: discord.Client):
                         f"<@{uid}> has reached **50 total poos**.\n\n"
                         f"This is a milestone.\n"
                         f"This is also deeply concerning.\n\n"
-                        f"They have been sentenced to **14 days of public shame.**"
+                        f"They have been sentenced to **7 days of public shame.**"
                     )
 
                     role = message.guild.get_role(POO_ROLE_ID)
