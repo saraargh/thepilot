@@ -1,5 +1,5 @@
 import discord
-from discord.ext import tasks, commands
+from discord.ext import tasks
 from discord import app_commands
 import pytz
 import os
@@ -21,6 +21,9 @@ from role_tools import setup as role_tools_setup
 # 🎂 BIRTHDAYS
 from birthdays import setup as birthdays_setup
 
+# ✅ POO / GOAT TRACKER
+from poo_goat_tracker import setup as setup_poo_goat_tracker
+
 # ===== CONFIG =====
 TOKEN = os.getenv("TOKEN")
 UK_TZ = pytz.timezone("Europe/London")
@@ -31,9 +34,10 @@ intents.members = True
 intents.message_content = True
 
 
-class ThePilot(commands.Bot):
+class ThePilot(discord.Client):
     def __init__(self):
-        super().__init__(command_prefix="!", intents=intents)
+        super().__init__(intents=intents)
+        self.tree = app_commands.CommandTree(self)
         self.joinleave = WelcomeSystem(self)
 
     # ---------------- MEMBER JOIN ----------------
@@ -96,8 +100,8 @@ class ThePilot(commands.Bot):
         # ✅ Role / Emoji tools
         role_tools_setup(self.tree)
 
-        # ✅ NEW: POO / GOAT TRACKER (listener + boards)
-        await self.load_extension("poo_goat_tracker")
+        # ✅ POO / GOAT TRACKER (listener + boards)
+        setup_poo_goat_tracker(self)
 
         # Sync once
         await self.tree.sync()
