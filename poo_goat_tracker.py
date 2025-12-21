@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import os
+import asyncio
 from datetime import datetime, timedelta
 from typing import Dict, List
 
@@ -48,10 +49,24 @@ def _default_data() -> Dict:
 
 
 def load_data() -> Dict:
+    base = _default_data()
+
     if not os.path.exists(DATA_FILE):
-        save_data(_default_data())
+        save_data(base)
+        return base
+
     with open(DATA_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
+        data = json.load(f)
+
+    # normalise (handles empty {})
+    data.setdefault("scores", {})
+    data["scores"].setdefault("goat", {})
+    data["scores"].setdefault("poo", {})
+    data.setdefault("dates", {})
+    data.setdefault("poo_milestones", {})
+    data.setdefault("poo_role_until", {})
+
+    return data
 
 
 def save_data(data: Dict):
@@ -71,6 +86,8 @@ def build_leaderboard_embed(guild, board, page, data):
     scores = data["scores"][board]
     sorted_scores = sorted(scores.items(), key=lambda x: x[1], reverse=True)
 
+    total_pages = max(1, (len(sorted_scores) + ENTRIES_PER_PAGE - 1) // ENTRIES_PER_PAGE)
+
     start = page * ENTRIES_PER_PAGE
     end = start + ENTRIES_PER_PAGE
     chunk = sorted_scores[start:end]
@@ -88,8 +105,46 @@ def build_leaderboard_embed(guild, board, page, data):
         description="\n".join(lines),
         colour=0xF5C542 if board == "goat" else 0x8B5A2B
     )
-    embed.set_footer(text=f"Page {page + 1}")
+
+    embed.set_footer(text=f"Page {page + 1} / {total_pages}")
     return embed
+
+
+# ==============================
+# PAGINATION VIEW
+# ==============================
+
+class LeaderboardDropdown(discord.ui.Select):
+    def __init__(self, guild, board, data):
+        self.guild = guild
+        self.board = board
+        self.data = data
+
+        total_pages = max(
+            1,
+            (len(data["scores"][board]) + ENTRIES_PER_PAGE - 1) // ENTRIES_PER_PAGE
+        )
+
+        options = [
+            discord.SelectOption(
+                label=f"Page {i + 1}",
+                description=f"Ranks {i * ENTRIES_PER_PAGE + 1}–{min((i + 1) * ENTRIES_PER_PAGE, len(data['scores'][board]))}"
+            )
+            for i in range(total_pages)
+        ]
+
+        super().__init__(placeholder="Select a page", options=options)
+
+    async def callback(self, interaction: discord.Interaction):
+        page = int(self.values[0].split(" ")[1]) - 1
+        embed = build_leaderboard_embed(self.guild, self.board, page, self.data)
+        await interaction.response.edit_message(embed=embed)
+
+
+class LeaderboardView(discord.ui.View):
+    def __init__(self, guild, board, data):
+        super().__init__(timeout=None)
+        self.add_item(LeaderboardDropdown(guild, board, data))
 
 
 # ==============================
@@ -112,7 +167,7 @@ def setup(bot: discord.Client):
         content = message.content.lower()
         data = load_data()
         date = date_str(message.created_at)
-        data.setdefault("dates", {}).setdefault(date, {"goat": False, "poo": False})
+        data["dates"].setdefault(date, {"goat": False, "poo": False})
 
         uid = str(message.mentions[0].id)
 
@@ -166,7 +221,7 @@ def setup(bot: discord.Client):
         now = datetime.now(UK_TZ)
         changed = False
 
-        for uid, until in list(data.get("poo_role_until", {}).items()):
+        for uid, until in list(data["poo_role_until"].items()):
             if now >= datetime.fromisoformat(until):
                 for guild in bot.guilds:
                     member = guild.get_member(int(uid))
@@ -186,18 +241,23 @@ def setup(bot: discord.Client):
     async def pooboard(interaction: discord.Interaction):
         data = load_data()
         await interaction.response.send_message(
-            embed=build_leaderboard_embed(interaction.guild, "poo", 0, data)
+            embed=build_leaderboard_embed(interaction.guild, "poo", 0, data),
+            view=LeaderboardView(interaction.guild, "poo", data)
         )
 
     @app_commands.command(name="goatboard", description="View the GOAT leaderboard")
     async def goatboard(interaction: discord.Interaction):
         data = load_data()
         await interaction.response.send_message(
-            embed=build_leaderboard_embed(interaction.guild, "goat", 0, data)
+            embed=build_leaderboard_embed(interaction.guild, "goat", 0, data),
+            view=LeaderboardView(interaction.guild, "goat", data)
         )
-        
-        # -------- REBUILD COMMAND --------
-    @app_commands.command(name="rebuild_poo_goat",description="Rebuild POO / GOAT history from announcements")
+
+    # -------- REBUILD COMMAND --------
+    @app_commands.command(
+        name="rebuild_poo_goat",
+        description="Rebuild POO / GOAT history from announcements"
+    )
     @app_commands.checks.has_permissions(administrator=True)
     async def rebuild_poo_goat(interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=True)
@@ -210,36 +270,39 @@ def setup(bot: discord.Client):
         data = _default_data()
 
         async for message in channel.history(limit=None, oldest_first=True):
-            if not message.author.bot:
-                continue
             if message.author.id != PILOT_BOT_ID:
                 continue
             if not message.mentions:
                 continue
 
             content = message.content.lower()
+            is_poo = "is today’s poo" in content
+            is_goat = "is today’s goat" in content
+
+            if not is_poo and not is_goat:
+                continue
+
             date = date_str(message.created_at)
-            data["dates"].setdefault(date, {"goat": False, "poo": False})
+            data["dates"].setdefault(date, {"poo": False, "goat": False})
+
+            if data["dates"][date]["poo"] and data["dates"][date]["goat"]:
+                continue
 
             uid = str(message.mentions[0].id)
 
-            # 💩 POO
-            if "is today’s poo" in content and not data["dates"][date]["poo"]:
+            if is_poo and not data["dates"][date]["poo"]:
                 count = data["scores"]["poo"].get(uid, 0) + 1
                 data["scores"]["poo"][uid] = count
                 data["dates"][date]["poo"] = True
                 data.setdefault("poo_milestones", {}).setdefault(uid, [])
-
                 if count in POO_MILESTONES:
                     data["poo_milestones"][uid].append(count)
 
-                await message.add_reaction(POO_EMOJI)
-
-            # 🐐 GOAT
-            if "is today’s goat" in content and not data["dates"][date]["goat"]:
+            if is_goat and not data["dates"][date]["goat"]:
                 data["scores"]["goat"][uid] = data["scores"]["goat"].get(uid, 0) + 1
                 data["dates"][date]["goat"] = True
-                await message.add_reaction(GOAT_EMOJI)
+
+            await asyncio.sleep(0.25)
 
         save_data(data)
         await interaction.followup.send("✅ POO / GOAT history rebuilt.")
