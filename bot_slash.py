@@ -24,8 +24,12 @@ from birthdays import setup as birthdays_setup
 # ✅ POO / GOAT TRACKER
 from poo_goat_tracker import setup as setup_poo_goat_tracker
 
-# 🚀 PILOT RUNTIME LOGGER (NEW)
-from pilot_runtime_logger import log_startup, log_error
+# 🚀 PILOT RUNTIME LOGGER
+from pilot_runtime_logger import (
+    log_startup,
+    log_error,
+    setup as setup_pilot_logs
+)
 
 # ===== CONFIG =====
 TOKEN = os.getenv("TOKEN")
@@ -62,17 +66,17 @@ class ThePilot(discord.Client):
     async def on_member_update(self, before: discord.Member, after: discord.Member):
         await self.joinleave.on_member_update(before, after)
 
-    # ---------------- GLOBAL ERROR LOGGER (NEW) ----------------
+    # ---------------- GLOBAL ERROR LOGGER ----------------
     async def on_error(self, event_method, *args, **kwargs):
         await log_error(self, event_method)
-        raise  # keep normal traceback + Render logs
+        raise  # keep traceback + Render logs
 
     # ---------------- SETUP ----------------
     async def setup_hook(self):
-        # 🚀 Log redeploy / restart (NEW)
+        # 🚀 Log redeploy / restart
         await log_startup(self)
 
-        # Start scheduled loop (safe to keep even if empty)
+        # Start scheduled loop (safe even if empty)
         scheduled_tasks.start(self)
 
         from plane import setup_plane_commands
@@ -111,8 +115,11 @@ class ThePilot(discord.Client):
         # ✅ Role / Emoji tools
         role_tools_setup(self.tree)
 
-        # ✅ POO / GOAT TRACKER (listener + boards)
+        # ✅ POO / GOAT TRACKER
         setup_poo_goat_tracker(self)
+
+        # 🚀 REGISTER /pilotlogs COMMAND
+        setup_pilot_logs(self.tree)
 
         # Sync once
         await self.tree.sync()
