@@ -1,13 +1,16 @@
 # poo_goat_tracker.py
 # Tracks POO / GOAT history based ONLY on official Pilot announcements
+# Persistent storage via GitHub-backed JSON
 
 from __future__ import annotations
 
 import json
 import os
 import asyncio
+import base64
+import requests
 from datetime import datetime, timedelta
-from typing import Dict, List
+from typing import Dict
 
 import discord
 from discord import app_commands
@@ -31,12 +34,30 @@ POO_ROLE_ID = 1452316099541471233
 POO_MILESTONES = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100}
 POO_ROLE_DURATION_DAYS = 14
 
-DATA_FILE = "poo_goat_data.json"
 ENTRIES_PER_PAGE = 10
 
 
 # ==============================
-# DATA HELPERS
+# GITHUB STORAGE CONFIG
+# ==============================
+
+POO_GOAT_GITHUB_TOKEN = os.getenv("POO_GOAT_GITHUB_TOKEN")
+POO_GOAT_GITHUB_REPO = os.getenv("POO_GOAT_GITHUB_REPO")
+POO_GOAT_GITHUB_PATH = os.getenv("POO_GOAT_GITHUB_PATH")
+
+GITHUB_API_URL = (
+    f"https://api.github.com/repos/"
+    f"{POO_GOAT_GITHUB_REPO}/contents/{POO_GOAT_GITHUB_PATH}"
+)
+
+GITHUB_HEADERS = {
+    "Authorization": f"token {POO_GOAT_GITHUB_TOKEN}",
+    "Accept": "application/vnd.github+json"
+}
+
+
+# ==============================
+# DATA HELPERS (GITHUB)
 # ==============================
 
 def _default_data() -> Dict:
@@ -51,14 +72,19 @@ def _default_data() -> Dict:
 def load_data() -> Dict:
     base = _default_data()
 
-    if not os.path.exists(DATA_FILE):
+    res = requests.get(GITHUB_API_URL, headers=GITHUB_HEADERS)
+
+    if res.status_code == 404:
         save_data(base)
         return base
 
-    with open(DATA_FILE, "r", encoding="utf-8") as f:
-        data = json.load(f)
+    res.raise_for_status()
+    payload = res.json()
 
-    # normalise (handles empty {})
+    content = base64.b64decode(payload["content"]).decode("utf-8")
+    data = json.loads(content)
+
+    # normalise
     data.setdefault("scores", {})
     data["scores"].setdefault("goat", {})
     data["scores"].setdefault("poo", {})
@@ -66,12 +92,27 @@ def load_data() -> Dict:
     data.setdefault("poo_milestones", {})
     data.setdefault("poo_role_until", {})
 
+    data["_sha"] = payload["sha"]
     return data
 
 
 def save_data(data: Dict):
-    with open(DATA_FILE, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2)
+    sha = data.pop("_sha", None)
+
+    encoded = base64.b64encode(
+        json.dumps(data, indent=2).encode("utf-8")
+    ).decode("utf-8")
+
+    payload = {
+        "message": "Update poo/goat data",
+        "content": encoded
+    }
+
+    if sha:
+        payload["sha"] = sha
+
+    res = requests.put(GITHUB_API_URL, headers=GITHUB_HEADERS, json=payload)
+    res.raise_for_status()
 
 
 def date_str(dt: datetime) -> str:
@@ -186,9 +227,11 @@ def setup(bot: discord.Client):
                     data["poo_role_until"][uid] = until.isoformat()
 
                     await message.channel.send(
-                        f"💩 **POO MILESTONE** 💩\n\n"
-                        f"<@{uid}> has reached **50 total poos**.\n"
-                        f"The POO role will remain for **14 days**."
+                        f"💩🚨 **POO LEVEL 50 ACHIEVED** 🚨💩\n\n"
+                        f"<@{uid}> has reached **50 total poos**.\n\n"
+                        f"This is a milestone.\n"
+                        f"This is also deeply concerning.\n\n"
+                        f"They have been sentenced to **14 days of public shame.**"
                     )
 
                     role = message.guild.get_role(POO_ROLE_ID)
@@ -284,9 +327,6 @@ def setup(bot: discord.Client):
 
             date = date_str(message.created_at)
             data["dates"].setdefault(date, {"poo": False, "goat": False})
-
-            if data["dates"][date]["poo"] and data["dates"][date]["goat"]:
-                continue
 
             uid = str(message.mentions[0].id)
 
