@@ -4,6 +4,7 @@ import json
 import base64
 import requests
 import discord
+import random
 from discord import app_commands
 from datetime import datetime
 
@@ -12,7 +13,7 @@ from permissions import has_app_access
 # ------------------- GitHub Config -------------------
 GITHUB_REPO = os.getenv("GITHUB_REPO", "saraargh/the-pilot")
 GITHUB_FILE_PATH = "warnings.json"
-GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")  # your token
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
 HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"} if GITHUB_TOKEN else {}
 
 # ------------------- Roles (logic roles, not permissions) -------------------
@@ -39,7 +40,7 @@ def ordinal(n: int) -> str:
 def _gh_url():
     return f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
 
-# ------------------- GitHub Load/Save -------------------
+# ------------------- GitHub Load / Save -------------------
 def load_data():
     try:
         r = requests.get(_gh_url(), headers=HEADERS, timeout=10)
@@ -108,8 +109,38 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
     @app_commands.describe(member="Member to warn", reason="Reason (optional)")
     async def warn(interaction: discord.Interaction, member: discord.Member, reason: str = None):
 
-        author_roles = {r.id for r in interaction.user.roles}
+        author = interaction.user
+        author_roles = {r.id for r in author.roles}
         target_roles = {r.id for r in member.roles}
+
+        # 🤡 SELF-WARN RULE
+        if member.id == author.id:
+            candidates = [
+                m for m in interaction.guild.members
+                if not m.bot and m.id != author.id
+            ]
+
+            if not candidates:
+                await interaction.response.send_message(
+                    "🤡 You tried to warn yourself but there was no one else to punish.",
+                    ephemeral=False
+                )
+                return
+
+            chosen = random.choice(candidates)
+
+            reason_text = (
+                f"{author.mention} couldn’t warn themselves, "
+                f"so the pilot gave it to {chosen.mention}"
+            )
+
+            add_warning(chosen.id, reason_text)
+
+            await interaction.response.send_message(
+                f"🤡 {author.mention} You cannot warn yourself, instead a warning has been given to {chosen.mention}!",
+                ephemeral=False
+            )
+            return
 
         # ---------------- Sazzles protection (KD exception) ----------------
         if SAZZLES_ROLE_ID in target_roles:
@@ -119,7 +150,6 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
                     ephemeral=False
                 )
                 return
-            # KD allowed → continue
 
         # ---------------- PASSENGER → WILLIAM (ALLOWED) ----------------
         if PASSENGERS_ROLE_ID in author_roles and WILLIAM_ROLE_ID in target_roles:
@@ -132,17 +162,14 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
             return
 
         # ---------------- Permission check ----------------
-        if not has_app_access(interaction.user, "warnings"):
+        if not has_app_access(author, "warnings"):
 
-            # Passenger punishment (NOT William)
             if PASSENGERS_ROLE_ID in author_roles:
-                offender = interaction.user
-                target = member
-                reason_text = f"Trying to warn {target.mention}"
-                count = add_warning(offender.id, reason_text)
+                reason_text = f"Trying to warn {member.mention}"
+                count = add_warning(author.id, reason_text)
 
                 await interaction.response.send_message(
-                    f"❌ {offender.mention} has been warned for trying to warn {target.mention}, "
+                    f"❌ {author.mention} has been warned for trying to warn {member.mention}, "
                     f"as you cannot warn your fellow passengers — only William. "
                     f"This is their {ordinal(count)} warning.",
                     ephemeral=False
@@ -209,7 +236,6 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
             )
             return
 
-        # Prevent clearing own warnings — punish them
         if member.id == interaction.user.id:
             reason_text = "Trying to remove their warnings"
             count = add_warning(interaction.user.id, reason_text)
@@ -240,10 +266,7 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
             )
 
     # ---------------- /clear_server_warnings ----------------
-    @tree.command(
-        name="clear_server_warnings",
-        description="Clear all warnings for the server."
-    )
+    @tree.command(name="clear_server_warnings", description="Clear all warnings for the server.")
     async def clear_server_warnings(interaction: discord.Interaction):
 
         if not has_app_access(interaction.user, "warnings"):
