@@ -583,7 +583,8 @@ class BirthdaySettingsView(discord.ui.View):
             )
 
         # Mentions outside (as requested)
-        await channel.send(f"🧪 **TEST MODE**\n{mentions}\n{text}")
+            # Single plain message (no @mentions)
+        await channel.send(body)
 
         img = _pick_image_url(s)
         if img:
