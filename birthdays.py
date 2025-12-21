@@ -14,12 +14,7 @@ from discord import app_commands
 from discord.ext import tasks
 from zoneinfo import ZoneInfo, available_timezones
 
-# If you already have a shared permissions helper, we’ll use it.
-# We also provide a safe fallback in case you don’t.
-try:
-    from permissions import has_pilot_access  # expected signature: (member, pilot_settings_dict) -> bool
-except Exception:
-    has_pilot_access = None
+from permissions import has_app_access
 
 
 # ------------------- GitHub Config -------------------
@@ -167,37 +162,6 @@ def _next_occurrence(day: int, month: int, now_local: date) -> date:
             candidate = date(year + 1, month, 1)
     return candidate
 
-
-def _pilot_access(member: discord.Member, pilot_settings: dict) -> bool:
-    # Prefer your shared helper
-    if has_pilot_access:
-        return bool(has_pilot_access(member, pilot_settings))
-    # Fallback: if pilot_settings has allowed_role_ids
-    allowed = pilot_settings.get("allowed_role_ids", []) if isinstance(pilot_settings, dict) else []
-    return any(r.id in allowed for r in member.roles)
-
-
-async def _get_pilot_settings(interaction: discord.Interaction) -> dict:
-    """
-    We assume your adminsettings module already loads a settings blob.
-    If you store Pilot settings in a file, import it here.
-    If not available, we fallback to env-based ALLOWED_ROLE_IDS from botslash-like pattern.
-    """
-    try:
-        # If you have an admin settings loader, use it.
-        from adminsettings import load_admin_settings  # must return dict
-        return await load_admin_settings()
-    except Exception:
-        # Fallback: try to read allowed role IDs from env as comma-separated
-        raw = os.getenv("PILOT_ALLOWED_ROLE_IDS", "")
-        ids = []
-        for x in raw.split(","):
-            x = x.strip()
-            if x.isdigit():
-                ids.append(int(x))
-        return {"allowed_role_ids": ids}
-
-
 # ------------------- Timezone Autocomplete -------------------
 _TZ_CACHE: Optional[List[str]] = None
 
@@ -278,19 +242,22 @@ class BirthdaySettingsView(discord.ui.View):
 
     @discord.ui.button(label="Toggle enabled", style=discord.ButtonStyle.primary)
     async def toggle_enabled(self, interaction: discord.Interaction, button: discord.ui.Button):
-        pilot = await _get_pilot_settings(interaction)
-        if not _pilot_access(interaction.user, pilot):
-            return await interaction.response.send_message("❌ You don’t have Pilot access.", ephemeral=True)
-
+        if not has_app_access(interaction.user, "birthdays"):
+            return await interaction.response.send_message(
+                "❌ You don’t have permission to manage birthdays.",
+                ephemeral=True
+            )
         s = self.data.setdefault("settings", {})
         s["enabled"] = not bool(s.get("enabled", True))
         await self._save_and_refresh(interaction)
 
     @discord.ui.button(label="Toggle announcements", style=discord.ButtonStyle.secondary)
     async def toggle_announce(self, interaction: discord.Interaction, button: discord.ui.Button):
-        pilot = await _get_pilot_settings(interaction)
-        if not _pilot_access(interaction.user, pilot):
-            return await interaction.response.send_message("❌ You don’t have Pilot access.", ephemeral=True)
+        if not has_app_access(interaction.user, "birthdays"):
+            return await interaction.response.send_message(
+                "❌ You don’t have permission to manage birthdays.",
+                ephemeral=True
+                )
 
         s = self.data.setdefault("settings", {})
         s["announce"] = not bool(s.get("announce", True))
@@ -298,9 +265,11 @@ class BirthdaySettingsView(discord.ui.View):
 
     @discord.ui.button(label="Set channel", style=discord.ButtonStyle.secondary)
     async def set_channel(self, interaction: discord.Interaction, button: discord.ui.Button):
-        pilot = await _get_pilot_settings(interaction)
-        if not _pilot_access(interaction.user, pilot):
-            return await interaction.response.send_message("❌ You don’t have Pilot access.", ephemeral=True)
+        if not has_app_access(interaction.user, "birthdays"):
+            return await interaction.response.send_message(
+                "❌ You don’t have permission to manage birthdays.",
+                ephemeral=True
+            )
 
         await interaction.response.send_message(
             "Reply with the channel mention (e.g. #birthdays) within 60s.",
@@ -324,10 +293,12 @@ class BirthdaySettingsView(discord.ui.View):
 
     @discord.ui.button(label="Set role", style=discord.ButtonStyle.secondary)
     async def set_role(self, interaction: discord.Interaction, button: discord.ui.Button):
-        pilot = await _get_pilot_settings(interaction)
-        if not _pilot_access(interaction.user, pilot):
-            return await interaction.response.send_message("❌ You don’t have Pilot access.", ephemeral=True)
-
+        if not has_app_access(interaction.user, "birthdays"):
+            return await interaction.response.send_message(
+                "❌ You don’t have permission to manage birthdays.",
+                ephemeral=True
+            )
+        
         await interaction.response.send_message(
             "Reply with the role mention (e.g. @Birthday) or `none` within 60s.",
             ephemeral=True
@@ -355,10 +326,12 @@ class BirthdaySettingsView(discord.ui.View):
 
     @discord.ui.button(label="Edit message", style=discord.ButtonStyle.success)
     async def edit_message(self, interaction: discord.Interaction, button: discord.ui.Button):
-        pilot = await _get_pilot_settings(interaction)
-        if not _pilot_access(interaction.user, pilot):
-            return await interaction.response.send_message("❌ You don’t have Pilot access.", ephemeral=True)
-
+        if not has_app_access(interaction.user, "birthdays"):
+            return await interaction.response.send_message(
+                "❌ You don’t have permission to manage birthdays.",
+                ephemeral=True
+            )
+        
         await interaction.response.send_message(
             "Reply with the new birthday message template within 120s.\n"
             "Placeholders: `{user}`, `{username}`, `{date}`, `{timezone}`",
@@ -378,10 +351,12 @@ class BirthdaySettingsView(discord.ui.View):
 
     @discord.ui.button(label="Export all birthdays", style=discord.ButtonStyle.danger)
     async def export_birthdays(self, interaction: discord.Interaction, button: discord.ui.Button):
-        pilot = await _get_pilot_settings(interaction)
-        if not _pilot_access(interaction.user, pilot):
-            return await interaction.response.send_message("❌ You don’t have Pilot access.", ephemeral=True)
-
+        if not has_app_access(interaction.user, "birthdays"):
+            return await interaction.response.send_message(
+                "❌ You don’t have permission to manage birthdays.",
+                ephemeral=True
+            )
+            
         bds: Dict[str, Any] = self.data.get("birthdays", {}) or {}
         if not bds:
             return await interaction.response.send_message("No birthdays saved yet.", ephemeral=True)
@@ -408,8 +383,13 @@ def setup(bot: discord.Client):
     birthday_group = app_commands.Group(name="birthday", description="Birthday commands")
     tree.add_command(birthday_group)
 
-    @birthday_group.command(name="set", description="Set a birthday (timezone required). Pilot roles can set for others.")
-    @app_commands.describe(day="Day (1-31)", month="Month (1-12)", timezone="IANA timezone (e.g. Europe/London)", user="Optional: set for someone else (Pilot access required)")
+    @birthday_group.command(name="set", description="Set a birthday (timezone required).")
+    @app_commands.describe(
+        day="Day (1-31)",
+        month="Month (1-12)",
+        timezone="IANA timezone (e.g. Europe/London)",
+        user="Optional: set for someone else"
+    )
     @app_commands.autocomplete(timezone=timezone_autocomplete)
     async def birthday_set(
         interaction: discord.Interaction,
@@ -420,71 +400,97 @@ def setup(bot: discord.Client):
     ):
         tz = (timezone or "").strip()
         if not _is_valid_tz(tz):
-            return await interaction.response.send_message("❌ Invalid timezone. Pick one from autocomplete.", ephemeral=True)
-
-        pilot = await _get_pilot_settings(interaction)
-
+            return await interaction.response.send_message(
+                "❌ Invalid timezone. Pick one from autocomplete.",
+                ephemeral=True
+            )
+    
         target = user or interaction.user
-        if user and not _pilot_access(interaction.user, pilot):
-            return await interaction.response.send_message("❌ You don’t have Pilot access to set birthdays for others.", ephemeral=True)
-
+    
+        if user and not has_app_access(interaction.user, "birthdays"):
+            return await interaction.response.send_message(
+                "❌ You don’t have permission to set birthdays for other members.",
+                ephemeral=True
+            )
+    
         data, sha = await load_data()
         data.setdefault("birthdays", {})
-        data["birthdays"][str(target.id)] = {"day": int(day), "month": int(month), "timezone": tz}
+        data["birthdays"][str(target.id)] = {
+            "day": int(day),
+            "month": int(month),
+            "timezone": tz
+        }
         _normalize_state_lists(data)
-
         await save_data(data, sha)
-
+    
         who = "your" if target.id == interaction.user.id else f"{target.mention}'s"
         await interaction.response.send_message(
             f"✅ Set {who} birthday to **{day:02d}/{month:02d}** in **{tz}**.",
             ephemeral=True
         )
 
-    @birthday_group.command(name="view", description="View a birthday. Pilot roles can view others.")
-    @app_commands.describe(user="Optional: view someone else (Pilot access required)")
-    async def birthday_view(interaction: discord.Interaction, user: Optional[discord.Member] = None):
-        pilot = await _get_pilot_settings(interaction)
+    @birthday_group.command(name="view", description="View someone’s birthday.")
+    @app_commands.describe(user="The user whose birthday you want to view")
+    async def view_birthday(
+        interaction: discord.Interaction,
+        user: Optional[discord.Member] = None
+    ):
         target = user or interaction.user
-        if user and not _pilot_access(interaction.user, pilot):
-            return await interaction.response.send_message("❌ You don’t have Pilot access to view others.", ephemeral=True)
 
         data, _ = await load_data()
         rec = (data.get("birthdays", {}) or {}).get(str(target.id))
+
         if not rec:
             if target.id == interaction.user.id:
-                return await interaction.response.send_message("You haven’t set your birthday yet. Use `/birthday set`.", ephemeral=True)
-            return await interaction.response.send_message("No birthday set for that user.", ephemeral=True)
+                return await interaction.response.send_message(
+                    "You haven’t set your birthday yet. Use `/birthday set`.",
+                    ephemeral=True
+                    )
+            return await interaction.response.send_message(
+                "That user hasn’t set their birthday yet.",
+                ephemeral=True
+            )
 
-        d = int(rec.get("day", 0))
-        m = int(rec.get("month", 0))
-        tz = str(rec.get("timezone", ""))
+        day = int(rec.get("day", 0))
+        month = int(rec.get("month", 0))
+        tz = rec.get("timezone", "Europe/London")
+
         await interaction.response.send_message(
-            f"🎂 **{target.display_name}** — **{d:02d}/{m:02d}** (**{tz}**)",
+            f"🎂 **{target.display_name}** — **{day:02d}/{month:02d}** (`{tz}`)",
             ephemeral=True
         )
 
-    @birthday_group.command(name="remove", description="Remove a birthday. Pilot roles can remove others.")
-    @app_commands.describe(user="Optional: remove someone else (Pilot access required)")
-    async def birthday_remove(interaction: discord.Interaction, user: Optional[discord.Member] = None):
-        pilot = await _get_pilot_settings(interaction)
+    @birthday_group.command(name="remove", description="Remove a birthday.")
+    @app_commands.describe(user="Optional: remove someone else")
+    async def birthday_remove(
+        interaction: discord.Interaction,
+        user: Optional[discord.Member] = None
+    ):
         target = user or interaction.user
-        if user and not _pilot_access(interaction.user, pilot):
-            return await interaction.response.send_message("❌ You don’t have Pilot access to remove others.", ephemeral=True)
-
+    
+        if user and not has_app_access(interaction.user, "birthdays"):
+            return await interaction.response.send_message(
+                "❌ You don’t have permission to remove birthdays for other members.",
+                ephemeral=True
+            )
+    
         data, sha = await load_data()
         bds = data.get("birthdays", {}) or {}
+    
         if str(target.id) not in bds:
-            return await interaction.response.send_message("No birthday set to remove.", ephemeral=True)
-
+            return await interaction.response.send_message(
+                "No birthday set to remove.",
+                ephemeral=True
+            )
+    
         del bds[str(target.id)]
         data["birthdays"] = bds
         _normalize_state_lists(data)
         await save_data(data, sha)
-
+    
         await interaction.response.send_message("✅ Birthday removed.", ephemeral=True)
-
-    @tree.command(name="upcomingbirthdays", description="Show upcoming birthdays.")
+        
+    @birthday_group.command(name="upcoming", description="Show upcoming birthdays.")
     @app_commands.describe(days="How many days ahead (default 14)")
     async def upcoming_birthdays(interaction: discord.Interaction, days: app_commands.Range[int, 1, 60] = 14):
         data, _ = await load_data()
@@ -530,11 +536,13 @@ def setup(bot: discord.Client):
         embed.set_footer(text="The Pilot • Birthdays")
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
-    @tree.command(name="birthdaysettings", description="Configure birthday settings (Pilot roles only).")
+    @birthday_group.command(name="settings", description="Configure birthday settings (Pilot roles only).")
     async def birthdaysettings(interaction: discord.Interaction):
-        pilot = await _get_pilot_settings(interaction)
-        if not _pilot_access(interaction.user, pilot):
-            return await interaction.response.send_message("❌ You don’t have Pilot access.", ephemeral=True)
+        if not has_app_access(interaction.user, "birthdays"):
+            return await interaction.response.send_message(
+                "❌ You don’t have permission to manage birthdays.",
+                ephemeral=True
+            )
 
         data, sha = await load_data()
         view = BirthdaySettingsView(bot, data, sha)
