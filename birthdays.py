@@ -396,7 +396,7 @@ class BirthdaySettingsView(discord.ui.View):
 
         content = "USER_ID\tDD-MM\tTIMEZONE\n" + "\n".join(sorted(lines))
         file = discord.File(fp=content.encode("utf-8"), filename="birthdays_export.txt")
-        await interaction.response.send_message("✅ Export:", file=file, ephemeral=False)
+        await interaction.response.send_message("✅ Export:", file=file, ephemeral=True)
 
     @discord.ui.button(label="Send test announcement", style=discord.ButtonStyle.secondary)
     async def test_announcement(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -487,7 +487,7 @@ def setup(bot: discord.Client):
         if not _is_valid_tz(tz):
             return await interaction.response.send_message(
                 "❌ Invalid timezone. Pick one from autocomplete.",
-                ephemeral=False
+                ephemeral=True
             )
     
         target = user or interaction.user
