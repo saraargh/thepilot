@@ -1,11 +1,18 @@
 {
   "settings": {
     "enabled": true,
+    "announce": true,
     "channel_id": 1444274467864838207,
     "birthday_role_id": 1406242523952713820,
-    "announce": true,
     "message_single": "Happy Birthday {user} - hope you have the best most magical day ever and all your wishes come true!! 🎂🎉🎁🎈",
-    "message_multiple": "Happy Birthday {users} - hope you have the best most magical day ever and all your wishes come true!! 🎂🎉🎁🎈"
+    "message_multiple": "Happy Birthday {users} - hope you have the best most magical day ever and all your wishes come true!! 🎂🎉🎁🎈",
+    "embed": {
+      "enabled": true,
+      "title": "🎉 Birthday Time!",
+      "description": "{message}",
+      "color": 16738740,
+      "images": []
+    }
   },
   "birthdays": {
     "487879272875425792": {
