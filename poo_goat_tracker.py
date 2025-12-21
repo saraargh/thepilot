@@ -267,7 +267,7 @@ def setup(bot: discord.Client):
             await interaction.followup.send("❌ Announcement channel not found.")
             return
 
-        data = _default_data()
+        data = load_data()
 
         async for message in channel.history(limit=None, oldest_first=True):
             if message.author.id != PILOT_BOT_ID:
