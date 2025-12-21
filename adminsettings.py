@@ -56,7 +56,8 @@ def build_role_pages(guild: discord.Guild, settings: Dict[str, Any]) -> List[dis
         ("💩🐐 Poo / Goat", settings.get("apps", {}).get("poo_goat", {}).get("allowed_roles", [])),
         ("👋📄🚀 Welcome / Leave / Boost", settings.get("apps", {}).get("welcome_leave", {}).get("allowed_roles", [])),
         ("🧩 Roles / Self-Roles", settings.get("apps", {}).get("roles", {}).get("allowed_roles", [])),
-    ]
+        ("🎂 Birthdays", settings.get("apps", {}).get("birthdays", {}).get("allowed_roles", [])),
+      ]
 
     chunk = 2
     pages: List[discord.Embed] = []
