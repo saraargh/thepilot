@@ -34,7 +34,6 @@ intents.message_content = True
 class ThePilot(commands.Bot):
     def __init__(self):
         super().__init__(command_prefix="!", intents=intents)
-        self.tree = app_commands.CommandTree(self)
         self.joinleave = WelcomeSystem(self)
 
     # ---------------- MEMBER JOIN ----------------
