@@ -7,7 +7,8 @@ from discord import app_commands
 from datetime import datetime, timedelta
 import pytz
 
-from permissions import has_app_access
+# ✅ GLOBAL PERMISSIONS
+from permissions import has_global_access
 
 # ======================
 # CONFIG
@@ -41,6 +42,7 @@ def _default_settings():
 def load_settings():
     try:
         res = requests.get(_github_url(), headers=HEADERS)
+
         if res.status_code == 404:
             return _default_settings(), None
 
@@ -160,55 +162,65 @@ class PilotLogs(app_commands.Group):
 
     @app_commands.command(name="enable", description="Enable Pilot runtime logs")
     async def enable(self, interaction: discord.Interaction):
-        if not has_app_access(interaction):
+        if not has_global_access(interaction):
             await interaction.response.send_message(
-                "❌ You don’t have access to this command.",
+                "❌ You don’t have permission to use this command.",
                 ephemeral=True
             )
             return
+
+        await interaction.response.defer(ephemeral=True)
 
         settings, sha = load_settings()
         settings["enabled"] = True
         save_settings(settings, sha)
 
-        await interaction.response.send_message(
+        await interaction.followup.send(
             "✅ Pilot runtime logging **enabled**.",
             ephemeral=True
         )
 
     @app_commands.command(name="disable", description="Disable Pilot runtime logs")
     async def disable(self, interaction: discord.Interaction):
-        if not has_app_access(interaction):
+        if not has_global_access(interaction):
             await interaction.response.send_message(
-                "❌ You don’t have access to this command.",
+                "❌ You don’t have permission to use this command.",
                 ephemeral=True
             )
             return
+
+        await interaction.response.defer(ephemeral=True)
 
         settings, sha = load_settings()
         settings["enabled"] = False
         save_settings(settings, sha)
 
-        await interaction.response.send_message(
+        await interaction.followup.send(
             "🛑 Pilot runtime logging **disabled**.",
             ephemeral=True
         )
 
     @app_commands.command(name="channel", description="Set the Pilot log channel")
     @app_commands.describe(channel="Channel to send Pilot runtime logs to")
-    async def channel(self, interaction: discord.Interaction, channel: discord.TextChannel):
-        if not has_app_access(interaction):
+    async def channel(
+        self,
+        interaction: discord.Interaction,
+        channel: discord.TextChannel
+    ):
+        if not has_global_access(interaction):
             await interaction.response.send_message(
-                "❌ You don’t have access to this command.",
+                "❌ You don’t have permission to use this command.",
                 ephemeral=True
             )
             return
+
+        await interaction.response.defer(ephemeral=True)
 
         settings, sha = load_settings()
         settings["channel_id"] = channel.id
         save_settings(settings, sha)
 
-        await interaction.response.send_message(
+        await interaction.followup.send(
             f"📡 Pilot runtime log channel set to {channel.mention}",
             ephemeral=True
         )
