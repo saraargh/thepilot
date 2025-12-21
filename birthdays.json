@@ -7,7 +7,8 @@
     "message_single": "Happy Birthday {user} - hope you have the best most magical day ever and all your wishes come true!! 🎂🎉🎁🎈",
     "message_multiple": "Happy Birthday {users} - hope you have the best most magical day ever and all your wishes come true!! 🎂🎉🎁🎈",
     "images": [
-      "https://cdn.discordapp.com/ephemeral-attachments/1450222619327729757/1452433785173053450/IMG_8761.gif?ex=6949cbdf&is=69487a5f&hm=6344c53173a943edfddd2d8a4df68d42f098214ec0864e229f8e2de5ca7267cb&"
+      "https://cdn.discordapp.com/ephemeral-attachments/1450222619327729757/1452433785173053450/IMG_8761.gif?ex=6949cbdf&is=69487a5f&hm=6344c53173a943edfddd2d8a4df68d42f098214ec0864e229f8e2de5ca7267cb&",
+      "https://cdn.discordapp.com/ephemeral-attachments/1450222619327729757/1452433716902105120/IMG_8763.gif?ex=6949cbcf&is=69487a4f&hm=c82f516d75c10ff583e5fbff203e8d5c5a97a4a1a3a5c385b6db3c71c9aabd9f&"
     ],
     "embed": {
       "enabled": true,
