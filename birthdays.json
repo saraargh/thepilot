@@ -1,1 +1,42 @@
-{}
+{
+  "settings": {
+    "enabled": true,
+    "channel_id": null,
+    "birthday_role_id": null,
+    "announce": true,
+
+    "message_single": "🎂 Happy Birthday {user}! ✈️",
+    "message_multiple": "🎉 Happy Birthday to everyone celebrating today! 🎂✈️"
+  },
+  "birthdays": {
+    "487879272875425792": { "day": 7, "month": 1, "timezone": "Europe/London" },
+    "360366406610452481": { "day": 18, "month": 2, "timezone": "Europe/London" },
+    "1400569483751456779": { "day": 23, "month": 2, "timezone": "Europe/London" },
+    "637606058231332886": { "day": 3, "month": 3, "timezone": "Australia/Brisbane" },
+    "619350934245605377": { "day": 8, "month": 3, "timezone": "Europe/London" },
+    "924686780408676392": { "day": 16, "month": 3, "timezone": "Europe/London" },
+    "1355886703767847064": { "day": 17, "month": 4, "timezone": "Europe/London" },
+    "636981787310161930": { "day": 17, "month": 5, "timezone": "Europe/London" },
+    "1263222573181960236": { "day": 16, "month": 6, "timezone": "Europe/London" },
+    "1213578451731357720": { "day": 5, "month": 8, "timezone": "Europe/London" },
+    "379330084181508107": { "day": 7, "month": 8, "timezone": "Europe/London" },
+    "536620158047879179": { "day": 8, "month": 8, "timezone": "Europe/London" },
+    "702589225018851348": { "day": 1, "month": 9, "timezone": "America/Los_Angeles" },
+    "302277087115345922": { "day": 10, "month": 9, "timezone": "Europe/London" },
+    "300738774332080128": { "day": 4, "month": 10, "timezone": "Europe/London" },
+    "277271767964188673": { "day": 12, "month": 10, "timezone": "Europe/London" },
+    "1238834298338152498": { "day": 14, "month": 10, "timezone": "Europe/London" },
+    "1342641182827872297": { "day": 15, "month": 10, "timezone": "Asia/Dubai" },
+    "154278268755771393": { "day": 31, "month": 10, "timezone": "Europe/Copenhagen" },
+    "865401742274330674": { "day": 7, "month": 11, "timezone": "America/Chicago" },
+    "1258358477903102024": { "day": 10, "month": 11, "timezone": "Europe/London" },
+    "1016515115450892349": { "day": 29, "month": 11, "timezone": "America/Chicago" },
+    "847045429086126082": { "day": 12, "month": 12, "timezone": "Europe/London" },
+    "1248020591823425626": { "day": 13, "month": 12, "timezone": "Europe/London" },
+    "1261707209599877151": { "day": 30, "month": 12, "timezone": "Europe/London" }
+  },
+  "state": {
+    "announced_keys": [],
+    "role_assigned_keys": []
+  }
+}
