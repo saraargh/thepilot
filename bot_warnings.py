@@ -113,11 +113,14 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
         author_roles = {r.id for r in author.roles}
         target_roles = {r.id for r in member.roles}
 
-        # 🤡 SELF-WARN RULE
+        # 🤡 SELF-WARN RULE (FIXED: GUARANTEED SAVE)
         if member.id == author.id:
+
             candidates = [
                 m for m in interaction.guild.members
-                if not m.bot and m.id != author.id
+                if not m.bot
+                and m.id != author.id
+                and SAZZLES_ROLE_ID not in [r.id for r in m.roles]
             ]
 
             if not candidates:
@@ -134,7 +137,14 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
                 f"so the pilot gave it to {chosen.mention}"
             )
 
-            add_warning(chosen.id, reason_text)
+            # 🔒 Force fresh load + save (prevents stale SHA bug)
+            data, sha = load_data()
+            uid = str(chosen.id)
+            if uid not in data["warnings"]:
+                data["warnings"][uid] = []
+
+            data["warnings"][uid].append(reason_text)
+            save_data(data, sha)
 
             await interaction.response.send_message(
                 f"🤡 {author.mention} You cannot warn yourself, instead a warning has been given to {chosen.mention}!",
