@@ -24,6 +24,9 @@ from birthdays import setup as birthdays_setup
 # ✅ POO / GOAT TRACKER
 from poo_goat_tracker import setup as setup_poo_goat_tracker
 
+# 🚀 PILOT RUNTIME LOGGER (NEW)
+from pilot_runtime_logger import log_startup, log_error
+
 # ===== CONFIG =====
 TOKEN = os.getenv("TOKEN")
 UK_TZ = pytz.timezone("Europe/London")
@@ -59,8 +62,16 @@ class ThePilot(discord.Client):
     async def on_member_update(self, before: discord.Member, after: discord.Member):
         await self.joinleave.on_member_update(before, after)
 
+    # ---------------- GLOBAL ERROR LOGGER (NEW) ----------------
+    async def on_error(self, event_method, *args, **kwargs):
+        await log_error(self, event_method)
+        raise  # keep normal traceback + Render logs
+
     # ---------------- SETUP ----------------
     async def setup_hook(self):
+        # 🚀 Log redeploy / restart (NEW)
+        await log_startup(self)
+
         # Start scheduled loop (safe to keep even if empty)
         scheduled_tasks.start(self)
 
