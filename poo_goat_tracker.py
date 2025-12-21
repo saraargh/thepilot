@@ -157,7 +157,7 @@ def setup(bot: discord.Client):
             await message.add_reaction(GOAT_EMOJI)
             save_data(data)
 
-    bot.add_listener(on_message)
+    bot.on_message = on_message
 
     # -------- ROLE CLEANUP TASK --------
     @tasks.loop(hours=1)
