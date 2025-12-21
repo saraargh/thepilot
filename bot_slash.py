@@ -1,5 +1,5 @@
 import discord
-from discord.ext import tasks
+from discord.ext import tasks, commands
 from discord import app_commands
 import pytz
 import os
@@ -31,9 +31,9 @@ intents.members = True
 intents.message_content = True
 
 
-class ThePilot(discord.Client):
+class ThePilot(commands.Bot):
     def __init__(self):
-        super().__init__(intents=intents)
+        super().__init__(command_prefix="!", intents=intents)
         self.tree = app_commands.CommandTree(self)
         self.joinleave = WelcomeSystem(self)
 
@@ -96,6 +96,9 @@ class ThePilot(discord.Client):
 
         # ✅ Role / Emoji tools
         role_tools_setup(self.tree)
+
+        # ✅ NEW: POO / GOAT TRACKER (listener + boards)
+        await self.load_extension("poo_goat_tracker")
 
         # Sync once
         await self.tree.sync()
