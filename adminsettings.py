@@ -29,6 +29,7 @@ SCOPES = {
     "poo_goat": "💩🐐 Poo / Goat",
     "welcome_leave": "👋📄🚀 Welcome / Leave / Boost",
     "roles": "🧩 Roles / Self-Roles",
+    "birthdays": "🎂 Birthdays",
 }
 
 # ======================================================
