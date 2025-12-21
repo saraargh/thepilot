@@ -396,8 +396,70 @@ class BirthdaySettingsView(discord.ui.View):
 
         content = "USER_ID\tDD-MM\tTIMEZONE\n" + "\n".join(sorted(lines))
         file = discord.File(fp=content.encode("utf-8"), filename="birthdays_export.txt")
-        await interaction.response.send_message("✅ Export:", file=file, ephemeral=True)
+        await interaction.response.send_message("✅ Export:", file=file, ephemeral=False)
 
+    @discord.ui.button(label="Send test announcement", style=discord.ButtonStyle.secondary)
+    async def test_announcement(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if not has_app_access(interaction.user, "birthdays"):
+            return await interaction.response.send_message(
+                "❌ You don’t have permission to test birthdays.",
+                ephemeral=True
+            )
+    
+        s = self.data.get("settings", {})
+        channel_id = s.get("channel_id")
+    
+        if not channel_id:
+            return await interaction.response.send_message(
+                "❌ No birthday channel set.",
+                ephemeral=True
+            )
+    
+        channel = interaction.guild.get_channel(int(channel_id))
+        if not channel:
+            return await interaction.response.send_message(
+                "❌ Birthday channel not found.",
+                ephemeral=True
+            )
+    
+        today = datetime.now(UK_TZ).date()
+        real_members: list[discord.Member] = []
+    
+        # ---- try real birthdays first ----
+        for uid, rec in self.data.get("birthdays", {}).items():
+            if rec.get("day") == today.day and rec.get("month") == today.month:
+                m = interaction.guild.get_member(int(uid))
+                if m:
+                    real_members.append(m)
+    
+        members = real_members
+    
+        # ---- fallback: fake test members ----
+        if not members:
+            # use command invoker + up to 1 more human
+            members = [interaction.user]
+    
+            for m in interaction.guild.members:
+                if not m.bot and m.id != interaction.user.id:
+                    members.append(m)
+                    break
+    
+        # ---- render message ----
+        if len(members) == 1:
+            tpl = s.get("message_single")
+            text = _fmt_template(
+                tpl,
+                member=members[0],
+                local_date=today,
+                tz="Europe/London"
+            )
+        else:
+            tpl = s.get("message_multiple")
+            text = tpl.replace("{users}", ", ".join(m.mention for m in members)) \
+                      .replace("{count}", str(len(members)))
+    
+        await channel.send(f"🧪 **TEST MODE**\n{text}")
+        await interaction.response.send_message("✅ Test sent.", ephemeral=True)
 
 # ------------------- Main Setup -------------------
 def setup(bot: discord.Client):
@@ -425,7 +487,7 @@ def setup(bot: discord.Client):
         if not _is_valid_tz(tz):
             return await interaction.response.send_message(
                 "❌ Invalid timezone. Pick one from autocomplete.",
-                ephemeral=True
+                ephemeral=False
             )
     
         target = user or interaction.user
@@ -449,7 +511,7 @@ def setup(bot: discord.Client):
         who = "your" if target.id == interaction.user.id else f"{target.mention}'s"
         await interaction.response.send_message(
             f"✅ Set {who} birthday to **{day:02d}/{month:02d}** in **{tz}**.",
-            ephemeral=True
+            ephemeral=False
         )
 
     @birthday_group.command(name="view", description="View someone’s birthday.")
@@ -480,7 +542,7 @@ def setup(bot: discord.Client):
 
         await interaction.response.send_message(
             f"🎂 **{target.display_name}** — **{day:02d}/{month:02d}** (`{tz}`)",
-            ephemeral=True
+            ephemeral=False
         )
 
     @birthday_group.command(name="remove", description="Remove a birthday.")
@@ -539,7 +601,7 @@ def setup(bot: discord.Client):
                 entries.append((delta, next_dt, uid, tz))
 
         if not entries:
-            return await interaction.response.send_message(f"No birthdays in the next {days} days.", ephemeral=True)
+            return await interaction.response.send_message(f"No birthdays in the next {days} days.", ephemeral=False)
 
         entries.sort(key=lambda x: (x[0], x[1].month, x[1].day))
 
@@ -557,7 +619,7 @@ def setup(bot: discord.Client):
             color=discord.Color.gold()
         )
         embed.set_footer(text="The Pilot • Birthdays")
-        await interaction.response.send_message(embed=embed, ephemeral=True)
+        await interaction.response.send_message(embed=embed, ephemeral=False)
 
     @birthday_group.command(name="settings", description="Configure birthday settings (Pilot roles only).")
     async def birthdaysettings(interaction: discord.Interaction):
@@ -569,64 +631,7 @@ def setup(bot: discord.Client):
 
         data, sha = await load_data()
         view = BirthdaySettingsView(bot, data, sha)
-        await interaction.response.send_message(embed=view._embed(), view=view, ephemeral=True)
-
-    @birthday_group.command(name="test", description="Force-test birthday announcements.")
-    @app_commands.describe(mode="Use 'today' to simulate today's birthdays")
-    async def birthday_test(interaction: discord.Interaction, mode: str):
-        if not has_app_access(interaction.user, "birthdays"):
-            return await interaction.response.send_message(
-                "❌ You don’t have permission to test birthdays.",
-                ephemeral=True
-            )
-    
-        if mode.lower() != "today":
-            return await interaction.response.send_message(
-                "Only supported mode is `today`.",
-                ephemeral=True
-            )
-    
-        data, _ = await load_data()
-        s = data.get("settings", {})
-        channel_id = s.get("channel_id")
-    
-        if not channel_id:
-            return await interaction.response.send_message(
-                "❌ No birthday channel set.",
-                ephemeral=True
-            )
-    
-        channel = interaction.guild.get_channel(int(channel_id))
-        if not channel:
-            return await interaction.response.send_message(
-                "❌ Birthday channel not found.",
-                ephemeral=True
-            )
-    
-        today = datetime.now(UK_TZ).date()
-        members = []
-    
-        for uid, rec in data.get("birthdays", {}).items():
-            if rec.get("day") == today.day and rec.get("month") == today.month:
-                m = interaction.guild.get_member(int(uid))
-                if m:
-                    members.append(m)
-    
-        if not members:
-            return await interaction.response.send_message(
-                "No birthdays today to test.",
-                ephemeral=True
-            )
-    
-        if len(members) == 1:
-            tpl = s.get("message_single")
-            text = _fmt_template(tpl, member=members[0], local_date=today, tz="Europe/London")
-        else:
-            tpl = s.get("message_multiple")
-            text = tpl.replace("{users}", ", ".join(m.mention for m in members))
-    
-        await channel.send(f"🧪 **TEST MODE**\n{text}")
-        await interaction.response.send_message("✅ Test sent.", ephemeral=True)
+        await interaction.response.send_message(embed=view._embed(), view=view, ephemeral=False)
 
 
     # ------------------- Background Task -------------------
