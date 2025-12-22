@@ -150,7 +150,11 @@
     }
   },
   "state": {
-    "announced_keys": [],
-    "role_assigned_keys": []
+    "announced_keys": [
+      "2025-12-22|announce"
+    ],
+    "role_assigned_keys": [
+      "2025-12-22|1238834298338152498"
+    ]
   }
 }
