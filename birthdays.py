@@ -417,6 +417,7 @@ class BirthdayChannelSelect(discord.ui.ChannelSelect):
             channel_types=[discord.ChannelType.text],
             min_values=1,
             max_values=1
+            row=0
         )
 
     async def callback(self, interaction: discord.Interaction):
@@ -435,6 +436,7 @@ class BirthdayRoleSelect(discord.ui.RoleSelect):
             placeholder="🎂 Set birthday role (optional)…",
             min_values=1,
             max_values=1
+            row=1
         )
 
     async def callback(self, interaction: discord.Interaction):
