@@ -416,7 +416,7 @@ class BirthdayChannelSelect(discord.ui.ChannelSelect):
             placeholder="📣 Set announcement channel…",
             channel_types=[discord.ChannelType.text],
             min_values=1,
-            max_values=1
+            max_values=1,
             row=0
         )
 
@@ -435,7 +435,7 @@ class BirthdayRoleSelect(discord.ui.RoleSelect):
         super().__init__(
             placeholder="🎂 Set birthday role (optional)…",
             min_values=1,
-            max_values=1
+            max_values=1,
             row=1
         )
 
