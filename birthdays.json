@@ -1,11 +1,14 @@
 {
   "settings": {
     "enabled": true,
+    "announce": true,
     "channel_id": 1444274467864838207,
     "birthday_role_id": 1406242523952713820,
-    "announce": true,
+    "post_hour": 12,
+    "post_minute": 0,
     "message_single": "Happy Birthday - hope you have the best most magical day ever and all your wishes come true!! 🎂🎉🎁🎈",
     "message_multiple": "Happy Birthday - hope you have the best most magical day ever and all your wishes come true!! 🎂🎉🎁🎈",
+    "image_urls": [],
     "images": [
       "https://cdn.discordapp.com/ephemeral-attachments/1450222619327729757/1452433785173053450/IMG_8761.gif?ex=6949cbdf&is=69487a5f&hm=6344c53173a943edfddd2d8a4df68d42f098214ec0864e229f8e2de5ca7267cb&",
       "https://cdn.discordapp.com/ephemeral-attachments/1450222619327729757/1452433716902105120/IMG_8763.gif?ex=6949cbcf&is=69487a4f&hm=c82f516d75c10ff583e5fbff203e8d5c5a97a4a1a3a5c385b6db3c71c9aabd9f&",
@@ -14,9 +17,6 @@
       "https://cdn.discordapp.com/ephemeral-attachments/1450222619327729757/1452431311292858378/IMG_8758.gif?ex=6949c991&is=69487811&hm=915d10b5e471ba9abc5f4ffbba4f0555f715fe01e98863484ce2a0b9819d31f3&",
       "https://cdn.discordapp.com/ephemeral-attachments/1450222619327729757/1452431285313339513/IMG_8759.gif?ex=6949c98b&is=6948780b&hm=2cb3a7f16b7d13822036bb5c1626e43086093f0640df4232b0798a5c0a33846e&"
     ],
-    "post_hour": 12,
-    "post_minute": 0,
-    "image_urls": [],
     "embed": {
       "enabled": true,
       "title": "🎉 Birthday Time!",
