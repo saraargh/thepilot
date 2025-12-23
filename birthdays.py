@@ -155,7 +155,8 @@ async def _send_announcement_like(*, channel, settings, members, local_date, tz_
     embed = discord.Embed(title=header, description=body, color=discord.Color.from_rgb(255, 105, 180))
     if test_mode: embed.set_author(name="PREVIEW MODE")
     img_urls = settings.get("image_urls", [])
-    if img_urls: embed.set_image(url=random.choice(img_urls))
+    if img_urls: 
+        embed.set_image(url=random.choice(img_urls))
     embed.set_footer(text=f"The Pilot • {local_date.strftime('%-d %B')} • {tz_label}")
     await channel.send(content=pings if not test_mode else f"🔔 *Ping Preview:* {pings}", embed=embed)
 
@@ -289,7 +290,7 @@ def setup(bot: discord.Client):
         )
         embed.add_field(
             name="`/birthday set`", 
-            value="Register your birthday.\n**Timezone:** Start typing your city/country (e.g., 'London' or 'New York') in the timezone field and select from the list.", 
+            value="Register your birthday.\n**Timezone:** Search for your city/country and select from the list.", 
             inline=False
         )
         embed.add_field(
@@ -311,9 +312,9 @@ def setup(bot: discord.Client):
     async def b_set(it, day: int, month: int, timezone: str, user: Optional[discord.Member] = None):
         if not _is_valid_tz(timezone): return await it.response.send_message("❌ Invalid Timezone.", ephemeral=True)
         target = user or it.user
-        if user and user.id != it.user.id:
+        if target.id != it.user.id:
             if not has_app_access(it.user, "birthdays"):
-                return await it.response.send_message("❌ You do not have permission to set other users' birthdays.", ephemeral=True)
+                return await it.response.send_message("❌ No permission to set others' birthdays.", ephemeral=True)
         
         data, sha = await load_data()
         data["birthdays"][str(target.id)] = {"day": day, "month": month, "timezone": timezone}
@@ -326,7 +327,7 @@ def setup(bot: discord.Client):
         target = user or it.user
         if target.id != it.user.id:
             if not has_app_access(it.user, "birthdays"):
-                return await it.response.send_message("❌ You do not have permission to remove other users' birthdays.", ephemeral=True)
+                return await it.response.send_message("❌ No permission to remove others' birthdays.", ephemeral=True)
         
         data, sha = await load_data()
         uid_str = str(target.id)
@@ -361,42 +362,80 @@ def setup(bot: discord.Client):
 
     @tasks.loop(minutes=1)
     async def birthday_tick():
-        now_utc = datetime.now(timezone.utc); data, sha = await load_data(); s = data["settings"]
+        now_utc = datetime.now(timezone.utc)
+        data, sha = await load_data()
+        s = data["settings"]
         if not s or not s.get("enabled"): return
-        dirty = False; announced = set(data["state"].get("announced_keys", [])); roles_set = set(data["state"].get("role_assigned_keys", []))
+
+        dirty = False
+        announced = set(data["state"].get("announced_keys", []))
+        roles_set = set(data["state"].get("role_assigned_keys", []))
+
         for guild in bot.guilds:
-            chan = guild.get_channel(s.get("channel_id")); role = guild.get_role(s.get("birthday_role_id")); buckets = {}; bucket_tz = {}
+            chan = guild.get_channel(s.get("channel_id"))
+            role = guild.get_role(s.get("birthday_role_id"))
+            buckets = {}
+            bucket_tz = {}
+
             for uid, rec in data["birthdays"].items():
                 member = guild.get_member(int(uid))
                 if not member: continue
-                tz_str = rec.get("timezone", "Europe/London"); loc_now = now_utc.astimezone(ZoneInfo(tz_str)); loc_date = loc_now.date()
+
+                tz_str = rec.get("timezone", "Europe/London")
+                try:
+                    loc_now = now_utc.astimezone(ZoneInfo(tz_str))
+                except:
+                    loc_now = now_utc.astimezone(UK_TZ)
+                
+                loc_date = loc_now.date()
                 is_bday = (rec['day'] == loc_date.day and rec['month'] == loc_date.month)
                 
-                # Logic: Give role only at post time, Remove at local midnight
+                # --- Specific Time Logic ---
+                is_post_minute = (loc_now.hour == s['post_hour'] and loc_now.minute == s['post_minute'])
+
+                # --- Role Logic ---
                 if role:
                     r_key = f"{loc_date.isoformat()}|{uid}"
-                    # Add role when announcement happens
-                    if is_bday and loc_now.hour == s['post_hour'] and loc_now.minute == s['post_minute']:
-                        if r_key not in roles_set and role not in member.roles:
-                            try: await member.add_roles(role); roles_set.add(r_key); dirty = True
+                    # ASSIGN ROLE only when it is post time
+                    if is_bday and is_post_minute:
+                        if role not in member.roles:
+                            try:
+                                await member.add_roles(role)
+                                if r_key not in roles_set:
+                                    roles_set.add(r_key)
+                                    dirty = True
                             except: pass
-                    # Remove role when it is no longer their birthday in their local time (Midnight)
+                    # REMOVE ROLE if it's no longer their birthday (hit midnight)
                     elif not is_bday and role in member.roles:
-                        try: await member.remove_roles(role)
+                        try:
+                            await member.remove_roles(role)
                         except: pass
 
-                if is_bday and s.get("announce") and chan:
-                    if loc_now.hour == s['post_hour'] and loc_now.minute == s['post_minute']:
-                        dk = loc_date.isoformat(); buckets.setdefault(dk, []).append(member); bucket_tz[dk] = tz_str
+                # --- Announcement Logic ---
+                if is_bday and s.get("announce") and chan and is_post_minute:
+                    dk = loc_date.isoformat()
+                    buckets.setdefault(dk, []).append(member)
+                    bucket_tz[dk] = tz_str
             
             for d_key, mems in buckets.items():
                 a_key = f"{d_key}|announce"
                 if a_key not in announced:
-                    try: await _send_announcement_like(channel=chan, settings=s, members=mems, local_date=date.fromisoformat(d_key), tz_label=bucket_tz[d_key], test_mode=False)
+                    try:
+                        await _send_announcement_like(
+                            channel=chan, 
+                            settings=s, 
+                            members=mems, 
+                            local_date=date.fromisoformat(d_key), 
+                            tz_label=bucket_tz[d_key], 
+                            test_mode=False
+                        )
+                        announced.add(a_key)
+                        dirty = True
                     except: pass
-                    announced.add(a_key); dirty = True
+
         if dirty:
-            data["state"]["announced_keys"] = list(announced); data["state"]["role_assigned_keys"] = list(roles_set)
+            data["state"]["announced_keys"] = list(announced)
+            data["state"]["role_assigned_keys"] = list(roles_set)
             await save_data(data, sha)
 
     @birthday_tick.before_loop
