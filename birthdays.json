@@ -5,7 +5,7 @@
     "channel_id": 1444274467864838207,
     "birthday_role_id": 1406242523952713820,
     "post_hour": 15,
-    "post_minute": 18,
+    "post_minute": 25,
     "message_header": "🎂 Birthday Celebration!",
     "message_single": "Happy Birthday {user} - hope you have the best most magical day ever and all your wishes come true!! 🎂🎉🎁🎈",
     "message_multiple": "Happy Birthday {user} - hope you have the best most magical day ever and all your wishes come true!! 🎂🎉🎁🎈",
@@ -159,8 +159,10 @@
   },
   "state": {
     "announced_keys": [
+      "2025-12-23|announce"
     ],
     "role_assigned_keys": [
+      "2025-12-23|1450514816958599220"
     ]
   }
 }
