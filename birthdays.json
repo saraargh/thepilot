@@ -1,7 +1,7 @@
 {
   "settings": {
     "enabled": true,
-    "announce": false,
+    "announce": true,
     "channel_id": 1444274467864838207,
     "birthday_role_id": 1406242523952713820,
     "post_hour": 12,
