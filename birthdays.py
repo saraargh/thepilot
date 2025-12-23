@@ -144,14 +144,13 @@ def _next_occurrence(day: int, month: int, now_local: date) -> date:
     return candidate
 
 # =========================================================
-# Announcement Helper
+# Announcement Helper (UPDATED WITH IMAGE FIX)
 # =========================================================
 async def _send_announcement_like(*, channel, settings, members, local_date, tz_label, test_mode):
     if not members: return
     pings = ", ".join(m.mention for m in members)
     header = _fmt(settings.get("message_header", "Happy Birthday!"), members)
     
-    # Choose template based on number of members
     if len(members) > 1:
         body_tpl = settings.get("message_multiple") or settings.get("message_single")
     else:
@@ -159,14 +158,22 @@ async def _send_announcement_like(*, channel, settings, members, local_date, tz_
         
     body = _fmt(body_tpl, members)
     embed = discord.Embed(title=header, description=body, color=discord.Color.from_rgb(255, 105, 180))
-    if test_mode: embed.set_author(name=f"PREVIEW MODE ({len(members)} Users)")
+    
+    if test_mode: 
+        embed.set_author(name=f"PREVIEW MODE ({len(members)} Users)")
     
     img_urls = settings.get("image_urls", [])
     if img_urls: 
-        embed.set_image(url=random.choice(img_urls))
+        chosen_url = random.choice(img_urls).strip() # Clean whitespaces
+        embed.set_image(url=chosen_url)
         
     embed.set_footer(text=f"The Pilot • {local_date.strftime('%-d %B')} • {tz_label}")
-    await channel.send(content=pings if not test_mode else f"🔔 *Ping Preview:* {pings}", embed=embed)
+    
+    await channel.send(
+        content=pings if not test_mode else f"🔔 *Ping Preview:* {pings}", 
+        embed=embed,
+        allowed_mentions=discord.AllowedMentions(users=True, roles=True)
+    )
 
 # =========================================================
 # UI Modals & Views
@@ -189,7 +196,7 @@ class BirthdayMessageModal(discord.ui.Modal, title="Edit Birthday Card Text"):
         s["message_header"] = str(self.header_text.value)
         s["message_single"] = str(self.single_message.value)
         s["message_multiple"] = str(self.multiple_message.value) if self.multiple_message.value else str(self.single_message.value)
-        await self.view_ref._save_and_refresh(interaction, note="✅ Card design updated.")
+        await self.view_ref._save_and_refresh(interaction, note="✅ Card designs updated.")
 
 class PostTimeModal(discord.ui.Modal, title="Set Birthday Post Time"):
     hour = discord.ui.TextInput(label="Hour (0-23)", max_length=2)
@@ -206,7 +213,7 @@ class PostTimeModal(discord.ui.Modal, title="Set Birthday Post Time"):
         except: await it.response.send_message("❌ Invalid numbers.", ephemeral=True)
 
 class AddImageModal(discord.ui.Modal, title="Add Image URL"):
-    url = discord.ui.TextInput(label="Direct Image URL", placeholder="https://.../image.gif")
+    url = discord.ui.TextInput(label="Direct Image URL", placeholder="https://i.imgur.com/example.gif")
     def __init__(self, view): super().__init__(); self.view_ref = view
     async def on_submit(self, it):
         u = str(self.url.value).strip()
@@ -280,7 +287,7 @@ class BirthdaySettingsView(discord.ui.View):
         s = self.data["settings"]; chan = self.bot.get_channel(s.get("channel_id"))
         if not chan: return await it.response.send_message("❌ Set a channel first!", ephemeral=True)
         await it.response.send_message("✨ Group Preview sent.", ephemeral=True)
-        # Mocking a second user (the bot itself) for the group preview
+        # Mocking a group with the bot
         await _send_announcement_like(channel=chan, settings=s, members=[it.user, it.guild.me], local_date=date.today(), tz_label="Preview Zone", test_mode=True)
 
 class BirthdayChannelSelect(discord.ui.ChannelSelect):
