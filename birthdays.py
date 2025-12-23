@@ -6,7 +6,7 @@ import base64
 import asyncio
 import io
 import random
-from datetime import datetime, timezone, date
+from datetime import datetime, timezone, date, timedelta
 from typing import Any, Dict, Optional, List, Tuple
 
 import aiohttp
@@ -111,7 +111,9 @@ async def save_data(data: dict, sha: Optional[str]) -> Optional[str]:
 def _get_all_timezones() -> List[str]:
     global _TZ_CACHE
     if _TZ_CACHE is None:
-        _TZ_CACHE = sorted(list(available_timezones()))
+        all_tz = available_timezones()
+        filtered = [t for t in all_tz if "/" in t and not t.startswith("Etc/")]
+        _TZ_CACHE = sorted(filtered)
     return _TZ_CACHE
 
 def _is_valid_tz(tz: str) -> bool:
@@ -119,67 +121,56 @@ def _is_valid_tz(tz: str) -> bool:
     except: return False
 
 async def timezone_autocomplete(interaction: discord.Interaction, current: str) -> List[app_commands.Choice[str]]:
-    cur = (current or "").strip().lower()
+    if not current:
+        priority = ["Europe/London", "America/New_York", "America/Los_Angeles", "Europe/Paris", "UTC", "Australia/Sydney"]
+        return [app_commands.Choice(name=tz, value=tz) for tz in priority]
+    cur = current.lower()
     tzs = _get_all_timezones()
     matches = [t for t in tzs if cur in t.lower()][:25]
     return [app_commands.Choice(name=m, value=m) for m in matches]
-
-def _next_occurrence(day: int, month: int, now_local: date) -> date:
-    year = now_local.year
-    try: candidate = date(year, month, day)
-    except: candidate = date(year, month, 1)
-    if candidate < now_local:
-        try: candidate = date(year + 1, month, day)
-        except: candidate = date(year + 1, month, 1)
-    return candidate
 
 def _fmt(tpl: str, members: List[discord.Member]) -> str:
     mentions = ", ".join(m.mention for m in members)
     names = ", ".join(m.display_name for m in members)
     return (tpl or "").replace("{mention}", mentions).replace("{username}", names).replace("{users}", mentions)
 
+def _next_occurrence(day: int, month: int, now_local: date) -> date:
+    year = now_local.year
+    try: candidate = date(year, month, day)
+    except: candidate = date(year, month, 1) # Fallback for Feb 29
+    if candidate < now_local:
+        try: candidate = date(year + 1, month, day)
+        except: candidate = date(year + 1, month, 1)
+    return candidate
+
 # =========================================================
 # Announcement Helper
 # =========================================================
 async def _send_announcement_like(*, channel, settings, members, local_date, tz_label, test_mode):
     if not members: return
-    if test_mode: await channel.send("🧪 **TEST MODE**")
-
     pings = ", ".join(m.mention for m in members)
     header = _fmt(settings.get("message_header", "Happy Birthday!"), members)
     body_tpl = settings.get("message_single" if len(members) == 1 else "message_multiple", "")
     body = _fmt(body_tpl, members)
-
     embed = discord.Embed(title=header, description=body, color=discord.Color.from_rgb(255, 105, 180))
-    
+    if test_mode: embed.set_author(name="PREVIEW MODE")
     img_urls = settings.get("image_urls", [])
-    if img_urls:
-        embed.set_image(url=random.choice(img_urls))
-    
+    if img_urls: embed.set_image(url=random.choice(img_urls))
     embed.set_footer(text=f"The Pilot • {local_date.strftime('%-d %B')} • {tz_label}")
-    await channel.send(content=pings, embed=embed)
+    await channel.send(content=pings if not test_mode else f"🔔 *Ping Preview:* {pings}", embed=embed)
 
 # =========================================================
 # UI Modals & Views
 # =========================================================
 class BirthdayMessageModal(discord.ui.Modal, title="Edit Birthday Message Card"):
     header_text = discord.ui.TextInput(label="Embed Header (Title)", placeholder="e.g. 🎂 Happy Birthday {username}!", max_length=100)
-    single_message = discord.ui.TextInput(label="Message Body (Single)", style=discord.TextStyle.paragraph, max_length=1500)
-    multiple_message = discord.ui.TextInput(label="Message Body (Multiple)", style=discord.TextStyle.paragraph, max_length=1500)
-
+    single_message = discord.ui.TextInput(label="Message Body", style=discord.TextStyle.paragraph, max_length=1500)
     def __init__(self, view: BirthdaySettingsView):
-        super().__init__()
-        self.view_ref = view
-        s = view.data.get("settings", {})
-        self.header_text.default = s.get("message_header")
-        self.single_message.default = s.get("message_single")
-        self.multiple_message.default = s.get("message_multiple")
-
+        super().__init__(); self.view_ref = view; s = view.data.get("settings", {})
+        self.header_text.default = s.get("message_header"); self.single_message.default = s.get("message_single")
     async def on_submit(self, interaction: discord.Interaction):
         s = self.view_ref.data["settings"]
-        s["message_header"] = str(self.header_text.value)
-        s["message_single"] = str(self.single_message.value)
-        s["message_multiple"] = str(self.multiple_message.value)
+        s["message_header"] = str(self.header_text.value); s["message_single"] = str(self.single_message.value); s["message_multiple"] = str(self.single_message.value)
         await self.view_ref._save_and_refresh(interaction, note="✅ Card design updated.")
 
 class PostTimeModal(discord.ui.Modal, title="Set Birthday Post Time"):
@@ -236,12 +227,14 @@ class BirthdaySettingsView(discord.ui.View):
         self.add_item(BirthdayChannelSelect()); self.add_item(BirthdayRoleSelect())
     def _embed(self):
         s = self.data["settings"]
-        ch = f"<#{s['channel_id']}>" if s['channel_id'] else "None"
-        rl = f"<@&{s['birthday_role_id']}>" if s['birthday_role_id'] else "None"
-        e = discord.Embed(title="🎂 Birthday Config", color=0xff69b4)
-        e.description = f"**Enabled:** {s['enabled']}\n**Channel:** {ch}\n**Role:** {rl}\n**Time:** {s['post_hour']:02d}:{s['post_minute']:02d}\n**Images:** {len(s.get('image_urls', []))}"
-        e.add_field(name="Header", value=f"```{s.get('message_header')}```", inline=False)
-        e.add_field(name="Message", value=f"```{s.get('message_single')}```", inline=False)
+        ch = f"<#{s['channel_id']}>" if s['channel_id'] else "Not Set"
+        rl = f"<@&{s['birthday_role_id']}>" if s['birthday_role_id'] else "Not Set"
+        e = discord.Embed(title="🎂 Birthday Configuration", color=0xff69b4)
+        e.add_field(name="Bot Status", value="✅ Enabled" if s['enabled'] else "❌ Disabled", inline=True)
+        e.add_field(name="Announcements", value=ch, inline=True)
+        e.add_field(name="Birthday Role", value=rl, inline=True)
+        e.add_field(name="Post Time", value=f"{s['post_hour']:02d}:{s['post_minute']:02d} (Local)", inline=True)
+        e.add_field(name="Gallery", value=f"{len(s.get('image_urls', []))} Images", inline=True)
         return e
     async def _save_and_refresh(self, it, note=None):
         new_sha = await save_data(self.data, self.sha)
@@ -252,17 +245,30 @@ class BirthdaySettingsView(discord.ui.View):
     async def t_en(self, it, bt): self.data["settings"]["enabled"] = not self.data["settings"]["enabled"]; await self._save_and_refresh(it)
     @discord.ui.button(label="Edit Card", style=discord.ButtonStyle.secondary)
     async def ed_m(self, it, bt): await it.response.send_modal(BirthdayMessageModal(self))
-    @discord.ui.button(label="Time", style=discord.ButtonStyle.secondary)
+    @discord.ui.button(label="Set Time", style=discord.ButtonStyle.secondary)
     async def ed_t(self, it, bt): await it.response.send_modal(PostTimeModal(self))
     @discord.ui.button(label="Images", style=discord.ButtonStyle.secondary)
     async def ed_i(self, it, bt): v = ImageSettingsView(self); await it.response.edit_message(embed=v._embed(), view=v)
+    @discord.ui.button(label="Preview Card", style=discord.ButtonStyle.success)
+    async def preview(self, it, bt):
+        s = self.data["settings"]; chan = self.bot.get_channel(s.get("channel_id"))
+        if not chan: return await it.response.send_message("❌ Set a channel first!", ephemeral=True)
+        await it.response.send_message("✨ Preview sent.", ephemeral=True)
+        await _send_announcement_like(channel=chan, settings=s, members=[it.user], local_date=date.today(), tz_label="Preview Zone", test_mode=True)
+    @discord.ui.button(label="Export .txt", style=discord.ButtonStyle.blurple)
+    async def export(self, it, bt):
+        bds = self.data.get("birthdays", {})
+        if not bds: return await it.response.send_message("❌ No data to export.", ephemeral=True)
+        lines = [f"USER_ID: {uid} | DATE: {r['day']}/{r['month']} | TZ: {r['timezone']}" for uid, r in bds.items()]
+        buf = io.BytesIO("\n".join(lines).encode("utf-8"))
+        await it.response.send_message("📁 Here is your birthday data export:", file=discord.File(buf, filename="birthday_export.txt"), ephemeral=True)
 
 class BirthdayChannelSelect(discord.ui.ChannelSelect):
-    def __init__(self): super().__init__(placeholder="Select Channel", channel_types=[discord.ChannelType.text], row=3)
+    def __init__(self): super().__init__(placeholder="Select Announcement Channel", channel_types=[discord.ChannelType.text], row=3)
     async def callback(self, it): self.view.data["settings"]["channel_id"] = self.values[0].id; await self.view._save_and_refresh(it)
 
 class BirthdayRoleSelect(discord.ui.RoleSelect):
-    def __init__(self): super().__init__(placeholder="Select Birthday Role", row=4)
+    def __init__(self): super().__init__(placeholder="Select Auto-Role", row=4)
     async def callback(self, it): self.view.data["settings"]["birthday_role_id"] = self.values[0].id; await self.view._save_and_refresh(it)
 
 # =========================================================
@@ -270,53 +276,55 @@ class BirthdayRoleSelect(discord.ui.RoleSelect):
 # =========================================================
 def setup(bot: discord.Client):
     tree = bot.tree
-    group = app_commands.Group(name="birthday", description="Birthdays")
+    group = app_commands.Group(name="birthday", description="Manage server birthdays")
     try: tree.add_command(group)
     except: pass
 
     @group.command(name="set")
     @app_commands.autocomplete(timezone=timezone_autocomplete)
     async def b_set(it, day: int, month: int, timezone: str, user: Optional[discord.Member] = None):
-        if not _is_valid_tz(timezone): return await it.response.send_message("❌ Bad Timezone.", ephemeral=True)
+        if not _is_valid_tz(timezone): return await it.response.send_message("❌ Invalid Timezone.", ephemeral=True)
         target = user or it.user
         if user and not has_app_access(it.user, "birthdays"): return await it.response.send_message("❌ No perm.", ephemeral=True)
         data, sha = await load_data()
         data["birthdays"][str(target.id)] = {"day": day, "month": month, "timezone": timezone}
         await save_data(data, sha)
-        await it.response.send_message(f"✅ Set {target.display_name}'s birthday to {day}/{month}.")
+        await it.response.send_message(f"✅ Set {target.display_name}'s birthday to {day}/{month} ({timezone}).")
+
+    @group.command(name="upcoming", description="Show birthdays in the next 31 days")
+    async def b_upcoming(it):
+        data, _ = await load_data()
+        bds = data.get("birthdays", {})
+        today = datetime.now(UK_TZ).date()
+        found = []
+        for uid, r in bds.items():
+            nxt = _next_occurrence(r['day'], r['month'], today)
+            diff = (nxt - today).days
+            if 0 <= diff <= 31: found.append((diff, nxt, uid))
+        if not found: return await it.response.send_message("No birthdays in the next 31 days.")
+        found.sort()
+        lines = [f"• **{d.strftime('%d %b')}** (in {diff} days) - <@{u}>" for diff, d, u in found]
+        await it.response.send_message(embed=discord.Embed(title="📅 Upcoming Birthdays (Next 31 Days)", description="\n".join(lines), color=0x3498db))
 
     @group.command(name="settings")
     async def b_settings(it):
-        if not has_app_access(it.user, "birthdays"): return await it.response.send_message("❌ No permission.", ephemeral=True)
+        if not has_app_access(it.user, "birthdays"): return await it.response.send_message("❌ No perm.", ephemeral=True)
         data, sha = await load_data()
         view = BirthdaySettingsView(bot, data, sha)
         await it.response.send_message(embed=view._embed(), view=view)
 
     @tasks.loop(minutes=1)
     async def birthday_tick():
-        now_utc = datetime.now(timezone.utc)
-        data, sha = await load_data()
-        s = data["settings"]
-        if not s.get("enabled"): return
-
-        dirty = False
-        announced = set(data["state"].get("announced_keys", []))
-        roles_set = set(data["state"].get("role_assigned_keys", []))
-
+        now_utc = datetime.now(timezone.utc); data, sha = await load_data(); s = data["settings"]
+        if not s or not s.get("enabled"): return
+        dirty = False; announced = set(data["state"].get("announced_keys", [])); roles_set = set(data["state"].get("role_assigned_keys", []))
         for guild in bot.guilds:
-            chan = guild.get_channel(s.get("channel_id"))
-            role = guild.get_role(s.get("birthday_role_id"))
-            buckets = {}
-            bucket_tz = {}
-
+            chan = guild.get_channel(s.get("channel_id")); role = guild.get_role(s.get("birthday_role_id")); buckets = {}; bucket_tz = {}
             for uid, rec in data["birthdays"].items():
                 member = guild.get_member(int(uid))
                 if not member: continue
-                tz_str = rec.get("timezone", "Europe/London")
-                loc_now = now_utc.astimezone(ZoneInfo(tz_str))
-                loc_date = loc_now.date()
+                tz_str = rec.get("timezone", "Europe/London"); loc_now = now_utc.astimezone(ZoneInfo(tz_str)); loc_date = loc_now.date()
                 is_bday = (rec['day'] == loc_date.day and rec['month'] == loc_date.month)
-
                 if role:
                     r_key = f"{loc_date.isoformat()}|{uid}"
                     if is_bday and r_key not in roles_set:
@@ -325,28 +333,20 @@ def setup(bot: discord.Client):
                     elif not is_bday and role in member.roles:
                         try: await member.remove_roles(role)
                         except: pass
-
                 if is_bday and s.get("announce") and chan:
                     if loc_now.hour == s['post_hour'] and loc_now.minute == s['post_minute']:
-                        dk = loc_date.isoformat()
-                        buckets.setdefault(dk, []).append(member)
-                        bucket_tz[dk] = tz_str
-
+                        dk = loc_date.isoformat(); buckets.setdefault(dk, []).append(member); bucket_tz[dk] = tz_str
             for d_key, mems in buckets.items():
                 a_key = f"{d_key}|announce"
                 if a_key not in announced:
-                    try:
-                        await _send_announcement_like(channel=chan, settings=s, members=mems, local_date=date.fromisoformat(d_key), tz_label=bucket_tz[d_key], test_mode=False)
-                        announced.add(a_key); dirty = True
+                    try: await _send_announcement_like(channel=chan, settings=s, members=mems, local_date=date.fromisoformat(d_key), tz_label=bucket_tz[d_key], test_mode=False)
                     except: pass
-
+                    announced.add(a_key); dirty = True
         if dirty:
-            data["state"]["announced_keys"] = list(announced)
-            data["state"]["role_assigned_keys"] = list(roles_set)
+            data["state"]["announced_keys"] = list(announced); data["state"]["role_assigned_keys"] = list(roles_set)
             await save_data(data, sha)
 
     @birthday_tick.before_loop
     async def before_tick(): await bot.wait_until_ready()
     if not getattr(bot, "_birthday_tick_started", False):
-        birthday_tick.start()
-        setattr(bot, "_birthday_tick_started", True)
+        birthday_tick.start(); setattr(bot, "_birthday_tick_started", True)
