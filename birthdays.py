@@ -324,7 +324,6 @@ def setup(bot: discord.Client):
     @app_commands.describe(user="Admin only: User to remove birthday for")
     async def b_remove(it: discord.Interaction, user: Optional[discord.Member] = None):
         target = user or it.user
-        # Logic: If target is someone else, check admin perms.
         if target.id != it.user.id:
             if not has_app_access(it.user, "birthdays"):
                 return await it.response.send_message("❌ You do not have permission to remove other users' birthdays.", ephemeral=True)
@@ -372,17 +371,24 @@ def setup(bot: discord.Client):
                 if not member: continue
                 tz_str = rec.get("timezone", "Europe/London"); loc_now = now_utc.astimezone(ZoneInfo(tz_str)); loc_date = loc_now.date()
                 is_bday = (rec['day'] == loc_date.day and rec['month'] == loc_date.month)
+                
+                # Logic: Give role only at post time, Remove at local midnight
                 if role:
                     r_key = f"{loc_date.isoformat()}|{uid}"
-                    if is_bday and r_key not in roles_set:
-                        try: await member.add_roles(role); roles_set.add(r_key); dirty = True
-                        except: pass
+                    # Add role when announcement happens
+                    if is_bday and loc_now.hour == s['post_hour'] and loc_now.minute == s['post_minute']:
+                        if r_key not in roles_set and role not in member.roles:
+                            try: await member.add_roles(role); roles_set.add(r_key); dirty = True
+                            except: pass
+                    # Remove role when it is no longer their birthday in their local time (Midnight)
                     elif not is_bday and role in member.roles:
                         try: await member.remove_roles(role)
                         except: pass
+
                 if is_bday and s.get("announce") and chan:
                     if loc_now.hour == s['post_hour'] and loc_now.minute == s['post_minute']:
                         dk = loc_date.isoformat(); buckets.setdefault(dk, []).append(member); bucket_tz[dk] = tz_str
+            
             for d_key, mems in buckets.items():
                 a_key = f"{d_key}|announce"
                 if a_key not in announced:
