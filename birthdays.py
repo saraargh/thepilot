@@ -280,16 +280,63 @@ def setup(bot: discord.Client):
     try: tree.add_command(group)
     except: pass
 
-    @group.command(name="set")
+    @group.command(name="help", description="How to use the birthday commands")
+    async def b_help(it: discord.Interaction):
+        embed = discord.Embed(
+            title="🎂 Birthday Help", 
+            description="Use these commands to manage your birthday reminders!",
+            color=discord.Color.from_rgb(255, 105, 180)
+        )
+        embed.add_field(
+            name="`/birthday set`", 
+            value="Register your birthday.\n**Timezone:** Start typing your city/country (e.g., 'London' or 'New York') in the timezone field and select from the list.", 
+            inline=False
+        )
+        embed.add_field(
+            name="`/birthday remove`", 
+            value="Remove your birthday from the system.", 
+            inline=False
+        )
+        embed.add_field(
+            name="`/birthday upcoming`", 
+            value="See who has a birthday coming up in the next 31 days.", 
+            inline=False
+        )
+        embed.set_footer(text="The Pilot • Management System")
+        await it.response.send_message(embed=embed, ephemeral=True)
+
+    @group.command(name="set", description="Register a birthday")
+    @app_commands.describe(day="Day of the month (1-31)", month="Month number (1-12)", timezone="Search and select your local timezone", user="Admin only: User to set birthday for")
     @app_commands.autocomplete(timezone=timezone_autocomplete)
     async def b_set(it, day: int, month: int, timezone: str, user: Optional[discord.Member] = None):
         if not _is_valid_tz(timezone): return await it.response.send_message("❌ Invalid Timezone.", ephemeral=True)
         target = user or it.user
-        if user and not has_app_access(it.user, "birthdays"): return await it.response.send_message("❌ No perm.", ephemeral=True)
+        if user and user.id != it.user.id:
+            if not has_app_access(it.user, "birthdays"):
+                return await it.response.send_message("❌ You do not have permission to set other users' birthdays.", ephemeral=True)
+        
         data, sha = await load_data()
         data["birthdays"][str(target.id)] = {"day": day, "month": month, "timezone": timezone}
         await save_data(data, sha)
         await it.response.send_message(f"✅ Set {target.display_name}'s birthday to {day}/{month} ({timezone}).")
+
+    @group.command(name="remove", description="Remove a registered birthday")
+    @app_commands.describe(user="Admin only: User to remove birthday for")
+    async def b_remove(it: discord.Interaction, user: Optional[discord.Member] = None):
+        target = user or it.user
+        # Logic: If target is someone else, check admin perms.
+        if target.id != it.user.id:
+            if not has_app_access(it.user, "birthdays"):
+                return await it.response.send_message("❌ You do not have permission to remove other users' birthdays.", ephemeral=True)
+        
+        data, sha = await load_data()
+        uid_str = str(target.id)
+        if uid_str not in data.get("birthdays", {}):
+            return await it.response.send_message(f"❌ No birthday found for {target.display_name}.", ephemeral=True)
+        
+        del data["birthdays"][uid_str]
+        await save_data(data, sha)
+        await it.response.send_message(f"🗑️ Removed birthday record for {target.display_name}.")
 
     @group.command(name="upcoming", description="Show birthdays in the next 31 days")
     async def b_upcoming(it):
@@ -306,7 +353,7 @@ def setup(bot: discord.Client):
         lines = [f"• **{d.strftime('%d %b')}** (in {diff} days) - <@{u}>" for diff, d, u in found]
         await it.response.send_message(embed=discord.Embed(title="📅 Upcoming Birthdays (Next 31 Days)", description="\n".join(lines), color=0x3498db))
 
-    @group.command(name="settings")
+    @group.command(name="settings", description="Admin only: Configure birthday announcement settings")
     async def b_settings(it):
         if not has_app_access(it.user, "birthdays"): return await it.response.send_message("❌ No perm.", ephemeral=True)
         data, sha = await load_data()
