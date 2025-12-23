@@ -52,6 +52,7 @@ DEFAULT_DATA: Dict[str, Any] = {
 }
 
 _lock = asyncio.Lock()
+_TZ_CACHE: Optional[List[str]] = None
 
 # =========================================================
 # GitHub JSON Helpers
@@ -86,6 +87,7 @@ async def load_data() -> Tuple[dict, Optional[str]]:
         merged = json.loads(json.dumps(DEFAULT_DATA))
         merged.update(data)
         merged["settings"] = {**DEFAULT_DATA["settings"], **(data.get("settings") or {})}
+        merged["state"] = {**DEFAULT_DATA["state"], **(data.get("state") or {})}
         return merged, sha
 
 async def save_data(data: dict, sha: Optional[str]) -> Optional[str]:
@@ -104,15 +106,22 @@ async def save_data(data: dict, sha: Optional[str]) -> Optional[str]:
     return None
 
 # =========================================================
-# Utility
+# Utility & Timezones
 # =========================================================
+def _get_all_timezones() -> List[str]:
+    global _TZ_CACHE
+    if _TZ_CACHE is None:
+        _TZ_CACHE = sorted(list(available_timezones()))
+    return _TZ_CACHE
+
 def _is_valid_tz(tz: str) -> bool:
     try: ZoneInfo(tz); return True
     except: return False
 
 async def timezone_autocomplete(interaction: discord.Interaction, current: str) -> List[app_commands.Choice[str]]:
-    tzs = sorted(list(available_timezones()))
-    matches = [t for t in tzs if current.lower() in t.lower()][:25]
+    cur = (current or "").strip().lower()
+    tzs = _get_all_timezones()
+    matches = [t for t in tzs if cur in t.lower()][:25]
     return [app_commands.Choice(name=m, value=m) for m in matches]
 
 def _next_occurrence(day: int, month: int, now_local: date) -> date:
@@ -130,28 +139,24 @@ def _fmt(tpl: str, members: List[discord.Member]) -> str:
     return (tpl or "").replace("{mention}", mentions).replace("{username}", names).replace("{users}", mentions)
 
 # =========================================================
-# Announcement Helper (NOW WITH EMBEDS)
+# Announcement Helper
 # =========================================================
 async def _send_announcement_like(*, channel, settings, members, local_date, tz_label, test_mode):
     if not members: return
     if test_mode: await channel.send("🧪 **TEST MODE**")
 
-    # The Ping (Outside the embed)
     pings = ", ".join(m.mention for m in members)
-    
-    # The Content
     header = _fmt(settings.get("message_header", "Happy Birthday!"), members)
     body_tpl = settings.get("message_single" if len(members) == 1 else "message_multiple", "")
     body = _fmt(body_tpl, members)
 
-    embed = discord.Embed(title=header, description=body, color=discord.Color.from_rgb(255, 105, 180)) # Pink
+    embed = discord.Embed(title=header, description=body, color=discord.Color.from_rgb(255, 105, 180))
     
-    img_url = random.choice(settings.get("image_urls", [])) if settings.get("image_urls") else None
-    if img_url:
-        embed.set_image(url=img_url)
+    img_urls = settings.get("image_urls", [])
+    if img_urls:
+        embed.set_image(url=random.choice(img_urls))
     
-    embed.set_footer(text=f"The Pilot • {local_date.strftime('%d %B')} • {tz_label}")
-    
+    embed.set_footer(text=f"The Pilot • {local_date.strftime('%-d %B')} • {tz_label}")
     await channel.send(content=pings, embed=embed)
 
 # =========================================================
@@ -177,11 +182,12 @@ class BirthdayMessageModal(discord.ui.Modal, title="Edit Birthday Message Card")
         s["message_multiple"] = str(self.multiple_message.value)
         await self.view_ref._save_and_refresh(interaction, note="✅ Card design updated.")
 
-# (Other Modals and Views remain similar but updated to support settings structure)
 class PostTimeModal(discord.ui.Modal, title="Set Birthday Post Time"):
     hour = discord.ui.TextInput(label="Hour (0-23)", max_length=2)
     minute = discord.ui.TextInput(label="Minute (0-59)", max_length=2)
-    def __init__(self, view): super().__init__(); self.view_ref = view; s = view.data.get("settings", {}); self.hour.default = str(s.get("post_hour", 12)); self.minute.default = str(s.get("post_minute", 0))
+    def __init__(self, view):
+        super().__init__(); self.view_ref = view; s = view.data.get("settings", {})
+        self.hour.default = str(s.get("post_hour", 12)); self.minute.default = str(s.get("post_minute", 0))
     async def on_submit(self, it):
         try:
             h, m = int(self.hour.value), int(self.minute.value)
@@ -301,6 +307,7 @@ def setup(bot: discord.Client):
             chan = guild.get_channel(s.get("channel_id"))
             role = guild.get_role(s.get("birthday_role_id"))
             buckets = {}
+            bucket_tz = {}
 
             for uid, rec in data["birthdays"].items():
                 member = guild.get_member(int(uid))
@@ -323,12 +330,13 @@ def setup(bot: discord.Client):
                     if loc_now.hour == s['post_hour'] and loc_now.minute == s['post_minute']:
                         dk = loc_date.isoformat()
                         buckets.setdefault(dk, []).append(member)
+                        bucket_tz[dk] = tz_str
 
             for d_key, mems in buckets.items():
                 a_key = f"{d_key}|announce"
                 if a_key not in announced:
                     try:
-                        await _send_announcement_like(channel=chan, settings=s, members=mems, local_date=date.fromisoformat(d_key), tz_label="Local Time", test_mode=False)
+                        await _send_announcement_like(channel=chan, settings=s, members=mems, local_date=date.fromisoformat(d_key), tz_label=bucket_tz[d_key], test_mode=False)
                         announced.add(a_key); dirty = True
                     except: pass
 
