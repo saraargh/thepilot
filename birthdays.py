@@ -417,7 +417,7 @@ class BirthdayChannelSelect(discord.ui.ChannelSelect):
             channel_types=[discord.ChannelType.text],
             min_values=1,
             max_values=1,
-            row=0
+            row=3
         )
 
     async def callback(self, interaction: discord.Interaction):
@@ -436,7 +436,7 @@ class BirthdayRoleSelect(discord.ui.RoleSelect):
             placeholder="🎂 Set birthday role (optional)…",
             min_values=1,
             max_values=1,
-            row=1
+            row=4
         )
 
     async def callback(self, interaction: discord.Interaction):
@@ -595,26 +595,26 @@ class BirthdaySettingsView(discord.ui.View):
         s["announce"] = not bool(s.get("announce", True))
         await self._save_and_refresh(interaction)
 
-    @discord.ui.button(label="Edit messages", style=discord.ButtonStyle.success, row=1)
+    @discord.ui.button(label="Edit messages", style=discord.ButtonStyle.success, row=0)
     async def edit_messages(self, interaction: discord.Interaction, button: discord.ui.Button):
         if not has_app_access(interaction.user, "birthdays"):
             return await interaction.response.send_message("❌ No permission.", ephemeral=True)
         await interaction.response.send_modal(BirthdayMessageModal(self))
 
-    @discord.ui.button(label="Set post time", style=discord.ButtonStyle.secondary, row=1)
+    @discord.ui.button(label="Set post time", style=discord.ButtonStyle.secondary, row=0)
     async def set_post_time(self, interaction: discord.Interaction, button: discord.ui.Button):
         if not has_app_access(interaction.user, "birthdays"):
             return await interaction.response.send_message("❌ No permission.", ephemeral=True)
         await interaction.response.send_modal(PostTimeModal(self))
 
-    @discord.ui.button(label="Image Settings", style=discord.ButtonStyle.secondary, row=2)
+    @discord.ui.button(label="Image Settings", style=discord.ButtonStyle.secondary, row=0)
     async def image_settings(self, interaction: discord.Interaction, button: discord.ui.Button):
         if not has_app_access(interaction.user, "birthdays"):
             return await interaction.response.send_message("❌ No permission.", ephemeral=True)
         view = ImageSettingsView(self)
         await interaction.response.edit_message(embed=view._embed(), view=view)
 
-    @discord.ui.button(label="Send test", style=discord.ButtonStyle.secondary, row=2)
+    @discord.ui.button(label="Send test", style=discord.ButtonStyle.secondary, row=1)
     async def send_test(self, interaction: discord.Interaction, button: discord.ui.Button):
         if not has_app_access(interaction.user, "birthdays"):
             return await interaction.response.send_message("❌ No permission.", ephemeral=True)
@@ -660,7 +660,7 @@ class BirthdaySettingsView(discord.ui.View):
 
         await interaction.response.send_message("✅ Test sent.", ephemeral=True)
 
-    @discord.ui.button(label="Export birthdays", style=discord.ButtonStyle.danger, row=3)
+    @discord.ui.button(label="Export birthdays", style=discord.ButtonStyle.danger, row=1)
     async def export_birthdays(self, interaction: discord.Interaction, button: discord.ui.Button):
         if not has_app_access(interaction.user, "birthdays"):
             return await interaction.response.send_message("❌ No permission.", ephemeral=True)
