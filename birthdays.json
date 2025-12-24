@@ -10,13 +10,7 @@
     "message_single": "Happy Birthday {username} - hope you have the best most magical day ever and all your wishes come true!! 🎂🎉🎁🎈",
     "message_multiple": "{count} Birthdays today!\n\nHappy Birthday {usernames} - hope you have the best most magical day ever and all your wishes come true!! 🎂🎉🎁🎈",
     "image_urls": [
-      "https://cdn.discordapp.com/ephemeral-attachments/1450222619327729757/1452433785173053450/IMG_8761.gif?ex=6949cbdf&is=69487a5f&hm=6344c53173a943edfddd2d8a4df68d42f098214ec0864e229f8e2de5ca7267cb&",
-      "https://cdn.discordapp.com/ephemeral-attachments/1450222619327729757/1452433716902105120/IMG_8763.gif?ex=6949cbcf&is=69487a4f&hm=c82f516d75c10ff583e5fbff203e8d5c5a97a4a1a3a5c385b6db3c71c9aabd9f&",
-      "https://cdn.discordapp.com/ephemeral-attachments/1450222619327729757/1452433678293536980/IMG_8764.gif?ex=6949cbc5&is=69487a45&hm=7b1777a3bf07f4ca4225c8c7da1b320b1819be035e4365270a7a4f86532ed28c&",
-      "https://cdn.discordapp.com/ephemeral-attachments/1450222619327729757/1452433637189488641/IMG_8765.gif?ex=6949cbbc&is=69487a3c&hm=ca7cdcf0f73a2adbdfb3594fdef9245f152c97a42e7aae0f90e88e03f0c2be7f&",
-      "https://cdn.discordapp.com/ephemeral-attachments/1450222619327729757/1452431311292858378/IMG_8758.gif?ex=6949c991&is=69487811&hm=915d10b5e471ba9abc5f4ffbba4f0555f715fe01e98863484ce2a0b9819d31f3&",
-      "https://cdn.discordapp.com/ephemeral-attachments/1450222619327729757/1452431285313339513/IMG_8759.gif?ex=6949c98b&is=6948780b&hm=2cb3a7f16b7d13822036bb5c1626e43086093f0640df4232b0798a5c0a33846e&",
-      "https://i.imgur.com/8m5uXhP.gif"
+      "https://media1.tenor.com/m/sFlF1uVyxDUAAAAd/happy-birthday-bon-anniversaire.gif"
     ],
     "embed": {
       "enabled": true,
