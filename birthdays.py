@@ -134,7 +134,7 @@ async def _send_announcement_like(*, channel, settings, members, local_date, tz_
         chosen_url = random.choice(img_urls).strip()
         final_url = f"{chosen_url}{'&' if '?' in chosen_url else '?'}cb={int(time.time())}"
         embed.set_image(url=final_url)
-    embed.set_footer(text=f"The Pilot • {local_date.strftime('%-d %B')} • {tz_label}")
+    embed.set_footer(text=f"Powered by The Pilot ✈️ • {local_date.strftime('%-d %B')}")
     await channel.send(content=pings if not test_mode else f"🔔 *Ping Preview:* {pings}", embed=embed)
 
 # UI Components (Omitted for brevity, use previous versions)
