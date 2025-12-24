@@ -9,7 +9,9 @@
     "message_header": "🎂 Birthday Celebrations!",
     "message_single": "Happy Birthday **{username}** - hope you have the best most magical day ever and all your wishes come true!! 🎂🎉🎁🎈",
     "message_multiple": "{count} Birthdays today!!\n\nHappy Birthday **{usernames}** - hope you have the best most magical day ever and all your wishes come true!! 🎂🎉🎁🎈",
-    "image_urls": [],
+    "image_urls": [
+      "https://y.yarn.co/828d9cd5-f764-4d22-be7d-f68081e2411d_text.gif"
+    ],
     "embed": {
       "enabled": true,
       "title": "🎉 Birthday Time!",
