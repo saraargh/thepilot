@@ -108,7 +108,7 @@ async def _send_announcement_like(*, channel, settings, members, local_date, tz_
     except: return False
 
 # =========================================================
-# Modals (Time, Card, Images)
+# Modals
 # =========================================================
 class BirthdayTimeModal(discord.ui.Modal, title="Edit Announcement Time"):
     hour = discord.ui.TextInput(label="Hour (0-23)", placeholder="15", min_length=1, max_length=2)
@@ -123,8 +123,8 @@ class BirthdayTimeModal(discord.ui.Modal, title="Edit Announcement Time"):
             if not (0 <= h <= 23 and 0 <= m <= 59): raise ValueError()
             self.view_ref.data["settings"]["post_hour"] = h
             self.view_ref.data["settings"]["post_minute"] = m
-            await self.view_ref._save_and_refresh(it, f"🕒 {it.user.mention} updated announcement time to **{h:02d}:{m:02d}**", is_ephemeral=False)
-        except: await it.response.send_message("❌ Invalid time format.", ephemeral=False)
+            await self.view_ref._save_and_refresh(it, f"🕒 {it.user.mention} set time to **{h:02d}:{m:02d}**", is_ephemeral=False)
+        except: await it.response.send_message("❌ Invalid time.", ephemeral=False)
 
 class BirthdayMessageModal(discord.ui.Modal, title="Edit Birthday Card"):
     header = discord.ui.TextInput(label="Title", placeholder="Happy Birthday {username}!")
@@ -140,16 +140,15 @@ class BirthdayMessageModal(discord.ui.Modal, title="Edit Birthday Card"):
         s["message_header"] = str(self.header.value)
         s["message_single"] = str(self.single.value)
         s["message_multiple"] = str(self.multi.value) or str(self.single.value)
-        await self.view_ref._save_and_refresh(it, f"📝 {it.user.mention} updated the birthday card templates.", is_ephemeral=False)
+        await self.view_ref._save_and_refresh(it, f"📝 {it.user.mention} updated the card text.", is_ephemeral=False)
 
-class AddImageModal(discord.ui.Modal, title="Add Birthday GIF/Image"):
-    url = discord.ui.TextInput(label="Image URL", placeholder="https://media.giphy.com/...", style=discord.TextStyle.paragraph)
+class AddImageModal(discord.ui.Modal, title="Add Birthday Image"):
+    url = discord.ui.TextInput(label="Image URL", placeholder="https://...", style=discord.TextStyle.paragraph)
     def __init__(self, view): super().__init__(); self.view_ref = view
     async def on_submit(self, it):
         url = str(self.url.value).strip()
-        if not url.startswith("http"): return await it.response.send_message("❌ Invalid URL.", ephemeral=True)
         self.view_ref.data["settings"].setdefault("image_urls", []).append(url)
-        await self.view_ref._save_and_refresh(it, f"🖼️ {it.user.mention} added a new birthday image.", is_ephemeral=False)
+        await self.view_ref._save_and_refresh(it, f"🖼️ {it.user.mention} added an image.", is_ephemeral=False)
 
 # =========================================================
 # Paginated List View
@@ -158,25 +157,22 @@ class BirthdayListView(discord.ui.View):
     def __init__(self, items: list, page: int = 0):
         super().__init__(timeout=60); self.items = items; self.page = page
         self.pages = [items[i:i + 10] for i in range(0, len(items), 10)]
-
     def _make_embed(self):
         desc = "\n".join([f"• **{n}**: {d}" for n, d in self.pages[self.page]])
-        e = discord.Embed(title="🎂 Server Birthdays (Jan-Dec)", description=desc, color=0xff69b4)
-        e.set_footer(text=f"Page {self.page + 1}/{len(self.pages)} • Total: {len(self.items)}")
+        e = discord.Embed(title="🎂 Birthday List (Jan-Dec)", description=desc, color=0xff69b4)
+        e.set_footer(text=f"Page {self.page + 1}/{len(self.pages)}")
         return e
-
     @discord.ui.button(label="<", style=discord.ButtonStyle.gray)
     async def prev(self, it, bt):
         if self.page > 0: self.page -= 1; await it.response.edit_message(embed=self._make_embed(), view=self)
         else: await it.response.defer()
-
     @discord.ui.button(label=">", style=discord.ButtonStyle.gray)
     async def next(self, it, bt):
         if self.page < len(self.pages) - 1: self.page += 1; await it.response.edit_message(embed=self._make_embed(), view=self)
         else: await it.response.defer()
 
 # =========================================================
-# Settings View
+# Settings View (Fixed Row Indices)
 # =========================================================
 class BirthdaySettingsView(discord.ui.View):
     def __init__(self, bot, data, sha):
@@ -186,10 +182,8 @@ class BirthdaySettingsView(discord.ui.View):
         s = self.data["settings"]
         e = discord.Embed(title="🎂 Birthday Admin Panel", color=0xff69b4)
         e.add_field(name="Bot", value="✅ ON" if s['enabled'] else "❌ OFF")
-        e.add_field(name="Channel", value=f"<#{s['channel_id']}>" if s['channel_id'] else "None")
-        e.add_field(name="Role", value=f"<@&{s['birthday_role_id']}>" if s['birthday_role_id'] else "None")
         e.add_field(name="Time", value=f"{s['post_hour']:02d}:{s['post_minute']:02d}")
-        e.add_field(name="Images", value=f"{len(s.get('image_urls', []))} loaded")
+        e.add_field(name="Images", value=f"{len(s.get('image_urls', []))} total")
         return e
     async def _save_and_refresh(self, it, note=None, is_ephemeral=True):
         new_sha = await save_data(self.data, self.sha)
@@ -197,52 +191,47 @@ class BirthdaySettingsView(discord.ui.View):
         await it.response.edit_message(embed=self._embed(), view=self)
         if note: await it.followup.send(note, ephemeral=is_ephemeral)
 
-    @discord.ui.button(label="Toggle Bot", style=discord.ButtonStyle.primary, row=1)
+    @discord.ui.button(label="Toggle Bot", style=discord.ButtonStyle.primary, row=0)
     async def toggle(self, it, bt):
         self.data["settings"]["enabled"] = not self.data["settings"]["enabled"]
         await self._save_and_refresh(it, f"⚙️ {it.user.mention} toggled bot.", is_ephemeral=False)
 
-    @discord.ui.button(label="Edit Card", style=discord.ButtonStyle.secondary, row=1)
+    @discord.ui.button(label="Edit Card", style=discord.ButtonStyle.secondary, row=0)
     async def ed_txt(self, it, bt): await it.response.send_modal(BirthdayMessageModal(self))
-    @discord.ui.button(label="Edit Time", style=discord.ButtonStyle.secondary, row=1)
+    @discord.ui.button(label="Edit Time", style=discord.ButtonStyle.secondary, row=0)
     async def ed_time(self, it, bt): await it.response.send_modal(BirthdayTimeModal(self))
 
-    @discord.ui.button(label="Add Image", style=discord.ButtonStyle.secondary, row=2)
+    @discord.ui.button(label="Add Image", style=discord.ButtonStyle.secondary, row=1)
     async def add_img(self, it, bt): await it.response.send_modal(AddImageModal(self))
-
-    @discord.ui.button(label="Clear Images", style=discord.ButtonStyle.danger, row=2)
+    @discord.ui.button(label="Clear Images", style=discord.ButtonStyle.danger, row=1)
     async def clear_img(self, it, bt):
         self.data["settings"]["image_urls"] = []
-        await self._save_and_refresh(it, f"🗑️ {it.user.mention} cleared all birthday images.", is_ephemeral=False)
-
+        await self._save_and_refresh(it, f"🗑️ {it.user.mention} cleared images.", is_ephemeral=False)
     @discord.ui.button(label="Export TXT", style=discord.ButtonStyle.secondary, row=1)
     async def exp(self, it, bt):
         txt = "USER ID | BIRTHDAY | TIMEZONE\n" + "-"*35 + "\n"
         for uid, rec in self.data.get("birthdays", {}).items():
             txt += f"{uid} | {rec['day']}/{rec['month']} | {rec['timezone']}\n"
-        f = io.BytesIO(txt.encode())
-        await it.response.send_message(f"📂 {it.user.mention} exported database to TXT.", file=discord.File(f, "birthdays.txt"), ephemeral=False)
+        await it.response.send_message(f"📂 {it.user.mention} exported data.", file=discord.File(io.BytesIO(txt.encode()), "birthdays.txt"), ephemeral=False)
 
-    @discord.ui.button(label="Preview Single", style=discord.ButtonStyle.success, row=3)
+    @discord.ui.button(label="Preview Single", style=discord.ButtonStyle.success, row=2)
     async def p1(self, it, bt):
-        chan = self.bot.get_channel(self.data["settings"]["channel_id"])
-        await _send_announcement_like(channel=chan, settings=self.data["settings"], members=[it.user], local_date=date.today(), tz_label="Test", test_mode=True)
-        await it.response.send_message(f"✨ {it.user.mention} triggered preview.", ephemeral=False)
+        await _send_announcement_like(channel=self.bot.get_channel(self.data["settings"]["channel_id"]), settings=self.data["settings"], members=[it.user], local_date=date.today(), tz_label="Test", test_mode=True)
+        await it.response.send_message(f"✨ {it.user.mention} previewed single.", ephemeral=False)
 
-    @discord.ui.button(label="Preview Multi", style=discord.ButtonStyle.success, row=3)
+    @discord.ui.button(label="Preview Multi", style=discord.ButtonStyle.success, row=2)
     async def p2(self, it, bt):
-        chan = self.bot.get_channel(self.data["settings"]["channel_id"])
-        await _send_announcement_like(channel=chan, settings=self.data["settings"], members=[it.user, it.guild.me], local_date=date.today(), tz_label="Test", test_mode=True, force_multiple=True)
-        await it.response.send_message(f"✨ {it.user.mention} triggered multi-preview.", ephemeral=False)
+        await _send_announcement_like(channel=self.bot.get_channel(self.data["settings"]["channel_id"]), settings=self.data["settings"], members=[it.user, it.guild.me], local_date=date.today(), tz_label="Test", test_mode=True, force_multiple=True)
+        await it.response.send_message(f"✨ {it.user.mention} previewed multi.", ephemeral=False)
 
 class BirthdayChannelSelect(discord.ui.ChannelSelect):
-    def __init__(self): super().__init__(placeholder="Select Channel", row=4)
+    def __init__(self): super().__init__(placeholder="Select Channel", row=3)
     async def callback(self, it): 
         self.view.data["settings"]["channel_id"] = self.values[0].id
         await self.view._save_and_refresh(it, f"📍 {it.user.mention} set channel to <#{self.values[0].id}>", is_ephemeral=False)
 
 class BirthdayRoleSelect(discord.ui.RoleSelect):
-    def __init__(self): super().__init__(placeholder="Select Role", row=5)
+    def __init__(self): super().__init__(placeholder="Select Role", row=4)
     async def callback(self, it): 
         self.view.data["settings"]["birthday_role_id"] = self.values[0].id
         await self.view._save_and_refresh(it, f"🏷️ {it.user.mention} set role to <@&{self.values[0].id}>", is_ephemeral=False)
@@ -255,8 +244,8 @@ def setup(bot: discord.Client):
     try: tree.add_command(group)
     except: pass
 
-    async def tz_autocomplete(it: discord.Interaction, current: str) -> List[app_commands.Choice[str]]:
-        return [app_commands.Choice(name=t, value=t) for t in sorted(available_timezones()) if current.lower() in t.lower()][:25]
+    async def tz_autocomplete(it: discord.Interaction, cur: str) -> List[app_commands.Choice[str]]:
+        return [app_commands.Choice(name=t, value=t) for t in sorted(available_timezones()) if cur.lower() in t.lower()][:25]
 
     @group.command(name="set", description="Add your birthday")
     @app_commands.autocomplete(timezone=tz_autocomplete)
@@ -274,72 +263,62 @@ def setup(bot: discord.Client):
             await it.response.send_message(f"🗑️ {it.user.mention} removed **{target.display_name}**.", ephemeral=False)
         else: await it.response.send_message("❌ Not found.", ephemeral=False)
 
-    @group.command(name="list", description="List all birthdays (Jan-Dec)")
+    @group.command(name="list", description="List birthdays (Jan-Dec)")
     async def b_list(it):
         data, _ = await load_data(); bdays = data.get("birthdays", {})
         if not bdays: return await it.response.send_message("No data.", ephemeral=False)
-        # Chronological Sort: Sort by Month then Day
-        raw_items = []
+        raw = []
         for uid, rec in bdays.items():
             m = it.guild.get_member(int(uid)); name = m.display_name if m else f"User {uid}"
-            raw_items.append({"name": name, "day": rec['day'], "month": rec['month']})
-        
-        sorted_items = sorted(raw_items, key=lambda x: (x['month'], x['day']))
-        formatted_list = [ (i['name'], f"{i['day']}/{i['month']}") for i in sorted_items]
-        
-        view = BirthdayListView(formatted_list)
+            raw.append({"name": name, "day": rec['day'], "month": rec['month']})
+        sorted_list = [(i['name'], f"{i['day']}/{i['month']}") for i in sorted(raw, key=lambda x: (x['month'], x['day']))]
+        view = BirthdayListView(sorted_list)
         await it.response.send_message(embed=view._make_embed(), view=view, ephemeral=False)
 
-    @group.command(name="upcoming", description="Show the next 5 upcoming birthdays")
+    @group.command(name="upcoming", description="Show next 5 birthdays")
     async def b_up(it):
         data, _ = await load_data(); bdays = data.get("birthdays", {}); today = date.today()
-        if not bdays: return await it.response.send_message("No birthdays found.", ephemeral=False)
-        sorted_bdays = []
+        if not bdays: return await it.response.send_message("No data.", ephemeral=False)
+        up = []
         for uid, rec in bdays.items():
-            try: bday_this_year = date(today.year, rec['month'], rec['day'])
-            except ValueError: bday_this_year = date(today.year, 3, 1)
-            if bday_this_year < today: bday_this_year = bday_this_year.replace(year=today.year + 1)
-            sorted_bdays.append((uid, bday_this_year))
-        sorted_bdays.sort(key=lambda x: x[1])
-        lines = []
-        for uid, d in sorted_bdays[:5]:
-            m = it.guild.get_member(int(uid)); name = m.display_name if m else f"User {uid}"
-            lines.append(f"**{name}** - {d.strftime('%-d %B')}")
-        e = discord.Embed(title="📅 Upcoming Birthdays", description="\n".join(lines), color=0xff69b4)
-        await it.response.send_message(embed=e, ephemeral=False)
+            try: b = date(today.year, rec['month'], rec['day'])
+            except: b = date(today.year, 3, 1)
+            if b < today: b = b.replace(year=today.year + 1)
+            up.append((uid, b))
+        up.sort(key=lambda x: x[1])
+        lines = [f"**{it.guild.get_member(int(uid)).display_name if it.guild.get_member(int(uid)) else uid}** - {d.strftime('%-d %B')}" for uid, d in up[:5]]
+        await it.response.send_message(embed=discord.Embed(title="📅 Upcoming Birthdays", description="\n".join(lines), color=0xff69b4), ephemeral=False)
 
-    @group.command(name="help", description="How to use birthday commands")
+    @group.command(name="help", description="Commands guide")
     async def b_help(it):
-        e = discord.Embed(title="🎂 Birthday Help", color=0xff69b4)
-        e.add_field(name="Commands", value="`/birthday set` - Add yours\n`/birthday list` - See all\n`/birthday upcoming` - See next 5\n`/birthday settings` - Admin Panel")
-        await it.response.send_message(embed=e, ephemeral=False)
+        await it.response.send_message(embed=discord.Embed(title="🎂 Help", description="`/set`, `/list`, `/upcoming`, `/remove`, `/settings`", color=0xff69b4), ephemeral=False)
 
-    @group.command(name="settings", description="Admin settings")
+    @group.command(name="settings", description="Admin panel")
     async def b_setts(it):
         if not has_app_access(it.user, "birthdays"): return await it.response.send_message("No perm.", ephemeral=False)
-        data, sha = await load_data(); await it.response.send_message(embed=BirthdaySettingsView(bot, data, sha)._embed(), view=BirthdaySettingsView(bot, data, sha), ephemeral=True)
+        data, sha = await load_data(); view = BirthdaySettingsView(bot, data, sha)
+        await it.response.send_message(embed=view._embed(), view=view, ephemeral=True)
 
     @tasks.loop(minutes=1)
     async def birthday_tick():
-        now_utc = datetime.now(timezone.utc); curr_year = now_utc.year
-        data, sha = await load_data(); s = data["settings"]
+        now = datetime.now(timezone.utc); data, sha = await load_data(); s = data["settings"]
         if not s.get("enabled"): return
-        dirty = False; announced = {k for k in data["state"].get("announced_keys", []) if k.startswith(str(curr_year))}
-        for guild in bot.guilds:
-            chan, role = guild.get_channel(s.get("channel_id")), guild.get_role(s.get("birthday_role_id"))
+        dirty = False; announced = {k for k in data["state"].get("announced_keys", []) if k.startswith(str(now.year))}
+        for g in bot.guilds:
+            c, r = g.get_channel(s.get("channel_id")), g.get_role(s.get("birthday_role_id"))
             for uid, rec in data["birthdays"].items():
-                member = guild.get_member(int(uid)) or await (lambda: guild.fetch_member(int(uid)) if True else None)()
-                if not member: continue
-                try: loc = now_utc.astimezone(ZoneInfo(rec.get("timezone", "Europe/London")))
-                except: loc = now_utc.astimezone(UK_TZ)
-                is_bday = (rec['day'] == loc.day and rec['month'] == loc.month)
-                if role:
-                    if is_bday and role not in member.roles: await member.add_roles(role)
-                    elif not is_bday and role in member.roles: await member.remove_roles(role)
-                if is_bday and chan and (loc.hour > s['post_hour'] or (loc.hour == s['post_hour'] and loc.minute >= s['post_minute'])):
+                m = g.get_member(int(uid)) or await (lambda: g.fetch_member(int(uid)) if True else None)()
+                if not m: continue
+                try: loc = now.astimezone(ZoneInfo(rec.get("timezone", "Europe/London")))
+                except: loc = now.astimezone(UK_TZ)
+                is_bd = (rec['day'] == loc.day and rec['month'] == loc.month)
+                if r:
+                    if is_bd and r not in m.roles: await m.add_roles(r)
+                    elif not is_bd and r in m.roles: await m.remove_roles(r)
+                if is_bd and c and (loc.hour > s['post_hour'] or (loc.hour == s['post_hour'] and loc.minute >= s['post_minute'])):
                     k = f"{loc.date().isoformat()}|{uid}|ann"
                     if k not in announced:
-                        if await _send_announcement_like(channel=chan, settings=s, members=[member], local_date=loc.date(), tz_label=rec.get("timezone"), test_mode=False):
+                        if await _send_announcement_like(channel=c, settings=s, members=[m], local_date=loc.date(), tz_label=rec.get("timezone"), test_mode=False):
                             announced.add(k); dirty = True
         if dirty: data["state"]["announced_keys"] = list(announced); await save_data(data, sha)
 
