@@ -10,7 +10,9 @@
     "message_single": "Happy Birthday **{username}** - hope you have the best most magical day ever and all your wishes come true!! 🎂🎉🎁🎈",
     "message_multiple": "{count} Birthdays today!!\n\nHappy Birthday **{usernames}** - hope you have the best most magical day ever and all your wishes come true!! 🎂🎉🎁🎈",
     "image_urls": [
-      "https://c.tenor.com/sFlF1uVyxDUAAAAd/tenor.gif"
+      "https://c.tenor.com/sFlF1uVyxDUAAAAd/tenor.gif",
+      "https://c.tenor.com/5C8uE1nyhk4AAAAd/tenor.gif",
+      "https://media.tenor.com/Egxl8TRxwT4AAAAM/happy-birthday-anya.gif"
     ],
     "embed": {
       "enabled": true,
@@ -154,10 +156,8 @@
   },
   "state": {
     "announced_keys": [
-      "2025-12-23|announce"
     ],
     "role_assigned_keys": [
-      "2025-12-23|1450514816958599220"
     ]
   }
 }
