@@ -28,7 +28,7 @@
     "log_ban": true
   },
   "boost": {
-    "enabled": true,
+    "enabled": false,
     "channel_id": 1398508734506078240,
     "title": "Thankyou \ud83d\ude48",
     "messages": {
