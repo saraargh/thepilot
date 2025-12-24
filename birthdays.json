@@ -5,7 +5,7 @@
     "channel_id": 1444274467864838207,
     "birthday_role_id": 1406242523952713820,
     "post_hour": 5,
-    "post_minute": 1,
+    "post_minute": 10,
     "message_header": "🎂 Birthday Celebrations!",
     "message_single": "Happy Birthday **{username}** - hope you have the best most magical day ever and all your wishes come true!! 🎂🎉🎁🎈",
     "message_multiple": "{count} Birthdays today!!\n\nHappy Birthday **{usernames}** - hope you have the best most magical day ever and all your wishes come true!! 🎂🎉🎁🎈",
