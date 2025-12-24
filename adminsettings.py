@@ -1,8 +1,13 @@
 # adminsettings.py
+from __future__ import annotations
+
+import io
+import random
+from typing import List, Dict, Any, Optional
+
 import discord
 from discord import app_commands
-from typing import List, Dict, Any
-import random
+from datetime import date
 
 from permissions import (
     has_global_access,
@@ -17,6 +22,18 @@ from joinleave import (
     render,
     human_member_number,
 )
+
+# --- Birthdays (GitHub-backed) ---
+# Uses your existing birthdays.json storage via birthdays.py
+try:
+    from birthdays import load_data as bday_load_data, save_data as bday_save_data, DEFAULT_DATA as BDAY_DEFAULT_DATA
+    from birthdays import _send_announcement_like as bday_send_announcement_like  # for previews
+except Exception:
+    bday_load_data = None
+    bday_save_data = None
+    BDAY_DEFAULT_DATA = None
+    bday_send_announcement_like = None
+
 
 # ======================================================
 # SCOPES (roles panel)
@@ -57,7 +74,7 @@ def build_role_pages(guild: discord.Guild, settings: Dict[str, Any]) -> List[dis
         ("👋📄🚀 Welcome / Leave / Boost", settings.get("apps", {}).get("welcome_leave", {}).get("allowed_roles", [])),
         ("🧩 Roles / Self-Roles", settings.get("apps", {}).get("roles", {}).get("allowed_roles", [])),
         ("🎂 Birthdays", settings.get("apps", {}).get("birthdays", {}).get("allowed_roles", [])),
-      ]
+    ]
 
     chunk = 2
     pages: List[discord.Embed] = []
@@ -94,6 +111,49 @@ def boost_status_text(cfg: Dict[str, Any]) -> str:
     b = cfg.get("boost", {}) or {}
     ch = f"<#{b.get('channel_id')}>" if b.get("channel_id") else "*Not set*"
     return f"**Enabled:** `{b.get('enabled', False)}`\n**Channel:** {ch}"
+
+
+def birthday_status_text(data: Optional[Dict[str, Any]]) -> str:
+    if not data or "settings" not in data:
+        return "**Enabled:** `False`\n**Channel:** *Not set*\n**Role:** *Not set*"
+
+    s = data.get("settings", {}) or {}
+    ch = f"<#{s.get('channel_id')}>" if s.get("channel_id") else "*Not set*"
+    role = f"<@&{s.get('birthday_role_id')}>" if s.get("birthday_role_id") else "*Not set*"
+    t = f"{int(s.get('post_hour', 15)):02d}:{int(s.get('post_minute', 0)):02d}"
+    imgs = len(s.get("image_urls", []) or [])
+    return (
+        f"**Enabled:** `{bool(s.get('enabled', True))}`\n"
+        f"**Announce:** `{bool(s.get('announce', True))}`\n"
+        f"**Channel:** {ch}\n"
+        f"**Role:** {role}\n"
+        f"**Time:** `{t}`\n"
+        f"**Images:** `{imgs}`"
+    )
+
+
+def _ensure_bday_data_shape(data: Dict[str, Any]) -> Dict[str, Any]:
+    """Ensure birthdays.json has required keys; merges defaults without deleting existing."""
+    if not BDAY_DEFAULT_DATA:
+        return data
+
+    # shallow + nested merge for known top-level keys
+    out = data or {}
+    for k, v in BDAY_DEFAULT_DATA.items():
+        if k not in out:
+            out[k] = v
+    out.setdefault("settings", {})
+    out.setdefault("birthdays", {})
+    out.setdefault("state", {"announced_keys": []})
+
+    # merge settings defaults
+    def_s = (BDAY_DEFAULT_DATA.get("settings") or {}) if isinstance(BDAY_DEFAULT_DATA, dict) else {}
+    s = out["settings"]
+    for k, v in def_s.items():
+        if k not in s:
+            s[k] = v
+    s.setdefault("image_urls", [])
+    return out
 
 
 # ======================================================
@@ -140,10 +200,11 @@ class PanelState:
     WELCOME = "welcome"
     LEAVE = "leave"
     BOOST = "boost"
+    BIRTHDAYS = "birthdays"
 
 
 # ======================================================
-# Shared image paging + removal picker (welcome/boost)
+# Shared image paging + removal picker (welcome/boost/birthdays)
 # ======================================================
 
 def image_embed(title: str, urls: List[str], index: int) -> discord.Embed:
@@ -200,9 +261,9 @@ class RemoveImageSelect(discord.ui.Select):
 
     async def callback(self, interaction: discord.Interaction):
         idx = int(self.values[0])
-        cfg = load_config()
 
         if self.kind == "welcome":
+            cfg = load_config()
             arr = (cfg.get("welcome", {}) or {}).get("arrival_images") or []
             if 0 <= idx < len(arr):
                 arr.pop(idx)
@@ -212,6 +273,7 @@ class RemoveImageSelect(discord.ui.Select):
             return await interaction.response.send_message("❌ Couldn’t remove that image.")
 
         if self.kind == "boost":
+            cfg = load_config()
             b = cfg.setdefault("boost", {})
             imgs = b.get("images") or []
             if 0 <= idx < len(imgs):
@@ -221,11 +283,24 @@ class RemoveImageSelect(discord.ui.Select):
                 return await interaction.response.send_message("✅ Removed that boost image.")
             return await interaction.response.send_message("❌ Couldn’t remove that image.")
 
+        if self.kind == "birthdays":
+            if not bday_load_data or not bday_save_data:
+                return await interaction.response.send_message("❌ Birthdays module not available.")
+            data, sha = await bday_load_data()
+            data = _ensure_bday_data_shape(data)
+            imgs = (data.get("settings", {}) or {}).get("image_urls") or []
+            if 0 <= idx < len(imgs):
+                imgs.pop(idx)
+                data["settings"]["image_urls"] = imgs
+                await bday_save_data(data, sha)
+                return await interaction.response.send_message("✅ Removed that birthday image.")
+            return await interaction.response.send_message("❌ Couldn’t remove that image.")
+
         await interaction.response.send_message("❌ Unknown image type.")
 
 
 # ======================================================
-# LOCAL CHANNEL PICKERS (so joinleave.py doesn't need to provide them)
+# LOCAL CHANNEL PICKERS (welcome/leave)
 # ======================================================
 
 class WelcomeChannelPickerViewLocal(discord.ui.View):
@@ -296,8 +371,7 @@ class ChannelSlotPickerViewLocal(discord.ui.View):
 
 
 # ======================================================
-# BOOST MANAGEMENT (panel + 3 text sections)
-# Uses joinleave.py structure: boost.messages.single/double/tier
+# BOOST MANAGEMENT (unchanged)
 # ======================================================
 
 def _ensure_boost(cfg: Dict[str, Any]) -> Dict[str, Any]:
@@ -306,7 +380,7 @@ def _ensure_boost(cfg: Dict[str, Any]) -> Dict[str, Any]:
     b.setdefault("enabled", True)
     b.setdefault("channel_id", None)
     b.setdefault("images", [])
-    b.setdefault("title", "")  # optional; harmless if you don't use it
+    b.setdefault("title", "")
     b.setdefault("messages", {})
     b["messages"].setdefault("single", "💎 {user} just boosted the server! 💎")
     b["messages"].setdefault("double", "🔥 {user} just used **both boosts**! 🔥")
@@ -431,7 +505,6 @@ class BoostActionSelect(discord.ui.Select):
 
         choice = self.values[0]
 
-        # FIRST RESPONSE actions (no defer)
         if choice == "set_channel":
             return await interaction.response.send_message("Select the boost channel:", view=BoostChannelPickerView())
 
@@ -472,7 +545,6 @@ class BoostActionSelect(discord.ui.Select):
         if choice == "add_img":
             return await interaction.response.send_modal(AddBoostImageModal())
 
-        # Everything else can defer
         await _safe_defer(interaction)
         cfg = _ensure_boost(load_config())
         b = cfg["boost"]
@@ -521,6 +593,299 @@ async def send_boost_preview(interaction: discord.Interaction):
 
 
 # ======================================================
+# BIRTHDAYS MANAGEMENT (GitHub-backed, select+modals)
+# ======================================================
+
+class BirthdayChannelPickerView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=120)
+        sel = discord.ui.ChannelSelect(channel_types=[discord.ChannelType.text])
+        sel.callback = self.pick
+        self.add_item(sel)
+
+    async def pick(self, interaction: discord.Interaction):
+        if not has_app_access(interaction.user, "birthdays"):
+            return await _no_perm(interaction, "❌ You don’t have permission for Birthdays settings.")
+
+        if not bday_load_data or not bday_save_data:
+            return await interaction.response.edit_message(content="❌ Birthdays module not available.", view=None)
+
+        cid = _cid(interaction.data["values"][0])
+        data, sha = await bday_load_data()
+        data = _ensure_bday_data_shape(data)
+        data["settings"]["channel_id"] = cid
+        await bday_save_data(data, sha)
+        await interaction.response.edit_message(content=f"✅ Birthday channel set to <#{cid}>", view=None)
+
+
+class BirthdayRolePickerView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=120)
+        sel = discord.ui.RoleSelect(min_values=1, max_values=1)
+        sel.callback = self.pick
+        self.add_item(sel)
+
+    async def pick(self, interaction: discord.Interaction):
+        if not has_app_access(interaction.user, "birthdays"):
+            return await _no_perm(interaction, "❌ You don’t have permission for Birthdays settings.")
+
+        if not bday_load_data or not bday_save_data:
+            return await interaction.response.edit_message(content="❌ Birthdays module not available.", view=None)
+
+        rid = _cid(interaction.data["values"][0])
+        data, sha = await bday_load_data()
+        data = _ensure_bday_data_shape(data)
+        data["settings"]["birthday_role_id"] = rid
+        await bday_save_data(data, sha)
+        await interaction.response.edit_message(content=f"✅ Birthday role set to <@&{rid}>", view=None)
+
+
+class EditBirthdayTimeModal(discord.ui.Modal, title="Edit Birthday Announcement Time"):
+    hour = discord.ui.TextInput(label="Hour (0-23)", placeholder="15", min_length=1, max_length=2)
+    minute = discord.ui.TextInput(label="Minute (0-59)", placeholder="00", min_length=1, max_length=2)
+
+    def __init__(self, default_hour: int, default_minute: int):
+        super().__init__()
+        self.hour.default = str(default_hour)
+        self.minute.default = str(default_minute)
+
+    async def on_submit(self, interaction: discord.Interaction):
+        if not has_app_access(interaction.user, "birthdays"):
+            return await _no_perm(interaction, "❌ You don’t have permission for Birthdays settings.")
+
+        if not bday_load_data or not bday_save_data:
+            return await interaction.response.send_message("❌ Birthdays module not available.")
+
+        try:
+            h = int(self.hour.value)
+            m = int(self.minute.value)
+            if not (0 <= h <= 23 and 0 <= m <= 59):
+                raise ValueError()
+
+            data, sha = await bday_load_data()
+            data = _ensure_bday_data_shape(data)
+            data["settings"]["post_hour"] = h
+            data["settings"]["post_minute"] = m
+            await bday_save_data(data, sha)
+            await interaction.response.send_message(f"✅ Birthday time set to **{h:02d}:{m:02d}**.")
+        except Exception:
+            await interaction.response.send_message("❌ Invalid time.")
+
+
+class EditBirthdayCardModal(discord.ui.Modal, title="Edit Birthday Card Text"):
+    header = discord.ui.TextInput(label="Title", placeholder="🎂 Birthday Celebration!", max_length=256)
+    single = discord.ui.TextInput(label="Single Message", style=discord.TextStyle.paragraph, max_length=2000)
+    multi = discord.ui.TextInput(label="Multiple Message", style=discord.TextStyle.paragraph, max_length=2000, required=False)
+
+    def __init__(self, header_default: str, single_default: str, multi_default: str):
+        super().__init__()
+        self.header.default = header_default or "🎂 Birthday Celebration!"
+        self.single.default = single_default or "Happy Birthday {username}! 🎂"
+        self.multi.default = multi_default or "We have {count} birthdays today! Happy Birthday to {usernames}! 🎂🎉"
+
+    async def on_submit(self, interaction: discord.Interaction):
+        if not has_app_access(interaction.user, "birthdays"):
+            return await _no_perm(interaction, "❌ You don’t have permission for Birthdays settings.")
+
+        if not bday_load_data or not bday_save_data:
+            return await interaction.response.send_message("❌ Birthdays module not available.")
+
+        data, sha = await bday_load_data()
+        data = _ensure_bday_data_shape(data)
+        s = data["settings"]
+        s["message_header"] = str(self.header.value)
+        s["message_single"] = str(self.single.value)
+        s["message_multiple"] = str(self.multi.value) or str(self.single.value)
+        await bday_save_data(data, sha)
+        await interaction.response.send_message("✅ Birthday card text updated.")
+
+
+class AddBirthdayImageModal(discord.ui.Modal, title="Add Birthday Image"):
+    url = discord.ui.TextInput(label="Image URL", max_length=400)
+
+    async def on_submit(self, interaction: discord.Interaction):
+        if not has_app_access(interaction.user, "birthdays"):
+            return await _no_perm(interaction, "❌ You don’t have permission for Birthdays settings.")
+
+        if not bday_load_data or not bday_save_data:
+            return await interaction.response.send_message("❌ Birthdays module not available.")
+
+        data, sha = await bday_load_data()
+        data = _ensure_bday_data_shape(data)
+        data["settings"].setdefault("image_urls", [])
+        data["settings"]["image_urls"].append(self.url.value.strip())
+        await bday_save_data(data, sha)
+        await interaction.response.send_message("✅ Birthday image added.")
+
+
+class BirthdayActionSelect(discord.ui.Select):
+    def __init__(self):
+        super().__init__(
+            placeholder="Birthdays action…",
+            options=[
+                discord.SelectOption(label="🔁 Toggle Birthdays On/Off", value="toggle"),
+                discord.SelectOption(label="📣 Toggle Announcements On/Off", value="toggle_announce"),
+                discord.SelectOption(label="📍 Set Birthday Channel", value="set_channel"),
+                discord.SelectOption(label="🏷️ Set Birthday Role", value="set_role"),
+                discord.SelectOption(label="🕒 Edit Post Time", value="edit_time"),
+                discord.SelectOption(label="📝 Edit Card Text", value="edit_card"),
+                discord.SelectOption(label="🖼️ Add Image", value="add_img"),
+                discord.SelectOption(label="👀 View Images", value="view_imgs"),
+                discord.SelectOption(label="🗑️ Remove Image", value="rm_img"),
+                discord.SelectOption(label="📂 Export TXT", value="export"),
+                discord.SelectOption(label="✨ Preview Single", value="preview_single"),
+                discord.SelectOption(label="✨ Preview Multi", value="preview_multi"),
+                discord.SelectOption(label="♻️ Reset Birthday Settings", value="reset_settings"),
+            ],
+            min_values=1, max_values=1
+        )
+
+    async def callback(self, interaction: discord.Interaction):
+        if not has_app_access(interaction.user, "birthdays"):
+            return await _no_perm(interaction, "❌ You don’t have permission for Birthdays settings.")
+
+        if not bday_load_data or not bday_save_data:
+            return await interaction.response.send_message("❌ Birthdays module not available.", ephemeral=False)
+
+        choice = self.values[0]
+
+        # Modal / picker actions (first-response)
+        if choice == "set_channel":
+            return await interaction.response.send_message("Select the birthday channel:", view=BirthdayChannelPickerView())
+
+        if choice == "set_role":
+            return await interaction.response.send_message("Select the birthday role:", view=BirthdayRolePickerView())
+
+        # Load data once for most actions
+        data, sha = await bday_load_data()
+        data = _ensure_bday_data_shape(data)
+        s = data.get("settings", {}) or {}
+
+        if choice == "edit_time":
+            return await interaction.response.send_modal(
+                EditBirthdayTimeModal(int(s.get("post_hour", 15)), int(s.get("post_minute", 0)))
+            )
+
+        if choice == "edit_card":
+            return await interaction.response.send_modal(
+                EditBirthdayCardModal(
+                    s.get("message_header", ""),
+                    s.get("message_single", ""),
+                    s.get("message_multiple", ""),
+                )
+            )
+
+        if choice == "add_img":
+            return await interaction.response.send_modal(AddBirthdayImageModal())
+
+        await _safe_defer(interaction)
+
+        if choice == "toggle":
+            s["enabled"] = not bool(s.get("enabled", True))
+            data["settings"] = s
+            await bday_save_data(data, sha)
+
+        elif choice == "toggle_announce":
+            s["announce"] = not bool(s.get("announce", True))
+            data["settings"] = s
+            await bday_save_data(data, sha)
+
+        elif choice == "view_imgs":
+            imgs = s.get("image_urls", []) or []
+            if not imgs:
+                if interaction.channel:
+                    await interaction.channel.send("No birthday images.")
+            else:
+                if interaction.channel:
+                    await interaction.channel.send(
+                        embed=image_embed("🎂 Birthday Images", imgs, 0),
+                        view=ImagePagerView("🎂 Birthday Images", imgs, 0)
+                    )
+            # panel refresh below
+
+        elif choice == "rm_img":
+            imgs = s.get("image_urls", []) or []
+            if not imgs:
+                if interaction.channel:
+                    await interaction.channel.send("No birthday images to remove.")
+            else:
+                if interaction.channel:
+                    await interaction.channel.send("Pick an image to remove:", view=RemoveImagePicker("birthdays", imgs))
+
+        elif choice == "export":
+            bdays = data.get("birthdays", {}) or {}
+            txt = "USER ID | BIRTHDAY | TIMEZONE\n" + "-" * 35 + "\n"
+            for uid, rec in bdays.items():
+                try:
+                    txt += f"{uid} | {rec['day']}/{rec['month']} | {rec.get('timezone','Europe/London')}\n"
+                except Exception:
+                    txt += f"{uid} | (invalid)\n"
+            f = discord.File(io.BytesIO(txt.encode("utf-8")), filename="birthdays.txt")
+            if interaction.channel:
+                await interaction.channel.send(f"📂 {interaction.user.mention} exported birthday data.", file=f)
+
+        elif choice == "preview_single":
+            # Same preview behaviour as your birthdays.py panel used (uses _send_announcement_like)
+            cid = s.get("channel_id")
+            if not cid:
+                if interaction.channel:
+                    await interaction.channel.send("❌ Set a birthday channel first.")
+            else:
+                ch = interaction.client.get_channel(int(cid))
+                if ch and bday_send_announcement_like:
+                    await bday_send_announcement_like(
+                        channel=ch,
+                        settings=s,
+                        members=[interaction.user],
+                        local_date=date.today(),
+                        tz_label="Preview",
+                        test_mode=True
+                    )
+                if interaction.channel:
+                    await interaction.channel.send(f"✨ {interaction.user.mention} previewed single.")
+
+        elif choice == "preview_multi":
+            cid = s.get("channel_id")
+            if not cid:
+                if interaction.channel:
+                    await interaction.channel.send("❌ Set a birthday channel first.")
+            else:
+                ch = interaction.client.get_channel(int(cid))
+                bot_member = interaction.guild.me if interaction.guild else None
+                members = [interaction.user] + ([bot_member] if bot_member else [])
+                if ch and bday_send_announcement_like:
+                    await bday_send_announcement_like(
+                        channel=ch,
+                        settings=s,
+                        members=members,
+                        local_date=date.today(),
+                        tz_label="Preview",
+                        test_mode=True,
+                        force_multiple=True
+                    )
+                if interaction.channel:
+                    await interaction.channel.send(f"✨ {interaction.user.mention} previewed multi.")
+
+        elif choice == "reset_settings":
+            # Reset only settings; keep birthdays + state
+            if BDAY_DEFAULT_DATA and isinstance(BDAY_DEFAULT_DATA, dict):
+                keep_birthdays = data.get("birthdays", {}) or {}
+                keep_state = data.get("state", {}) or {"announced_keys": []}
+                data["settings"] = (BDAY_DEFAULT_DATA.get("settings") or {}).copy()
+                data["birthdays"] = keep_birthdays
+                data["state"] = keep_state
+                data = _ensure_bday_data_shape(data)
+                await bday_save_data(data, sha)
+                if interaction.channel:
+                    await interaction.channel.send("♻️ Reset birthday settings to defaults (kept birthdays).")
+
+        # Refresh panel
+        data2, _ = await bday_load_data()
+        embed = discord.Embed(title="🎂 Birthday Settings", description=birthday_status_text(data2), color=discord.Color.blurple())
+        await _safe_edit_panel_message(interaction, embed=embed, view=PilotPanelView(state=PanelState.BIRTHDAYS))
+
+
+# ======================================================
 # MAIN PANEL VIEW
 # ======================================================
 
@@ -542,6 +907,8 @@ class PilotPanelView(discord.ui.View):
             self.add_item(LeaveActionSelect())
         elif self.state == PanelState.BOOST:
             self.add_item(BoostActionSelect())
+        elif self.state == PanelState.BIRTHDAYS:
+            self.add_item(BirthdayActionSelect())
 
     async def interaction_check(self, interaction: discord.Interaction) -> bool:
         if not has_global_access(interaction.user):
@@ -558,6 +925,7 @@ class PanelNavSelect(discord.ui.Select):
             discord.SelectOption(label="👋 Welcome", value=PanelState.WELCOME),
             discord.SelectOption(label="📄 Leave / Logs", value=PanelState.LEAVE),
             discord.SelectOption(label="🚀 Boost", value=PanelState.BOOST),
+            discord.SelectOption(label="🎂 Birthdays", value=PanelState.BIRTHDAYS),
         ]
         super().__init__(placeholder="Navigate panel…", options=opts, min_values=1, max_values=1)
 
@@ -575,6 +943,17 @@ class PanelNavSelect(discord.ui.Select):
             embed.add_field(name="👋 Welcome", value=welcome_status_text(cfg), inline=False)
             embed.add_field(name="📄 Leave / Logs", value=logs_status_text(cfg), inline=False)
             embed.add_field(name="🚀 Boost", value=boost_status_text(cfg), inline=False)
+
+            # birthdays status from GitHub
+            btxt = "*Birthdays module not available*"
+            if bday_load_data:
+                try:
+                    bdata, _ = await bday_load_data()
+                    btxt = birthday_status_text(bdata)
+                except Exception:
+                    btxt = "*Couldn’t load birthdays.json*"
+            embed.add_field(name="🎂 Birthdays", value=btxt, inline=False)
+
             embed.add_field(name="🛂 Roles", value="Manage access inside **🛂 Roles**.", inline=False)
             return await _safe_edit_panel_message(interaction, embed=embed, view=PilotPanelView(state=PanelState.ROOT))
 
@@ -588,14 +967,23 @@ class PanelNavSelect(discord.ui.Select):
             embed = discord.Embed(title="👋 Welcome Settings", description=welcome_status_text(cfg), color=discord.Color.blurple())
         elif target == PanelState.LEAVE:
             embed = discord.Embed(title="📄 Leave / Logs Settings", description=logs_status_text(cfg), color=discord.Color.blurple())
-        else:
+        elif target == PanelState.BOOST:
             embed = discord.Embed(title="🚀 Boost Settings", description=boost_status_text(cfg), color=discord.Color.blurple())
+        else:
+            btxt = "*Birthdays module not available*"
+            if bday_load_data:
+                try:
+                    bdata, _ = await bday_load_data()
+                    btxt = birthday_status_text(bdata)
+                except Exception:
+                    btxt = "*Couldn’t load birthdays.json*"
+            embed = discord.Embed(title="🎂 Birthday Settings", description=btxt, color=discord.Color.blurple())
 
         await _safe_edit_panel_message(interaction, embed=embed, view=PilotPanelView(state=target))
 
 
 # ======================================================
-# ROLES MANAGEMENT (overview paginated + back, and show stays IN PANEL)
+# ROLES MANAGEMENT (unchanged)
 # ======================================================
 
 class RolesOverviewView(discord.ui.View):
@@ -654,7 +1042,6 @@ class RoleScopeSelect(discord.ui.Select):
                     view=PilotPanelView(state=PanelState.ROLES)
                 )
 
-            # ✅ FIX: DO NOT send a new message. Edit the panel message in-place.
             return await _safe_edit_panel_message(
                 interaction,
                 embed=pages[0],
@@ -759,9 +1146,10 @@ class RemoveRolesSelect(discord.ui.RoleSelect):
 
         save_settings(settings)
         await interaction.response.send_message(f"✅ Removed roles from **{SCOPES[self.scope]}**.")
-        
+
+
 # ======================================================
-# WELCOME MANAGEMENT (self-contained modals)
+# WELCOME MANAGEMENT (unchanged)
 # ======================================================
 
 class EditWelcomeTitleModalLocal(discord.ui.Modal, title="Edit Welcome Title"):
@@ -876,7 +1264,6 @@ class WelcomeActionSelect(discord.ui.Select):
 
         choice = self.values[0]
 
-        # first-response actions
         if choice == "set_channel":
             return await interaction.response.send_message("Select the welcome channel:", view=WelcomeChannelPickerViewLocal())
 
@@ -954,7 +1341,7 @@ async def send_welcome_preview(interaction: discord.Interaction):
 
 
 # ======================================================
-# LEAVE / LOGS MANAGEMENT
+# LEAVE / LOGS MANAGEMENT (unchanged)
 # ======================================================
 
 class LeaveActionSelect(discord.ui.Select):
@@ -1020,6 +1407,16 @@ def setup_admin_settings(tree: app_commands.CommandTree):
         embed.add_field(name="👋 Welcome", value=welcome_status_text(cfg), inline=False)
         embed.add_field(name="📄 Leave / Logs", value=logs_status_text(cfg), inline=False)
         embed.add_field(name="🚀 Boost", value=boost_status_text(cfg), inline=False)
+
+        btxt = "*Birthdays module not available*"
+        if bday_load_data:
+            try:
+                bdata, _ = await bday_load_data()
+                btxt = birthday_status_text(bdata)
+            except Exception:
+                btxt = "*Couldn’t load birthdays.json*"
+        embed.add_field(name="🎂 Birthdays", value=btxt, inline=False)
+
         embed.add_field(name="🛂 Roles", value="Go to **🛂 Roles** to edit scopes / overview.", inline=False)
 
         await interaction.followup.send(embed=embed, view=PilotPanelView(state=PanelState.ROOT))
