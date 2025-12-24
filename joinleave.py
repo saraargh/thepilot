@@ -117,6 +117,7 @@ def render(text: str, *, user, guild, member_count: int, channels: Dict[str, int
             .replace("{mention}", getattr(user, "mention", ""))
             .replace("{server}", guild.name)
             .replace("{member_count}", str(member_count))
+            .replace("{tier}", str(getattr(guild, "premium_tier", 0)))
     )
     for name, cid in (channels or {}).items():
         out = out.replace(f"{{channel:{name}}}", f"<#{cid}>")
@@ -129,8 +130,6 @@ def render(text: str, *, user, guild, member_count: int, channels: Dict[str, int
 class WelcomeSystem:
     def __init__(self, client: discord.Client):
         self.client = client
-        self._recent_boosts: Dict[int, float] = {}
-        self._last_tier: Dict[int, int] = {}
 
     # ---------------- MEMBER JOIN ----------------
 
@@ -251,55 +250,62 @@ class WelcomeSystem:
                 )
                 return
 
-    # ---------------- BOOST EVENT ----------------
+    # ---------------- BOOST EVENT (MESSAGE LISTENER) ----------------
 
-    async def on_member_update(self, before: discord.Member, after: discord.Member):
-        if before.premium_since == after.premium_since:
+    async def on_message(self, message: discord.Message):
+        # Listen for Discord's specific system boost messages
+        boost_types = [
+            discord.MessageType.premium_guild_subscription,
+            discord.MessageType.premium_guild_tier_1,
+            discord.MessageType.premium_guild_tier_2,
+            discord.MessageType.premium_guild_tier_3,
+        ]
+
+        # Filter: Only proceed if it is a boost system message
+        if message.type not in boost_types:
             return
-        if after.premium_since is None:
-            return
+
+        # If it reaches here, a boost message WAS detected! 
+        # This print is safe and only runs when a boost actually happens.
+        print(f">>> SYSTEM: Detected Boost Message Type {message.type} from {message.author}")
 
         cfg = load_config()
         b = cfg.get("boost", {}) or {}
         if not b.get("enabled") or not b.get("channel_id"):
             return
 
-        channel = self.client.get_channel(b["channel_id"])
+        # Ensure ID is an integer
+        channel = self.client.get_channel(int(b["channel_id"]))
         if not channel:
             return
 
-        await asyncio.sleep(1.2)
-
-        guild = after.guild
-        now_ts = discord.utils.utcnow().timestamp()
+        guild = message.guild
+        user = message.author
+        total_boosts = guild.premium_subscription_count or 0
         now = discord.utils.utcnow().strftime("%H:%M")
 
-        total_boosts = guild.premium_subscription_count or 0
-        prev_tier = self._last_tier.get(guild.id, guild.premium_tier)
-        new_tier = guild.premium_tier
-        self._last_tier[guild.id] = new_tier
-
-        user_id = after.id
-        last_boost = self._recent_boosts.get(user_id)
-
-        if new_tier > prev_tier:
-            text = b["messages"]["tier"]
-        elif last_boost and (now_ts - last_boost) <= 8:
-            text = b["messages"]["double"]
+        # Select message
+        if message.type == discord.MessageType.premium_guild_subscription:
+            text = b["messages"].get("single", "")
         else:
-            text = b["messages"]["single"]
-
-        self._recent_boosts[user_id] = now_ts
+            text = b["messages"].get("tier", "")
 
         embed = discord.Embed(
-            description=render(
-                text,
-                user=after,
+            title=render(
+                b.get("title", ""),
+                user=user,
                 guild=guild,
                 member_count=total_boosts,
                 channels={}
             ),
-            color=discord.Color.blurple(),
+            description=render(
+                text,
+                user=user,
+                guild=guild,
+                member_count=total_boosts,
+                channels={}
+            ),
+            color=discord.Color.magenta(),
         )
 
         embed.set_footer(
@@ -310,4 +316,4 @@ class WelcomeSystem:
         if imgs:
             embed.set_image(url=random.choice(imgs))
 
-        await channel.send(content=after.mention, embed=embed)
+        await channel.send(content=user.mention, embed=embed)
