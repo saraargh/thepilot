@@ -1400,7 +1400,7 @@ def setup_admin_settings(tree: app_commands.CommandTree):
         if not has_global_access(interaction.user):
             return await interaction.response.send_message("❌ You do not have permission.")
 
-        await interaction.response.defer(thinking=False)
+        await _safe_defer(interaction)
 
         cfg = load_config()
         embed = discord.Embed(title="⚙️ Pilot Settings", color=discord.Color.blurple())
