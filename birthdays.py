@@ -239,7 +239,7 @@ class BirthdaySettingsView(discord.ui.View):
         e.add_field(name="Channel", value=f"<#{s['channel_id']}>" if s['channel_id'] else "Not Set")
         e.add_field(name="Role", value=f"<@&{s['birthday_role_id']}>" if s['birthday_role_id'] else "Not Set")
         return e
-    async def _save_and_refresh(self, it, note=None, is_ephemeral=True):
+    async def _save_and_refresh(self, it, note=None, is_ephemeral=False):
         new_sha = await save_data(self.data, self.sha)
         if new_sha: self.sha = new_sha
         if it.response.is_done():
@@ -319,7 +319,7 @@ def setup(bot: discord.Client):
             await it.response.send_message(f"🗑️ {it.user.mention} removed **{target.display_name}**.", ephemeral=False)
         else: await it.response.send_message("❌ Not found.", ephemeral=False)
 
-    @group.command(name="list", description="List birthdays (Jan-Dec)")
+    @group.command(name="list", description="Server Birthdays")
     async def b_list(it):
         data, _ = await load_data(); bdays = data.get("birthdays", {})
         if not bdays: return await it.response.send_message("No data.", ephemeral=False)
@@ -360,9 +360,9 @@ def setup(bot: discord.Client):
 
     @group.command(name="settings", description="Admin panel")
     async def b_setts(it):
-        if not has_app_access(it.user, "birthdays"): return await it.response.send_message("No perm.", ephemeral=False)
+        if not has_app_access(it.user, "birthdays"): return await it.response.send_message("❌ No permission to view settings.", ephemeral=True)
         data, sha = await load_data(); view = BirthdaySettingsView(bot, data, sha)
-        await it.response.send_message(embed=view._embed(), view=view, ephemeral=True)
+        await it.response.send_message(embed=view._embed(), view=view, ephemeral=False)
 
     @tasks.loop(minutes=1)
     async def birthday_tick():
