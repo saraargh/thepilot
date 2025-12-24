@@ -62,9 +62,10 @@ class ThePilot(discord.Client):
     async def on_member_ban(self, guild: discord.Guild, user: discord.User):
         await self.joinleave.on_member_ban(guild, user)
 
-    # ---------------- BOOST EVENTS ----------------
-    async def on_member_update(self, before: discord.Member, after: discord.Member):
-        await self.joinleave.on_member_update(before, after)
+    # ---------------- MESSAGE LISTENER (BOOSTS) ----------------
+    async def on_message(self, message: discord.Message):
+        # This replaces the old update logic to prevent the AttributeError
+        await self.joinleave.on_message(message)
 
     # ---------------- GLOBAL ERROR LOGGER ----------------
     async def on_error(self, event_method, *args, **kwargs):
