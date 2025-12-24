@@ -155,8 +155,7 @@
     }
   },
   "state": {
-    "announced_keys": [
-    ],
+    "announced_keys": [],
     "role_assigned_keys": []
   }
 }
