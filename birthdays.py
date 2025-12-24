@@ -278,7 +278,7 @@ def setup(bot: discord.Client):
     @group.command(name="upcoming", description="Show next 5 birthdays")
     async def b_up(it):
         data, _ = await load_data(); bdays = data.get("birthdays", {}); today = date.today()
-        if not bdays: return await it.response.send_message("No data.", ephemeral=False)
+        if not bdays: return await it.response.send_message("No data.", ephemeral=True)
         up = []
         for uid, rec in bdays.items():
             try: b = date(today.year, rec['month'], rec['day'])
@@ -295,9 +295,9 @@ def setup(bot: discord.Client):
 
     @group.command(name="settings", description="Admin panel")
     async def b_setts(it):
-        if not has_app_access(it.user, "birthdays"): return await it.response.send_message("No perm.", ephemeral=False)
+        if not has_app_access(it.user, "birthdays"): return await it.response.send_message("You do not have access to view the settings.", ephemeral=False)
         data, sha = await load_data(); view = BirthdaySettingsView(bot, data, sha)
-        await it.response.send_message(embed=view._embed(), view=view, ephemeral=True)
+        await it.response.send_message(embed=view._embed(), view=view, ephemeral=False)
 
     @tasks.loop(minutes=1)
     async def birthday_tick():
