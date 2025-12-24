@@ -117,7 +117,6 @@ def render(text: str, *, user, guild, member_count: int, channels: Dict[str, int
             .replace("{mention}", getattr(user, "mention", ""))
             .replace("{server}", guild.name)
             .replace("{member_count}", str(member_count))
-            .replace("{tier}", str(getattr(guild, "premium_tier", 0)))
     )
     for name, cid in (channels or {}).items():
         out = out.replace(f"{{channel:{name}}}", f"<#{cid}>")
@@ -130,6 +129,9 @@ def render(text: str, *, user, guild, member_count: int, channels: Dict[str, int
 class WelcomeSystem:
     def __init__(self, client: discord.Client):
         self.client = client
+        self._recent_boosts: Dict[int, float] = {}
+        self._last_tier: Dict[int, int] = {}
+        self._pending_boost_counts: Dict[tuple, int] = {} # Helper for double boost detection
 
     # ---------------- MEMBER JOIN ----------------
 
@@ -250,10 +252,9 @@ class WelcomeSystem:
                 )
                 return
 
-    # ---------------- BOOST EVENT (MESSAGE LISTENER) ----------------
+    # ---------------- BOOST EVENT (LISTENER) ----------------
 
     async def on_message(self, message: discord.Message):
-        # Listen for Discord's specific system boost messages
         boost_types = [
             discord.MessageType.premium_guild_subscription,
             discord.MessageType.premium_guild_tier_1,
@@ -261,51 +262,57 @@ class WelcomeSystem:
             discord.MessageType.premium_guild_tier_3,
         ]
 
-        # Filter: Only proceed if it is a boost system message
         if message.type not in boost_types:
             return
 
-        # If it reaches here, a boost message WAS detected! 
-        # This print is safe and only runs when a boost actually happens.
-        print(f">>> SYSTEM: Detected Boost Message Type {message.type} from {message.author}")
-
+        # Config Check
         cfg = load_config()
         b = cfg.get("boost", {}) or {}
         if not b.get("enabled") or not b.get("channel_id"):
             return
 
-        # Ensure ID is an integer
-        channel = self.client.get_channel(int(b["channel_id"]))
-        if not channel:
+        guild = message.guild
+        user = message.author
+        key = (guild.id, user.id)
+
+        # Immediate Action for Tiers
+        if message.type != discord.MessageType.premium_guild_subscription:
+            await self._execute_boost_embed(message, b["messages"]["tier"])
             return
+
+        # Logic for Single vs Double
+        if key in self._pending_boost_counts:
+            self._pending_boost_counts[key] += 1
+            return
+        
+        self._pending_boost_counts[key] = 1
+        await asyncio.sleep(30) # Your requested wait time
+        
+        final_count = self._pending_boost_counts.pop(key, 1)
+        msg_template = b["messages"]["double"] if final_count > 1 else b["messages"]["single"]
+        
+        await self._execute_boost_embed(message, msg_template)
+
+    async def _execute_boost_embed(self, message, text_template):
+        cfg = load_config()
+        b = cfg.get("boost", {}) or {}
+        channel = self.client.get_channel(int(b["channel_id"]))
+        if not channel: return
 
         guild = message.guild
         user = message.author
         total_boosts = guild.premium_subscription_count or 0
         now = discord.utils.utcnow().strftime("%H:%M")
 
-        # Select message
-        if message.type == discord.MessageType.premium_guild_subscription:
-            text = b["messages"].get("single", "")
-        else:
-            text = b["messages"].get("tier", "")
-
         embed = discord.Embed(
-            title=render(
-                b.get("title", ""),
-                user=user,
-                guild=guild,
-                member_count=total_boosts,
-                channels={}
-            ),
             description=render(
-                text,
+                text_template,
                 user=user,
                 guild=guild,
                 member_count=total_boosts,
                 channels={}
             ),
-            color=discord.Color.magenta(),
+            color=discord.Color.blurple(),
         )
 
         embed.set_footer(
