@@ -108,6 +108,59 @@ async def _send_announcement_like(*, channel, settings, members, local_date, tz_
     except: return False
 
 # =========================================================
+# Image Management Components
+# =========================================================
+class ImageManageView(discord.ui.View):
+    def __init__(self, parent_view: BirthdaySettingsView):
+        super().__init__(timeout=180); self.parent = parent_view
+        self.update_select()
+
+    def update_select(self):
+        self.clear_items()
+        urls = self.parent.data["settings"].get("image_urls", [])
+        if not urls:
+            self.add_item(discord.ui.Button(label="No Images Found", disabled=True))
+        else:
+            select = discord.ui.Select(placeholder="Select an image to manage...", options=[
+                discord.SelectOption(label=f"Image {i+1}", value=str(i), description=url[:50])
+                for i, url in enumerate(urls)
+            ][:25])
+            select.callback = self.select_callback
+            self.add_item(select)
+        
+        back = discord.ui.Button(label="Back to Settings", style=discord.ButtonStyle.gray)
+        back.callback = self.back_callback
+        self.add_item(back)
+
+    async def select_callback(self, it: discord.Interaction):
+        idx = int(it.data['values'][0])
+        url = self.parent.data["settings"]["image_urls"][idx]
+        view = ImageActionView(self, idx, url)
+        await it.response.edit_message(content=f"**Managing Image {idx+1}:**\n{url}", embed=None, view=view)
+
+    async def back_callback(self, it: discord.Interaction):
+        await it.response.edit_message(content=None, embed=self.parent._embed(), view=self.parent)
+
+class ImageActionView(discord.ui.View):
+    def __init__(self, manage_view: ImageManageView, index: int, url: str):
+        super().__init__(timeout=180); self.manage_view = manage_view; self.index = index; self.url = url
+
+    @discord.ui.button(label="View Image", style=discord.ButtonStyle.primary)
+    async def view_img(self, it, bt):
+        await it.response.send_message(self.url, ephemeral=True)
+
+    @discord.ui.button(label="Delete Image", style=discord.ButtonStyle.danger)
+    async def del_img(self, it, bt):
+        urls = self.manage_view.parent.data["settings"]["image_urls"]
+        deleted_url = urls.pop(self.index)
+        self.manage_view.update_select()
+        await self.manage_view.parent._save_and_refresh(it, f"🗑️ {it.user.mention} deleted image: {deleted_url}", is_ephemeral=False)
+
+    @discord.ui.button(label="Back", style=discord.ButtonStyle.gray)
+    async def back(self, it, bt):
+        await it.response.edit_message(content="**Image Management**", view=self.manage_view)
+
+# =========================================================
 # Modals
 # =========================================================
 class BirthdayTimeModal(discord.ui.Modal, title="Edit Announcement Time"):
@@ -140,7 +193,7 @@ class BirthdayMessageModal(discord.ui.Modal, title="Edit Birthday Card"):
         s["message_header"] = str(self.header.value)
         s["message_single"] = str(self.single.value)
         s["message_multiple"] = str(self.multi.value) or str(self.single.value)
-        await self.view_ref._save_and_refresh(it, f"📝 {it.user.mention} updated the card text.", is_ephemeral=False)
+        await self.view_ref._save_and_refresh(it, f"📝 {it.user.mention} updated card text.", is_ephemeral=False)
 
 class AddImageModal(discord.ui.Modal, title="Add Birthday Image"):
     url = discord.ui.TextInput(label="Image URL", placeholder="https://...", style=discord.TextStyle.paragraph)
@@ -172,7 +225,7 @@ class BirthdayListView(discord.ui.View):
         else: await it.response.defer()
 
 # =========================================================
-# Settings View (Fixed Row Indices)
+# Settings View
 # =========================================================
 class BirthdaySettingsView(discord.ui.View):
     def __init__(self, bot, data, sha):
@@ -183,12 +236,12 @@ class BirthdaySettingsView(discord.ui.View):
         e = discord.Embed(title="🎂 Birthday Admin Panel", color=0xff69b4)
         e.add_field(name="Bot", value="✅ ON" if s['enabled'] else "❌ OFF")
         e.add_field(name="Time", value=f"{s['post_hour']:02d}:{s['post_minute']:02d}")
-        e.add_field(name="Images", value=f"{len(s.get('image_urls', []))} total")
+        e.add_field(name="Images", value=f"{len(s.get('image_urls', []))} loaded")
         return e
     async def _save_and_refresh(self, it, note=None, is_ephemeral=True):
         new_sha = await save_data(self.data, self.sha)
         if new_sha: self.sha = new_sha
-        await it.response.edit_message(embed=self._embed(), view=self)
+        await it.response.edit_message(content=None, embed=self._embed(), view=self)
         if note: await it.followup.send(note, ephemeral=is_ephemeral)
 
     @discord.ui.button(label="Toggle Bot", style=discord.ButtonStyle.primary, row=0)
@@ -203,10 +256,12 @@ class BirthdaySettingsView(discord.ui.View):
 
     @discord.ui.button(label="Add Image", style=discord.ButtonStyle.secondary, row=1)
     async def add_img(self, it, bt): await it.response.send_modal(AddImageModal(self))
-    @discord.ui.button(label="Clear Images", style=discord.ButtonStyle.danger, row=1)
-    async def clear_img(self, it, bt):
-        self.data["settings"]["image_urls"] = []
-        await self._save_and_refresh(it, f"🗑️ {it.user.mention} cleared images.", is_ephemeral=False)
+    
+    @discord.ui.button(label="Images", style=discord.ButtonStyle.secondary, row=1)
+    async def manage_imgs(self, it, bt):
+        view = ImageManageView(self)
+        await it.response.edit_message(content="**Image Management**", embed=None, view=view)
+
     @discord.ui.button(label="Export TXT", style=discord.ButtonStyle.secondary, row=1)
     async def exp(self, it, bt):
         txt = "USER ID | BIRTHDAY | TIMEZONE\n" + "-"*35 + "\n"
@@ -278,7 +333,7 @@ def setup(bot: discord.Client):
     @group.command(name="upcoming", description="Show next 5 birthdays")
     async def b_up(it):
         data, _ = await load_data(); bdays = data.get("birthdays", {}); today = date.today()
-        if not bdays: return await it.response.send_message("No data.", ephemeral=True)
+        if not bdays: return await it.response.send_message("No data.", ephemeral=False)
         up = []
         for uid, rec in bdays.items():
             try: b = date(today.year, rec['month'], rec['day'])
@@ -291,13 +346,13 @@ def setup(bot: discord.Client):
 
     @group.command(name="help", description="Commands guide")
     async def b_help(it):
-        await it.response.send_message(embed=discord.Embed(title="🎂 Help", description="`/set`, `/list`, `/upcoming`, `/remove`, `/settings`", color=0xff69b4), ephemeral=False)
+        await it.response.send_message(embed=discord.Embed(title="🎂 Help", description="`/set`, `/list`, `/upcoming`, `/remove`, `/settings`"), ephemeral=False)
 
     @group.command(name="settings", description="Admin panel")
     async def b_setts(it):
-        if not has_app_access(it.user, "birthdays"): return await it.response.send_message("You do not have access to view the settings.", ephemeral=False)
+        if not has_app_access(it.user, "birthdays"): return await it.response.send_message("No perm.", ephemeral=False)
         data, sha = await load_data(); view = BirthdaySettingsView(bot, data, sha)
-        await it.response.send_message(embed=view._embed(), view=view, ephemeral=False)
+        await it.response.send_message(embed=view._embed(), view=view, ephemeral=True)
 
     @tasks.loop(minutes=1)
     async def birthday_tick():
