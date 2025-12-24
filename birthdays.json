@@ -102,8 +102,8 @@
       "timezone": "Europe/London"
     },
     "1238834298338152498": {
-      "day": 14,
-      "month": 10,
+      "day": 24,
+      "month": 12,
       "timezone": "Europe/London"
     },
     "1342641182827872297": {
@@ -153,9 +153,7 @@
     }
   },
   "state": {
-    "announced_keys": [
-    ],
-    "role_assigned_keys": [
-    ]
+    "announced_keys": [],
+    "role_assigned_keys": []
   }
 }
