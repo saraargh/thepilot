@@ -90,7 +90,7 @@ def _fmt(tpl: str, members: List[discord.Member]) -> str:
     return tpl.replace("{mention}", mentions).replace("{mentions}", mentions).replace("{username}", names).replace("{usernames}", names).replace("{count}", str(len(members)))
 
 async def _send_announcement_like(*, channel, settings, members, local_date, tz_label, test_mode, force_multiple=False):
-    if not members: return False
+    if not members or not channel: return False
     is_multi = force_multiple or len(members) > 1
     pings = ", ".join(m.mention for m in members)
     header = _fmt(settings.get("message_header", "Birthday!"), members)
@@ -108,7 +108,7 @@ async def _send_announcement_like(*, channel, settings, members, local_date, tz_
     except: return False
 
 # =========================================================
-# Modals (Time, Text)
+# Modals
 # =========================================================
 class BirthdayTimeModal(discord.ui.Modal, title="Edit Announcement Time"):
     hour = discord.ui.TextInput(label="Hour (0-23)", placeholder="15", min_length=1, max_length=2)
@@ -123,7 +123,6 @@ class BirthdayTimeModal(discord.ui.Modal, title="Edit Announcement Time"):
             if not (0 <= h <= 23 and 0 <= m <= 59): raise ValueError()
             self.view_ref.data["settings"]["post_hour"] = h
             self.view_ref.data["settings"]["post_minute"] = m
-            # NOT EPHEMERAL: Public update message
             await self.view_ref._save_and_refresh(it, f"🕒 {it.user.mention} updated announcement time to **{h:02d}:{m:02d}**", is_ephemeral=False)
         except: await it.response.send_message("❌ Invalid time format.", ephemeral=False)
 
@@ -141,7 +140,6 @@ class BirthdayMessageModal(discord.ui.Modal, title="Edit Birthday Card"):
         s["message_header"] = str(self.header.value)
         s["message_single"] = str(self.single.value)
         s["message_multiple"] = str(self.multi.value) or str(self.single.value)
-        # NOT EPHEMERAL: Public update message
         await self.view_ref._save_and_refresh(it, f"📝 {it.user.mention} updated the birthday card templates.", is_ephemeral=False)
 
 # =========================================================
@@ -178,18 +176,21 @@ class BirthdaySettingsView(discord.ui.View):
 
     @discord.ui.button(label="Export", style=discord.ButtonStyle.secondary, row=1)
     async def exp(self, it, bt):
-        # NOT EPHEMERAL: Public export notification and file
         f = io.BytesIO(json.dumps(self.data, indent=2).encode())
         await it.response.send_message(f"📂 {it.user.mention} exported the birthday database.", file=discord.File(f, "birthdays.json"), ephemeral=False)
 
     @discord.ui.button(label="Preview Single", style=discord.ButtonStyle.success, row=2)
-    async def p1(self, it, bt): 
-        await _send_announcement_like(channel=self.bot.get_channel(self.data["settings"]["channel_id"]), settings=self.data["settings"], members=[it.user], local_date=date.today(), tz_label="Test", test_mode=True)
+    async def p1(self, it, bt):
+        chan = self.bot.get_channel(self.data["settings"]["channel_id"])
+        if not chan: return await it.response.send_message("❌ Set channel first.", ephemeral=False)
+        await _send_announcement_like(channel=chan, settings=self.data["settings"], members=[it.user], local_date=date.today(), tz_label="Test", test_mode=True)
         await it.response.send_message(f"✨ {it.user.mention} triggered a single preview.", ephemeral=False)
 
     @discord.ui.button(label="Preview Multi", style=discord.ButtonStyle.success, row=2)
-    async def p2(self, it, bt): 
-        await _send_announcement_like(channel=self.bot.get_channel(self.data["settings"]["channel_id"]), settings=self.data["settings"], members=[it.user, it.guild.me], local_date=date.today(), tz_label="Test", test_mode=True, force_multiple=True)
+    async def p2(self, it, bt):
+        chan = self.bot.get_channel(self.data["settings"]["channel_id"])
+        if not chan: return await it.response.send_message("❌ Set channel first.", ephemeral=False)
+        await _send_announcement_like(channel=chan, settings=self.data["settings"], members=[it.user, it.guild.me], local_date=date.today(), tz_label="Test", test_mode=True, force_multiple=True)
         await it.response.send_message(f"✨ {it.user.mention} triggered a multiple preview.", ephemeral=False)
 
 class BirthdayChannelSelect(discord.ui.ChannelSelect):
@@ -212,13 +213,15 @@ def setup(bot: discord.Client):
     try: tree.add_command(group)
     except: pass
 
+    async def tz_autocomplete(it: discord.Interaction, current: str) -> List[app_commands.Choice[str]]:
+        return [app_commands.Choice(name=t, value=t) for t in sorted(available_timezones()) if current.lower() in t.lower()][:25]
+
     @group.command(name="set", description="Add your birthday")
-    @app_commands.autocomplete(timezone=lambda it, cur: [app_commands.Choice(name=t, value=t) for t in sorted(available_timezones()) if cur.lower() in t.lower()][:25])
+    @app_commands.autocomplete(timezone=tz_autocomplete)
     async def b_set(it, day: int, month: int, timezone: str, user: Optional[discord.Member] = None):
         target = user or it.user; data, sha = await load_data()
         data["birthdays"][str(target.id)] = {"day": day, "month": month, "timezone": timezone}
         await save_data(data, sha)
-        # NOT EPHEMERAL: Confirmation is public
         await it.response.send_message(f"✅ Birthday for **{target.display_name}** set to **{day}/{month}** ({timezone}).", ephemeral=False)
 
     @group.command(name="remove", description="Remove a birthday")
@@ -226,7 +229,6 @@ def setup(bot: discord.Client):
         target = user or it.user; data, sha = await load_data()
         if str(target.id) in data["birthdays"]:
             del data["birthdays"][str(target.id)]; await save_data(data, sha)
-            # NOT EPHEMERAL: Removal is public
             await it.response.send_message(f"🗑️ {it.user.mention} removed birthday record for **{target.display_name}**.", ephemeral=False)
         else: await it.response.send_message("❌ No birthday record found.", ephemeral=False)
 
@@ -240,7 +242,6 @@ def setup(bot: discord.Client):
         desc = "\n".join([f"**{n}**: {d}" for n, d in pages[page-1]])
         e = discord.Embed(title="🎂 Full Birthday List", description=desc, color=0xff69b4)
         e.set_footer(text=f"Page {page}/{len(pages)} • Total: {len(items)}")
-        # LIST remains non-ephemeral so people can reference it together
         await it.response.send_message(embed=e, ephemeral=False)
 
     @group.command(name="upcoming", description="Show the next 5 upcoming birthdays")
@@ -271,10 +272,7 @@ def setup(bot: discord.Client):
     @group.command(name="settings", description="Admin settings")
     async def b_setts(it):
         if not has_app_access(it.user, "birthdays"): return await it.response.send_message("No perm.", ephemeral=False)
-        data, sha = await load_data()
-        view = BirthdaySettingsView(bot, data, sha)
-        # Settings menu itself remains ephemeral to prevent multiple users from clicking buttons at once
-        await it.response.send_message(embed=view._embed(), view=view, ephemeral=True)
+        data, sha = await load_data(); await it.response.send_message(embed=BirthdaySettingsView(bot, data, sha)._embed(), view=BirthdaySettingsView(bot, data, sha), ephemeral=True)
 
     @tasks.loop(minutes=1)
     async def birthday_tick():
