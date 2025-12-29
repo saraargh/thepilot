@@ -142,7 +142,7 @@ def build_leaderboard_embed(guild, board, page, data):
     lines = []
     for i, (uid, score) in enumerate(chunk, start=start + 1):
         member = guild.get_member(int(uid))
-        lines.append(f"**{i}.** {member.mention if member else f'<@{uid}>'} — `{score}`")
+        lines.append(f"**{i}.** <@{uid}> — `{score}`")
 
     if not lines:
         lines = ["*No data yet.*"]
