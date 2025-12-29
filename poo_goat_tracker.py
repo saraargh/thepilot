@@ -90,7 +90,6 @@ def load_data() -> Dict:
     content = base64.b64decode(payload["content"]).decode("utf-8")
     data = json.loads(content)
 
-    # normalise
     data.setdefault("scores", {})
     data["scores"].setdefault("goat", {})
     data["scores"].setdefault("poo", {})
@@ -126,10 +125,10 @@ def date_str(dt: datetime) -> str:
 
 
 # ==============================
-# LEADERBOARD EMBED
+# LEADERBOARD EMBED (FIXED)
 # ==============================
 
-def build_leaderboard_embed(guild, board, page, data):
+async def build_leaderboard_embed(guild, board, page, data):
     scores = data["scores"][board]
     sorted_scores = sorted(scores.items(), key=lambda x: x[1], reverse=True)
 
@@ -142,7 +141,17 @@ def build_leaderboard_embed(guild, board, page, data):
     lines = []
     for i, (uid, score) in enumerate(chunk, start=start + 1):
         member = guild.get_member(int(uid))
-        lines.append(f"**{i}.** <@{uid}> — `{score}`")
+
+        if member:
+            name = member.mention
+        else:
+            try:
+                fetched = await guild.fetch_member(int(uid))
+                name = fetched.mention
+            except discord.NotFound:
+                name = f"<@{uid}>"
+
+        lines.append(f"**{i}.** {name} — `{score}`")
 
     if not lines:
         lines = ["*No data yet.*"]
@@ -184,7 +193,7 @@ class LeaderboardDropdown(discord.ui.Select):
 
     async def callback(self, interaction: discord.Interaction):
         page = int(self.values[0].split(" ")[1]) - 1
-        embed = build_leaderboard_embed(self.guild, self.board, page, self.data)
+        embed = await build_leaderboard_embed(self.guild, self.board, page, self.data)
         await interaction.response.edit_message(embed=embed)
 
 
@@ -286,16 +295,18 @@ def setup(bot: discord.Client):
     @app_commands.command(name="pooboard", description="View the POO leaderboard")
     async def pooboard(interaction: discord.Interaction):
         data = load_data()
+        embed = await build_leaderboard_embed(interaction.guild, "poo", 0, data)
         await interaction.response.send_message(
-            embed=build_leaderboard_embed(interaction.guild, "poo", 0, data),
+            embed=embed,
             view=LeaderboardView(interaction.guild, "poo", data)
         )
 
     @app_commands.command(name="goatboard", description="View the GOAT leaderboard")
     async def goatboard(interaction: discord.Interaction):
         data = load_data()
+        embed = await build_leaderboard_embed(interaction.guild, "goat", 0, data)
         await interaction.response.send_message(
-            embed=build_leaderboard_embed(interaction.guild, "goat", 0, data),
+            embed=embed,
             view=LeaderboardView(interaction.guild, "goat", data)
         )
 
@@ -330,8 +341,7 @@ def setup(bot: discord.Client):
             uid = str(message.mentions[0].id)
 
             if is_poo and not data["dates"][date]["poo"]:
-                count = data["scores"]["poo"].get(uid, 0) + 1
-                data["scores"]["poo"][uid] = count
+                data["scores"]["poo"][uid] = data["scores"]["poo"].get(uid, 0) + 1
                 data["dates"][date]["poo"] = True
 
             if is_goat and not data["dates"][date]["goat"]:
