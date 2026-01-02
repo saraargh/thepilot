@@ -25,6 +25,7 @@ KD_ROLE_ID = 1420817462290681936  # KD can warn Sazzles
 # ------------------- Default JSON structure -------------------
 DEFAULT_DATA = {
     "warnings": {},
+    "blocked_warners": [],  # ✅ NEW
     "last_reset": None,
     "extra_var": None
 }
@@ -48,10 +49,9 @@ def load_data():
             content = r.json()
             raw = base64.b64decode(content["content"]).decode()
             data = json.loads(raw) if raw.strip() else DEFAULT_DATA.copy()
-            sha = content.get("sha")
-            if "warnings" not in data:
-                data["warnings"] = {}
-            return data, sha
+            data.setdefault("warnings", {})
+            data.setdefault("blocked_warners", [])
+            return data, content.get("sha")
 
         if r.status_code == 404:
             sha = save_data(DEFAULT_DATA.copy())
@@ -113,9 +113,18 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
         author_roles = {r.id for r in author.roles}
         target_roles = {r.id for r in member.roles}
 
-        # 🤡 SELF-WARN RULE (FIXED: GUARANTEED SAVE)
-        if member.id == author.id:
+        data, _ = load_data()
 
+        # 🚫 BLOCKED WARNER CHECK (NEW)
+        if author.id in data.get("blocked_warners", []):
+            await interaction.response.send_message(
+                f"❌ {author.mention} is no longer allowed to warn people.",
+                ephemeral=False
+            )
+            return
+
+        # 🤡 SELF-WARN RULE (GUARANTEED SAVE)
+        if member.id == author.id:
             candidates = [
                 m for m in interaction.guild.members
                 if not m.bot
@@ -137,14 +146,7 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
                 f"so the pilot gave it to {chosen.mention}"
             )
 
-            # 🔒 Force fresh load + save (prevents stale SHA bug)
-            data, sha = load_data()
-            uid = str(chosen.id)
-            if uid not in data["warnings"]:
-                data["warnings"][uid] = []
-
-            data["warnings"][uid].append(reason_text)
-            save_data(data, sha)
+            count = add_warning(chosen.id, reason_text)
 
             await interaction.response.send_message(
                 f"🤡 {author.mention} You cannot warn yourself, instead a warning has been given to {chosen.mention}!",
@@ -200,21 +202,55 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
         msg += f", this is their {ordinal(count)} warning."
         await interaction.response.send_message(msg, ephemeral=False)
 
-    # ---------------- /warnings_list ----------------
-    @tree.command(name="warnings_list", description="List warnings for a user (public).")
-    @app_commands.describe(member="Member to see warnings for")
-    async def warnings_list(interaction: discord.Interaction, member: discord.Member):
-        warns = get_warnings(member.id)
+    # ---------------- /warnings_list (SELF OR OTHER) ----------------
+    @tree.command(name="warnings_list", description="List warnings (yourself or another user).")
+    @app_commands.describe(member="Member to see warnings for (optional)")
+    async def warnings_list(interaction: discord.Interaction, member: discord.Member | None = None):
+        target = member or interaction.user
+        warns = get_warnings(target.id)
+
         if not warns:
             await interaction.response.send_message(
-                f"{member.mention} has no warnings.",
+                f"{target.mention} has no warnings.",
                 ephemeral=False
             )
             return
 
         lines = [f"{i+1}. {w}" for i, w in enumerate(warns)]
         await interaction.response.send_message(
-            f"{member.mention} warnings:\n" + "\n".join(lines),
+            f"{target.mention} warnings:\n" + "\n".join(lines),
+            ephemeral=False
+        )
+
+    # ---------------- /block_warner ----------------
+    @tree.command(name="block_warner", description="Stop a user from being allowed to warn.")
+    async def block_warner(interaction: discord.Interaction, member: discord.Member):
+        if not has_app_access(interaction.user, "warnings"):
+            return
+
+        data, sha = load_data()
+        if member.id not in data["blocked_warners"]:
+            data["blocked_warners"].append(member.id)
+            save_data(data, sha)
+
+        await interaction.response.send_message(
+            f"🚫 {member.mention} is no longer allowed to warn people.",
+            ephemeral=False
+        )
+
+    # ---------------- /unblock_warner ----------------
+    @tree.command(name="unblock_warner", description="Allow a user to warn again.")
+    async def unblock_warner(interaction: discord.Interaction, member: discord.Member):
+        if not has_app_access(interaction.user, "warnings"):
+            return
+
+        data, sha = load_data()
+        if member.id in data["blocked_warners"]:
+            data["blocked_warners"].remove(member.id)
+            save_data(data, sha)
+
+        await interaction.response.send_message(
+            f"✅ {member.mention} can warn again.",
             ephemeral=False
         )
 
