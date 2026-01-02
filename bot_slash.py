@@ -83,7 +83,6 @@ class ThePilot(discord.Client):
         from plane import setup_plane_commands
         from poo import setup_poo_commands
         from goat import setup_goat_commands
-        from bot_warnings import setup_warnings_commands
         from mute import setup_mute_commands
 
         # Commands
@@ -95,7 +94,6 @@ class ThePilot(discord.Client):
         goat_task = setup_goat_commands(self.tree, self)
         goat_task.start()
 
-        setup_warnings_commands(self.tree)
         setup_mute_commands(self, self.tree)
 
         # Admin settings (Pilot source of truth)
