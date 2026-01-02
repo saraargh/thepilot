@@ -203,7 +203,8 @@
             "<@1248020591823425626> couldn\u2019t warn themselves, so the pilot gave it to <@1083504434669166714>"
         ],
         "154278268755771393": [
-            "Trying to warn <@154278268755771393>"
+            "Trying to warn <@154278268755771393>",
+            "<@277271767964188673> couldn\u2019t warn themselves, so the pilot gave it to <@154278268755771393>"
         ],
         "277271767964188673": [
             "that\u2019s no way to talk to a ickle yout",
@@ -293,5 +294,6 @@
         ]
     },
     "last_reset": "2026-01-01T20:58:02.036666",
-    "extra_var": 123
+    "extra_var": 123,
+    "blocked_warners": []
 }
