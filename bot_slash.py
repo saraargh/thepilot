@@ -10,7 +10,7 @@ from joinleave import WelcomeSystem
 from adminsettings import setup_admin_settings
 from image_linker import setup as image_linker_setup
 from snipe import setup as snipe_setup
-from bot_warnings import setup_warnings_commands
+
 
 # ✅ SELF ROLES
 from selfroles import setup as selfroles_setup
@@ -85,7 +85,8 @@ class ThePilot(discord.Client):
         from poo import setup_poo_commands
         from goat import setup_goat_commands
         from mute import setup_mute_commands
-
+        from bot_warnings import setup_warnings_commands
+        
         # Commands
         setup_plane_commands(self.tree)
         
