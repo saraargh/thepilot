@@ -162,11 +162,14 @@ def guild_me(guild: discord.Guild) -> Optional[discord.Member]:
     except Exception:
         return None
 
+import re
+
 def parse_emoji(raw: Optional[str]):
     """
-    For SelectOption emoji:
-    - Unicode emoji → return as plain string (e.g. "🎮", "💛")
-    - Custom emoji → return PartialEmoji (e.g. "<:name:id>")
+    Safe emoji parser for SelectOption:
+    - Custom emoji "<:name:id>" or "<a:name:id>" -> PartialEmoji (name normalised)
+    - Unicode emoji -> str
+    - Anything else -> None
     """
     raw = (raw or "").strip()
     if not raw:
@@ -175,11 +178,32 @@ def parse_emoji(raw: Optional[str]):
     # Custom emoji
     if raw.startswith("<") and raw.endswith(">"):
         try:
-            return discord.PartialEmoji.from_str(raw)
+            pe = discord.PartialEmoji.from_str(raw)
+            if pe.id is None:
+                return None
+
+            # Normalise name for components (lowercase + only [a-z0-9_])
+            name = (pe.name or "").lower()
+            name = re.sub(r"[^a-z0-9_]", "", name)
+
+            # Discord expects a non-empty name
+            if not name:
+                return None
+
+            return discord.PartialEmoji(name=name, id=pe.id, animated=pe.animated)
         except Exception:
             return None
 
-    # Unicode emoji
+    # Unicode emoji (must be "clean": no letters/numbers/spaces)
+    if any(ch.isalnum() for ch in raw):
+        return None
+    if any(ch.isspace() for ch in raw):
+        return None
+    if "<" in raw or ">" in raw:
+        return None
+    if len(raw) > 8:
+        return None
+
     return raw
         
 # =========================================================
