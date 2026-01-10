@@ -180,7 +180,7 @@
     "football": {
       "title": "Football",
       "description": "",
-      "emoji": "⚽️",
+      "emoji": "⚽"
       "multi_select": false,
       "roles": {}
     }
