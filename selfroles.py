@@ -471,27 +471,15 @@ class PublicSelfRolesView(discord.ui.View):
     ):
         super().__init__(timeout=None)
 
-        # Row 0 — category selector
-        cat_select = CategorySelect(categories, selected=active_category)
-        cat_select.row = 0
-        self.add_item(cat_select)
+        self.add_item(CategorySelect(categories, selected=active_category))
 
-        # Row 1 — request button
-        req_btn = RequestRoleButton()
-        req_btn.row = 1
-        self.add_item(req_btn)
-
-        # Row 2 — role selector (only if category selected)
         if active_category and active_category in categories:
             cat = categories[active_category]
             if cat.get("roles"):
-                role_select = RoleSelect(
-                    active_category,
-                    cat,
-                    member_role_ids=member_role_ids,
-                )
-                role_select.row = 2
-                self.add_item(role_select)
+                self.add_item(RoleSelect(active_category, cat, member_role_ids=member_role_ids))
+
+        # ✅ button LAST so it sits under everything
+        self.add_item(RequestRoleButton())
 # =========================================================
 # DEPLOY / UPDATE PUBLIC MENU
 # =========================================================
