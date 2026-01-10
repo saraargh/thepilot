@@ -1429,6 +1429,8 @@ async def rolesettings(interaction: discord.Interaction):
     lg = cfg.get("logging") or {}
     log_state = "ON" if lg.get("enabled") else "OFF"
     log_chan = lg.get("channel_id")
+    req_chan = cfg.get("requests_channel_id")
+    
 
     desc = [
         f"📍 **Self-roles channel:** {_fmt_chan(ch)}",
@@ -1437,6 +1439,9 @@ async def rolesettings(interaction: discord.Interaction):
     ]
     if log_chan:
         desc.append(f"🧾 **Log channel:** {_fmt_chan(log_chan)}")
+
+    if req_chan:
+        desc.append(f"📝 **Requests channel:** {_fmt_chan(req_chan)}")
 
     embed = discord.Embed(
         title="⚙️ Role Settings",
