@@ -163,13 +163,24 @@ def guild_me(guild: discord.Guild) -> Optional[discord.Member]:
         return None
 
 def parse_emoji(raw: Optional[str]):
+    """
+    For SelectOption emoji:
+    - Unicode emoji → return as plain string (e.g. "🎮", "💛")
+    - Custom emoji → return PartialEmoji (e.g. "<:name:id>")
+    """
     raw = (raw or "").strip()
     if not raw:
         return None
-    try:
-        return discord.PartialEmoji.from_str(raw)
-    except Exception:
-        return None
+
+    # Custom emoji
+    if raw.startswith("<") and raw.endswith(">"):
+        try:
+            return discord.PartialEmoji.from_str(raw)
+        except Exception:
+            return None
+
+    # Unicode emoji
+    return raw
         
 # =========================================================
 # ROLE / LOGGING HELPERS
