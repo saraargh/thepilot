@@ -437,18 +437,26 @@ class RoleSelect(discord.ui.Select):
             lines.append("ℹ️ No changes made.")
         await interaction.followup.send("\n".join(lines), ephemeral=True)
 
-        # ✅ IMPORTANT: refresh the original menu message so it doesn't “freeze”
+        # ✅ Reset the original menu message back to the main view (no role chips shown)
         try:
-            member_role_ids = {r.id for r in member.roles}
-            refreshed_view = PublicSelfRolesView(
-                cats,
-                active_category=self.category_key,
-                member_role_ids=member_role_ids,
+            cfg2 = await load_config()
+            categories2 = cfg2.get("categories", {}) or {}
+            await interaction.response.edit_message(
+                embed=public_embed(),
+                view=PublicSelfRolesView(categories2),
             )
-            await interaction.message.edit(embed=role_embed(cat), view=refreshed_view)
         except Exception:
-            pass
-    
+            # If we've already responded somehow, fall back to editing
+            try:
+                cfg2 = await load_config()
+                categories2 = cfg2.get("categories", {}) or {}
+                await interaction.message.edit(
+                    embed=public_embed(),
+                    view=PublicSelfRolesView(categories2),
+                )
+            except Exception:
+                pass
+            
 ##requests##
 
 class RequestRoleButton(discord.ui.Button):
