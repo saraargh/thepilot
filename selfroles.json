@@ -176,6 +176,13 @@
           "emoji": "<:Phamo:1404965631945867326>"
         }
       }
+    },
+    "football": {
+      "title": "Football",
+      "description": "",
+      "emoji": "⚽️",
+      "multi_select": false,
+      "roles": {}
     }
   },
   "selfroles_message_id": 1452048432108802048
