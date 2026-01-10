@@ -182,7 +182,16 @@
       "description": "",
       "emoji": "⚽",
       "multi_select": false,
-      "roles": {}
+      "roles": {
+        "1454553325058920540": {
+          "label": "Aston Villa",
+          "emoji": null
+        },
+        "1411656101555867668": {
+          "label": "Arsenal",
+          "emoji": null
+        }
+      }
     }
   },
   "selfroles_message_id": 1452048432108802048
