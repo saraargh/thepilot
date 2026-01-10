@@ -347,17 +347,19 @@ class CategorySelect(discord.ui.Select):
         await interaction.response.edit_message(embed=role_embed(cat), view=view)
 
 class RoleSelect(discord.ui.Select):
-    def __init__(self, category_key: str, category: dict):
+    def __init__(self, category_key: str, category: dict, member_role_ids: Optional[set[int]] = None):
         self.category_key = category_key
+        member_role_ids = member_role_ids or set()
 
         options: List[discord.SelectOption] = []
         for rid, meta in list((category.get("roles") or {}).items())[:25]:
+            rid_int = int(rid) if str(rid).isdigit() else None
             options.append(
                 discord.SelectOption(
                     label=(meta.get("label") or rid)[:100],
                     value=str(rid),
                     emoji=parse_emoji(meta.get("emoji")),
-                    default=(rid_int in member_role_ids) if rid_int is not None else False,
+                    default=(rid_int in member_role_ids) if rid_int is not None else False,  # ✅ keep ticks
                 )
             )
 
@@ -395,6 +397,8 @@ class RoleSelect(discord.ui.Select):
 
         added, removed = [], []
 
+        # ✅ For single-select categories: enforce “only one”
+        # ✅ For multi-select categories: defaults mean existing roles stay ticked unless user unticks
         for rid in valid_ids:
             role = interaction.guild.get_role(rid)
             if not role or not role_manageable(role, me):
@@ -406,7 +410,8 @@ class RoleSelect(discord.ui.Select):
                     added.append(role)
                 except Exception:
                     pass
-            elif rid not in selected and role in member.roles:
+
+            if rid not in selected and role in member.roles:
                 try:
                     await member.remove_roles(role, reason="Self-role")
                     removed.append(role)
@@ -422,7 +427,6 @@ class RoleSelect(discord.ui.Select):
             lines.append("ℹ️ No changes made.")
 
         await interaction.response.send_message("\n".join(lines), ephemeral=True)
-
 ##requests##
 
 class RequestRoleButton(discord.ui.Button):
@@ -437,17 +441,21 @@ class RequestRoleButton(discord.ui.Button):
         await interaction.response.send_modal(RoleRequestModal())
 
 class PublicSelfRolesView(discord.ui.View):
-    def __init__(self, categories: Dict[str, Any], active_category: Optional[str] = None):
+    def __init__(
+        self,
+        categories: Dict[str, Any],
+        active_category: Optional[str] = None,
+        member_role_ids: Optional[set[int]] = None,
+    ):
         super().__init__(timeout=None)
 
         self.add_item(CategorySelect(categories, selected=active_category))
-                
+        self.add_item(RequestRoleButton())
+
         if active_category and active_category in categories:
             cat = categories[active_category]
             if cat.get("roles"):
-                self.add_item(RoleSelect(active_category, cat))
-
-        self.add_item(RequestRoleButton())
+                self.add_item(RoleSelect(active_category, cat, member_role_ids=member_role_ids))
 # =========================================================
 # DEPLOY / UPDATE PUBLIC MENU
 # =========================================================
