@@ -379,26 +379,28 @@ class RoleSelect(discord.ui.Select):
         if not interaction.guild:
             return
 
+        # ✅ defer so we can both reply + edit the message cleanly
+        await interaction.response.defer(ephemeral=True)
+
         member = interaction.guild.get_member(interaction.user.id)
         if not member:
-            return
+            return await interaction.followup.send("❌ Member missing.", ephemeral=True)
 
         cfg = await load_config()
-        cat = (cfg.get("categories") or {}).get(self.category_key)
+        cats = cfg.get("categories", {}) or {}
+        cat = cats.get(self.category_key)
         if not cat:
-            return await interaction.response.send_message("❌ Category missing.", ephemeral=True)
+            return await interaction.followup.send("❌ Category missing.", ephemeral=True)
 
         me = guild_me(interaction.guild)
         if not me:
-            return await interaction.response.send_message("❌ Bot member missing.", ephemeral=True)
+            return await interaction.followup.send("❌ Bot member missing.", ephemeral=True)
 
-        valid_ids = {int(r) for r in cat.get("roles", {}) if str(r).isdigit()}
+        valid_ids = {int(r) for r in (cat.get("roles") or {}) if str(r).isdigit()}
         selected = {int(v) for v in self.values if str(v).isdigit()}
 
         added, removed = [], []
 
-        # ✅ For single-select categories: enforce “only one”
-        # ✅ For multi-select categories: defaults mean existing roles stay ticked unless user unticks
         for rid in valid_ids:
             role = interaction.guild.get_role(rid)
             if not role or not role_manageable(role, me):
@@ -418,6 +420,7 @@ class RoleSelect(discord.ui.Select):
                 except Exception:
                     pass
 
+        # ✅ send ephemeral feedback
         lines = ["✨ **Your roles have been updated**"]
         if added:
             lines.append("✅ Added: " + ", ".join(r.mention for r in added))
@@ -425,8 +428,20 @@ class RoleSelect(discord.ui.Select):
             lines.append("❌ Removed: " + ", ".join(r.mention for r in removed))
         if not added and not removed:
             lines.append("ℹ️ No changes made.")
+        await interaction.followup.send("\n".join(lines), ephemeral=True)
 
-        await interaction.response.send_message("\n".join(lines), ephemeral=True)
+        # ✅ IMPORTANT: refresh the original menu message so it doesn't “freeze”
+        try:
+            member_role_ids = {r.id for r in member.roles}
+            refreshed_view = PublicSelfRolesView(
+                cats,
+                active_category=self.category_key,
+                member_role_ids=member_role_ids,
+            )
+            await interaction.message.edit(embed=role_embed(cat), view=refreshed_view)
+        except Exception:
+            pass
+    
 ##requests##
 
 class RequestRoleButton(discord.ui.Button):
