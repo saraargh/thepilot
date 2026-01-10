@@ -56,6 +56,8 @@ def ensure_shape(cfg: Dict[str, Any]) -> Dict[str, Any]:
 
     cfg.setdefault("requests_channel_id", None)
 
+    cfg.setdefault("role_request_instructions", "")
+
     cfg.setdefault("role_requests", {})
     if not isinstance(cfg["role_requests"], dict):
         cfg["role_requests"] = {}
@@ -1277,6 +1279,28 @@ class RequestCompleteView(discord.ui.View):
         super().__init__(timeout=None)
 
     @discord.ui.button(
+        label="ℹ️ Instructions",
+        style=discord.ButtonStyle.secondary,
+        custom_id="sr_req_help",
+    )
+    async def help(self, interaction: discord.Interaction, _: discord.ui.Button):
+        if not interaction.guild:
+            return
+
+        # Optional: gate to admins only (same as completion)
+        if not isinstance(interaction.user, discord.Member) or not has_global_access(interaction.user):
+            return await interaction.response.send_message("❌ No permission.", ephemeral=True)
+
+        cfg = await load_config()
+        text = (cfg.get("role_request_instructions") or "").strip()
+
+        if not text:
+            text = "Add your instructions in config: `role_request_instructions`"
+
+        emb = discord.Embed(title="🧾 Role Request Instructions", description=text, color=discord.Color.blurple())
+        await interaction.response.send_message(embed=emb, ephemeral=True)
+    
+    @discord.ui.button(
         label="✅ Mark Completed",
         style=discord.ButtonStyle.success,
         custom_id="sr_req_done",  # fixed id = persistent across restarts
@@ -1312,7 +1336,7 @@ class RequestCompleteView(discord.ui.View):
 
         if user:
             try:
-                await user.send(f"✅ Your request for **{role_name}** has been marked complete.")
+                await user.send(f"✅ Your request for **{role_name}** has been marked complete. Visit #self-roles to assign the role.")
             except Exception:
                 pass
 
