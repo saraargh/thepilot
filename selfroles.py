@@ -164,11 +164,16 @@ def guild_me(guild: discord.Guild) -> Optional[discord.Member]:
 
 import re
 
+_VARIATION_SELECTORS = {"\uFE0F", "\uFE0E"}  # VS16 / VS15
+
+def _strip_variation_selectors(s: str) -> str:
+    return "".join(ch for ch in s if ch not in _VARIATION_SELECTORS).strip()
+
 def parse_emoji(raw: Optional[str]):
     """
     Safe emoji parser for SelectOption:
     - Custom emoji "<:name:id>" or "<a:name:id>" -> PartialEmoji (name normalised)
-    - Unicode emoji -> str
+    - Unicode emoji -> str (variation selectors stripped)
     - Anything else -> None
     """
     raw = (raw or "").strip()
@@ -182,29 +187,28 @@ def parse_emoji(raw: Optional[str]):
             if pe.id is None:
                 return None
 
-            # Normalise name for components (lowercase + only [a-z0-9_])
             name = (pe.name or "").lower()
             name = re.sub(r"[^a-z0-9_]", "", name)
 
-            # Discord expects a non-empty name
-            if not name:
+            if not (1 <= len(name) <= 32):
                 return None
 
             return discord.PartialEmoji(name=name, id=pe.id, animated=pe.animated)
         except Exception:
             return None
 
-    # Unicode emoji (must be "clean": no letters/numbers/spaces)
-    if any(ch.isalnum() for ch in raw):
+    # Unicode emoji
+    uni = _strip_variation_selectors(raw)
+
+    # reject obvious garbage / accidental strings
+    if any(ch.isspace() for ch in uni):
         return None
-    if any(ch.isspace() for ch in raw):
+    if "<" in uni or ">" in uni:
         return None
-    if "<" in raw or ">" in raw:
-        return None
-    if len(raw) > 8:
+    if len(uni) > 32:
         return None
 
-    return raw
+    return uni
         
 # =========================================================
 # ROLE / LOGGING HELPERS
