@@ -54,6 +54,12 @@ def ensure_shape(cfg: Dict[str, Any]) -> Dict[str, Any]:
     cfg["auto_roles"].setdefault("humans", [])
     cfg["auto_roles"].setdefault("bots", [])
 
+    cfg.setdefault("requests_channel_id", None)
+
+    cfg.setdefault("role_requests", {})
+    if not isinstance(cfg["role_requests"], dict):
+        cfg["role_requests"] = {}
+    
     cfg.setdefault("categories", {})
     if not isinstance(cfg["categories"], dict):
         cfg["categories"] = {}
@@ -407,12 +413,26 @@ class RoleSelect(discord.ui.Select):
 
         await interaction.response.send_message("\n".join(lines), ephemeral=True)
 
+##requests##
+
+class RequestRoleButton(discord.ui.Button):
+    def __init__(self):
+        super().__init__(
+            label="Request Custom Role",
+            style=discord.ButtonStyle.success,
+            custom_id="sr_request_role",
+        )
+
+    async def callback(self, interaction: discord.Interaction):
+        await interaction.response.send_modal(RoleRequestModal())
+
 class PublicSelfRolesView(discord.ui.View):
     def __init__(self, categories: Dict[str, Any], active_category: Optional[str] = None):
         super().__init__(timeout=None)
 
         self.add_item(CategorySelect(categories, selected=active_category))
-
+        self.add_item(RequestRoleButton())
+                
         if active_category and active_category in categories:
             cat = categories[active_category]
             if cat.get("roles"):
@@ -500,6 +520,134 @@ class SetLogChannelView(discord.ui.View):
 
         await interaction.followup.send(f"🧾 Log channel set to {channel.mention}", ephemeral=True)
 
+##requests##
+class SetRequestsChannelView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=180)
+        self.sel = discord.ui.ChannelSelect(
+            placeholder="Select requests channel",
+            channel_types=[discord.ChannelType.text],
+            min_values=1,
+            max_values=1,
+        )
+        self.sel.callback = self.pick  # type: ignore
+        self.add_item(self.sel)
+
+    async def pick(self, interaction: discord.Interaction):
+        await interaction.response.defer(ephemeral=True)
+        channel: discord.abc.GuildChannel = self.sel.values[0]
+
+        cfg = await load_config()
+        cfg["requests_channel_id"] = channel.id
+        await save_config(cfg)
+
+        await interaction.followup.send(f"📝 Requests channel set to {channel.mention}", ephemeral=True)
+
+class RoleRequestModal(discord.ui.Modal):
+    def __init__(self):
+        super().__init__(title="Request Custom Role")
+
+        self.role_type = discord.ui.TextInput(
+            label="Role Type",
+            required=True,
+            max_length=20,
+            placeholder="Game Ping/Cosmetic",
+        )
+        self.role_name = discord.ui.TextInput(
+            label="Role Name",
+            required=True,
+            max_length=80,
+            placeholder="e.g. Deathnote",
+        )
+        self.colour = discord.ui.TextInput(
+            label="Colour (Cosmetic)",
+            required=False,
+            max_length=30,
+            placeholder="e.g. #FF69B4 or 'pink'",
+        )
+        self.icon = discord.ui.TextInput(
+            label="Icon (Cosmetic)",
+            required=False,
+            max_length=80,
+            placeholder="e.g. 🩷 or advise custom",
+        )
+
+        self.add_item(self.role_type)
+        self.add_item(self.role_name)
+        self.add_item(self.colour)
+        self.add_item(self.icon)
+
+    async def on_submit(self, interaction: discord.Interaction):
+        await interaction.response.defer(ephemeral=True)
+
+        if not interaction.guild:
+            return await interaction.followup.send("❌ This only works in a server.", ephemeral=True)
+
+        rt = self.role_type.value.strip().lower()
+        rn = self.role_name.value.strip()
+        colour = self.colour.value.strip()
+        icon = self.icon.value.strip()
+
+        # normalise role type
+        if rt in ("gameping", "ping", "game"):
+            rt = "game ping"
+
+        if rt not in ("game ping", "cosmetic"):
+            return await interaction.followup.send("❌ Role Type must be **Game Ping** or **Cosmetic**.", ephemeral=True)
+
+        if not rn:
+            return await interaction.followup.send("❌ Role Name is required.", ephemeral=True)
+
+        is_cosmetic = (rt == "cosmetic")
+
+# ✅ add this right here
+        if not is_cosmetic:
+            colour = ""
+            icon = ""
+    
+        if is_cosmetic and not colour:
+            return await interaction.followup.send("❌ Colour is required for **Cosmetic** roles.", ephemeral=True)
+
+        cfg = await load_config()
+        req_cid = cfg.get("requests_channel_id")
+        if not req_cid:
+            return await interaction.followup.send("❌ Requests channel not set yet (use /rolesettings).", ephemeral=True)
+
+        ch = interaction.guild.get_channel(int(req_cid))
+        if not isinstance(ch, discord.TextChannel):
+            return await interaction.followup.send("❌ Requests channel is missing / not a text channel.", ephemeral=True)
+
+        emb = discord.Embed(title="📝 Custom Role Request", color=discord.Color.blurple())
+        emb.add_field(name="Requester", value=f"{interaction.user.mention} (`{interaction.user.id}`)", inline=False)
+        emb.add_field(name="Type", value=("Cosmetic" if is_cosmetic else "Game Ping"), inline=True)
+        emb.add_field(name="Name", value=rn, inline=True)
+
+        if is_cosmetic:
+            emb.add_field(name="Colour", value=(colour or "—"), inline=True)
+            emb.add_field(name="Icon", value=(icon or "—"), inline=True)
+
+        msg = await ch.send(embed=emb, view=RequestCompleteView())
+
+        # Persist request by message id so the complete button works after restart
+        cfg = await load_config()
+        reqs = cfg.get("role_requests", {}) or {}
+        reqs[str(msg.id)] = {
+            "user_id": interaction.user.id,
+            "role_type": rt,
+            "role_name": rn,
+            "colour": colour,
+            "icon": icon,
+        }
+        cfg["role_requests"] = reqs
+        await save_config(cfg)
+
+        # DM user
+        try:
+            await interaction.user.send(f"✅ Got it — your request for **{rn}** has been received.")
+        except Exception:
+            pass
+
+        await interaction.followup.send("✅ Submitted! Check your DMs ✨", ephemeral=True)
 # =========================================================
 # ADMIN: CATEGORY MODAL
 # (labels must be 1..45 chars -> fixed)
@@ -1123,6 +1271,72 @@ class PickRoleRemoveView(discord.ui.View):
         emb.add_field(name="Role", value=role.mention, inline=False)
         await send_log(interaction.guild, emb)
 
+##requests##
+class RequestCompleteView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+
+    @discord.ui.button(
+        label="✅ Mark Completed",
+        style=discord.ButtonStyle.success,
+        custom_id="sr_req_done",  # fixed id = persistent across restarts
+    )
+    async def done(self, interaction: discord.Interaction, _: discord.ui.Button):
+        if not interaction.guild or not interaction.message:
+            return
+
+        # gate completion to admins (same permission style as rolesettings)
+        if not isinstance(interaction.user, discord.Member) or not has_global_access(interaction.user):
+            return await interaction.response.send_message("❌ No permission.", ephemeral=True)
+
+        await interaction.response.defer(ephemeral=True)
+
+        cfg = await load_config()
+        reqs = cfg.get("role_requests", {}) or {}
+        msg_id = str(interaction.message.id)
+        req = reqs.get(msg_id)
+
+        if not req:
+            return await interaction.followup.send("❌ I can’t find this request in storage.", ephemeral=True)
+
+        user_id = int(req.get("user_id"))
+        role_name = str(req.get("role_name") or "your role request")
+
+        # DM requester
+        user = interaction.client.get_user(user_id)
+        if not user:
+            try:
+                user = await interaction.client.fetch_user(user_id)
+            except Exception:
+                user = None
+
+        if user:
+            try:
+                await user.send(f"✅ Your request for **{role_name}** has been marked complete.")
+            except Exception:
+                pass
+
+        # Update the request message embed to show completed
+        try:
+            emb = interaction.message.embeds[0] if interaction.message.embeds else discord.Embed(title="📝 Custom Role Request")
+            emb.color = discord.Color.green()
+            # remove old Status field if it exists
+            new_fields = [f for f in emb.fields if f.name.lower() != "status"]
+            emb.clear_fields()
+            for f in new_fields:
+                emb.add_field(name=f.name, value=f.value, inline=f.inline)
+            
+            emb.add_field(name="Status", value=f"✅ Completed by {interaction.user.mention}", inline=False)
+            await interaction.message.edit(embed=emb, view=self)
+        except Exception:
+            pass
+        
+        reqs.pop(msg_id, None)
+        cfg["role_requests"] = reqs
+        await save_config(cfg)
+        
+        await interaction.followup.send("✅ Marked complete + DM sent.", ephemeral=True)
+        
 # =========================================================
 # ADMIN DASHBOARD + COMMAND
 # =========================================================
@@ -1170,6 +1384,14 @@ class RoleSettingsDashboard(discord.ui.View):
     async def admin_roles(self, interaction: discord.Interaction, _: discord.ui.Button):
         await interaction.response.send_message("User role management:", view=AdminUserRoleView(), ephemeral=True)
 
+    @discord.ui.button(label="📝 Requests Channel", style=discord.ButtonStyle.secondary)
+    async def requests_channel(self, interaction: discord.Interaction, _: discord.ui.Button):
+        await interaction.response.send_message(
+            "Select the requests channel:",
+            view=SetRequestsChannelView(),
+            ephemeral=True,
+        )
+
 @app_commands.command(name="rolesettings", description="Admin panel for self-roles + role tools")
 async def rolesettings(interaction: discord.Interaction):
     if not isinstance(interaction.user, discord.Member) or not has_global_access(interaction.user):
@@ -1206,5 +1428,12 @@ async def rolesettings(interaction: discord.Interaction):
 
 def setup(tree: app_commands.CommandTree, client: discord.Client):
     tree.add_command(rolesettings)
+
+    # ✅ makes the "Mark Completed" button work after restarts
+    try:
+        client.add_view(RequestCompleteView())
+    except Exception:
+        pass
+
     # Public view is attached when you post/update the menu (deploy_or_update_menu).
     return
