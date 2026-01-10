@@ -463,7 +463,7 @@ class BackToMainButton(discord.ui.Button):
             label="⬅️ Back",
             style=discord.ButtonStyle.secondary,
             custom_id="sr_back_main",
-            row=0,
+            row=3,
         )
 
     async def callback(self, interaction: discord.Interaction):
