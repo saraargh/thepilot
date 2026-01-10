@@ -336,7 +336,14 @@ class CategorySelect(discord.ui.Select):
         if not cat:
             return await interaction.response.send_message("❌ Category no longer exists.", ephemeral=True)
 
-        view = PublicSelfRolesView(categories, active_category=key)
+        member = interaction.guild.get_member(interaction.user.id)
+        member_role_ids = {r.id for r in member.roles} if member else set()
+        
+        view = PublicSelfRolesView(
+            categories,
+            active_category=key,
+            member_role_ids=member_role_ids,
+        )
         await interaction.response.edit_message(embed=role_embed(cat), view=view)
 
 class RoleSelect(discord.ui.Select):
@@ -350,6 +357,7 @@ class RoleSelect(discord.ui.Select):
                     label=(meta.get("label") or rid)[:100],
                     value=str(rid),
                     emoji=parse_emoji(meta.get("emoji")),
+                    default=(rid_int in member_role_ids) if rid_int is not None else False,
                 )
             )
 
@@ -433,13 +441,13 @@ class PublicSelfRolesView(discord.ui.View):
         super().__init__(timeout=None)
 
         self.add_item(CategorySelect(categories, selected=active_category))
-        self.add_item(RequestRoleButton())
                 
         if active_category and active_category in categories:
             cat = categories[active_category]
             if cat.get("roles"):
                 self.add_item(RoleSelect(active_category, cat))
 
+        self.add_item(RequestRoleButton())
 # =========================================================
 # DEPLOY / UPDATE PUBLIC MENU
 # =========================================================
