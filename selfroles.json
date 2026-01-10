@@ -192,14 +192,6 @@
   },
   "selfroles_message_id": 1452048432108802048,
   "requests_channel_id": 1404103684069265519,
-  "role_requests": {
-    "1459640934416515086": {
-      "user_id": 1238834298338152498,
-      "role_type": "game ping",
-      "role_name": "test game",
-      "colour": "",
-      "icon": ""
-    }
-  },
+  "role_requests": {},
   "role_request_instructions": "**How to fulfil a Custom Role Request explains 👇**\n\n1) Create the role in Discord.\n2) Add the required icon as a **custom emoji** (this is required for Cosmetic roles and also for the Role Selector dropdown).\n3) If the role is **Cosmetic**: add an image/icon to the role (PC or Mobile Browser). **Do not do this for Game Pings.**\n4) Open The Pilot **/rolesettings** menu.\n5) Go to **Roles in Categories** → select the correct category:\n   • Cosmetic = **Miscellaneous**\n   • Game ping = **Game Pings**\n6) Click **➕ Add Roles** and pick the role(s). (You can search here.)\n7) Click **😀 Edit Label/Emoji** → select the new role → paste the emoji ID into the modal and save.\n   Tip: post the emoji in chat → right click → copy → paste into chat again to get the full `<:name:id>` format.\n8) Back at the top of Role Settings, click **📌 Post / Update Menu** to refresh the menu in **#self-roles**.\n9) Click **✅ Mark Completed** on this request. The submitter will get a DM and can select the role in **#self-roles** (or you can assign it manually)."
 }
