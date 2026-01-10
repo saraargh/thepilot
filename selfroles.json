@@ -190,5 +190,7 @@
       }
     }
   },
-  "selfroles_message_id": 1452048432108802048
+  "selfroles_message_id": 1452048432108802048,
+  "requests_channel_id": 1404103684069265519,
+  "role_requests": {}
 }
