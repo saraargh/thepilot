@@ -347,19 +347,24 @@ class CategorySelect(discord.ui.Select):
         await interaction.response.edit_message(embed=role_embed(cat), view=view)
 
 class RoleSelect(discord.ui.Select):
-    def __init__(self, category_key: str, category: dict, member_role_ids: Optional[set[int]] = None):
+    def __init__(
+        self,
+        category_key: str,
+        category: dict,
+        member_role_ids: Optional[set[int]] = None,
+    ):
         self.category_key = category_key
         member_role_ids = member_role_ids or set()
 
         options: List[discord.SelectOption] = []
         for rid, meta in list((category.get("roles") or {}).items())[:25]:
-            rid_int = int(rid) if str(rid).isdigit() else None
+            rid_int = int(rid)
             options.append(
                 discord.SelectOption(
                     label=(meta.get("label") or rid)[:100],
                     value=str(rid),
                     emoji=parse_emoji(meta.get("emoji")),
-                    default=(rid_int in member_role_ids) if rid_int is not None else False,  # ✅ keep ticks
+                    default=(rid_int in member_role_ids),  # ⭐ THIS is the key line
                 )
             )
 
@@ -371,7 +376,9 @@ class RoleSelect(discord.ui.Select):
             placeholder="Select your roles…",
             min_values=0,
             max_values=max_vals,
-            options=options if options else [discord.SelectOption(label="No roles", value="__none__")],
+            options=options if options else [
+                discord.SelectOption(label="No roles", value="__none__")
+            ],
             disabled=not bool(options),
         )
 
@@ -464,13 +471,27 @@ class PublicSelfRolesView(discord.ui.View):
     ):
         super().__init__(timeout=None)
 
-        self.add_item(CategorySelect(categories, selected=active_category))
-        self.add_item(RequestRoleButton())
+        # Row 0 — category selector
+        cat_select = CategorySelect(categories, selected=active_category)
+        cat_select.row = 0
+        self.add_item(cat_select)
 
+        # Row 1 — request button
+        req_btn = RequestRoleButton()
+        req_btn.row = 1
+        self.add_item(req_btn)
+
+        # Row 2 — role selector (only if category selected)
         if active_category and active_category in categories:
             cat = categories[active_category]
             if cat.get("roles"):
-                self.add_item(RoleSelect(active_category, cat, member_role_ids=member_role_ids))
+                role_select = RoleSelect(
+                    active_category,
+                    cat,
+                    member_role_ids=member_role_ids,
+                )
+                role_select.row = 2
+                self.add_item(role_select)
 # =========================================================
 # DEPLOY / UPDATE PUBLIC MENU
 # =========================================================
