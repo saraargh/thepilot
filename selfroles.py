@@ -456,7 +456,24 @@ class RoleSelect(discord.ui.Select):
                 )
             except Exception:
                 pass
-            
+                
+class BackToMainButton(discord.ui.Button):
+    def __init__(self):
+        super().__init__(
+            label="⬅️ Back",
+            style=discord.ButtonStyle.secondary,
+            custom_id="sr_back_main",
+            row=0,
+        )
+
+    async def callback(self, interaction: discord.Interaction):
+        cfg = await load_config()
+        categories = cfg.get("categories", {}) or {}
+        await interaction.response.edit_message(
+            embed=public_embed(),
+            view=PublicSelfRolesView(categories),
+        )                    
+    
 ##requests##
 
 class RequestRoleButton(discord.ui.Button):
@@ -479,14 +496,25 @@ class PublicSelfRolesView(discord.ui.View):
     ):
         super().__init__(timeout=None)
 
+        # 1️⃣ Category dropdown always first
         self.add_item(CategorySelect(categories, selected=active_category))
 
+        # 2️⃣ Role selector (only when inside a category)
         if active_category and active_category in categories:
             cat = categories[active_category]
             if cat.get("roles"):
-                self.add_item(RoleSelect(active_category, cat, member_role_ids=member_role_ids))
+                self.add_item(
+                    RoleSelect(
+                        active_category,
+                        cat,
+                        member_role_ids=member_role_ids,
+                    )
+                )
 
-        # ✅ button LAST so it sits under everything
+                # ⬅ Back button ONLY when viewing a category
+                self.add_item(BackToMainButton())
+
+        # 3️⃣ Green request button ALWAYS LAST
         self.add_item(RequestRoleButton())
 # =========================================================
 # DEPLOY / UPDATE PUBLIC MENU
