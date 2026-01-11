@@ -12,7 +12,6 @@ from adminsettings import setup_admin_settings
 from image_linker import setup as image_linker_setup
 from snipe import setup as snipe_setup
 
-
 # ✅ SELF ROLES
 from selfroles import setup as selfroles_setup
 from selfroles import apply_auto_roles
@@ -66,29 +65,12 @@ class ThePilot(discord.Client):
 
     # ---------------- MESSAGE LISTENER (BOOSTS) ----------------
     async def on_message(self, message: discord.Message):
-        # ✅ HARD MUTE (MUST RUN FIRST)
+        # ✅ COSMETIC MUTE (MUST RUN FIRST)
         try:
-            from mute import muted_users
-            if not message.author.bot:
-                info = muted_users.get(message.author.id)
-                if info:
-                    until = info.get("until")
-                    if until and datetime.utcnow() < until:
-                        try:
-                            await message.delete()
-                            return
-                        except (discord.Forbidden, discord.HTTPException):
-                            # If it can't delete, just fall through to normal handling
-                            pass
-                    else:
-                        # expired -> auto unmute announcement
-                        muted_users.pop(message.author.id, None)
-                        try:
-                            ch = self.get_channel(info.get("channel_id"))
-                            if ch:
-                                await ch.send(f"🔊 {message.author.mention} has been automatically unmuted.")
-                        except Exception:
-                            pass
+            from mute import check_and_handle_message
+            blocked = await check_and_handle_message(self, message)
+            if blocked:
+                return
         except Exception:
             # don’t break other systems if mute handler errors
             pass
@@ -117,7 +99,6 @@ class ThePilot(discord.Client):
 
         # Commands
         setup_plane_commands(self.tree)
-
         setup_warnings_commands(self.tree)
 
         poo_task = setup_poo_commands(self.tree, self)
@@ -126,8 +107,8 @@ class ThePilot(discord.Client):
         goat_task = setup_goat_commands(self.tree, self)
         goat_task.start()
 
-        # ✅ Mute commands (/mute, /unmute, /mutetest optional)
-        setup_mute_commands(self, self.tree)
+        # ✅ Mute commands (/mute, /unmute)
+        setup_mute_commands(self.tree)
 
         # Admin settings (Pilot source of truth)
         setup_admin_settings(self.tree)
