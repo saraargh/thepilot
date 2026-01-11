@@ -5,11 +5,19 @@ from datetime import datetime, timedelta
 
 from permissions import has_app_access
 
-# { user_id: {"until": datetime_utc, "channel_id": int, "guild_id": int, "warned": bool} }
+# { user_id: {"until": datetime_utc, "channel_id": int, "guild_id": int} }
 muted_users: dict[int, dict] = {}
+
+# prevent double-wrapping on reloads
+_MUTE_ON_MESSAGE_WRAPPED = False
 
 
 def setup_mute_commands(client: discord.Client, tree: app_commands.CommandTree):
+    global _MUTE_ON_MESSAGE_WRAPPED
+
+    # -------------------------
+    # /mute
+    # -------------------------
     @tree.command(name="mute", description="Hard mute a member by deleting their messages")
     @app_commands.describe(member="The member to mute", minutes="Duration in minutes")
     async def mute(interaction: discord.Interaction, member: discord.User, minutes: int):
@@ -22,7 +30,7 @@ def setup_mute_commands(client: discord.Client, tree: app_commands.CommandTree):
         if not interaction.guild or not interaction.channel:
             return await interaction.response.send_message("❌ Use this in a server channel.", ephemeral=True)
 
-        # Resolve to actual guild member (robust)
+        # Resolve to guild member (robust)
         guild_member = interaction.guild.get_member(member.id)
         if guild_member is None:
             try:
@@ -38,21 +46,18 @@ def setup_mute_commands(client: discord.Client, tree: app_commands.CommandTree):
             "until": datetime.utcnow() + timedelta(minutes=minutes),
             "channel_id": interaction.channel.id,
             "guild_id": interaction.guild.id,
-            "warned": False,  # used to avoid spam if we can’t delete
         }
 
-        await interaction.response.send_message(
-            f"🔇 {guild_member.mention} has been muted for **{minutes}** minutes."
-        )
+        await interaction.response.send_message(f"🔇 {guild_member.mention} has been muted for **{minutes}** minutes.")
 
+    # -------------------------
+    # /unmute
+    # -------------------------
     @tree.command(name="unmute", description="Remove a hard mute from a member")
     @app_commands.describe(member="The member to unmute")
     async def unmute(interaction: discord.Interaction, member: discord.User):
         if not has_app_access(interaction.user, "mute"):
             return await interaction.response.send_message("❌ You cannot unmute anyone.", ephemeral=True)
-
-        if not interaction.guild:
-            return await interaction.response.send_message("❌ Use this in a server.", ephemeral=True)
 
         info = muted_users.pop(member.id, None)
         if info is None:
@@ -60,7 +65,7 @@ def setup_mute_commands(client: discord.Client, tree: app_commands.CommandTree):
 
         await interaction.response.send_message(f"🔊 {member.mention} has been unmuted.")
 
-        # Optional: announce in original channel (if different)
+        # Optional: announce in original channel if different
         try:
             ch = client.get_channel(info["channel_id"])
             if ch and interaction.channel and ch.id != interaction.channel.id:
@@ -68,51 +73,77 @@ def setup_mute_commands(client: discord.Client, tree: app_commands.CommandTree):
         except Exception:
             pass
 
-    # ✅ Debug: check if a user is muted + when it ends
+    # -------------------------
+    # /mutestatus (debug)
+    # -------------------------
     @tree.command(name="mutestatus", description="Check if a member is currently hard-muted")
-    @app_commands.describe(member="The member to check")
+    @app_commands.describe(member="Member to check")
     async def mutestatus(interaction: discord.Interaction, member: discord.User):
         if not has_app_access(interaction.user, "mute"):
             return await interaction.response.send_message("❌ No access.", ephemeral=True)
 
         info = muted_users.get(member.id)
-        if not info:
+        if not info or not info.get("until"):
             return await interaction.response.send_message(f"✅ {member.mention} is **not** muted.", ephemeral=True)
 
-        until = info.get("until")
-        mins_left = None
-        if until:
-            delta = (until - datetime.utcnow()).total_seconds()
-            mins_left = max(0, int(delta // 60))
-
+        seconds_left = (info["until"] - datetime.utcnow()).total_seconds()
+        mins_left = max(0, int(seconds_left // 60))
         await interaction.response.send_message(
-            f"🔇 {member.mention} is muted. Time left: **{mins_left}** min(s).",
+            f"🔇 {member.mention} is muted. **{mins_left}** min(s) left.",
             ephemeral=True
         )
 
-    # ✅ Debug: list currently muted users (small)
-    @tree.command(name="mutelist", description="List currently hard-muted users")
-    async def mutelist(interaction: discord.Interaction):
+    # -------------------------
+    # /mutetest (debug) attempts a delete right now
+    # -------------------------
+    @tree.command(name="mutetest", description="Debug: try deleting the most recent message from a member in this channel")
+    @app_commands.describe(member="Member to test deletion against")
+    async def mutetest(interaction: discord.Interaction, member: discord.User):
         if not has_app_access(interaction.user, "mute"):
             return await interaction.response.send_message("❌ No access.", ephemeral=True)
+        if not interaction.channel or not isinstance(interaction.channel, discord.abc.Messageable):
+            return await interaction.response.send_message("❌ Not a message channel.", ephemeral=True)
 
-        if not muted_users:
-            return await interaction.response.send_message("✅ No one is muted.", ephemeral=True)
+        try:
+            async for msg in interaction.channel.history(limit=50):
+                if msg.author.id == member.id and not msg.author.bot:
+                    try:
+                        await msg.delete()
+                        return await interaction.response.send_message("✅ Delete test: **SUCCESS**", ephemeral=True)
+                    except discord.Forbidden:
+                        return await interaction.response.send_message("❌ Delete test: **FORBIDDEN** (perm issue)", ephemeral=True)
+                    except discord.HTTPException as e:
+                        return await interaction.response.send_message(f"❌ Delete test: HTTPException: {e}", ephemeral=True)
 
-        lines = []
-        now = datetime.utcnow()
-        for uid, info in list(muted_users.items()):
-            until = info.get("until")
-            if not until:
-                continue
-            mins_left = max(0, int((until - now).total_seconds() // 60))
-            lines.append(f"<@{uid}> — {mins_left} min(s) left")
+            return await interaction.response.send_message("⚠️ No recent message from that member found in last 50.", ephemeral=True)
+        except Exception as e:
+            return await interaction.response.send_message(f"❌ Delete test failed: {e}", ephemeral=True)
 
-        await interaction.response.send_message("🔇 Muted:\n" + "\n".join(lines[:25]), ephemeral=True)
+    # -------------------------
+    # AUTO-HOOK on_message (no bot_slash.py changes required)
+    # -------------------------
+    if not _MUTE_ON_MESSAGE_WRAPPED:
+        _MUTE_ON_MESSAGE_WRAPPED = True
+
+        original_on_message = getattr(client, "on_message", None)
+
+        async def wrapped_on_message(message: discord.Message):
+            try:
+                blocked = await handle_hard_mute_message(client, message)
+                if blocked:
+                    return
+            except Exception:
+                # never break the rest of your bot
+                pass
+
+            if original_on_message is not None:
+                await original_on_message(message)
+
+        # Replace instance handler
+        client.on_message = wrapped_on_message
 
 
 async def handle_hard_mute_message(client: discord.Client, message: discord.Message) -> bool:
-    """Call this from your bot's on_message. Returns True if we blocked/deleted the message."""
     if message.author.bot:
         return False
 
@@ -125,7 +156,7 @@ async def handle_hard_mute_message(client: discord.Client, message: discord.Mess
         muted_users.pop(message.author.id, None)
         return False
 
-    # expired -> auto unmute + announce once (via scheduler OR next message)
+    # Expired -> auto unmute + announce once
     if datetime.utcnow() >= until:
         muted_users.pop(message.author.id, None)
         try:
@@ -136,32 +167,18 @@ async def handle_hard_mute_message(client: discord.Client, message: discord.Mess
             pass
         return False
 
-    # still muted -> delete message
+    # Still muted -> delete message
     try:
         await message.delete()
         return True
-    except discord.Forbidden:
-        # IMPORTANT: if we can't delete, tell admins ONCE so you know it's perms, not logic
-        if not info.get("warned"):
-            info["warned"] = True
-            try:
-                ch = client.get_channel(info.get("channel_id")) or message.channel
-                await ch.send(
-                    f"⚠️ Hard-mute is active for {message.author.mention} but I **can’t delete messages** here. "
-                    f"Grant me **Manage Messages** in this channel/category."
-                )
-            except Exception:
-                pass
-        return False
-    except discord.HTTPException:
+    except (discord.Forbidden, discord.HTTPException):
         return False
 
 
 async def process_expired_mutes(client: discord.Client):
-    """Call this from a loop so auto-unmute message fires even if they don’t speak again."""
+    """Optional: call this from a loop if you want expiry announcements even with no further messages."""
     now = datetime.utcnow()
     expired = [uid for uid, info in muted_users.items() if info.get("until") and now >= info["until"]]
-
     for uid in expired:
         info = muted_users.pop(uid, None)
         if not info:
