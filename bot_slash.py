@@ -11,6 +11,7 @@ from adminsettings import setup_admin_settings
 from image_linker import setup as image_linker_setup
 from snipe import setup as snipe_setup
 
+
 # ✅ SELF ROLES
 from selfroles import setup as selfroles_setup
 from selfroles import apply_auto_roles
@@ -50,6 +51,8 @@ class ThePilot(discord.Client):
     # ---------------- MEMBER JOIN ----------------
     async def on_member_join(self, member: discord.Member):
         await self.joinleave.on_member_join(member)
+
+        # ✅ Auto roles (humans vs bots)
         await apply_auto_roles(member)
 
     # ---------------- MEMBER REMOVE ----------------
@@ -60,29 +63,35 @@ class ThePilot(discord.Client):
     async def on_member_ban(self, guild: discord.Guild, user: discord.User):
         await self.joinleave.on_member_ban(guild, user)
 
-    # ---------------- MESSAGE LISTENER ----------------
+    # ---------------- MESSAGE LISTENER (BOOSTS) ----------------
     async def on_message(self, message: discord.Message):
         # ✅ HARD MUTE: delete messages if user is muted
         try:
             from mute import handle_hard_mute_message
             blocked = await handle_hard_mute_message(self, message)
             if blocked:
-                return  # don't continue processing (optional, but cleaner)
+                return
         except Exception:
-            # don't break other systems if mute handler errors
-            pass
+            # if something goes wrong, log it rather than silently failing
+            try:
+                await log_error(self, "hard_mute_on_message")
+            except Exception:
+                pass
 
-        # existing logic
+        # Existing logic (boosts / joinleave)
         await self.joinleave.on_message(message)
 
     # ---------------- GLOBAL ERROR LOGGER ----------------
     async def on_error(self, event_method, *args, **kwargs):
         await log_error(self, event_method)
-        raise
+        raise  # keep traceback + Render logs
 
     # ---------------- SETUP ----------------
     async def setup_hook(self):
+        # 🚀 Log redeploy / restart
         await log_startup(self)
+
+        # Start scheduled loop (safe even if empty)
         scheduled_tasks.start(self)
 
         from plane import setup_plane_commands
@@ -93,6 +102,7 @@ class ThePilot(discord.Client):
 
         # Commands
         setup_plane_commands(self.tree)
+
         setup_warnings_commands(self.tree)
 
         poo_task = setup_poo_commands(self.tree, self)
@@ -101,10 +111,9 @@ class ThePilot(discord.Client):
         goat_task = setup_goat_commands(self.tree, self)
         goat_task.start()
 
-        # ✅ Mute commands
         setup_mute_commands(self, self.tree)
 
-        # Admin settings
+        # Admin settings (Pilot source of truth)
         setup_admin_settings(self.tree)
 
         # 🎂 Birthdays
@@ -125,9 +134,10 @@ class ThePilot(discord.Client):
         # ✅ POO / GOAT TRACKER
         setup_poo_goat_tracker(self)
 
-        # 🚀 /pilotlogs
+        # 🚀 REGISTER /pilotlogs COMMAND
         setup_pilot_logs(self.tree)
 
+        # Sync once
         await self.tree.sync()
 
 
@@ -139,7 +149,15 @@ async def scheduled_tasks(bot_client: ThePilot):
     now = discord.utils.utcnow().astimezone(UK_TZ)
     guild = bot_client.guilds[0] if bot_client.guilds else None
     if guild:
-        pass
+        # ✅ Fire auto-unmute messages even if the muted user never speaks again
+        try:
+            from mute import process_expired_mutes
+            await process_expired_mutes(bot_client)
+        except Exception:
+            try:
+                await log_error(bot_client, "process_expired_mutes")
+            except Exception:
+                pass
 
 
 # ===== Flask keep-alive =====
