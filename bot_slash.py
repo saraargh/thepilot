@@ -11,7 +11,6 @@ from adminsettings import setup_admin_settings
 from image_linker import setup as image_linker_setup
 from snipe import setup as snipe_setup
 
-
 # ✅ SELF ROLES
 from selfroles import setup as selfroles_setup
 from selfroles import apply_auto_roles
@@ -51,8 +50,6 @@ class ThePilot(discord.Client):
     # ---------------- MEMBER JOIN ----------------
     async def on_member_join(self, member: discord.Member):
         await self.joinleave.on_member_join(member)
-
-        # ✅ Auto roles (humans vs bots)
         await apply_auto_roles(member)
 
     # ---------------- MEMBER REMOVE ----------------
@@ -63,22 +60,29 @@ class ThePilot(discord.Client):
     async def on_member_ban(self, guild: discord.Guild, user: discord.User):
         await self.joinleave.on_member_ban(guild, user)
 
-    # ---------------- MESSAGE LISTENER (BOOSTS) ----------------
+    # ---------------- MESSAGE LISTENER ----------------
     async def on_message(self, message: discord.Message):
-        # This replaces the old update logic to prevent the AttributeError
+        # ✅ HARD MUTE: delete messages if user is muted
+        try:
+            from mute import handle_hard_mute_message
+            blocked = await handle_hard_mute_message(self, message)
+            if blocked:
+                return  # don't continue processing (optional, but cleaner)
+        except Exception:
+            # don't break other systems if mute handler errors
+            pass
+
+        # existing logic
         await self.joinleave.on_message(message)
 
     # ---------------- GLOBAL ERROR LOGGER ----------------
     async def on_error(self, event_method, *args, **kwargs):
         await log_error(self, event_method)
-        raise  # keep traceback + Render logs
+        raise
 
     # ---------------- SETUP ----------------
     async def setup_hook(self):
-        # 🚀 Log redeploy / restart
         await log_startup(self)
-
-        # Start scheduled loop (safe even if empty)
         scheduled_tasks.start(self)
 
         from plane import setup_plane_commands
@@ -86,10 +90,9 @@ class ThePilot(discord.Client):
         from goat import setup_goat_commands
         from mute import setup_mute_commands
         from bot_warnings import setup_warnings_commands
-        
+
         # Commands
         setup_plane_commands(self.tree)
-        
         setup_warnings_commands(self.tree)
 
         poo_task = setup_poo_commands(self.tree, self)
@@ -98,9 +101,10 @@ class ThePilot(discord.Client):
         goat_task = setup_goat_commands(self.tree, self)
         goat_task.start()
 
+        # ✅ Mute commands
         setup_mute_commands(self, self.tree)
 
-        # Admin settings (Pilot source of truth)
+        # Admin settings
         setup_admin_settings(self.tree)
 
         # 🎂 Birthdays
@@ -121,10 +125,9 @@ class ThePilot(discord.Client):
         # ✅ POO / GOAT TRACKER
         setup_poo_goat_tracker(self)
 
-        # 🚀 REGISTER /pilotlogs COMMAND
+        # 🚀 /pilotlogs
         setup_pilot_logs(self.tree)
 
-        # Sync once
         await self.tree.sync()
 
 
