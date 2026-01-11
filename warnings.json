@@ -199,10 +199,6 @@
             "No reason provided",
             "Trying to warn <@637606058231332886>"
         ],
-        "636981787310161930": [
-            "first one!!!",
-            "Trying to warn <@300738774332080128>"
-        ],
         "1083504434669166714": [
             "Trying to warn <@1429920180632293388>",
             "<@1248020591823425626> couldn\u2019t warn themselves, so the pilot gave it to <@1083504434669166714>"
@@ -316,7 +312,7 @@
             "if zombie gets one so do you"
         ]
     },
-    "last_reset": "2026-01-01T20:58:02.036666",
+    "last_reset": "2026-01-11T22:59:02.864693",
     "extra_var": 123,
     "blocked_warners": [
         1248020591823425626
