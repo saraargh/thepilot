@@ -6,21 +6,19 @@ from datetime import datetime, timedelta
 from permissions import has_app_access
 
 # =========================
-# Store currently muted users
-# Format: {user_id: unmute_datetime}
+# Store muted users
+# { user_id: {"until": datetime_utc, "channel_id": int, "guild_id": int} }
 # =========================
-
-muted_users = {}
+muted_users: dict[int, dict] = {}
 
 
 def setup_mute_commands(client: discord.Client, tree: app_commands.CommandTree):
-
     # =========================
     # /mute
     # =========================
     @tree.command(
         name="mute",
-        description="Hard mute a member by deleting messages automatically"
+        description="Hard mute a member by deleting their messages"
     )
     @app_commands.describe(
         member="The member to mute",
@@ -43,8 +41,17 @@ def setup_mute_commands(client: discord.Client, tree: app_commands.CommandTree):
                 ephemeral=True
             )
 
-        unmute_time = datetime.utcnow() + timedelta(minutes=minutes)
-        muted_users[member.id] = unmute_time
+        if not interaction.guild or not interaction.channel:
+            return await interaction.response.send_message(
+                "❌ This command can only be used in a server channel.",
+                ephemeral=True
+            )
+
+        muted_users[member.id] = {
+            "until": datetime.utcnow() + timedelta(minutes=minutes),
+            "channel_id": interaction.channel.id,
+            "guild_id": interaction.guild.id
+        }
 
         await interaction.response.send_message(
             f"🔇 {member.mention} has been muted for **{minutes}** minutes."
@@ -57,9 +64,7 @@ def setup_mute_commands(client: discord.Client, tree: app_commands.CommandTree):
         name="unmute",
         description="Remove a hard mute from a member"
     )
-    @app_commands.describe(
-        member="The member to unmute"
-    )
+    @app_commands.describe(member="The member to unmute")
     async def unmute(
         interaction: discord.Interaction,
         member: discord.Member
@@ -70,38 +75,60 @@ def setup_mute_commands(client: discord.Client, tree: app_commands.CommandTree):
                 ephemeral=True
             )
 
-        if member.id in muted_users:
-            del muted_users[member.id]
-            await interaction.response.send_message(
-                f"🔊 {member.mention} has been unmuted."
-            )
-        else:
-            await interaction.response.send_message(
+        info = muted_users.pop(member.id, None)
+        if info is None:
+            return await interaction.response.send_message(
                 f"❌ {member.mention} is not muted.",
                 ephemeral=True
             )
 
+        await interaction.response.send_message(
+            f"🔊 {member.mention} has been unmuted."
+        )
+
+        # Optional: also announce in the original channel (if different)
+        try:
+            ch = client.get_channel(info["channel_id"])
+            if ch and interaction.channel and ch.id != interaction.channel.id:
+                await ch.send(f"🔊 {member.mention} has been unmuted.")
+        except Exception:
+            pass
+
     # =========================
-    # Message listener
+    # Listener: delete messages while muted + auto-unmute announce
     # =========================
-    @client.event
-    async def on_message(message: discord.Message):
+    async def hard_mute_listener(message: discord.Message):
         if message.author.bot:
             return
 
-        if message.author.id in muted_users:
-            unmute_time = muted_users.get(message.author.id)
+        info = muted_users.get(message.author.id)
+        if not info:
+            return
 
-            if not unmute_time:
-                return
+        until = info.get("until")
+        if not until:
+            muted_users.pop(message.author.id, None)
+            return
 
-            if datetime.utcnow() >= unmute_time:
-                del muted_users[message.author.id]
-                return
+        # Expired -> auto-unmute + announce once
+        if datetime.utcnow() >= until:
+            muted_users.pop(message.author.id, None)
 
+            # Announce in the channel where mute was issued
             try:
-                await message.delete()
-            except discord.Forbidden:
-                pass  # Bot cannot delete messages
-            except discord.HTTPException:
+                ch = client.get_channel(info.get("channel_id"))
+                if ch:
+                    await ch.send(f"🔊 {message.author.mention} has been automatically unmuted.")
+            except Exception:
                 pass
+
+            return
+
+        # Still muted -> delete their message
+        try:
+            await message.delete()
+        except (discord.Forbidden, discord.HTTPException):
+            pass
+
+    # IMPORTANT: add_listener STACKS (doesn't overwrite other on_message handlers)
+    client.add_listener(hard_mute_listener, "on_message")
