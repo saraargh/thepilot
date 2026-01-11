@@ -104,20 +104,24 @@ async def handle_hard_mute_message(client: discord.Client, message: discord.Mess
         muted_users.pop(message.author.id, None)
         return False
 
-    # expired -> auto unmute + announce once
-    if datetime.utcnow() >= until:
-        muted_users.pop(message.author.id, None)
-        try:
-            ch = client.get_channel(info.get("channel_id"))
-            if ch:
-                await ch.send(f"🔊 {message.author.mention} has been automatically unmuted.")
-        except Exception:
-            pass
-        return False
-
     # still muted -> delete message
     try:
         await message.delete()
         return True
     except (discord.Forbidden, discord.HTTPException):
         return False
+        
+async def process_expired_mutes(client: discord.Client):
+    now = datetime.utcnow()
+    expired = [uid for uid, info in muted_users.items() if info.get("until") and now >= info["until"]]
+
+    for uid in expired:
+        info = muted_users.pop(uid, None)
+        if not info:
+            continue
+        try:
+            ch = client.get_channel(info.get("channel_id"))
+            if ch:
+                await ch.send(f"🔊 <@{uid}> has been automatically unmuted.")
+        except Exception:
+            pass
