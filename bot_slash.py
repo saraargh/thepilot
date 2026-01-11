@@ -5,6 +5,7 @@ import pytz
 import os
 from flask import Flask
 from threading import Thread
+from datetime import datetime
 
 from joinleave import WelcomeSystem
 from adminsettings import setup_admin_settings
@@ -65,20 +66,34 @@ class ThePilot(discord.Client):
 
     # ---------------- MESSAGE LISTENER (BOOSTS) ----------------
     async def on_message(self, message: discord.Message):
-        # ✅ HARD MUTE: delete messages if user is muted
+        # ✅ HARD MUTE (MUST RUN FIRST)
         try:
-            from mute import handle_hard_mute_message
-            blocked = await handle_hard_mute_message(self, message)
-            if blocked:
-                return
+            from mute import muted_users
+            if not message.author.bot:
+                info = muted_users.get(message.author.id)
+                if info:
+                    until = info.get("until")
+                    if until and datetime.utcnow() < until:
+                        try:
+                            await message.delete()
+                            return
+                        except (discord.Forbidden, discord.HTTPException):
+                            # If it can't delete, just fall through to normal handling
+                            pass
+                    else:
+                        # expired -> auto unmute announcement
+                        muted_users.pop(message.author.id, None)
+                        try:
+                            ch = self.get_channel(info.get("channel_id"))
+                            if ch:
+                                await ch.send(f"🔊 {message.author.mention} has been automatically unmuted.")
+                        except Exception:
+                            pass
         except Exception:
-            # if something goes wrong, log it rather than silently failing
-            try:
-                await log_error(self, "hard_mute_on_message")
-            except Exception:
-                pass
+            # don’t break other systems if mute handler errors
+            pass
 
-        # Existing logic (boosts / joinleave)
+        # Existing joinleave logic (boosts etc.)
         await self.joinleave.on_message(message)
 
     # ---------------- GLOBAL ERROR LOGGER ----------------
@@ -111,6 +126,7 @@ class ThePilot(discord.Client):
         goat_task = setup_goat_commands(self.tree, self)
         goat_task.start()
 
+        # ✅ Mute commands (/mute, /unmute, /mutetest optional)
         setup_mute_commands(self, self.tree)
 
         # Admin settings (Pilot source of truth)
@@ -149,15 +165,12 @@ async def scheduled_tasks(bot_client: ThePilot):
     now = discord.utils.utcnow().astimezone(UK_TZ)
     guild = bot_client.guilds[0] if bot_client.guilds else None
     if guild:
-        # ✅ Fire auto-unmute messages even if the muted user never speaks again
+        # ✅ Auto-unmute message even if they never speak again
         try:
             from mute import process_expired_mutes
             await process_expired_mutes(bot_client)
         except Exception:
-            try:
-                await log_error(bot_client, "process_expired_mutes")
-            except Exception:
-                pass
+            pass
 
 
 # ===== Flask keep-alive =====
