@@ -1,56 +1,44 @@
-import os
-import sys
-import traceback
 import discord
 from discord.ext import tasks
 from discord import app_commands
 import pytz
+import os
 from flask import Flask
 from threading import Thread
+
+from joinleave import WelcomeSystem
+from adminsettings import setup_admin_settings
+from image_linker import setup as image_linker_setup
+from snipe import setup as snipe_setup
+
+# ✅ SELF ROLES
+from selfroles import setup as selfroles_setup
+from selfroles import apply_auto_roles
+
+# ✅ ROLE + EMOJI TOOLS
+from role_tools import setup as role_tools_setup
+
+# 🎂 BIRTHDAYS
+from birthdays import setup as birthdays_setup
+
+# ✅ POO / GOAT TRACKER
+from poo_goat_tracker import setup as setup_poo_goat_tracker
+
+# 🚀 PILOT RUNTIME LOGGER
+from pilot_runtime_logger import (
+    log_startup,
+    log_error,
+    setup as setup_pilot_logs
+)
 
 # ===== CONFIG =====
 TOKEN = os.getenv("TOKEN")
 UK_TZ = pytz.timezone("Europe/London")
 
-if not TOKEN:
-    raise RuntimeError("TOKEN env var is missing on Render (set TOKEN in Environment).")
-
 # ===== Discord Client =====
 intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
-
-
-# ---- IMPORTS (wrapped so startup errors always show) ----
-try:
-    from joinleave import WelcomeSystem
-    from adminsettings import setup_admin_settings
-    from image_linker import setup as image_linker_setup
-    from snipe import setup as snipe_setup
-
-    # ✅ SELF ROLES
-    from selfroles import setup as selfroles_setup
-    from selfroles import apply_auto_roles
-
-    # ✅ ROLE + EMOJI TOOLS
-    from role_tools import setup as role_tools_setup
-
-    # 🎂 BIRTHDAYS
-    from birthdays import setup as birthdays_setup
-
-    # ✅ POO / GOAT TRACKER
-    from poo_goat_tracker import setup as setup_poo_goat_tracker
-
-    # 🚀 PILOT RUNTIME LOGGER
-    from pilot_runtime_logger import (
-        log_startup,
-        log_error,
-        setup as setup_pilot_logs
-    )
-except Exception as e:
-    print("❌ IMPORT ERROR DURING STARTUP:", repr(e))
-    traceback.print_exc()
-    raise
 
 
 class ThePilot(discord.Client):
@@ -59,72 +47,105 @@ class ThePilot(discord.Client):
         self.tree = app_commands.CommandTree(self)
         self.joinleave = WelcomeSystem(self)
 
+    # ---------------- MEMBER JOIN ----------------
     async def on_member_join(self, member: discord.Member):
         await self.joinleave.on_member_join(member)
+
+        # ✅ Auto roles (humans vs bots)
         await apply_auto_roles(member)
 
+    # ---------------- MEMBER REMOVE ----------------
     async def on_member_remove(self, member: discord.Member):
         await self.joinleave.on_member_remove(member)
 
+    # ---------------- MEMBER BAN ----------------
     async def on_member_ban(self, guild: discord.Guild, user: discord.User):
         await self.joinleave.on_member_ban(guild, user)
 
+    # ---------------- MESSAGE LISTENER (BOOSTS) ----------------
     async def on_message(self, message: discord.Message):
-        # Cosmetic mute is handled by stacked on_message listener installed by mute.py
+        # ✅ COSMETIC MUTE (MUST RUN FIRST)
+        try:
+            from mute import check_and_handle_message
+            blocked = await check_and_handle_message(self, message)
+            if blocked:
+                return
+        except Exception:
+            # don’t break other systems if mute handler errors
+            pass
+
+        # Existing joinleave logic (boosts etc.)
         await self.joinleave.on_message(message)
 
+    # ---------------- GLOBAL ERROR LOGGER ----------------
     async def on_error(self, event_method, *args, **kwargs):
         await log_error(self, event_method)
-        raise
+        raise  # keep traceback + Render logs
 
+    # ---------------- SETUP ----------------
     async def setup_hook(self):
-        try:
-            await log_startup(self)
-            scheduled_tasks.start(self)
+        # 🚀 Log redeploy / restart
+        await log_startup(self)
 
-            from plane import setup_plane_commands
-            from poo import setup_poo_commands
-            from goat import setup_goat_commands
-            from mute import setup_mute_commands
-            from bot_warnings import setup_warnings_commands
+        # Start scheduled loop (safe even if empty)
+        scheduled_tasks.start(self)
 
-            setup_plane_commands(self.tree)
-            setup_warnings_commands(self.tree)
+        from plane import setup_plane_commands
+        from poo import setup_poo_commands
+        from goat import setup_goat_commands
+        from mute import setup_mute_commands
+        from bot_warnings import setup_warnings_commands
 
-            poo_task = setup_poo_commands(self.tree, self)
-            poo_task.start()
+        # Commands
+        setup_plane_commands(self.tree)
+        setup_warnings_commands(self.tree)
 
-            goat_task = setup_goat_commands(self.tree, self)
-            goat_task.start()
+        poo_task = setup_poo_commands(self.tree, self)
+        poo_task.start()
 
-            # ✅ installs mute listener + registers /mutesettings /mute /unmute
-            setup_mute_commands(self, self.tree)
+        goat_task = setup_goat_commands(self.tree, self)
+        goat_task.start()
 
-            setup_admin_settings(self.tree)
-            birthdays_setup(self)
-            await image_linker_setup(self.tree)
-            snipe_setup(self, self.tree)
-            selfroles_setup(self.tree, self)
-            role_tools_setup(self.tree)
-            setup_poo_goat_tracker(self)
-            setup_pilot_logs(self.tree)
+        # ✅ Mute commands (/mute, /unmute)
+        setup_mute_commands(self.tree)
 
-            await self.tree.sync()
+        # Admin settings (Pilot source of truth)
+        setup_admin_settings(self.tree)
 
-        except Exception as e:
-            print("❌ ERROR INSIDE setup_hook:", repr(e))
-            traceback.print_exc()
-            raise
+        # 🎂 Birthdays
+        birthdays_setup(self)
+
+        # Image linker
+        await image_linker_setup(self.tree)
+
+        # Snipe
+        snipe_setup(self, self.tree)
+
+        # ✅ Self roles
+        selfroles_setup(self.tree, self)
+
+        # ✅ Role / Emoji tools
+        role_tools_setup(self.tree)
+
+        # ✅ POO / GOAT TRACKER
+        setup_poo_goat_tracker(self)
+
+        # 🚀 REGISTER /pilotlogs COMMAND
+        setup_pilot_logs(self.tree)
+
+        # Sync once
+        await self.tree.sync()
 
 
 client = ThePilot()
 
-
+# ===== Scheduled tasks =====
 @tasks.loop(minutes=1)
 async def scheduled_tasks(bot_client: ThePilot):
-    _ = discord.utils.utcnow().astimezone(UK_TZ)
+    now = discord.utils.utcnow().astimezone(UK_TZ)
     guild = bot_client.guilds[0] if bot_client.guilds else None
     if guild:
+        # ✅ Auto-unmute message even if they never speak again
         try:
             from mute import process_expired_mutes
             await process_expired_mutes(bot_client)
@@ -147,11 +168,4 @@ def run_flask():
 
 Thread(target=run_flask, daemon=True).start()
 
-
-# ===== Run Bot (wrapped so you ALWAYS get a traceback) =====
-try:
-    client.run(TOKEN)
-except Exception as e:
-    print("❌ FATAL STARTUP ERROR:", repr(e))
-    traceback.print_exc()
-    raise
+client.run(TOKEN)
