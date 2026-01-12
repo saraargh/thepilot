@@ -5,7 +5,6 @@ import pytz
 import os
 from flask import Flask
 from threading import Thread
-from datetime import datetime
 
 from joinleave import WelcomeSystem
 from adminsettings import setup_admin_settings
