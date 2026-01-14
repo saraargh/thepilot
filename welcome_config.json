@@ -3,7 +3,7 @@
     "enabled": true,
     "welcome_channel_id": 1404099938828292136,
     "title": "Welcome to the server, {user}!\ud83d\udc4b\ud83c\udffc",
-    "description": "Regardless of how you found us, we hope you enjoy your time here! \u2728\ud83c\udfae\n\nCheck out:\n\u2022 {channel:self_roles} to pick your roles \n\u2022 {channel:birthday} to get a birthday message \ud83c\udf82",
+    "description": "Regardless of how you found us, we hope you enjoy your time here! \ud83c\udfae\u2728\n\nCheck out:\n\u2022 {channel:self_roles} to customise roles/pings\n\u2022 {channel:birthday} to get a birthday message \ud83c\udf82",
     "channels": {
       "self_roles": 1404103196078768261,
       "birthday": 1406250261915369512,
