@@ -59,13 +59,21 @@ async def reply(
     view: Optional[discord.ui.View] = None,
     ephemeral: bool = False,
 ):
-    """
-    Safe responder that won't crash with:
-    40060 Interaction has already been acknowledged.
-    """
+    # Build kwargs without ever including view=None/embed=None/content=None
+    kwargs = {}
+    if content is not None:
+        kwargs["content"] = content
+    if embed is not None:
+        kwargs["embed"] = embed
+    if view is not None:
+        kwargs["view"] = view
+    kwargs["ephemeral"] = ephemeral
+
+    # Use followup if already acknowledged
     if interaction.response.is_done():
-        return await interaction.followup.send(content=content, embed=embed, view=view, ephemeral=ephemeral)
-    return await interaction.response.send_message(content=content, embed=embed, view=view, ephemeral=ephemeral)
+        return await interaction.followup.send(**kwargs)
+    return await interaction.response.send_message(**kwargs)
+
 
 # ------------------- GitHub Load / Save -------------------
 def load_data() -> Tuple[dict, Optional[str]]:
