@@ -305,8 +305,7 @@
         ],
         "1451765667618357281": [
             "<@1248020591823425626> couldn\u2019t warn themselves, so the pilot gave it to <@1451765667618357281>",
-            "asking for it",
-            "<@1238834298338152498> couldn\u2019t warn themselves, so the pilot gave it to <@1451765667618357281>"
+            "asking for it"
         ],
         "1381782131449008250": [
             "<@1248020591823425626> couldn\u2019t warn themselves, so the pilot gave it to <@1381782131449008250>",
@@ -337,9 +336,13 @@
         ],
         "871450866186608730": [
             "brandi\u2019s make a wish"
+        ],
+        "1263222573181960236": [
+            "<@1238834298338152498> couldn\u2019t warn themselves, so the pilot gave it to <@1263222573181960236>"
         ]
     },
     "last_reset": "2026-01-11T22:59:02.864693",
     "extra_var": 123,
-    "blocked_warners": []
+    "blocked_warners": [],
+    "ffa_enabled": false
 }
