@@ -51,7 +51,7 @@ def setup_mute_commands(tree: app_commands.CommandTree):
         try:
             # Passing None removes the timeout
             await member.timeout(None)
-            await interaction.response.send_message(f"🔊 {member.mention} has been unmuted.")
+            await interaction.response.send_message(f"🔊 Timeout removed for {member.mention}.")
         except discord.Forbidden:
             await interaction.response.send_message("❌ I cannot unmute this member.", ephemeral=True)
         except Exception as e:
