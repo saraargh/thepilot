@@ -51,6 +51,22 @@ def _page_label(i: int, per_page: int, total: int) -> str:
     end = min((i + 1) * per_page, total)
     return f"Page {i+1} ({start}–{end})"
 
+async def reply(
+    interaction: discord.Interaction,
+    content: Optional[str] = None,
+    *,
+    embed: Optional[discord.Embed] = None,
+    view: Optional[discord.ui.View] = None,
+    ephemeral: bool = False,
+):
+    """
+    Safe responder that won't crash with:
+    40060 Interaction has already been acknowledged.
+    """
+    if interaction.response.is_done():
+        return await interaction.followup.send(content=content, embed=embed, view=view, ephemeral=ephemeral)
+    return await interaction.response.send_message(content=content, embed=embed, view=view, ephemeral=ephemeral)
+
 # ------------------- GitHub Load / Save -------------------
 def load_data() -> Tuple[dict, Optional[str]]:
     try:
@@ -147,7 +163,10 @@ class PageSelect(discord.ui.Select):
 
     async def callback(self, interaction: discord.Interaction):
         self.parent_view.index = int(self.values[0])
-        await interaction.response.edit_message(embed=self.parent_view.embeds[self.parent_view.index], view=self.parent_view)
+        await interaction.response.edit_message(
+            embed=self.parent_view.embeds[self.parent_view.index],
+            view=self.parent_view
+        )
 
 class PagedEmbedView(discord.ui.View):
     def __init__(self, embeds: List[discord.Embed], per_page: int, total_items: int):
@@ -202,10 +221,7 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
     @app_commands.describe(mode="restricted = fun rules, free_for_all = anyone can warn anyone")
     async def warningsmode(interaction: discord.Interaction, mode: Literal["restricted", "free_for_all"]):
         if not has_app_access(interaction.user, "warnings"):
-            await interaction.response.send_message(
-                "❌ You do not have permission to change warning mode.",
-                ephemeral=False
-            )
+            await reply(interaction, "❌ You do not have permission to change warning mode.", ephemeral=False)
             return
 
         data, sha = load_data()
@@ -213,26 +229,17 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
         if mode == "free_for_all":
             data["ffa_enabled"] = True
             save_data(data, sha)
-            await interaction.response.send_message(
-                "🔓 **Warnings free for all enabled** - Anyone can warn anyone.",
-                ephemeral=False
-            )
+            await reply(interaction, "🔓 **Warnings free for all enabled** - Anyone can warn anyone.", ephemeral=False)
         else:
             data["ffa_enabled"] = False
             save_data(data, sha)
-            await interaction.response.send_message(
-                "🔒 **Warning restrictions enabled**",
-                ephemeral=False
-            )
+            await reply(interaction, "🔒 **Warning restrictions enabled**", ephemeral=False)
 
     # ---------------- /block_warner ----------------
     @tree.command(name="block_warner", description="Stop a user from being allowed to warn.")
     async def block_warner(interaction: discord.Interaction, member: discord.Member):
         if not has_app_access(interaction.user, "warnings"):
-            await interaction.response.send_message(
-                "❌ You do not have permission to block warners.",
-                ephemeral=False
-            )
+            await reply(interaction, "❌ You do not have permission to block warners.", ephemeral=False)
             return
 
         data, sha = load_data()
@@ -242,19 +249,13 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
             data["blocked_warners"].append(member.id)
             save_data(data, sha)
 
-        await interaction.response.send_message(
-            f"🚫 {member.mention} is no longer allowed to warn people.",
-            ephemeral=False
-        )
+        await reply(interaction, f"🚫 {member.mention} is no longer allowed to warn people.", ephemeral=False)
 
     # ---------------- /unblock_warner ----------------
     @tree.command(name="unblock_warner", description="Allow a user to warn again.")
     async def unblock_warner(interaction: discord.Interaction, member: discord.Member):
         if not has_app_access(interaction.user, "warnings"):
-            await interaction.response.send_message(
-                "❌ You do not have permission to unblock warners.",
-                ephemeral=False
-            )
+            await reply(interaction, "❌ You do not have permission to unblock warners.", ephemeral=False)
             return
 
         data, sha = load_data()
@@ -264,10 +265,7 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
             data["blocked_warners"].remove(member.id)
             save_data(data, sha)
 
-        await interaction.response.send_message(
-            f"✅ {member.mention} can warn again.",
-            ephemeral=False
-        )
+        await reply(interaction, f"✅ {member.mention} can warn again.", ephemeral=False)
 
     # ---------------- /warn ----------------
     @tree.command(name="warn", description="Warn a user (joke warnings).")
@@ -283,10 +281,7 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
 
         # 🚫 BLOCKED WARNER (applies in all modes)
         if author.id in data.get("blocked_warners", []):
-            await interaction.response.send_message(
-                f"❌ {author.mention} is no longer allowed to warn people.",
-                ephemeral=False
-            )
+            await reply(interaction, f"❌ {author.mention} is no longer allowed to warn people.", ephemeral=False)
             return
 
         # 🤡 SELF-WARN RULE (applies in all modes)
@@ -299,10 +294,7 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
             ]
 
             if not candidates:
-                await interaction.response.send_message(
-                    "🤡 You tried to warn yourself but there was no one else to punish.",
-                    ephemeral=False
-                )
+                await reply(interaction, "🤡 You tried to warn yourself but there was no one else to punish.", ephemeral=False)
                 return
 
             chosen = random.choice(candidates)
@@ -310,7 +302,8 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
             reason_text = f"{author.mention} couldn’t warn themselves, so the pilot gave it to {chosen.mention}"
             add_warning(chosen.id, reason_text)
 
-            await interaction.response.send_message(
+            await reply(
+                interaction,
                 f"🤡 {author.mention} You cannot warn yourself, instead a warning has been given to {chosen.mention}!",
                 ephemeral=False
             )
@@ -319,7 +312,8 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
         # ---------------- SAZZLES protection (RESTRICTED ONLY) ----------------
         if not ffa_enabled and (SAZZLES_ROLE_ID in target_roles):
             if KD_ROLE_ID not in author_roles:
-                await interaction.response.send_message(
+                await reply(
+                    interaction,
                     "❌ Only Mr KD can warn this user because she is too pretty and nice to be warned and made this so you can all warn William!",
                     ephemeral=False
                 )
@@ -333,7 +327,7 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
             if reason:
                 msg += f" for {reason}"
             msg += f", this is their {ordinal(count)} warning."
-            await interaction.response.send_message(msg, ephemeral=False)
+            await reply(interaction, msg, ephemeral=False)
             return
 
         # ---------------- RESTRICTED MODE (existing fun rules) ----------------
@@ -345,7 +339,7 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
             if reason:
                 msg += f" for {reason}"
             msg += f", this is their {ordinal(count)} warning."
-            await interaction.response.send_message(msg, ephemeral=False)
+            await reply(interaction, msg, ephemeral=False)
             return
 
         # Permission check for restricted mode
@@ -356,7 +350,8 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
                 reason_text = f"Trying to warn {member.mention}"
                 count = add_warning(author.id, reason_text)
 
-                await interaction.response.send_message(
+                await reply(
+                    interaction,
                     f"❌ {author.mention} has been warned for trying to warn {member.mention}, "
                     f"as you cannot warn your fellow passengers — only William. "
                     f"This is their {ordinal(count)} warning.",
@@ -364,10 +359,7 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
                 )
                 return
 
-            await interaction.response.send_message(
-                f"❌ You do not have permission to warn {member.mention}.",
-                ephemeral=False
-            )
+            await reply(interaction, f"❌ You do not have permission to warn {member.mention}.", ephemeral=False)
             return
 
         # Normal restricted-mode warn (allowed roles)
@@ -376,7 +368,7 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
         if reason:
             msg += f" for {reason}"
         msg += f", this is their {ordinal(count)} warning."
-        await interaction.response.send_message(msg, ephemeral=False)
+        await reply(interaction, msg, ephemeral=False)
 
     # ---------------- /warnings_list (member optional = self) ----------------
     @tree.command(name="warnings_list", description="List warnings (yourself or another user).")
@@ -387,14 +379,14 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
 
         embeds = build_warnings_list_embeds(target, warns, per_page=10)
         view = PagedEmbedView(embeds, per_page=10, total_items=len(warns))
-        await interaction.response.send_message(embed=embeds[0], view=view, ephemeral=False)
+        await reply(interaction, embed=embeds[0], view=view, ephemeral=False)
 
     # ---------------- /server_warnings (embed + dropdown pages) ----------------
     @tree.command(name="server_warnings", description="Show all warnings on this server (counts only).")
     async def server_warnings(interaction: discord.Interaction):
         embeds, total_items = build_server_warnings_embeds(interaction, per_page=10)
         view = PagedEmbedView(embeds, per_page=10, total_items=total_items)
-        await interaction.response.send_message(embed=embeds[0], view=view, ephemeral=False)
+        await reply(interaction, embed=embeds[0], view=view, ephemeral=False)
 
     # ---------------- /clear_warnings ----------------
     @tree.command(name="clear_warnings", description="Clear all warnings for a user.")
@@ -402,17 +394,15 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
     async def clear_warnings(interaction: discord.Interaction, member: discord.Member):
 
         if not has_app_access(interaction.user, "warnings"):
-            await interaction.response.send_message(
-                "❌ You do not have permission to clear warnings.",
-                ephemeral=False
-            )
+            await reply(interaction, "❌ You do not have permission to clear warnings.", ephemeral=False)
             return
 
         if member.id == interaction.user.id:
             reason_text = "Trying to remove their warnings"
             count = add_warning(interaction.user.id, reason_text)
 
-            await interaction.response.send_message(
+            await reply(
+                interaction,
                 f"❌ You can not clear your own warnings. {interaction.user.mention} has now been warned. "
                 f"This is their {ordinal(count)} warning.",
                 ephemeral=False
@@ -426,26 +416,16 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
             data["warnings"].pop(uid)
             data["last_reset"] = datetime.utcnow().isoformat()
             save_data(data, sha)
-
-            await interaction.response.send_message(
-                f"✅ All warnings for {member.mention} have been cleared.",
-                ephemeral=False
-            )
+            await reply(interaction, f"✅ All warnings for {member.mention} have been cleared.", ephemeral=False)
         else:
-            await interaction.response.send_message(
-                f"{member.mention} has no warnings to clear.",
-                ephemeral=False
-            )
+            await reply(interaction, f"{member.mention} has no warnings to clear.", ephemeral=False)
 
     # ---------------- /clear_server_warnings ----------------
     @tree.command(name="clear_server_warnings", description="Clear all warnings for the server.")
     async def clear_server_warnings(interaction: discord.Interaction):
 
         if not has_app_access(interaction.user, "warnings"):
-            await interaction.response.send_message(
-                "❌ You do not have permission to clear server warnings.",
-                ephemeral=False
-            )
+            await reply(interaction, "❌ You do not have permission to clear server warnings.", ephemeral=False)
             return
 
         data, sha = load_data()
@@ -460,7 +440,4 @@ def setup_warnings_commands(tree: app_commands.CommandTree):
         data["last_reset"] = datetime.utcnow().isoformat()
         save_data(data, sha)
 
-        await interaction.response.send_message(
-            f"✅ Cleared {removed} warnings from the server.",
-            ephemeral=False
-        )
+        await reply(interaction, f"✅ Cleared {removed} warnings from the server.", ephemeral=False)
