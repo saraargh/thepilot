@@ -50,8 +50,6 @@ class ThePilot(discord.Client):
     # ---------------- MEMBER JOIN ----------------
     async def on_member_join(self, member: discord.Member):
         await self.joinleave.on_member_join(member)
-
-        # ✅ Auto roles (humans vs bots)
         await apply_auto_roles(member)
 
     # ---------------- MEMBER REMOVE ----------------
@@ -64,17 +62,7 @@ class ThePilot(discord.Client):
 
     # ---------------- MESSAGE LISTENER (BOOSTS) ----------------
     async def on_message(self, message: discord.Message):
-        # ✅ COSMETIC MUTE (MUST RUN FIRST)
-        try:
-            from mute import check_and_handle_message
-            blocked = await check_and_handle_message(self, message)
-            if blocked:
-                return
-        except Exception:
-            # don’t break other systems if mute handler errors
-            pass
-
-        # Existing joinleave logic (boosts etc.)
+        # ✅ Cosmetic mute is handled by stacked on_message listener installed in setup_hook
         await self.joinleave.on_message(message)
 
     # ---------------- GLOBAL ERROR LOGGER ----------------
@@ -93,7 +81,7 @@ class ThePilot(discord.Client):
         from plane import setup_plane_commands
         from poo import setup_poo_commands
         from goat import setup_goat_commands
-        from mute import setup_mute_commands
+        from mute import setup_mute_commands, install_mute_listener
         from bot_warnings import setup_warnings_commands
 
         # Commands
@@ -106,8 +94,9 @@ class ThePilot(discord.Client):
         goat_task = setup_goat_commands(self.tree, self)
         goat_task.start()
 
-        # ✅ Mute commands (/mute, /unmute)
+        # ✅ Mute commands (/mute, /unmute) + ✅ install stacked listener
         setup_mute_commands(self.tree)
+        install_mute_listener(self)
 
         # Admin settings (Pilot source of truth)
         setup_admin_settings(self.tree)
