@@ -31,6 +31,9 @@ from pilot_runtime_logger import (
     setup as setup_pilot_logs
 )
 
+# ✅ MUTE SYSTEM IMPORT
+from mute import check_and_handle_message
+
 # ===== CONFIG =====
 TOKEN = os.getenv("TOKEN")
 UK_TZ = pytz.timezone("Europe/London")
@@ -60,9 +63,14 @@ class ThePilot(discord.Client):
     async def on_member_ban(self, guild: discord.Guild, user: discord.User):
         await self.joinleave.on_member_ban(guild, user)
 
-    # ---------------- MESSAGE LISTENER (BOOSTS) ----------------
+    # ---------------- MESSAGE LISTENER (BOOSTS + MUTES) ----------------
     async def on_message(self, message: discord.Message):
-        # ✅ Cosmetic mute is handled by stacked on_message listener installed in setup_hook
+        # ✅ Check mute status first. If handled, stop processing.
+        was_muted = await check_and_handle_message(self, message)
+        if was_muted:
+            return
+
+        # ✅ Process Boosts/Join-Leave logic
         await self.joinleave.on_message(message)
 
     # ---------------- GLOBAL ERROR LOGGER ----------------
@@ -75,13 +83,13 @@ class ThePilot(discord.Client):
         # 🚀 Log redeploy / restart
         await log_startup(self)
 
-        # Start scheduled loop (safe even if empty)
+        # Start scheduled loop
         scheduled_tasks.start(self)
 
         from plane import setup_plane_commands
         from poo import setup_poo_commands
         from goat import setup_goat_commands
-        from mute import setup_mute_commands, install_mute_listener
+        from mute import setup_mute_commands # Note: removed install_mute_listener here
         from bot_warnings import setup_warnings_commands
 
         # Commands
@@ -94,9 +102,8 @@ class ThePilot(discord.Client):
         goat_task = setup_goat_commands(self.tree, self)
         goat_task.start()
 
-        # ✅ Mute commands (/mute, /unmute) + ✅ install stacked listener
+        # ✅ Mute commands (/mute, /unmute)
         setup_mute_commands(self.tree)
-        install_mute_listener(self)
 
         # Admin settings (Pilot source of truth)
         setup_admin_settings(self.tree)
@@ -131,6 +138,7 @@ client = ThePilot()
 # ===== Scheduled tasks =====
 @tasks.loop(minutes=1)
 async def scheduled_tasks(bot_client: ThePilot):
+    # Using London Time as requested
     now = discord.utils.utcnow().astimezone(UK_TZ)
     guild = bot_client.guilds[0] if bot_client.guilds else None
     if guild:
