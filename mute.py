@@ -56,11 +56,15 @@ def install_mute_listener(client: discord.Client):
         return
     _LISTENER_INSTALLED = True
 
-    async def _on_message(message: discord.Message):
-        try:
-            await check_and_handle_message(client, message)
-        except Exception:
-            pass
+    async def on_message(self, message: discord.Message):
+    # Let your boost system run
+    await self.joinleave.on_message(message)
+
+    # IMPORTANT: don’t break the event pipeline
+    try:
+        await self.process_commands(message)
+    except Exception:
+        pass
 
     # discord.py internal stacked events list
     if not hasattr(client, "extra_events") or client.extra_events is None:
