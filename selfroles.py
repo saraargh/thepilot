@@ -441,21 +441,12 @@ class RoleSelect(discord.ui.Select):
         try:
             cfg2 = await load_config()
             categories2 = cfg2.get("categories", {}) or {}
-            await interaction.response.edit_message(
+            await interaction.message.edit(
                 embed=public_embed(),
                 view=PublicSelfRolesView(categories2),
             )
         except Exception:
-            # If we've already responded somehow, fall back to editing
-            try:
-                cfg2 = await load_config()
-                categories2 = cfg2.get("categories", {}) or {}
-                await interaction.message.edit(
-                    embed=public_embed(),
-                    view=PublicSelfRolesView(categories2),
-                )
-            except Exception:
-                pass
+            pass
                 
 class BackToMainButton(discord.ui.Button):
     def __init__(self):
@@ -1531,14 +1522,31 @@ async def rolesettings(interaction: discord.Interaction):
 # SETUP
 # =========================================================
 
+_MENU_REFRESH_STARTED = False
+
+async def _refresh_menus_when_ready(client: discord.Client):
+    await client.wait_until_ready()
+    await asyncio.sleep(1)
+
+    for guild in client.guilds:
+        try:
+            await deploy_or_update_menu(guild)
+        except Exception:
+            pass
+
 def setup(tree: app_commands.CommandTree, client: discord.Client):
     tree.add_command(rolesettings)
 
-    # ✅ makes the "Mark Completed" button work after restarts
+    # ✅ persistent request buttons
     try:
         client.add_view(RequestCompleteView())
     except Exception:
         pass
 
-    # Public view is attached when you post/update the menu (deploy_or_update_menu).
+    # 🔁 auto-refresh the public self-roles menu after restart
+    global _MENU_REFRESH_STARTED
+    if not _MENU_REFRESH_STARTED:
+        _MENU_REFRESH_STARTED = True
+        client.loop.create_task(_refresh_menus_when_ready(client))
+
     return
