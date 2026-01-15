@@ -371,5 +371,5 @@
     "last_reset": "2026-01-11T22:59:02.864693",
     "extra_var": 123,
     "blocked_warners": [],
-    "ffa_enabled": true
+    "ffa_enabled": false
 }
