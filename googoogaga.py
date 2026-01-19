@@ -333,8 +333,12 @@ def setup_googoogaga_commands(tree: app_commands.CommandTree, bot: discord.Clien
 
         st = load_state()
 
-        if not start_time_passed():
-            return await interaction.response.send_message("❌ Not started yet (starts 13:30).", ephemeral=True)
+        # Allow picking before 13:30 IF a parent already exists (test mode)
+        if not start_time_passed() and not st.current_parent_id:
+            return await interaction.response.send_message(
+                "❌ Not started yet (starts 13:30).",
+                ephemeral=True
+            )
 
         if st.picked:
             return await interaction.response.send_message("❌ Already picked today.", ephemeral=True)
