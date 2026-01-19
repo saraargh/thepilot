@@ -210,7 +210,7 @@ async def is_global_admin(member: discord.Member) -> bool:
 # =========================================================
 def start_time_passed() -> bool:
     now = datetime.now(UK)
-    start = datetime.combine(now.date(), time(4, 20), tzinfo=UK)
+    start = datetime.combine(now.date(), time(13, 30), tzinfo=UK)
     return now >= start
 
 
