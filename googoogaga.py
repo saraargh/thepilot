@@ -345,6 +345,44 @@ class GooGooGaGa(commands.Cog):
 
         await interaction.response.send_message(f"🍼 {member.mention} is today’s **Goo Goo Ga Ga**!")
 
+    @app_commands.command(name="testgoogoo",description="(Admin) Send a test Goo Goo Ga Ga parent announcement")
+    async def testgoogoo(self, interaction: discord.Interaction):
+        if not interaction.guild:
+            return await interaction.response.send_message("❌ Guild only.", ephemeral=True)
+    
+        if not isinstance(interaction.user, discord.Member) or not interaction.user.guild_permissions.administrator:
+            return await interaction.response.send_message("❌ Admins only.", ephemeral=True)
+    
+        self.state = load_state()
+        guild = interaction.guild
+    
+        parent_member: Optional[discord.Member] = None
+    
+        # 1️⃣ If JSON already has a parent today, use them
+        if self.state.current_parent_id:
+            parent_member = guild.get_member(self.state.current_parent_id)
+    
+        # 2️⃣ Otherwise pick a fresh eligible parent (but don't touch real state)
+        if not parent_member:
+            choices = self.eligible_parents(guild)
+            if not choices:
+                return await interaction.response.send_message(
+                    "❌ No eligible Passengers available to be Parent.",
+                    ephemeral=True,
+                )
+            parent_member = random.choice(choices)
+    
+        # 3️⃣ Send TEST announcement only (no state mutation)
+        await self.announce(
+            guild,
+            f"🧪 **TEST MODE** 🧪\n"
+            f"🍼 **Parent:** {parent_member.mention}\n"
+            f"You have **1 hour** to use `/give_googoogaga` "
+            f"(this is a test message — no timers enforced)."
+        )
+    
+        await interaction.response.send_message("✅ Test Goo Goo Ga Ga announcement sent.", ephemeral=True)
+
     @app_commands.command(name="assigngoogoogaga", description="(Admin) Force assign Goo Goo Ga Ga role")
     @app_commands.describe(member="Member to assign")
     async def assigngoogoogaga(self, interaction: discord.Interaction, member: discord.Member):
