@@ -464,6 +464,7 @@ def setup_googoogaga_commands(tree: app_commands.CommandTree, bot: discord.Clien
         st.goo_id = member.id
         save_state(st)
 
+        await announce(interaction.guild, f"🍼 {member.mention} has been **manually assigned** Goo Goo Ga Ga.")
         await interaction.response.send_message("✅ Assigned Goo Goo Ga Ga.", ephemeral=True)
 
     @tree.command(name="removegoogoogaga", description="(Admin) Remove Goo Goo Ga Ga role")
@@ -482,7 +483,8 @@ def setup_googoogaga_commands(tree: app_commands.CommandTree, bot: discord.Clien
             st.goo_id = None
             save_state(st)
 
+        await announce(interaction.guild, f"🫃 {member.mention} has been **manually unassigned** Goo Goo Ga Ga.")
         await interaction.response.send_message("✅ Removed Goo Goo Ga Ga.", ephemeral=True)
-
+        
     # Return tasks so botslash can start them like poo/goat
     return goo_guard_loop, goo_daily_reset
