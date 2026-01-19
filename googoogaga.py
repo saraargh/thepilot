@@ -24,6 +24,11 @@ PASSENGERS_ROLE_ID = 1404100554807971971 # Passengers
 STATE_PATH = "googoo.json"
 UK = ZoneInfo("Europe/London")
 
+# Cutoffs
+FINAL_PARENT_TIME = time(22, 30)  # 10:30pm: final parent chosen (one message)
+HARD_STOP_TIME = time(23, 30)     # 11:30pm: no more actions/rotations/messages
+
+
 # =========================================================
 # STATE
 # =========================================================
@@ -250,8 +255,7 @@ async def assign_new_parent(guild: discord.Guild, st: GooState, *, announce_stan
     if announce_standard:
         await announce(
             guild,
-            f"🍼 **Parent of the day:** {parent.mention}\n"
-            f"You have **1 hour** to use `/give_googoogaga` (ONLY ONE pick today)."
+            f"🫃 {parent.mention} is **Parent of the day:** - You have **1 hour** to use `/give_googoogaga` or a new parent will be chosen!."
         )
 
     return parent
@@ -263,16 +267,38 @@ async def assign_new_parent(guild: discord.Guild, st: GooState, *, announce_stan
 @tasks.loop(seconds=30)
 async def goo_guard_loop(bot: discord.Client):
     st = load_state()
-
-    if st.picked:
-        return
-    if not start_time_passed():
-        return
-
     now = datetime.now(UK)
 
+    # Hard stop after 11:30pm
+    if now.time() >= HARD_STOP_TIME:
+        return
+
+    # If already picked, nothing to do
+    if st.picked:
+        return
+
+    # If it's before 13:30 and there is no active parent, do nothing.
+    # (If a parent exists in JSON for any reason, we allow the day to function.)
+    if not start_time_passed() and not st.current_parent_id:
+        return
+
     for guild in bot.guilds:
-        # Timeout -> ONE combined message
+        # 🕥 Final parent logic (10:30pm+):
+        # - If no parent exists yet and still not picked, choose ONE final parent and announce final message.
+        # - After 10:30pm, we do NOT rotate parents anymore (no timeouts, no new picks), just wait for /give_googoogaga.
+        if now.time() >= FINAL_PARENT_TIME:
+            if not st.current_parent_id and not st.picked:
+                final_parent = await assign_new_parent(guild, st, announce_standard=False)
+                if final_parent:
+                    await announce(
+                        guild,
+                        f"🕥 **FINAL PARENT CHOSEN: {final_parent.mention} - This is the **final chance** to pick today’s Goo Goo Ga Ga. If `/give_googoogaga` is **not used**, there will be **no Goo Goo Ga Ga of the day**."
+                    )
+                else:
+                    await announce(guild, "🍼 No eligible Passengers left to be **Parent** today.")
+            return  # after 10:30pm, we stop rotating/announcing further
+
+        # Normal rotation (before 10:30pm)
         if st.current_parent_id:
             we = window_end(st)
             if we and now > we:
@@ -281,9 +307,7 @@ async def goo_guard_loop(bot: discord.Client):
                 if new_parent:
                     await announce(
                         guild,
-                        f"⏰ {old_parent} did not pick a **Goo Goo Ga Ga** in time.\n"
-                        f"🍼 New Parent chosen: {new_parent.mention} — you have **1 hour** to use `/give_googoogaga` "
-                        f"or a new Parent will be chosen."
+                        f"⏰ {old_parent} - you did not pick a **Goo Goo Ga Ga** in time. {new_parent.mention} — you are now the Parent and have **1 hour** to use `/give_googoogaga` or a new Parent will be chosen."
                     )
                 else:
                     await announce(
@@ -292,15 +316,7 @@ async def goo_guard_loop(bot: discord.Client):
                         f"🍼 No eligible Passengers left to be Parent today."
                     )
         else:
-            # No parent yet -> standard announcement
             await assign_new_parent(guild, st, announce_standard=True)
-
-
-@goo_guard_loop.before_loop
-async def _before_goo_guard():
-    # bot will be passed when started; wait_until_ready exists on Client
-    # (this runs after start() is called)
-    pass
 
 
 @tasks.loop(time=time(11, 0, tzinfo=UK))
@@ -308,13 +324,7 @@ async def goo_daily_reset(bot: discord.Client):
     for guild in bot.guilds:
         await clear_roles_in_guild(guild)
         await announce(guild, "🍼 Goo Goo Ga Ga reset complete. Ready for **13:30**.")
-
     hard_reset_state_file()
-
-
-@goo_daily_reset.before_loop
-async def _before_goo_reset():
-    pass
 
 
 # =========================================================
@@ -333,12 +343,9 @@ def setup_googoogaga_commands(tree: app_commands.CommandTree, bot: discord.Clien
 
         st = load_state()
 
-        # Allow picking before 13:30 IF a parent already exists (test mode)
+        # Before 13:30, only allow if a parent is already set (e.g., testing/admin set state)
         if not start_time_passed() and not st.current_parent_id:
-            return await interaction.response.send_message(
-                "❌ Not started yet (starts 13:30).",
-                ephemeral=True
-            )
+            return await interaction.response.send_message("❌ Not started yet (starts 13:30).", ephemeral=True)
 
         if st.picked:
             return await interaction.response.send_message("❌ Already picked today.", ephemeral=True)
@@ -348,6 +355,7 @@ def setup_googoogaga_commands(tree: app_commands.CommandTree, bot: discord.Clien
 
         we = window_end(st)
         if not we or datetime.now(UK) > we:
+            # Note: after 10:30pm we stop rotating, but parent still only has their window
             return await interaction.response.send_message("❌ Your 1-hour window expired.", ephemeral=True)
 
         # Remove goo from previous holder
@@ -404,41 +412,6 @@ def setup_googoogaga_commands(tree: app_commands.CommandTree, bot: discord.Clien
             save_state(st)
 
         await interaction.response.send_message("✅ Removed Goo Goo Ga Ga.", ephemeral=True)
-
-    @tree.command(name="testgoogoo", description="(Admin) Send a test parent announcement (uses JSON parent or picks one)")
-    async def testgoogoo(interaction: discord.Interaction):
-        if not interaction.guild:
-            return await interaction.response.send_message("❌ Guild only.", ephemeral=True)
-
-        if not isinstance(interaction.user, discord.Member) or not await is_global_admin(interaction.user):
-            return await interaction.response.send_message("❌ Admins only.", ephemeral=True)
-
-        st = load_state()
-        guild = interaction.guild
-
-        parent_member: Optional[discord.Member] = None
-
-        # Use current parent from JSON if present
-        if st.current_parent_id:
-            parent_member = guild.get_member(st.current_parent_id)
-
-        # Otherwise pick a valid parent AND set them as current parent (so /give_googoogaga works)
-        if not parent_member:
-            parent_member = await assign_new_parent(guild, st, announce_standard=False)
-
-        if not parent_member:
-            return await interaction.response.send_message("❌ No eligible Passengers available to be Parent.", ephemeral=True)
-
-        # Announce (test-style)
-        await announce(
-            guild,
-            f"🧪 **TEST MODE** 🧪\n"
-            f"🍼 **Parent:** {parent_member.mention}\n"
-            f"You have **1 hour** to use `/give_googoogaga` "
-            f"or a new Parent will be chosen."
-        )
-
-        await interaction.response.send_message("✅ Test announcement sent.", ephemeral=True)
 
     # Return tasks so botslash can start them like poo/goat
     return goo_guard_loop, goo_daily_reset
