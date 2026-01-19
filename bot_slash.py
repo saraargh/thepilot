@@ -24,6 +24,9 @@ from birthdays import setup as birthdays_setup
 # ✅ POO / GOAT TRACKER
 from poo_goat_tracker import setup as setup_poo_goat_tracker
 
+# 🍼 GOO GOO GA GA
+from googoogaga import setup_googoogaga_commands
+
 # 🚀 PILOT RUNTIME LOGGER
 from pilot_runtime_logger import (
     log_startup,
@@ -101,6 +104,11 @@ class ThePilot(discord.Client):
 
         goat_task = setup_goat_commands(self.tree, self)
         goat_task.start()
+
+        # 🍼 Goo Goo Ga Ga
+        goo_guard_task, goo_reset_task = setup_googoogaga_commands(self.tree, self)
+        goo_guard_task.start(self)
+        goo_reset_task.start(self)
 
         # ✅ Mute commands (/mute, /unmute)
         setup_mute_commands(self.tree)
