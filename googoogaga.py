@@ -6,11 +6,11 @@ import random
 from dataclasses import dataclass, asdict
 from datetime import datetime, time, timedelta
 from zoneinfo import ZoneInfo
-from typing import Optional, Set, Dict, Any, Tuple
+from typing import Optional, Set, Dict, Any, List
 
 import discord
 from discord import app_commands
-from discord.ext import tasks, commands
+from discord.ext import tasks
 
 # =========================================================
 # HARD-CODED CONFIG (YOUR IDS)
@@ -71,6 +71,14 @@ def _default_state() -> GooState:
     )
 
 
+def save_state(st: GooState) -> None:
+    st.day = today_key()
+    if st.tried_parent_ids is None:
+        st.tried_parent_ids = set()
+    with open(STATE_PATH, "w", encoding="utf-8") as f:
+        json.dump(st.to_json(), f, indent=2, ensure_ascii=False)
+
+
 def load_state() -> GooState:
     if not os.path.exists(STATE_PATH):
         st = _default_state()
@@ -96,16 +104,10 @@ def load_state() -> GooState:
     return st
 
 
-def save_state(st: GooState) -> None:
-    st.day = today_key()
-    if st.tried_parent_ids is None:
-        st.tried_parent_ids = set()
-
-    with open(STATE_PATH, "w", encoding="utf-8") as f:
-        json.dump(st.to_json(), f, indent=2, ensure_ascii=False)
-
-
 def hard_reset_state_file() -> GooState:
+    """
+    Overwrites googoo.json with a fresh tiny state (so it never 'gets busy').
+    """
     st = _default_state()
     with open(STATE_PATH, "w", encoding="utf-8") as f:
         json.dump(st.to_json(), f, indent=2, ensure_ascii=False)
@@ -113,328 +115,326 @@ def hard_reset_state_file() -> GooState:
 
 
 # =========================================================
-# CORE
+# ADMIN CHECK (tries Pilot adminsettings, falls back to admin perms)
 # =========================================================
-class GooGooGaGa(commands.Cog):
-    def __init__(self, bot: discord.Client):
-        self.bot = bot
-        self.state = load_state()
+async def is_global_admin(member: discord.Member) -> bool:
+    try:
+        import adminsettings  # your Pilot module
+        cfg = await adminsettings.load_config()  # type: ignore
+        role_ids: List[int] = (cfg.get("global_admin_roles") or cfg.get("admin_roles") or [])
+        if role_ids:
+            return any(r.id in set(role_ids) for r in member.roles)
+    except Exception:
+        pass
 
-        self.guard_loop.start()
-        self.daily_reset.start()
+    return member.guild_permissions.administrator
 
-    # -----------------------
-    # Helpers
-    # -----------------------
-    def _start_time_passed(self) -> bool:
-        now = datetime.now(UK)
-        start = datetime.combine(now.date(), time(13, 30), tzinfo=UK)
-        return now >= start
 
-    def window_end(self) -> Optional[datetime]:
-        if not self.state.window_end_iso:
-            return None
+# =========================================================
+# CORE HELPERS
+# =========================================================
+def start_time_passed() -> bool:
+    now = datetime.now(UK)
+    start = datetime.combine(now.date(), time(13, 30), tzinfo=UK)
+    return now >= start
+
+
+def window_end(st: GooState) -> Optional[datetime]:
+    if not st.window_end_iso:
+        return None
+    try:
+        return datetime.fromisoformat(st.window_end_iso).astimezone(UK)
+    except Exception:
+        return None
+
+
+def set_window_end(st: GooState, dt: datetime) -> None:
+    st.window_end_iso = dt.astimezone(UK).isoformat()
+
+
+async def announce(guild: discord.Guild, msg: str) -> None:
+    ch = guild.get_channel(ANNOUNCE_CHANNEL_ID)
+    if isinstance(ch, discord.TextChannel):
         try:
-            dt = datetime.fromisoformat(self.state.window_end_iso)
-            return dt.astimezone(UK)
+            await ch.send(msg)
         except Exception:
-            return None
+            pass
 
-    def set_window_end(self, dt: datetime) -> None:
-        self.state.window_end_iso = dt.astimezone(UK).isoformat()
 
-    async def announce(self, guild: discord.Guild, msg: str) -> None:
-        ch = guild.get_channel(ANNOUNCE_CHANNEL_ID)
-        if isinstance(ch, discord.TextChannel):
-            try:
-                await ch.send(msg)
-            except Exception:
-                pass
+async def add_role(member: discord.Member, role_id: int) -> None:
+    role = member.guild.get_role(role_id)
+    if role and role not in member.roles:
+        try:
+            await member.add_roles(role, reason="GooGooGaGa")
+        except Exception:
+            pass
 
-    async def add_role(self, member: discord.Member, role_id: int) -> None:
-        role = member.guild.get_role(role_id)
-        if role and role not in member.roles:
-            try:
-                await member.add_roles(role, reason="GooGooGaGa")
-            except Exception:
-                pass
 
-    async def remove_role(self, member: discord.Member, role_id: int) -> None:
-        role = member.guild.get_role(role_id)
-        if role and role in member.roles:
-            try:
-                await member.remove_roles(role, reason="GooGooGaGa")
-            except Exception:
-                pass
+async def remove_role(member: discord.Member, role_id: int) -> None:
+    role = member.guild.get_role(role_id)
+    if role and role in member.roles:
+        try:
+            await member.remove_roles(role, reason="GooGooGaGa")
+        except Exception:
+            pass
 
-    def eligible_parents(self, guild: discord.Guild) -> list[discord.Member]:
-        passengers = guild.get_role(PASSENGERS_ROLE_ID)
-        parent_role = guild.get_role(PARENT_ROLE_ID)
-        if not passengers or not parent_role:
-            return []
 
-        tried = self.state.tried_parent_ids or set()
+def eligible_parents(guild: discord.Guild, st: GooState) -> list[discord.Member]:
+    passengers = guild.get_role(PASSENGERS_ROLE_ID)
+    parent_role = guild.get_role(PARENT_ROLE_ID)
+    if not passengers or not parent_role:
+        return []
 
-        return [
-            m for m in passengers.members
-            if not m.bot
-            and parent_role not in m.roles
-            and m.id not in tried
-        ]
+    tried = st.tried_parent_ids or set()
 
-    async def clear_roles_in_guild(self, guild: discord.Guild) -> None:
-        goo_role = guild.get_role(GOO_ROLE_ID)
-        parent_role = guild.get_role(PARENT_ROLE_ID)
-        if not goo_role or not parent_role:
-            return
+    return [
+        m for m in passengers.members
+        if not m.bot
+        and parent_role not in m.roles
+        and m.id not in tried
+    ]
 
-        for m in guild.members:
-            if parent_role in m.roles:
-                await self.remove_role(m, PARENT_ROLE_ID)
-            if goo_role in m.roles:
-                await self.remove_role(m, GOO_ROLE_ID)
 
-    async def revoke_current_parent(self, guild: discord.Guild) -> str:
-        """
-        Revokes current parent and returns a display name/mention for announcement.
-        Also adds them to tried_parent_ids so they can't be picked again today.
-        """
-        if not self.state.current_parent_id:
-            return "Someone"
+async def clear_roles_in_guild(guild: discord.Guild) -> None:
+    goo_role = guild.get_role(GOO_ROLE_ID)
+    parent_role = guild.get_role(PARENT_ROLE_ID)
+    if not goo_role or not parent_role:
+        return
 
-        old_id = self.state.current_parent_id
-        old_member = guild.get_member(old_id)
+    for m in guild.members:
+        if parent_role in m.roles:
+            await remove_role(m, PARENT_ROLE_ID)
+        if goo_role in m.roles:
+            await remove_role(m, GOO_ROLE_ID)
 
-        if old_member:
-            await self.remove_role(old_member, PARENT_ROLE_ID)
 
-        if self.state.tried_parent_ids is None:
-            self.state.tried_parent_ids = set()
-        self.state.tried_parent_ids.add(old_id)
+async def revoke_current_parent(guild: discord.Guild, st: GooState) -> str:
+    """
+    Revokes current parent, adds them to tried list, returns mention for messaging.
+    """
+    if not st.current_parent_id:
+        return "Someone"
 
-        self.state.current_parent_id = None
-        self.state.window_end_iso = None
-        save_state(self.state)
+    old_id = st.current_parent_id
+    old_member = guild.get_member(old_id)
 
-        return old_member.mention if old_member else f"<@{old_id}>"
+    if old_member:
+        await remove_role(old_member, PARENT_ROLE_ID)
 
-    async def assign_new_parent(self, guild: discord.Guild, *, announce: bool = True) -> Optional[discord.Member]:
-        """
-        Picks a new parent (not tried today), gives role, sets 1-hour window.
-        If announce=False, it will not post the standard "Parent of the day" message.
-        """
-        choices = self.eligible_parents(guild)
-        if not choices:
-            if announce:
-                await self.announce(guild, "🍼 No eligible Passengers left to be **Parent** today.")
-            return None
+    if st.tried_parent_ids is None:
+        st.tried_parent_ids = set()
+    st.tried_parent_ids.add(old_id)
 
-        parent = random.choice(choices)
-        await self.add_role(parent, PARENT_ROLE_ID)
+    st.current_parent_id = None
+    st.window_end_iso = None
+    save_state(st)
 
-        self.state.current_parent_id = parent.id
-        self.set_window_end(datetime.now(UK) + timedelta(hours=1))
-        self.state.started = True
-        save_state(self.state)
+    return old_member.mention if old_member else f"<@{old_id}>"
 
-        if announce:
-            await self.announce(
-                guild,
-                f"🍼 **Parent of the day:** {parent.mention}\n"
-                f"You have **1 hour** to use `/give_googoogaga` (ONLY ONE pick today)."
-            )
-        return parent
 
-    # -----------------------
-    # Loops
-    # -----------------------
-    @tasks.loop(seconds=30)
-    async def guard_loop(self):
-        self.state = load_state()
+async def assign_new_parent(guild: discord.Guild, st: GooState, *, announce_standard: bool = True) -> Optional[discord.Member]:
+    choices = eligible_parents(guild, st)
+    if not choices:
+        if announce_standard:
+            await announce(guild, "🍼 No eligible Passengers left to be **Parent** today.")
+        return None
 
-        if self.state.picked:
-            return
-        if not self._start_time_passed():
-            return
+    parent = random.choice(choices)
+    await add_role(parent, PARENT_ROLE_ID)
 
-        now = datetime.now(UK)
+    st.current_parent_id = parent.id
+    set_window_end(st, datetime.now(UK) + timedelta(hours=1))
+    st.started = True
+    save_state(st)
 
-        for guild in self.bot.guilds:
-            # If parent exists but expired -> ONE combined message + new parent chosen (no duplicate standard announcement)
-            if self.state.current_parent_id:
-                we = self.window_end()
-                if we and now > we:
-                    old_parent_mention = await self.revoke_current_parent(guild)
-                    new_parent = await self.assign_new_parent(guild, announce=False)
+    if announce_standard:
+        await announce(
+            guild,
+            f"🍼 **Parent of the day:** {parent.mention}\n"
+            f"You have **1 hour** to use `/give_googoogaga` (ONLY ONE pick today)."
+        )
 
-                    if new_parent:
-                        await self.announce(
-                            guild,
-                            f"⏰ {old_parent_mention} did not pick a **Goo Goo Ga Ga** in time.\n"
-                            f"🍼 New Parent chosen: {new_parent.mention} — you have **1 hour** to use `/give_googoogaga` "
-                            f"or a new Parent will be chosen."
-                        )
-                    else:
-                        await self.announce(
-                            guild,
-                            f"⏰ {old_parent_mention} did not pick a **Goo Goo Ga Ga** in time.\n"
-                            f"🍼 No eligible Passengers left to be Parent today."
-                        )
+    return parent
 
-            else:
-                # No parent currently -> normal announcement
-                await self.assign_new_parent(guild, announce=True)
 
-    @guard_loop.before_loop
-    async def before_guard_loop(self):
-        await self.bot.wait_until_ready()
+# =========================================================
+# TASK LOOPS (started from botslash.py)
+# =========================================================
+@tasks.loop(seconds=30)
+async def goo_guard_loop(bot: discord.Client):
+    st = load_state()
 
-    @tasks.loop(time=time(11, 0, tzinfo=UK))
-    async def daily_reset(self):
-        for guild in self.bot.guilds:
-            await self.clear_roles_in_guild(guild)
-            await self.announce(guild, "🍼 Goo Goo Ga Ga reset complete. Ready for **13:30**.")
+    if st.picked:
+        return
+    if not start_time_passed():
+        return
 
-        self.state = hard_reset_state_file()
+    now = datetime.now(UK)
 
-    @daily_reset.before_loop
-    async def before_daily_reset(self):
-        await self.bot.wait_until_ready()
+    for guild in bot.guilds:
+        # Timeout -> ONE combined message
+        if st.current_parent_id:
+            we = window_end(st)
+            if we and now > we:
+                old_parent = await revoke_current_parent(guild, st)
+                new_parent = await assign_new_parent(guild, st, announce_standard=False)
+                if new_parent:
+                    await announce(
+                        guild,
+                        f"⏰ {old_parent} did not pick a **Goo Goo Ga Ga** in time.\n"
+                        f"🍼 New Parent chosen: {new_parent.mention} — you have **1 hour** to use `/give_googoogaga` "
+                        f"or a new Parent will be chosen."
+                    )
+                else:
+                    await announce(
+                        guild,
+                        f"⏰ {old_parent} did not pick a **Goo Goo Ga Ga** in time.\n"
+                        f"🍼 No eligible Passengers left to be Parent today."
+                    )
+        else:
+            # No parent yet -> standard announcement
+            await assign_new_parent(guild, st, announce_standard=True)
 
-    # -----------------------
-    # Commands
-    # -----------------------
-    @app_commands.command(name="give_googoogaga", description="(Parent only) Pick the Goo Goo Ga Ga of the day!")
+
+@goo_guard_loop.before_loop
+async def _before_goo_guard():
+    # bot will be passed when started; wait_until_ready exists on Client
+    # (this runs after start() is called)
+    pass
+
+
+@tasks.loop(time=time(11, 0, tzinfo=UK))
+async def goo_daily_reset(bot: discord.Client):
+    for guild in bot.guilds:
+        await clear_roles_in_guild(guild)
+        await announce(guild, "🍼 Goo Goo Ga Ga reset complete. Ready for **13:30**.")
+
+    hard_reset_state_file()
+
+
+@goo_daily_reset.before_loop
+async def _before_goo_reset():
+    pass
+
+
+# =========================================================
+# COMMAND REGISTRATION (Pilot-style)
+# =========================================================
+def setup_googoogaga_commands(tree: app_commands.CommandTree, bot: discord.Client):
+    """
+    Registers commands onto The Pilot's CommandTree and returns the 2 tasks to start.
+    """
+
+    @tree.command(name="give_googoogaga", description="(Parent only) Pick the Goo Goo Ga Ga of the day!")
     @app_commands.describe(member="Who is Goo Goo Ga Ga today?")
-    async def give_googoogaga(self, interaction: discord.Interaction, member: discord.Member):
+    async def give_googoogaga(interaction: discord.Interaction, member: discord.Member):
         if not interaction.guild:
             return await interaction.response.send_message("❌ Guild only.", ephemeral=True)
 
-        self.state = load_state()
+        st = load_state()
 
-        if not self._start_time_passed():
+        if not start_time_passed():
             return await interaction.response.send_message("❌ Not started yet (starts 13:30).", ephemeral=True)
 
-        if self.state.picked:
+        if st.picked:
             return await interaction.response.send_message("❌ Already picked today.", ephemeral=True)
 
-        if interaction.user.id != self.state.current_parent_id:
+        if interaction.user.id != st.current_parent_id:
             return await interaction.response.send_message("❌ Only the current **Parent** can use this.", ephemeral=True)
 
-        we = self.window_end()
+        we = window_end(st)
         if not we or datetime.now(UK) > we:
             return await interaction.response.send_message("❌ Your 1-hour window expired.", ephemeral=True)
 
-        # Remove goo from previous holder (if any)
-        if self.state.goo_id:
-            prev = interaction.guild.get_member(self.state.goo_id)
+        # Remove goo from previous holder
+        if st.goo_id:
+            prev = interaction.guild.get_member(st.goo_id)
             if prev:
-                await self.remove_role(prev, GOO_ROLE_ID)
+                await remove_role(prev, GOO_ROLE_ID)
 
         # Assign goo + remove parent
-        await self.add_role(member, GOO_ROLE_ID)
+        await add_role(member, GOO_ROLE_ID)
         if isinstance(interaction.user, discord.Member):
-            await self.remove_role(interaction.user, PARENT_ROLE_ID)
+            await remove_role(interaction.user, PARENT_ROLE_ID)
 
         # Lock in pick
-        self.state.picked = True
-        self.state.goo_id = member.id
-        self.state.current_parent_id = None
-        self.state.window_end_iso = None
-        save_state(self.state)
+        st.picked = True
+        st.goo_id = member.id
+        st.current_parent_id = None
+        st.window_end_iso = None
+        save_state(st)
 
         await interaction.response.send_message(f"🍼 {member.mention} is today’s **Goo Goo Ga Ga**!")
 
-    @app_commands.command(name="testgoogoo",description="(Admin) Send a test Goo Goo Ga Ga parent announcement")
-    async def testgoogoo(self, interaction: discord.Interaction):
+    @tree.command(name="assigngoogoogaga", description="(Admin) Force assign Goo Goo Ga Ga role")
+    @app_commands.describe(member="Member to assign")
+    async def assigngoogoogaga(interaction: discord.Interaction, member: discord.Member):
         if not interaction.guild:
             return await interaction.response.send_message("❌ Guild only.", ephemeral=True)
-    
-        if not isinstance(interaction.user, discord.Member) or not interaction.user.guild_permissions.administrator:
+
+        if not isinstance(interaction.user, discord.Member) or not await is_global_admin(interaction.user):
             return await interaction.response.send_message("❌ Admins only.", ephemeral=True)
-    
-        self.state = load_state()
+
+        await add_role(member, GOO_ROLE_ID)
+
+        st = load_state()
+        st.goo_id = member.id
+        save_state(st)
+
+        await interaction.response.send_message("✅ Assigned Goo Goo Ga Ga.", ephemeral=True)
+
+    @tree.command(name="removegoogoogaga", description="(Admin) Remove Goo Goo Ga Ga role")
+    @app_commands.describe(member="Member to remove from")
+    async def removegoogoogaga(interaction: discord.Interaction, member: discord.Member):
+        if not interaction.guild:
+            return await interaction.response.send_message("❌ Guild only.", ephemeral=True)
+
+        if not isinstance(interaction.user, discord.Member) or not await is_global_admin(interaction.user):
+            return await interaction.response.send_message("❌ Admins only.", ephemeral=True)
+
+        await remove_role(member, GOO_ROLE_ID)
+
+        st = load_state()
+        if st.goo_id == member.id:
+            st.goo_id = None
+            save_state(st)
+
+        await interaction.response.send_message("✅ Removed Goo Goo Ga Ga.", ephemeral=True)
+
+    @tree.command(name="testgoogoo", description="(Admin) Send a test parent announcement (uses JSON parent or picks one)")
+    async def testgoogoo(interaction: discord.Interaction):
+        if not interaction.guild:
+            return await interaction.response.send_message("❌ Guild only.", ephemeral=True)
+
+        if not isinstance(interaction.user, discord.Member) or not await is_global_admin(interaction.user):
+            return await interaction.response.send_message("❌ Admins only.", ephemeral=True)
+
+        st = load_state()
         guild = interaction.guild
-    
+
         parent_member: Optional[discord.Member] = None
-    
-        # 1️⃣ If JSON already has a parent today, use them
-        if self.state.current_parent_id:
-            parent_member = guild.get_member(self.state.current_parent_id)
-    
-        # 2️⃣ Otherwise pick a fresh eligible parent (but don't touch real state)
+
+        # Use current parent from JSON if present
+        if st.current_parent_id:
+            parent_member = guild.get_member(st.current_parent_id)
+
+        # Otherwise pick a valid parent AND set them as current parent (so /give_googoogaga works)
         if not parent_member:
-            choices = self.eligible_parents(guild)
-            if not choices:
-                return await interaction.response.send_message(
-                    "❌ No eligible Passengers available to be Parent.",
-                    ephemeral=True,
-                )
-            parent_member = random.choice(choices)
-    
-        # 3️⃣ Send TEST announcement only (no state mutation)
-        await self.announce(
+            parent_member = await assign_new_parent(guild, st, announce_standard=False)
+
+        if not parent_member:
+            return await interaction.response.send_message("❌ No eligible Passengers available to be Parent.", ephemeral=True)
+
+        # Announce (test-style)
+        await announce(
             guild,
             f"🧪 **TEST MODE** 🧪\n"
             f"🍼 **Parent:** {parent_member.mention}\n"
             f"You have **1 hour** to use `/give_googoogaga` "
-            f"(this is a test message — no timers enforced)."
+            f"or a new Parent will be chosen."
         )
-    
-        await interaction.response.send_message("✅ Test Goo Goo Ga Ga announcement sent.", ephemeral=True)
 
-    @app_commands.command(name="assigngoogoogaga", description="(Admin) Force assign Goo Goo Ga Ga role")
-    @app_commands.describe(member="Member to assign")
-    async def assigngoogoogaga(self, interaction: discord.Interaction, member: discord.Member):
-        if not interaction.guild:
-            return await interaction.response.send_message("❌ Guild only.", ephemeral=True)
+        await interaction.response.send_message("✅ Test announcement sent.", ephemeral=True)
 
-        if not isinstance(interaction.user, discord.Member) or not interaction.user.guild_permissions.administrator:
-            return await interaction.response.send_message("❌ Admins only.", ephemeral=True)
-
-        await self.add_role(member, GOO_ROLE_ID)
-
-        self.state = load_state()
-        self.state.goo_id = member.id
-        save_state(self.state)
-
-        await interaction.response.send_message("✅ Assigned Goo Goo Ga Ga.", ephemeral=True)
-
-    @app_commands.command(name="removegoogoogaga", description="(Admin) Remove Goo Goo Ga Ga role")
-    @app_commands.describe(member="Member to remove from")
-    async def removegoogoogaga(self, interaction: discord.Interaction, member: discord.Member):
-        if not interaction.guild:
-            return await interaction.response.send_message("❌ Guild only.", ephemeral=True)
-
-        if not isinstance(interaction.user, discord.Member) or not interaction.user.guild_permissions.administrator:
-            return await interaction.response.send_message("❌ Admins only.", ephemeral=True)
-
-        await self.remove_role(member, GOO_ROLE_ID)
-
-        self.state = load_state()
-        if self.state.goo_id == member.id:
-            self.state.goo_id = None
-            save_state(self.state)
-
-        await interaction.response.send_message("✅ Removed Goo Goo Ga Ga.", ephemeral=True)
-
-
-# =========================================================
-# SETUP
-# =========================================================
-async def setup(bot: discord.Client):
-    """
-    Use: await googoogaga.setup(bot) from your botslash.py / setup_hook.
-    """
-    cog = GooGooGaGa(bot)
-
-    if hasattr(bot, "add_cog"):
-        maybe = bot.add_cog(cog)
-        if hasattr(maybe, "__await__"):
-            await maybe
-
-    bot.tree.add_command(cog.give_googoogaga)
-    bot.tree.add_command(cog.assigngoogoogaga)
-    bot.tree.add_command(cog.removegoogoogaga)
-
-    print("🍼 Goo Goo Ga Ga loaded.")
+    # Return tasks so botslash can start them like poo/goat
+    return goo_guard_loop, goo_daily_reset
