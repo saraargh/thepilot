@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 import os
 import random
+import base64
+import requests
 from dataclasses import dataclass, asdict
 from datetime import datetime, time, timedelta
 from zoneinfo import ZoneInfo
@@ -21,12 +23,34 @@ GOO_ROLE_ID = 1462642673042325629        # Goo Goo Ga Ga
 PARENT_ROLE_ID = 1462642845575024671     # Parent
 PASSENGERS_ROLE_ID = 1404100554807971971 # Passengers
 
-STATE_PATH = "googoo.json"
 UK = ZoneInfo("Europe/London")
 
 # Cutoffs
 FINAL_PARENT_TIME = time(22, 30)  # 10:30pm: final parent chosen (one message)
 HARD_STOP_TIME = time(23, 30)     # 11:30pm: no more actions/rotations/messages
+
+# =========================================================
+# GITHUB STORAGE CONFIG (like poo_goat_tracker)
+# =========================================================
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+GITHUB_REPO = os.getenv("GITHUB_REPO")
+GOOGOO_GITHUB_PATH = os.getenv("GOOGOO_GITHUB_PATH")  # set to: googoo.json
+
+if not all([GITHUB_TOKEN, GITHUB_REPO, GOOGOO_GITHUB_PATH]):
+    raise RuntimeError(
+        "Missing GitHub env vars. Required: "
+        "GITHUB_TOKEN, GITHUB_REPO, GOOGOO_GITHUB_PATH"
+    )
+
+GITHUB_API_URL = (
+    f"https://api.github.com/repos/"
+    f"{GITHUB_REPO}/contents/{GOOGOO_GITHUB_PATH}"
+)
+
+GITHUB_HEADERS = {
+    "Authorization": f"token {GITHUB_TOKEN}",
+    "Accept": "application/vnd.github+json"
+}
 
 
 # =========================================================
@@ -76,32 +100,72 @@ def _default_state() -> GooState:
     )
 
 
+def _gh_load_json(default_obj: Dict[str, Any]) -> Dict[str, Any]:
+    res = requests.get(GITHUB_API_URL, headers=GITHUB_HEADERS, timeout=20)
+
+    if res.status_code == 404:
+        _gh_save_json(default_obj, message="Create googoo.json")
+        return default_obj
+
+    res.raise_for_status()
+    payload = res.json()
+
+    content = base64.b64decode(payload["content"]).decode("utf-8")
+    data = json.loads(content or "{}")
+
+    data["_sha"] = payload["sha"]
+    return data
+
+
+def _gh_save_json(data: Dict[str, Any], message: str = "Update googoo state") -> None:
+    sha = data.pop("_sha", None)
+
+    encoded = base64.b64encode(
+        json.dumps(data, indent=2, ensure_ascii=False).encode("utf-8")
+    ).decode("utf-8")
+
+    payload = {
+        "message": message,
+        "content": encoded
+    }
+
+    if sha:
+        payload["sha"] = sha
+
+    res = requests.put(GITHUB_API_URL, headers=GITHUB_HEADERS, json=payload, timeout=20)
+    res.raise_for_status()
+
+
 def save_state(st: GooState) -> None:
+    # Load current doc to get latest sha (avoid sha mismatch)
+    current = _gh_load_json(_default_state().to_json())
+    sha = current.get("_sha")
+
     st.day = today_key()
     if st.tried_parent_ids is None:
         st.tried_parent_ids = set()
-    with open(STATE_PATH, "w", encoding="utf-8") as f:
-        json.dump(st.to_json(), f, indent=2, ensure_ascii=False)
+
+    out = st.to_json()
+    out["_sha"] = sha
+    _gh_save_json(out, message="Update Goo Goo Ga Ga state")
 
 
 def load_state() -> GooState:
-    if not os.path.exists(STATE_PATH):
+    default = _default_state().to_json()
+    data = _gh_load_json(default)
+
+    # Force today's day (and auto-reset if stale)
+    if data.get("day") != today_key():
         st = _default_state()
-        save_state(st)
+        # Preserve sha so we overwrite same file cleanly
+        sha = data.get("_sha")
+        out = st.to_json()
+        if sha:
+            out["_sha"] = sha
+        _gh_save_json(out, message="Daily rollover googoo state")
         return st
 
-    try:
-        with open(STATE_PATH, "r", encoding="utf-8") as f:
-            data = json.load(f)
-        st = GooState.from_json(data)
-    except Exception:
-        st = _default_state()
-        save_state(st)
-        return st
-
-    if st.day != today_key():
-        st = _default_state()
-        save_state(st)
+    st = GooState.from_json(data)
 
     if st.tried_parent_ids is None:
         st.tried_parent_ids = set()
@@ -113,9 +177,15 @@ def hard_reset_state_file() -> GooState:
     """
     Overwrites googoo.json with a fresh tiny state (so it never 'gets busy').
     """
+    data = _gh_load_json(_default_state().to_json())
+    sha = data.get("_sha")
+
     st = _default_state()
-    with open(STATE_PATH, "w", encoding="utf-8") as f:
-        json.dump(st.to_json(), f, indent=2, ensure_ascii=False)
+    out = st.to_json()
+    if sha:
+        out["_sha"] = sha
+    _gh_save_json(out, message="Daily reset googoo state")
+
     return st
 
 
@@ -193,11 +263,16 @@ def eligible_parents(guild: discord.Guild, st: GooState) -> list[discord.Member]
     tried = st.tried_parent_ids or set()
 
     return [
-        m for m in passengers.members
+        m for m in passengers_role_members(passengers)
         if not m.bot
         and parent_role not in m.roles
         and m.id not in tried
     ]
+
+
+def passengers_role_members(passengers_role: discord.Role) -> list[discord.Member]:
+    # Role.members is already a list, but keep as helper to avoid mypy / future discord changes
+    return list(passengers_role.members)
 
 
 async def clear_roles_in_guild(guild: discord.Guild) -> None:
@@ -284,8 +359,6 @@ async def goo_guard_loop(bot: discord.Client):
 
     for guild in bot.guilds:
         # 🕥 Final parent logic (10:30pm+):
-        # - If no parent exists yet and still not picked, choose ONE final parent and announce final message.
-        # - After 10:30pm, we do NOT rotate parents anymore (no timeouts, no new picks), just wait for /give_googoogaga.
         if now.time() >= FINAL_PARENT_TIME:
             if not st.current_parent_id and not st.picked:
                 final_parent = await assign_new_parent(guild, st, announce_standard=False)
@@ -296,7 +369,7 @@ async def goo_guard_loop(bot: discord.Client):
                     )
                 else:
                     await announce(guild, "🍼 No eligible Passengers left to be **Parent** today.")
-            return  # after 10:30pm, we stop rotating/announcing further
+            return
 
         # Normal rotation (before 10:30pm)
         if st.current_parent_id:
@@ -355,7 +428,6 @@ def setup_googoogaga_commands(tree: app_commands.CommandTree, bot: discord.Clien
 
         we = window_end(st)
         if not we or datetime.now(UK) > we:
-            # Note: after 10:30pm we stop rotating, but parent still only has their window
             return await interaction.response.send_message("❌ Your 1-hour window expired.", ephemeral=True)
 
         # Remove goo from previous holder
