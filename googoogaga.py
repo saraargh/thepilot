@@ -396,7 +396,6 @@ async def goo_guard_loop(bot: discord.Client):
 async def goo_daily_reset(bot: discord.Client):
     for guild in bot.guilds:
         await clear_roles_in_guild(guild)
-        await announce(guild, "🍼 Goo Goo Ga Ga reset complete. Ready for **13:30**.")
     hard_reset_state_file()
 
 
