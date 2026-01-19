@@ -17,11 +17,11 @@ from discord.ext import tasks
 # =========================================================
 # HARD-CODED CONFIG (YOUR IDS)
 # =========================================================
-ANNOUNCE_CHANNEL_ID = 1398508734506078240
+ANNOUNCE_CHANNEL_ID = 1444274467864838207
 
 GOO_ROLE_ID = 1462642673042325629        # Goo Goo Ga Ga
 PARENT_ROLE_ID = 1462642845575024671     # Parent
-PASSENGERS_ROLE_ID = 1404100554807971971 # Passengers
+PASSENGERS_ROLE_ID = 1404104881098195015 # Passengers
 
 UK = ZoneInfo("Europe/London")
 
