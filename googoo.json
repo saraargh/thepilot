@@ -1,9 +1,9 @@
 {
   "day": "2026-01-26",
-  "started": false,
+  "started": true,
   "picked": false,
-  "current_parent_id": null,
-  "window_end_iso": null,
+  "current_parent_id": 636981787310161930,
+  "window_end_iso": "2026-01-26T14:30:17.861649+00:00",
   "tried_parent_ids": [],
   "goo_id": null
 }
