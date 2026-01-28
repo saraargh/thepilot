@@ -1,14 +1,14 @@
 {
   "day": "2026-01-28",
   "started": true,
-  "picked": false,
-  "current_parent_id": 581896881555374081,
-  "window_end_iso": "2026-01-28T18:32:18.694126+00:00",
+  "picked": true,
+  "current_parent_id": null,
+  "window_end_iso": null,
   "tried_parent_ids": [
     406872408914526208,
     591895290223788033,
     1177684908618035332,
     941756923705962566
   ],
-  "goo_id": 1177684908618035332
+  "goo_id": 300738774332080128
 }
