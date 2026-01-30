@@ -2,8 +2,8 @@
   "day": "2026-01-30",
   "started": true,
   "picked": false,
-  "current_parent_id": null,
-  "window_end_iso": null,
+  "current_parent_id": 1288992263095062531,
+  "window_end_iso": "2026-01-30T17:31:49.267258+00:00",
   "tried_parent_ids": [
     1342641182827872297,
     1238834298338152498,
