@@ -42,5 +42,10 @@ from pilot_runtime_logger import (
         setup_pilot_logs(self.tree)
 
 
+    # ---------------- GLOBAL ERROR LOGGER ----------------
+    async def on_error(self, event_method, *args, **kwargs):
+        await log_error(self, event_method)
+        raise  # keep traceback + Render logs
+
 
 
