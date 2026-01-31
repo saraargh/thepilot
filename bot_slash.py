@@ -65,10 +65,6 @@ class ThePilot(discord.Client):
         # ✅ Process Boosts/Join-Leave logic
         await self.joinleave.on_message(message)
 
-    # ---------------- GLOBAL ERROR LOGGER ----------------
-    async def on_error(self, event_method, *args, **kwargs):
-        await log_error(self, event_method)
-        raise  # keep traceback + Render logs
 
     # ---------------- SETUP ----------------
     async def setup_hook(self):
