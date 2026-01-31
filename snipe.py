@@ -6,7 +6,7 @@ from collections import defaultdict, deque
 from typing import Optional
 
 MAX_HISTORY = 10
-EXPIRE_AFTER = 600  # 5 minutes
+EXPIRE_AFTER = 600  # 10 minutes
 
 DELETED = defaultdict(lambda: deque(maxlen=MAX_HISTORY))
 EDITED = defaultdict(lambda: deque(maxlen=MAX_HISTORY))
