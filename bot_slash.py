@@ -21,16 +21,7 @@ from role_tools import setup as role_tools_setup
 # 🎂 BIRTHDAYS
 from birthdays import setup as birthdays_setup
 
-# ✅ POO / GOAT TRACKER
-from poo_goat_tracker import setup as setup_poo_goat_tracker
 
-
-# 🚀 PILOT RUNTIME LOGGER
-from pilot_runtime_logger import (
-    log_startup,
-    log_error,
-    setup as setup_pilot_logs
-)
 
 # ✅ MUTE SYSTEM IMPORT
 from mute import check_and_handle_message
@@ -87,21 +78,13 @@ class ThePilot(discord.Client):
         # Start scheduled loop
         scheduled_tasks.start(self)
 
-        from plane import setup_plane_commands
-        from poo import setup_poo_commands
-        from goat import setup_goat_commands
+
         from mute import setup_mute_commands # Note: removed install_mute_listener here
         from bot_warnings import setup_warnings_commands
 
-        # Commands
-        setup_plane_commands(self.tree)
+
         setup_warnings_commands(self.tree)
 
-        poo_task = setup_poo_commands(self.tree, self)
-        poo_task.start()
-
-        goat_task = setup_goat_commands(self.tree, self)
-        goat_task.start()
 
 
         # ✅ Mute commands (/mute, /unmute)
@@ -125,11 +108,6 @@ class ThePilot(discord.Client):
         # ✅ Role / Emoji tools
         role_tools_setup(self.tree)
 
-        # ✅ POO / GOAT TRACKER
-        setup_poo_goat_tracker(self)
-
-        # 🚀 REGISTER /pilotlogs COMMAND
-        setup_pilot_logs(self.tree)
 
         # Sync once
         await self.tree.sync()
