@@ -19,7 +19,7 @@ def setup_mute_commands(tree: app_commands.CommandTree):
         except:
             pass
 
-    @tree.command(name="mute", description="Timeout a member using Discord's native system")
+    @tree.command(name="timeout", description="Timeout a member using Discord's native system")
     @app_commands.describe(member="Member to timeout", minutes="Duration in minutes")
     async def mute(interaction: discord.Interaction, member: discord.Member, minutes: int):
         if not has_app_access(interaction.user, "mute"):
@@ -43,7 +43,7 @@ def setup_mute_commands(tree: app_commands.CommandTree):
         except Exception as e:
             await interaction.response.send_message(f"❌ Error: {e}", ephemeral=True)
 
-    @tree.command(name="unmute", description="Remove timeout from a member")
+    @tree.command(name="untimeout", description="Remove timeout from a member")
     async def unmute(interaction: discord.Interaction, member: discord.Member):
         if not has_app_access(interaction.user, "mute"):
             return await interaction.response.send_message("❌ No permission.", ephemeral=True)
@@ -53,7 +53,7 @@ def setup_mute_commands(tree: app_commands.CommandTree):
             await member.timeout(None)
             await interaction.response.send_message(f"🔊 Timeout removed for {member.mention}.")
         except discord.Forbidden:
-            await interaction.response.send_message("❌ I cannot unmute this member.", ephemeral=True)
+            await interaction.response.send_message("❌ I cannot untimeout this member.", ephemeral=True)
         except Exception as e:
             await interaction.response.send_message(f"❌ Error: {e}", ephemeral=True)
 
