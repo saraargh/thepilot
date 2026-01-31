@@ -1,4 +1,5 @@
 GOOGOOGAGA
+
 # 🍼 GOO GOO GA GA
 from googoogaga import setup_googoogaga_commands
 
@@ -6,3 +7,40 @@ from googoogaga import setup_googoogaga_commands
         goo_guard_task, goo_reset_task = setup_googoogaga_commands(self.tree, self)
         goo_guard_task.start(self)
         goo_reset_task.start(self)
+
+POO/GOAT
+
+# ✅ POO / GOAT TRACKER
+from poo_goat_tracker import setup as setup_poo_goat_tracker
+
+        poo_task = setup_poo_commands(self.tree, self)
+        poo_task.start()
+
+        goat_task = setup_goat_commands(self.tree, self)
+        goat_task.start()
+
+        # ✅ POO / GOAT TRACKER
+        setup_poo_goat_tracker(self)
+
+        from poo import setup_poo_commands
+        from goat import setup_goat_commands
+
+PLANE
+       setup_plane_commands(self.tree)
+
+        from plane import setup_plane_commands
+
+PILOT RUNTIME (NON WORKING)
+# 🚀 PILOT RUNTIME LOGGER
+from pilot_runtime_logger import (
+    log_startup,
+    log_error,
+    setup as setup_pilot_logs
+
+
+        # 🚀 REGISTER /pilotlogs COMMAND
+        setup_pilot_logs(self.tree)
+
+
+
+
