@@ -68,8 +68,6 @@ class ThePilot(discord.Client):
 
     # ---------------- SETUP ----------------
     async def setup_hook(self):
-        # 🚀 Log redeploy / restart
-        await log_startup(self)
 
         # Start scheduled loop
         scheduled_tasks.start(self)
