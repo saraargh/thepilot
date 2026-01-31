@@ -1,1 +1,8 @@
-xx
+GOOGOOGAGA
+# 🍼 GOO GOO GA GA
+from googoogaga import setup_googoogaga_commands
+
+        # 🍼 Goo Goo Ga Ga
+        goo_guard_task, goo_reset_task = setup_googoogaga_commands(self.tree, self)
+        goo_guard_task.start(self)
+        goo_reset_task.start(self)
