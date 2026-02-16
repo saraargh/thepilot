@@ -227,8 +227,6 @@ def role_manageable(role: discord.Role, me: discord.Member) -> bool:
         return False
     if role.managed:
         return False
-    if role.permissions.administrator:
-        return False
     if role >= me.top_role:
         return False
     return True
